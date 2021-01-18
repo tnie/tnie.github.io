@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Configure.ac 文件解析原理：Autoconf 是用来产生 “configure” 文档的工具。“configure” 是一个 shell script，它可以自动设定原始程序以符合各种不同平台上 Unix 系统的特性，并且根据系统参数及环境产生合适的 Makefile 文档或是 C 的标头档 (header file)，让原始程序可以很方便地在这些不同的平台上被编译出来。Autocon">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Makefile 自动生成 - 渣滓">
+<meta property="og:url" content="https://tnie.github.io/2017/08/24/automake4th/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="Configure.ac 文件解析原理：Autoconf 是用来产生 “configure” 文档的工具。“configure” 是一个 shell script，它可以自动设定原始程序以符合各种不同平台上 Unix 系统的特性，并且根据系统参数及环境产生合适的 Makefile 文档或是 C 的标头档 (header file)，让原始程序可以很方便地在这些不同的平台上被编译出来。Autocon">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/table1.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/table2.gif">
+<meta property="article:published_time" content="2017-08-24T07:08:46.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.368Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="make">
+<meta property="article:tag" content="makefile">
+<meta property="article:tag" content="automake">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/2.png">
+
+<link rel="canonical" href="https://tnie.github.io/2017/08/24/automake4th/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Makefile 自动生成 - 渣滓 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/08/24/automake4th/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Makefile 自动生成 - 渣滓
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-08-24 15:08:46" itemprop="dateCreated datePublished" datetime="2017-08-24T15:08:46+08:00">2017-08-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Configure-ac-文件解析"><a href="#Configure-ac-文件解析" class="headerlink" title="Configure.ac 文件解析"></a>Configure.ac 文件解析</h1><p>原理：Autoconf 是用来产生 “configure” 文档的工具。“configure” 是一个 shell script，它可以自动设定原始程序以符合各种不同平台上 Unix 系统的特性，并且根据系统参数及环境产生合适的 Makefile 文档或是 C 的标头档 (header file)，让原始程序可以很方便地在这些不同的平台上被编译出来。Autoconf 会读取 <del>configure.in</del> configure.ac 档然后产生 “configure” 这个 shell script。</p>
+<p><del>configure.in</del> configure.ac 文档的内容是一连串 GNU m4 的巨集，这些巨集经过 autoconf 处理后会变成检查系统特征的 shell script。<del>configure.in</del> configure.ac 内巨集的顺序并没有特别的规定，但是每一个 <del>configure.in</del> configure.ac 档必须在所有巨集前加入 AC_INIT 巨集，然後在所有巨集的最后面加上 AC_OUTPUT 巨集。</p>
+<p>一般先用 autoscan 这个工具扫描原始文件以产生一个 configure.scan 文件，再对 configure.scan 作些修改，从而生成 <del>configure.in</del> configure.ac 文件。</p>
+<a id="more"></a>
+
+<p>先来看一下 confiugre.scan 文件：</p>
+<p><img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/2.png" alt="configure.scan 文件"></p>
+<p>部分宏的意义如下：</p>
+<ul>
+<li>AC_PREREQ 宏：声明本文件要求的 autoconf 版本，这里使用的是 2.63</li>
+<li>AC_INIT 宏：用来定义软件的名称和版本等信息，BUG-REPORT-ADDRESS，一般为作者的 E-mail。</li>
+<li>AC_CONFIG_SRCDIR 宏：用来检测指定的源文件是否存在，来确定源码目录的有效性，在此处为当前目录下的 hello.c。如果有多个源文件，按其默认或只写文件中的任意一个就好了，只是测试。也可以全写上，但文件很多时，完全没有必要。</li>
+<li>AC_CONFIG_HEADERS 宏：用于生成 config.h 文件，以便 autoheader 使用。【怀疑这个解释的准确性？实际中并未生成。实际效果此条宏影响的是 automake 指令，AC_CONFIG_SRCDIR 用于检测源代码目录下的 config.h 文件。AC_CONFIG_HEADER 表示你想要使用一个配置头文件。】</li>
+<li>AC_CONFIG_FILES 宏：<strong>用于生成相应的 Makefile 文件</strong>。【和 AC_OUTPUT(Makefile) 效果相同？】</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#方式一</span><br><span class="line">AC_OUTPUT(Makefile head&#x2F;Makefile)</span><br><span class="line"></span><br><span class="line">#方式二</span><br><span class="line">AC_CONFIG_FILES(Makefile head&#x2F;Makefile)</span><br><span class="line">AC_OUTPUT</span><br><span class="line"></span><br><span class="line">#上述两种书写方式效果一致？后者更规范，理由如下</span><br></pre></td></tr></table></figure>
+<p>经过实际测试验证，当前目录或其子目录存在 Makefile.am 或/和 Makefile.in 文件时，autoscan 命令生成 configure.scan 包含 AC_CONFIG_FILES(Makefile1 Makefile2 …)；否则，无此宏。<br>如图，autoscan 自动生成 .scan 文件内容：</p>
+<p><img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/3.png" alt="configure.scan 文件"></p>
+<p>所以，<strong>更有效/规范的操作顺序是，创建 Makefile.am 文件应该早于执行 autoscan 命令！</strong></p>
+<p>——这个地方真的花费了一些时间才整明白，因为网上看到的所有资料要么说 AC_CONFIG_FILES 宏是手动添加的，要么就是按照这篇笔记之前描述的操作顺序，可是配的图片却包含此宏（可实际是不可能的，如果在新添 Makefile.am 文件之前执行 autoscan 命令，生成的 configure.scan 不可能有这条宏）。简单来说，跟着网上的帖子学可以达到生成 makefile，执行 make 的目的，但是真心太粗糙了。</p>
+<p>每个 configure.scan 文件都是以 AC_INIT 开头，以 AC_OUTPUT 结束。从文件中的注释可以看出 confiugre.in 文件的一般布局：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">AC_INIT</span><br><span class="line">测试程序</span><br><span class="line">测试函数库</span><br><span class="line">测试头文件</span><br><span class="line">测试类型定义</span><br><span class="line">测试结构</span><br><span class="line">测试编译器特性</span><br><span class="line">测试库函数</span><br><span class="line">测试系统调用</span><br><span class="line">AC_OUTPUT</span><br></pre></td></tr></table></figure>
+<p>上面的调用次序只是建议性质的，但还是强烈建议不要随意改变对宏调用的次序。</p>
+<p><del>configure.in</del> configure.ac 文件中一些宏的含义如下：</p>
+<table>
+<thead>
+<tr>
+<th>#或dnl</th>
+<th>#或dnl后面的内容作为注释不会被处理，它们是注释的起始标志</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])</td>
+<td></td>
+</tr>
+<tr>
+<td>AM_INIT_AUTOMAKE(PACKAGE,VERSION)</td>
+<td>这个是后面运行 automake 命令所<strong>必需的宏</strong>，PACKAGE 指明要产生软件的名称，VERSION 是其版本号</td>
+</tr>
+<tr>
+<td>AC_PROG_CC</td>
+<td>检查系统可用的 C 编译器，若源代码是用 C 语言编写的就需要这个宏</td>
+</tr>
+<tr>
+<td>AC_OUTPUT(FILE)</td>
+<td>设置 configure 命令所要产生的文件。我们最终期望产生 Makefile 这个文件，因此一般将其设置为 AC_OUTPUT(Makefile)</td>
+</tr>
+</tbody></table>
+<p>AM_INIT_AUTOMAK E宏：需要自己增加，它是 automake 所必备的宏，其参数与 AC_INIT 宏的参数一样，分别是软件名称和版本编号。</p>
+<p>【是需要描述一下 aclocal 命令，但感觉应该是由 autoconf 引出，不该是 automake 啊】</p>
+<p><del>在运行 automak e命令时，还需要一些其他的宏，这些额外的宏由 aclocal 产生。执行 aclocal 会产生 aclocal.m4 文件，如果没有特别的要求，无需修改它。用 aclocal 产生的宏将会提示 automake 如何动作。</del></p>
+<p><del>另一个重要的文件是 Makefile.am。automake 根据 configure.in 中的宏并在 perl 的帮助下把 Makefile.am 转成 Makefile.in 文件。Makefile.am 文件定义所要产生的目标。</del></p>
+<h1 id="实战-Makefile-am"><a href="#实战-Makefile-am" class="headerlink" title="实战 Makefile.am"></a>实战 Makefile.am</h1><p>Makefile.am 是一种比 Makefile 更高层次的规则。只需指定要生成什么目标，它由什么源文件生成，要安装到什么目录等构成。</p>
+<p>一般情况是在最上层目录下写一个 Makefile.am，然后在每一个子目录下分别写一个 Makefile.am 文件。automake 会从最上层开始递归处理各个 Makefile.am，每个 Makefile.am 相应生成一个 Makefile.in。</p>
+<p>bin_PROGRAMS 定义要产生的可执行文件名，如果要产生多个执行文件，每个文件名用空格隔开。</p>
+<p>main_SOURCES 定义“main”这个执行程序所需要的原始文件，如果“ main”这个程序是由多个原始文件所产生的，则必须把它所用到的所有原始文件都列出来，并用空格隔开。要注意的是，如果要定义多个执行文件，则对每个执行程序都要定义相应的 file_SOURCES。</p>
+<p>下表列出了可执行文件、静态库、头文件和数据文件，四种书写Makefile.am文件个一般格式。</p>
+<p><img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/table1.gif" alt="Makefile.am 一般格式"></p>
+<p>对于可执行文件和静态库类型，如果只想编译，不想安装到系统中，可以用 noinst_PROGRAMS 代替 bin_PROGRAMS，noinst_LIBRARIES 代替 lib_LIBRARIES。</p>
+<p>Makefile.am 还提供了一些全局变量供所有的<strong>目标体</strong>使用：（目标体是啥？没说明白啊）</p>
+<p><img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/table2.gif" alt="Makefile.am 中可用的全局变量"></p>
+<p>整理此节笔记参考：<a target="_blank" rel="noopener" href="http://www.ibm.com/developerworks/cn/linux/l-makefile/">例解 autoconf 和 automake 生成 Makefile 文件</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/make/" rel="tag"># make</a>
+              <a href="/tags/makefile/" rel="tag"># makefile</a>
+              <a href="/tags/automake/" rel="tag"># automake</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/08/24/automake3rd/" rel="prev" title="Makefile 自动生成 - configure & make">
+      <i class="fa fa-chevron-left"></i> Makefile 自动生成 - configure & make
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/01/17/gitConfig/" rel="next" title="git 常用配置">
+      git 常用配置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Configure-ac-%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">Configure.ac 文件解析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E6%88%98-Makefile-am"><span class="nav-number">2.</span> <span class="nav-text">实战 Makefile.am</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

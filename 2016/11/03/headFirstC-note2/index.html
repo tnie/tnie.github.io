@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="动态存储（189~） 堆上的数据不会自动清除，因此堆是保存数据结构的绝佳场所。  可以把在堆上保存数据想象成在储物柜中寄存物品。   当程序不断地申请存储器，又不释放那些不再需要的存储器，就会发生存储器泄漏。  创建数据不会发生泄漏，只有当程序失去了所有对数据的引用才会导致泄漏。       用malloc()获取空间，memory allocation；调用free()释放存储器  malloc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《嗨翻C语言》（下）">
+<meta property="og:url" content="https://tnie.github.io/2016/11/03/headFirstC-note2/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="动态存储（189~） 堆上的数据不会自动清除，因此堆是保存数据结构的绝佳场所。  可以把在堆上保存数据想象成在储物柜中寄存物品。   当程序不断地申请存储器，又不释放那些不再需要的存储器，就会发生存储器泄漏。  创建数据不会发生泄漏，只有当程序失去了所有对数据的引用才会导致泄漏。       用malloc()获取空间，memory allocation；调用free()释放存储器  malloc">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-11-03T08:16:04.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.387Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="note">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2016/11/03/headFirstC-note2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>《嗨翻C语言》（下） | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/headFirstC-note2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《嗨翻C语言》（下）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-03 16:16:04" itemprop="dateCreated datePublished" datetime="2016-11-03T16:16:04+08:00">2016-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="动态存储（189-）"><a href="#动态存储（189-）" class="headerlink" title="动态存储（189~）"></a>动态存储（189~）</h1><ul>
+<li><p>堆上的数据不会自动清除，因此堆是保存数据结构的绝佳场所。</p>
+<blockquote>
+<p>可以把在堆上保存数据想象成在储物柜中寄存物品。</p>
+</blockquote>
+</li>
+<li><p>当程序不断地申请存储器，又不释放那些不再需要的存储器，就会发生<strong>存储器泄漏</strong>。</p>
+<blockquote>
+<p>创建数据不会发生泄漏，只有当程序失去了所有对数据的引用才会导致泄漏。    </p>
+</blockquote>
+</li>
+<li><p>用<code>malloc()</code>获取空间，<em>memory allocation</em>；调用<code>free()</code>释放存储器</p>
+<ul>
+<li><code>malloc()</code>接收一个参数：所需要的字节数。因此<code>malloc()</code>经常与<code>sizeof</code>运算符一起使用。</li>
+<li><code>malloc()</code>返回的是通用指针，即<code>void*</code>类型的指针。 </li>
+</ul>
+</li>
+<li><p><code>strdup()</code>函数可以把字符串复制到堆上。</p>
+<blockquote>
+<p><code>strdup()</code>函数总是在堆上创建空间，而不是在栈上。所以千万记得要用<code>free()</code>函数释放空间。</p>
+</blockquote>
+</li>
+<li><p><strong>valgrind</strong>工具，它用于Linux操作系统中。</p>
+<blockquote>
+<p>当程序想分配堆存储器时，valgrind将会拦截你对<code>malloc()</code>和<code>free()</code>的调用，然后调用自己的<code>malloc()</code>和<code>free()</code>。</p>
+</blockquote>
+</li>
+<li><p>垃圾收集（garbage collection），一些语言会跟踪你在堆上分配的数据，当你不再使用这些数据时，就会释放它们。<strong>C语言没有“垃圾收集”</strong></p>
+</li>
+</ul>
+<blockquote>
+<p>虽然不必在程序结束前释放所有数据，操作系统会在程序结束时清除所有存储器。不过，你还是应该显式释放你创建的每样东西，这是一种好的习惯。</p>
+</blockquote>
+<p>——很不懂作者为什么在章节快结束的时候，放上一句这么没营养的话。有机会去查一查原文，确认是不是译者的问题。个人认为以下表述更恰当：<br>虽然<em>操作系统会在程序结束时清除所有存储器</em>。不过，你还是应该<strong>显式释放</strong>你创建的每样东西，这是一种好的习惯。</p>
+<h1 id="高级函数（201-）"><a href="#高级函数（201-）" class="headerlink" title="高级函数（201~）"></a>高级函数（201~）</h1><h2 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h2><p>此章节介绍“学习如何把函数作为参数传递，从而提高代码的智商”。</p>
+<p>有些时候，我们希望“把代码打包传给函数”。“把代码打包”就是封装成函数，所以，问题就是：怎么把函数传给函数?</p>
+<ul>
+<li><p>在C语言中，函数名也是指针变量。</p>
+<blockquote>
+<p>当你创建了一个叫<code>go_to_warp_speed(int speed)</code>函数的同时也会创建了一个叫<code>go_to_warp_speed</code>的指针变量，变量中保存了函数的地址。只要把函数指针类型的参数传给<code>find()</code>，就能调用它指向的函数了。</p>
+</blockquote>
+<p>  上述中<code>go_to_warp_speed</code>指针变量是一个常量。类似 <code>int* a=4</code>中的<code>4</code>, <code>char* str=&quot;abc&quot;</code>中的<code>&quot;abc&quot;</code>。</p>
+<p>  扩展</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 此处声明时的*和 赋值操作时的*应不是同一个意思?!</span></span><br><span class="line"><span class="comment">那么为什么初始化不写成int* a=&amp;4?? —就是声明了一个指针,指向了常量存储区的一块地址 */</span></span><br><span class="line"><span class="keyword">int</span>* a;  <span class="comment">//声明</span></span><br><span class="line"><span class="keyword">int</span> b=<span class="number">4</span>;</span><br><span class="line">*a=<span class="number">4</span>;    <span class="comment">//改变指针指向存储器中的值,但单纯这么写是错的</span></span><br><span class="line">a=&amp;b;    <span class="comment">//给指针赋值,改变指针指向的存储器</span></span><br></pre></td></tr></table></figure></li>
+<li><p>函数名是指向函数的指针……两者并不完全相同，函数名是L-value，而指针变量是R-value，因此函数名不能像指针变量那样自加或自减。</p>
+</li>
+<li><p>函数指针是C语言最强大的特性之一。</p>
+</li>
+</ul>
+<h3 id="函数指针的语法"><a href="#函数指针的语法" class="headerlink" title="函数指针的语法"></a>函数指针的语法</h3><ul>
+<li><p>没有函数类型，即：不能用<code>function * pointer_func</code> 声明函数指针。</p>
+</li>
+<li><p>因为需要把函数的返回类型和接收参数类型告诉C编译器，所以创建函数指针如下：</p>
+<blockquote>
+<p>返回类型(* 指针变量)(参数类型)，例如</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> (*warp_fn)(<span class="keyword">int</span>);  <span class="comment">//创建函数指针</span></span><br><span class="line">wrap_fn = go_to_warp_speed;  <span class="comment">//函数指针赋值</span></span><br><span class="line">wrap_fn(<span class="number">4</span>);  <span class="comment">//使用函数指针</span></span><br></pre></td></tr></table></figure>
+<p>Q1:如果函数指针是指针，为什么调用时不需要再它们前面加<code>*</code>？</p>
+<p>A1:可加可不加。<code>wrap_fn(4)</code>和<code>(*wrap_fn)(4)</code>都可以。如果<code>fp</code>是函数指针，那么可以用<code>fp(参数，……)</code>调用函数。 也可以用<code>(*fp)(参数，……)</code>，两种情况都能工作。</p>
+<p>Q2：可以用<code>&amp;</code>取得函数的地址吗？</p>
+<p>A2：可以。<code>find(sports_or_workout)</code>和<code>find(&amp;sports_or_workout)</code>都可以。如果你有函数<code>shoot()</code>，那么<code>shoot</code>和<code>&amp;shoot</code>都指向了<code>shoot()</code>函数。</p>
+<p>Q3：那为什么不这么写？</p>
+<p>A3：即使省略<code>*</code>和<code>&amp;</code>，C编译器也能识别他们，（而且）这样代码更好读。</p>
+</blockquote>
+<p>  延伸：由A3推测，是不是 常量<code>4</code>或者<code>&quot;abc&quot;</code>既表示本身的值,又代表其在常量存储区的地址?此处亦类似?</p>
+</li>
+</ul>
+<h3 id="C标准库的排序函数"><a href="#C标准库的排序函数" class="headerlink" title="C标准库的排序函数"></a>C标准库的排序函数</h3><ul>
+<li>C标准库的排序函数会接收一个<strong>比较器函数（comparator function）指针</strong>，用来判断两条数据的大小。</li>
+<li><code>qsort()</code>函数看起来像这样：  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">qsort(<span class="keyword">void</span>* <span class="built_in">array</span>,       <span class="comment">//数组指针</span></span><br><span class="line">      <span class="keyword">size_t</span> length,     <span class="comment">//数组长度</span></span><br><span class="line">      <span class="keyword">size_t</span> item_size,  <span class="comment">//数组中每个元素的长度</span></span><br><span class="line">      <span class="keyword">int</span> (*comparator)(<span class="keyword">const</span> <span class="keyword">void</span>*, <span class="keyword">const</span> <span class="keyword">void</span>*));</span><br></pre></td></tr></table></figure></li>
+<li><code>qsort()</code>函数在原数组上进行改动。</li>
+</ul>
+<h3 id="创建函数指针数组"><a href="#创建函数指针数组" class="headerlink" title="创建函数指针数组"></a>创建函数指针数组</h3><ul>
+<li>在数组中保存函数，就必须告诉编译器函数的具体特征：函数返回什么类型以及接收什么参数。  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> (* replies[])(response) = &#123;dump, second_chance, marriage&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>函数指针数组让代码易于管理，它们让代码变得更短、更易于扩展，从而可以伸缩。<br>  ——至于说降低程序可读性,那是因为你笨。</li>
+</ul>
+<h2 id="可变参数函数（variadic-function）（228-）"><a href="#可变参数函数（variadic-function）（228-）" class="headerlink" title="可变参数函数（variadic function）（228~）"></a>可变参数函数（variadic function）（228~）</h2><p>C标准库中有一组宏（macro）可以帮助你建立自己的可变参数函数。<br>——TODO：kindle中描述这一组宏的图片看不清，抽空在网上找一下。</p>
+<h1 id="静态库和动态库"><a href="#静态库和动态库" class="headerlink" title="静态库和动态库"></a>静态库和动态库</h1><p>（省略。在接触Linux下C++开发之后，这方面知识不算陌生。）</p>
+<h1 id="系统调用（249-）"><a href="#系统调用（249-）" class="headerlink" title="系统调用（249~）"></a>系统调用（249~）</h1><p>在大部分计算机上，系统调用就是操作系统内核中的函数，是程序用来与内核对话的函数。</p>
+<h2 id="system"><a href="#system" class="headerlink" title="system()"></a>system()</h2><ul>
+<li><p>简单易用</p>
+</li>
+<li><p>安全问题</p>
+</li>
+<li><p>无法应付复杂的应用场景</p>
+<blockquote>
+<p>操作系统必须解释你传给 <code>system()</code>的字符串，这可能引发错误，尤其当你动态创建命令字符串时。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="exec"><a href="#exec" class="headerlink" title="exec()"></a>exec()</h2><ul>
+<li><p><code>exec()</code> 函数通过运行其他程序来<strong>替换</strong>当前进程。</p>
+<ul>
+<li><code>exec()</code>函数的版本众多，但可以分为两组：列表函数和数组函数。</li>
+<li>如果<code>exec()</code>调用成功，当前程序就会停止运行。一旦程序运行了<code>exec()</code>以后的代码，就说明出了问题。</li>
+</ul>
+</li>
+<li><p>每个进程都有一组环境变量。</p>
+</li>
+</ul>
+<h2 id="失败黄金法则"><a href="#失败黄金法则" class="headerlink" title="失败黄金法则"></a>失败黄金法则</h2><ul>
+<li><p>尽可能收拾残局</p>
+</li>
+<li><p>把<code>errno</code>变量设为错误码</p>
+<ul>
+<li><code>errno</code>变量是定义在<code>errno.h</code>中的全局变量，和它定义在一起的还有很多<strong>标准错误码</strong></li>
+<li>可以使用<code>string.h</code>中<code>strerror()</code>函数查询<strong>标准错误信息</strong></li>
+</ul>
+</li>
+<li><p>返回<code>-1</code></p>
+<ul>
+<li>系统调用出错时通常会返回<code>-1</code>，但不是绝对的。</li>
+<li><code>fileno()</code>:根据文件指针获取文件描述符。失败时不返回<code>-1</code></li>
+<li><code>exit()</code>是唯一没有返回值而且不会失败的函数。</li>
+<li>记住：一定要检查系统调用的返回值</li>
+</ul>
+</li>
+</ul>
+<h2 id="fork"><a href="#fork" class="headerlink" title="fork()"></a>fork()</h2><ul>
+<li><p><code>fork()</code>会克隆当前进程</p>
+<ul>
+<li>新建副本将从同一行开始运行相同程序。</li>
+<li>原进程叫父进程，而新建副本叫子进程。</li>
+</ul>
+</li>
+<li><p>进程需要以某种方式区分自己是父进程还是子进程</p>
+<blockquote>
+<p><code>fork()</code>会返回一个整型值：为子进程返回<code>0</code>，为父进程返回一个正数。父进程将接收到子进程的进程标识符。</p>
+</blockquote>
+</li>
+<li><p>与Unix和Mac不同，Windows天生不支持<code>fork()</code>。</p>
+</li>
+</ul>
+<h1 id="进程间通信（274-）"><a href="#进程间通信（274-）" class="headerlink" title="进程间通信（274~）"></a>进程间通信（274~）</h1><h2 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h2><ul>
+<li><p>三大默认数据流：标准输入、标准输出和标准错误；文件连接和网络连接也属于数据流。</p>
+</li>
+<li><p>进程需要记录数据流的连向，比如标准输出连到了哪里。进程用文件描述符（就是个数字）表示数据流</p>
+</li>
+<li><p><strong>描述符表</strong>：描述符表的前三项万年不变：0号标准输入，1号标准输出，2号标准错误</p>
+<ul>
+<li>标准输入/输出/错误在描述符表中的位置是固定的，但它们指向的数据流可以改变。</li>
+<li>每打开一个文件，操作系统都会在描述符表中新注册一项</li>
+</ul>
+</li>
+<li><p><code>dup2()</code>复制数据流</p>
+</li>
+<li><p><code>exit()</code>是系统调用！</p>
+<blockquote>
+<p><code>exit()</code>系统调用是结束程序的最快方式</p>
+</blockquote>
+</li>
+<li><p><code>waitpid()</code>函数会等子进程结束以后才返回</p>
+<ul>
+<li>为了得到子进程的退出状态，可以把<code>pid_status</code>的值传给<code>WEXITSTATUS()</code>宏</li>
+</ul>
+</li>
+</ul>
+<h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><ul>
+<li><p>在命令行用管道连接两条命令时，实际把它们当成了父子进程来连接。child | parent，详见<a target="_blank" rel="noopener" href="http://linux.chinaunix.net/techdoc/develop/2008/02/21/979889.shtml">shell中管道的原理</a></p>
+</li>
+<li><p><code>pipe()</code>函数建立管道</p>
+<blockquote>
+<p><code>pipe()</code>函数创建了管道，并返回了两个描述符：<code>fd[1]</code>用来向管道写数据，<code>fd[0]</code>用来从管道读数据，</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h2><ul>
+<li>当信号到来时，进程必须停止手中一切工作去处理信号。进程会查看<strong>信号映射表</strong>，表中每个信号都对应一个信号处理器函数。</li>
+</ul>
+<h3 id="捕捉信号，然后运行自己的代码"><a href="#捕捉信号，然后运行自己的代码" class="headerlink" title="捕捉信号，然后运行自己的代码"></a>捕捉信号，然后运行自己的代码</h3><ul>
+<li><code>sigaction</code>是一个函数包装器，是一个结构体。</li>
+<li>创建<code>sigaction</code>以后，需要用<code>sigaction()</code>函数来让操作系统知道它的存在</li>
+<li>有一个例外，代码捕捉不到<code>SIGKILL</code>信号，也没法忽略它</li>
+<li>在自定义的信号处理函数中使用<code>raise()</code>，这样程序就能在接收到低级别的信号时引发更高级别的信号 </li>
+</ul>
+<h3 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h3><ul>
+<li><p>不要同时使用<code>alarm()</code>和<code>sleep()</code>。两者都使用了间隔计时器，因此同时使用这两个函数会发生冲突。</p>
+</li>
+<li><p>一个进程只有一个定时器。因此每次调用<code>alarm()</code>函数都会重置定时器</p>
+<blockquote>
+<p>定时器由操作系统的内核管理，如果一个进程有很多定时器，内核就会变得很慢，因此操作系统需要限制进程能使用的定时器个数。</p>
+</blockquote>
+</li>
+<li><p>信号可以让程序从容结束，而间隔定时器可以帮助处理一些超时任务。</p>
+</li>
+</ul>
+<h1 id="网络编程（323-）"><a href="#网络编程（323-）" class="headerlink" title="网络编程（323~）"></a>网络编程（323~）</h1><p>C程序用数据流读写字节。如果想要写一个与网络通信的程序，就需要一种新数据流——套接字。</p>
+<ul>
+<li><p>在使用<strong>套接字</strong>与客户端程序通信前，服务器需要经历四个阶段：</p>
+<ol>
+<li><p>绑定（Bind）</p>
+<ul>
+<li>为了绑定它（端口），你需要两样东西：套接字描述符（还记得“文件描述符”吗？）和套接字名。</li>
+</ul>
+</li>
+<li><p>监听（Listen）</p>
+</li>
+<li><p>接受（Accept）</p>
+</li>
+<li><p>开始（Begin）</p>
+</li>
+</ol>
+</li>
+<li><p>之前见过的数据流都可以用<code>fprintf()</code>和<code>fscanf()</code>与它们通信。但套接字是双向的：</p>
+<ul>
+<li>如果想向套接字输出数据，就要用<code>send()</code>函数；</li>
+<li><code>recv()</code>函数；</li>
+</ul>
+</li>
+<li><p>绑定端口有延时：当你在某个端口绑定了套接字，在接下来的30秒内，操作系统不允许任何程序再绑定它，包括上一次绑定这个端口的程序。</p>
+</li>
+<li><p><code>recv()</code>读取数据</p>
+<ul>
+<li>字符串不以<code>\0</code>结尾。 </li>
+<li>当用户在telnet输入文本时，字符串以<code>\r\n</code>结尾。 </li>
+<li><code>recv()</code>将返回字符个数，如果发生错误就返回<code>-1</code>，如果客户端关闭了连接，就返回<code>0</code>。 </li>
+<li><code>recv()</code>调用不一定能一次接收到所有字符。</li>
+<li><code>revc()</code>用起来十分繁琐，最好把它<strong>封装</strong>在某个函数中</li>
+</ul>
+</li>
+<li><p><code>getaddrinfo()</code>获取域名的地址</p>
+<ul>
+<li><code>getaddrinfo()</code>会在堆上创建一种叫名字资源的新数据结构</li>
+<li>因为名字资源在堆上创建，所以要用一个叫<code>freeaddrinfo()</code>的函数清除它</li>
+</ul>
+</li>
+</ul>
+<h1 id="多线程（342-）"><a href="#多线程（342-）" class="headerlink" title="多线程（342~）"></a>多线程（342~）</h1><p>你可以使用很多线程库，这里我们将使用最流行的一种：POSIX线程库，也叫pthread。</p>
+<ul>
+<li><p>线程函数的返回类型必须是<code>void*</code>。</p>
+</li>
+<li><p>可以用<code>pthread_create()</code>创建并运行线程。</p>
+</li>
+<li><p>如果程序运行完这段代码就结束了，线程也会随之灭亡，因此必须等待线程结束：</p>
+<ul>
+<li><code>pthread_join()</code>会接收线程函数的返回值，并把它保存在一个<code>void</code>指针变量中</li>
+</ul>
+</li>
+<li><p>通常当两个线程读写相同变量时，代码就是非线程安全的。</p>
+</li>
+<li><p><code>PTHREAD_MUTEX_INITIALIZER</code>实际上是一个宏，当编译器看到它，就会插入创建互斥锁的代码。</p>
+</li>
+<li><p>如果你希望把某个整型值传给线程，并让它返回某个整型值，一种方法是：</p>
+<ul>
+<li>用<code>long</code>，因为它的大小和<code>void</code>指针相同，可以把它保存在<code>void</code>指针变量中</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>问：怎样设计高效的多线程程序？ 答：减少线程需要访问的共享数据的数量。</p>
+</blockquote>
+<h1 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h1><p>另一种理解思路：</p>
+<ul>
+<li><p>C语言允许你创建只能在函数局部作用域访问的全局变量：</p>
+<ul>
+<li>函数内：<code>static</code>关键字会把变量保存在存储器中的全局量区。</li>
+</ul>
+</li>
+<li><p><code>static</code>关键字用来控制变量或函数的作用域</p>
+<ul>
+<li>函数外使用<code>static</code>关键字，表示“只有这个.c文件中的代码能使用这个变量（或函数）”</li>
+</ul>
+</li>
+</ul>
+<p>关于“自动化测试”，你又了解多少？</p>
+<p>之前读书时做的笔记全部誊抄、整理完毕，上篇中的知识点基本都已熟悉掌握，下篇的内容因为学校时练习不多，实际做项目经验也很少，所以只处于了解、知道的层次，<strong>勤复习，多练习</strong>。笔记内容包含编程过程中的“为什么这样”，也包括一些具体的语法细节、函数使用（实际上后者是不应该杂糅到一起的，但是基础太差）。在以后的复习、练习过程中，争取将语法细节、函数使用这些具体化的内容一点点去掉。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/note/" rel="tag"># note</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/03/getTime/" rel="prev" title="C++ 获取系统时间">
+      <i class="fa fa-chevron-left"></i> C++ 获取系统时间
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/03/initialization/" rel="next" title="初始化">
+      初始化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%AD%98%E5%82%A8%EF%BC%88189-%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">动态存储（189~）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E5%87%BD%E6%95%B0%EF%BC%88201-%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">高级函数（201~）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88"><span class="nav-number">2.1.</span> <span class="nav-text">函数指针</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="nav-number">2.1.1.</span> <span class="nav-text">函数指针的语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C%E6%A0%87%E5%87%86%E5%BA%93%E7%9A%84%E6%8E%92%E5%BA%8F%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.2.</span> <span class="nav-text">C标准库的排序函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84"><span class="nav-number">2.1.3.</span> <span class="nav-text">创建函数指针数组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%87%BD%E6%95%B0%EF%BC%88variadic-function%EF%BC%89%EF%BC%88228-%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">可变参数函数（variadic function）（228~）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%BA%93%E5%92%8C%E5%8A%A8%E6%80%81%E5%BA%93"><span class="nav-number">3.</span> <span class="nav-text">静态库和动态库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%EF%BC%88249-%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">系统调用（249~）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#system"><span class="nav-number">4.1.</span> <span class="nav-text">system()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exec"><span class="nav-number">4.2.</span> <span class="nav-text">exec()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%B1%E8%B4%A5%E9%BB%84%E9%87%91%E6%B3%95%E5%88%99"><span class="nav-number">4.3.</span> <span class="nav-text">失败黄金法则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fork"><span class="nav-number">4.4.</span> <span class="nav-text">fork()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%EF%BC%88274-%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">进程间通信（274~）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-number">5.1.</span> <span class="nav-text">重定向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E9%81%93"><span class="nav-number">5.2.</span> <span class="nav-text">管道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7"><span class="nav-number">5.3.</span> <span class="nav-text">信号</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%95%E6%8D%89%E4%BF%A1%E5%8F%B7%EF%BC%8C%E7%84%B6%E5%90%8E%E8%BF%90%E8%A1%8C%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-number">5.3.1.</span> <span class="nav-text">捕捉信号，然后运行自己的代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="nav-number">5.3.2.</span> <span class="nav-text">定时器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88323-%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">网络编程（323~）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88342-%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">多线程（342~）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="nav-number">8.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

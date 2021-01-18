@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="姊妹篇 《Makefile 入门》 中已经介绍过隐含规则、自动推导。要想在 make &amp; Makefile 上精进，必须了解其隐含规则。它可以让你省去很多繁琐、重复的细节，快速高效地完成项目的编译和链接。 隐含规则依赖同名（同名源文件-同名目标文件-同名可执行文件），一般而言设置好编译器属性、给出必要的头文件目录，就可以使用隐含规则生成同名的目标文件（.o 文件）；但实际项目中很少出现可执">
+<meta property="og:type" content="article">
+<meta property="og:title" content="不同场景下的 Makefile">
+<meta property="og:url" content="https://tnie.github.io/2016/12/09/Makefile2nd/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="姊妹篇 《Makefile 入门》 中已经介绍过隐含规则、自动推导。要想在 make &amp; Makefile 上精进，必须了解其隐含规则。它可以让你省去很多繁琐、重复的细节，快速高效地完成项目的编译和链接。 隐含规则依赖同名（同名源文件-同名目标文件-同名可执行文件），一般而言设置好编译器属性、给出必要的头文件目录，就可以使用隐含规则生成同名的目标文件（.o 文件）；但实际项目中很少出现可执">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-12-09T08:40:29.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.361Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="make">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2016/12/09/Makefile2nd/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>不同场景下的 Makefile | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/09/Makefile2nd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          不同场景下的 Makefile
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-12-09 16:40:29" itemprop="dateCreated datePublished" datetime="2016-12-09T16:40:29+08:00">2016-12-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>姊妹篇 <a href="https://tnie.github.io/2016/09/18/Makefile1st/">《Makefile 入门》</a> 中已经介绍过隐含规则、自动推导。要想在 make &amp; Makefile 上精进，必须了解其隐含规则。它可以让你省去很多繁琐、重复的细节，快速高效地完成项目的编译和链接。</p>
+<p>隐含规则依赖同名（同名源文件-同名目标文件-同名可执行文件），一般而言设置好编译器属性、给出必要的头文件目录，就可以使用隐含规则生成同名的目标文件（.o 文件）；但实际项目中很少出现可执行文件由单独一个源文件/目标文件生成的情况，所以生成可执行文件（包括链接库）时一般不能只使用隐含规则达到目的。</p>
+<a id="more"></a>
+
+<h1 id="只有一个源文件"><a href="#只有一个源文件" class="headerlink" title="只有一个源文件"></a>只有一个源文件</h1><p>假设目录下只有 test.c 一个源文件。</p>
+<h2 id="最简单的方式：（只使用隐含规则）"><a href="#最简单的方式：（只使用隐含规则）" class="headerlink" title="最简单的方式：（只使用隐含规则）"></a>最简单的方式：（只使用隐含规则）</h2><p>不写 Makefile 文件，直接执行 <code>make test</code>。可以看到： make（其实是默认生成的 Makefile 文件） 默认使用 cc 编译器（不是 gcc）。</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ ls</span><br><span class="line">test.c</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ make test</span><br><span class="line">cc     test.c   -o test  ## Makefile 隐含规则生成的 gcc 执行语句，可以看到</span><br><span class="line"><span class="meta">#</span><span class="bash"> Makefile 倾向的书写方式</span></span><br></pre></td></tr></table></figure>
+<p>当目录下存在 test.o 文件时直接执行 <code>make test</code> 命令</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ ls</span><br><span class="line">Makefile.bak  test.c  test.o</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ make test</span><br><span class="line">cc   test.o   -o test</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ </span><br></pre></td></tr></table></figure>
+<p>可以看到 Makefile 隐含规则在<strong>生成可执行文件时</strong>倾向于将可执行文件放在命令的最后，即 <code>$&#123;CC&#125; $^ -o $@</code> 的形式。</p>
+<p>扩展：我们看到上文中使用的都是 cc 编译器，我们更习惯 gcc/g++ 对不？而且有时候还需要给编译器指定参数，比如使用 c99 标准，怎么做呢？很简单，只需要在当前目录下新建以下 Makefile 文件：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 指定编译器和选项</span></span><br><span class="line">CC=gcc</span><br><span class="line">CFLAGS=-Wall -std=c99</span><br><span class="line"></span><br><span class="line">CXX=g++</span><br><span class="line">CXXFLAGS=-Wall -std=c++11</span><br></pre></td></tr></table></figure>
+<p>再次执行 <code>make test</code> 看看效果吧</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ ls</span><br><span class="line">Makefile  Makefile.bak  test.c  text.cpp</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ make test</span><br><span class="line">gcc -Wall -std=c99    test.c   -o test</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ make text</span><br><span class="line">g++ -Wall -std=c++11    text.cpp   -o text</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$</span><br></pre></td></tr></table></figure>
+<p>可以看到：Makefile 隐含规则会自动使用 <code>CC</code> 和 <code>CFLAGS</code> 变量，针对 <code>.cpp</code> 文件则自动使用 <code>CXX</code> 和 <code>CXXFLAGS</code> 变量。</p>
+<p>也可以看出，直接使用源文件生成可执行文件时，更准确的格式是 <code>$&#123;CC&#125; $&#123;CFLAGS&#125; $^ -o $@</code>。</p>
+<h2 id="最简单的-Makefile-文件："><a href="#最简单的-Makefile-文件：" class="headerlink" title="最简单的 Makefile 文件："></a>最简单的 Makefile 文件：</h2><p>其实最简单的 Makefile 文件就是没有 Makefile文件，其次就是上一节中“只指定编译器及选项”的 Makefile 文件。但也由于其太过简单，在实际生产中并不具备<strong>实用性</strong>。下面来看一个“麻雀虽小，五脏俱全”的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 可执行文件</span><br><span class="line">TARGET&#x3D;test</span><br><span class="line"># 依赖目标</span><br><span class="line">OBJS&#x3D; test.o</span><br><span class="line"></span><br><span class="line"># 指定编译器和选项</span><br><span class="line">CC&#x3D;gcc</span><br><span class="line">CFLAGS&#x3D;-Wall -std&#x3D;c99</span><br><span class="line"></span><br><span class="line">.PHONEY:all clean</span><br><span class="line"></span><br><span class="line">all:$&#123;TARGET&#125;</span><br><span class="line"></span><br><span class="line"># 目标文件生成可执行文件</span><br><span class="line">$&#123;TARGET&#125;:$&#123;OBJS&#125;</span><br><span class="line">        $&#123;CC&#125; $^ -o $@</span><br><span class="line"></span><br><span class="line"># 使用隐含规则生成目标文件</span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">        $&#123;RM&#125; $&#123;TARGET&#125; $&#123;OBJS&#125;</span><br></pre></td></tr></table></figure>
+<p>执行 <code>make</code> 命令。可以看到：Makefile 隐含规则在<strong>生成目标文件时</strong>倾向于将源文件放在命令的最后，即 <code>$&#123;CC&#125; $&#123;CLFAGS&#125; -c -o $@ $&lt;</code> 的形式。</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ make</span><br><span class="line">gcc -Wall -std=c99   -c -o test.o test.c  ## Makefile 倾向的书写方式</span><br><span class="line">gcc test.o -o test</span><br></pre></td></tr></table></figure>
+<h1 id="多个源文件"><a href="#多个源文件" class="headerlink" title="多个源文件"></a>多个源文件</h1><p>比如说三个：test.c test-add.c test-sub.c。这种情况下，我们只需要将上述 Makefile 文件中的“依赖目标”稍作修改即可（修改后的 Makefile 依旧适用之前的案例）</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 可执行文件</span></span><br><span class="line">TARGET=test</span><br><span class="line"><span class="comment"># 扫描源文件</span></span><br><span class="line">SRCS=$&#123;wildcard *.c&#125;</span><br><span class="line"><span class="comment">#SRCS=test.c test-add.c test-sub.c</span></span><br><span class="line"><span class="comment"># 依赖目标</span></span><br><span class="line">OBJS=$&#123;SRCS:.c=.o&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定编译器和选项</span></span><br><span class="line">CC=gcc</span><br><span class="line">CFLAGS=-Wall -std=c99</span><br><span class="line"></span><br><span class="line"><span class="section">.PHONEY:all clean</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:$&#123;TARGET&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标文件生成可执行文件</span></span><br><span class="line"><span class="section">$&#123;TARGET&#125;:$&#123;OBJS&#125;</span></span><br><span class="line">        $&#123;CC&#125; <span class="variable">$^</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用其隐含规则生成目标文件</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        $&#123;RM&#125; $&#123;TARGET&#125; $&#123;OBJS&#125;</span><br></pre></td></tr></table></figure>
+<p><code>make</code> 执行结果：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ ls</span><br><span class="line">Makefile  test-add.c  test.c  test-sub.c</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ make</span><br><span class="line">gcc -Wall -std=c99   -c -o test-add.o test-add.c</span><br><span class="line">gcc -Wall -std=c99   -c -o test-sub.o test-sub.c</span><br><span class="line">gcc -Wall -std=c99   -c -o test.o test.c</span><br><span class="line">gcc test-add.o test-sub.o test.o -o test</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ </span><br></pre></td></tr></table></figure>
+<h1 id="目录分级-amp-头文件"><a href="#目录分级-amp-头文件" class="headerlink" title="目录分级 &amp; 头文件"></a>目录分级 &amp; 头文件</h1><p>目录结构如下：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ tree</span><br><span class="line">.</span><br><span class="line">├── test-add</span><br><span class="line">│   ├── test-add.c</span><br><span class="line">│   └── test-add.h</span><br><span class="line">├── test.c</span><br><span class="line">└── test-sub</span><br><span class="line">    ├── test-sub.c</span><br><span class="line">    └── test-sub.h</span><br><span class="line"></span><br><span class="line">2 directories, 5 files</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$</span><br></pre></td></tr></table></figure>
+<p>其中 test.c 文件中如下引入头文件：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;test-add.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;test-sub.h&quot;</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="预处理错误"><a href="#预处理错误" class="headerlink" title="预处理错误"></a>预处理错误</h2><p>如果我们直接 <code>make test</code> 那么一定会报错 <code>test.c:2:22: fatal error: test-add.h: 没有那个文件或目录</code> 找不到头文件。我们可以通过以下方式解决这个错误：</p>
+<ol>
+<li><p>在 <code>make</code> 命令中指定参数：<code>make test CPPFLAGS=&#39;-Itest-add -Itest-sub&#39;</code>，因为参数中包含空格，所以必须用引号括起来。此时使用的仍然是 cc 编译器，我们可以在命令行中指定 <code>CC=gcc</code> 参数等等。</p>
+</li>
+<li><p>使用 Makefile 文件：我们延用第一节中的例子</p>
+ <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 指定编译器和选项</span></span><br><span class="line">CC=gcc</span><br><span class="line">CFLAGS=-Wall -std=c99</span><br><span class="line"></span><br><span class="line">CXX=g++</span><br><span class="line">CXXFLAGS=-Wall -std=c++11</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给预处理器传参</span></span><br><span class="line">CPPFLAGS=-I&#x27;./test-add&#x27; -I&#x27;./test-sub&#x27;</span><br><span class="line"><span class="comment"># CPPFLAGS=-I./test-add -I./test-sub    # 这么写也可以</span></span><br><span class="line"><span class="comment"># CPPFLAGS=&#x27;-I./test-add -I./test-sub&#x27;  # 这么写报错，为什么呢？</span></span><br></pre></td></tr></table></figure>
+<p>上述的执行结果：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ ls</span><br><span class="line">Makefile  test-add  test.c  test-sub</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ make test</span><br><span class="line">gcc -Wall -std=c99 -I&#x27;./test-add&#x27; -I&#x27;./test-sub&#x27;   test.c   -o test</span><br><span class="line">（作者备注：以下报错链接错误）</span><br><span class="line">/tmp/ccQlkvYC.o：在函数‘main’中：</span><br><span class="line">test.c:(.text+0x49)：对‘add’未定义的引用</span><br><span class="line">test.c:(.text+0x69)：对‘sub’未定义的引用</span><br><span class="line">collect2: error: ld returned 1 exit status</span><br><span class="line">&lt;builtin&gt;: recipe for target &#x27;test&#x27; failed</span><br><span class="line">make: *** [test] Error 1</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$</span><br></pre></td></tr></table></figure>
+<h2 id="链接错误"><a href="#链接错误" class="headerlink" title="链接错误"></a>链接错误</h2></li>
+</ol>
+<p>我们使用第二节中的 Makefile，对“源文件”做相应修改就可：（当然也需要新添 <code>CPPFLAGS</code> 变量）</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 可执行文件</span></span><br><span class="line">TARGET=test</span><br><span class="line"><span class="comment"># 扫描源文件</span></span><br><span class="line">SRCS=test.c \</span><br><span class="line">     test-add/test-add.c \</span><br><span class="line">     test-sub/test-sub.c</span><br><span class="line"><span class="comment"># 依赖目标</span></span><br><span class="line">OBJS=$&#123;SRCS:.c=.o&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定编译器和选项</span></span><br><span class="line">CC=gcc</span><br><span class="line">CFLAGS=-Wall -std=c99</span><br><span class="line">CPPFLAGS=-I&#x27;./test-add&#x27; -I&#x27;./test-sub&#x27;</span><br><span class="line"></span><br><span class="line"><span class="section">.PHONEY:all clean</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:$&#123;TARGET&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标文件生成可执行文件</span></span><br><span class="line"><span class="section">$&#123;TARGET&#125;:$&#123;OBJS&#125;</span></span><br><span class="line">        $&#123;CC&#125; <span class="variable">$^</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用其隐含规则生成目标文件</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        $&#123;RM&#125; $&#123;TARGET&#125; $&#123;OBJS&#125;</span><br></pre></td></tr></table></figure>
+<p>成功执行：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ make</span><br><span class="line">gcc -Wall -std=c99 -I&#x27;./test-add&#x27; -I&#x27;./test-sub&#x27;  -c -o test.o test.c</span><br><span class="line">gcc -Wall -std=c99 -I&#x27;./test-add&#x27; -I&#x27;./test-sub&#x27;  -c -o test-add/test-add.o test-add/test-add.c</span><br><span class="line">gcc -Wall -std=c99 -I&#x27;./test-add&#x27; -I&#x27;./test-sub&#x27;  -c -o test-sub/test-sub.o test-sub/test-sub.c</span><br><span class="line">gcc test.o test-add/test-add.o test-sub/test-sub.o -o test</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ </span><br></pre></td></tr></table></figure>
+<h1 id="共享库"><a href="#共享库" class="headerlink" title="共享库"></a>共享库</h1><h2 id="系统共享库"><a href="#系统共享库" class="headerlink" title="系统共享库"></a>系统共享库</h2><p>如果使用到系统共享库又该怎么做呢？我们知道共享库是用在链接阶段的，参考第一节，在隐含规则中 <code>CPPFLAGS</code> 是传给预处理器的，<code>CFLAGS</code> 是传给编译器的，相应的传给链接器的变量是 <code>LDLIBS</code>。</p>
+<p>假设 test.c 源文件中调用了 <code>#include &lt;math.h&gt;</code> 的 <code>sin()</code> 函数，那么只需要在链接时指定 <code>LDLIBS=-lm</code> 即可：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ ls</span><br><span class="line">test.c</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ make test.o  # 编译阶段不需要任何特殊处理</span><br><span class="line">cc    -c -o test.o test.c</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ make test    # 报链接错误</span><br><span class="line">cc   test.o   -o test</span><br><span class="line">test.o：在函数‘main’中：</span><br><span class="line">test.c:(.text+0x34)：对‘sin’未定义的引用</span><br><span class="line">collect2: error: ld returned 1 exit status</span><br><span class="line">&lt;builtin&gt;: recipe for target &#x27;test&#x27; failed</span><br><span class="line">make: *** [test] Error 1</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ make test LDLIBS=-lm  # 使用 libm.so 库</span><br><span class="line">cc   test.o  -lm -o test</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ ls</span><br><span class="line">source_learn  test  test.c  test.o</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ ./test </span><br><span class="line">sin(30.00)=0.50</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn$ </span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义共享库"><a href="#自定义共享库" class="headerlink" title="自定义共享库"></a>自定义共享库</h2><p>在使用 make &amp; Makefile 文件生成可执行文件过程中，使用系统共享库和自定义共享库的区别在于：后者需要使用 <code>LDFLAGS</code> 变量指定路径。</p>
+<p>运行可执行文件又会有一些区别，关于链接库更多的知识请移步 <a href="https://tnie.github.io/2016/12/09/library-static-dynamic/">《共享库 &amp; 静态库》</a>。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>整篇笔记的结构以及用到源码参考自 <a target="_blank" rel="noopener" href="http://blog.csdn.net/xukai871105/article/details/37083675">例说makefile</a>。但此系列笔记有两个不足之处：</p>
+<ol>
+<li><p>原文中的 <code>DLIBS</code> <code>INC</code> 其实就是 <code>LDLIBS</code> 和 <code>CPPFLAGS</code> 变量。</p>
+<ul>
+<li>虽说如果不使用隐含规则，只是显式地使用，这些变量随便起什么名字都可以；</li>
+<li>但既然使用 Makefile &amp; make，那么完全放弃使用隐含规则有“大器小用”之嫌，和单纯使用 shell 脚本还有区别吗？</li>
+<li>使用 Makefile 的隐含规则，就应该使用 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html">其隐含规则用到的变量</a>（限于 GNU make）；</li>
+<li>在 <a target="_blank" rel="noopener" href="http://xahlee.info/UnixResource_dir/_/ldpath.html">Why LD_LIBRARY_PATH is bad</a> 中提到的 <code>LD_RUN_PATH </code> 变量，在隐含规则中是否生效？</li>
+<li>DLIBS INC 是其他 make （非 GNU make）的预定义变量吗？</li>
+</ul>
+</li>
+<li><p>原文中讲到自定义共享库时并没有细致划分 soname、linker name、real name。这个只是小瑕疵</p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/make/" rel="tag"># make</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/12/05/pass-parameters/" rel="prev" title="传值、传指针和传引用">
+      <i class="fa fa-chevron-left"></i> 传值、传指针和传引用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/12/09/library-static-dynamic/" rel="next" title="共享库 & 静态库">
+      共享库 & 静态库 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AA%E6%9C%89%E4%B8%80%E4%B8%AA%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">只有一个源文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E6%96%B9%E5%BC%8F%EF%BC%9A%EF%BC%88%E5%8F%AA%E4%BD%BF%E7%94%A8%E9%9A%90%E5%90%AB%E8%A7%84%E5%88%99%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">最简单的方式：（只使用隐含规则）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84-Makefile-%E6%96%87%E4%BB%B6%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">最简单的 Makefile 文件：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">多个源文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E5%88%86%E7%BA%A7-amp-%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">目录分级 &amp; 头文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%A4%84%E7%90%86%E9%94%99%E8%AF%AF"><span class="nav-number">3.1.</span> <span class="nav-text">预处理错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5%E9%94%99%E8%AF%AF"><span class="nav-number">3.2.</span> <span class="nav-text">链接错误</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%BA%93"><span class="nav-number">4.</span> <span class="nav-text">共享库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%85%B1%E4%BA%AB%E5%BA%93"><span class="nav-number">4.1.</span> <span class="nav-text">系统共享库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%85%B1%E4%BA%AB%E5%BA%93"><span class="nav-number">4.2.</span> <span class="nav-text">自定义共享库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

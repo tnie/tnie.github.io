@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="我们先从使用的角度，从最直观的数据类型说起。 ps 这一篇笔记并不显式地涉及 wchar_t，也不包含字符（串）之间如何转换。更多内容请跳转 字符（串）之间的转换 类型：char[]\char*\string\CString转帖来源：C++中的字符串 C++支持两种字符串：C风格字符串和string。之所以抛弃char*的字符串而选用C++标准程序库中的string类，是因为它和前者比较起来，不必">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C、C++ 和 VC++ 中的字符串">
+<meta property="og:url" content="https://tnie.github.io/2016/11/08/char-string-CString/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="我们先从使用的角度，从最直观的数据类型说起。 ps 这一篇笔记并不显式地涉及 wchar_t，也不包含字符（串）之间如何转换。更多内容请跳转 字符（串）之间的转换 类型：char[]\char*\string\CString转帖来源：C++中的字符串 C++支持两种字符串：C风格字符串和string。之所以抛弃char*的字符串而选用C++标准程序库中的string类，是因为它和前者比较起来，不必">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Cpp-Standard-Library.gif">
+<meta property="article:published_time" content="2016-11-08T10:01:12.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.372Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Cpp-Standard-Library.gif">
+
+<link rel="canonical" href="https://tnie.github.io/2016/11/08/char-string-CString/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C、C++ 和 VC++ 中的字符串 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/08/char-string-CString/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C、C++ 和 VC++ 中的字符串
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-08 18:01:12" itemprop="dateCreated datePublished" datetime="2016-11-08T18:01:12+08:00">2016-11-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>我们先从使用的角度，从最直观的数据类型说起。</p>
+<p>ps 这一篇笔记并不显式地涉及 <code>wchar_t</code>，也不包含字符（串）之间如何转换。更多内容请跳转 <a href="https://tnie.github.io/2016/11/16/char-wchar-t/">字符（串）之间的转换</a></p>
+<h1 id="类型：char-char-string-CString"><a href="#类型：char-char-string-CString" class="headerlink" title="类型：char[]\char*\string\CString"></a>类型：char[]\char*\string\CString</h1><p>转帖来源：<a target="_blank" rel="noopener" href="http://blog.csdn.net/conanswp/article/details/23341901">C++中的字符串</a></p>
+<p>C++支持两种字符串：C风格字符串和string。之所以抛弃char*的字符串而选用C++标准程序库中的string类，是因为它和前者比较起来，不必担心内存是否足够、字符串长度等等，而且作为一个类出现，它集成的操作函数足以完成我们大多数情况下(甚至是100%)的需要。我们可以用 <code>=</code> 进行赋值操作，<code>==</code> 进行比较，<code>+</code> 做串联（是不是很简单:-D）。我们尽可以把它看成是C++的基本数据类型。此外，CString类在MFC中广泛应用，简化了字符串的处理。</p>
+<a id="more"></a>
+
+<h2 id="C风格字符串"><a href="#C风格字符串" class="headerlink" title="C风格字符串"></a>C风格字符串</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;		//如果是C++代码，用cstring；如果是写C 请用string.h</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> str1[] = <span class="string">&quot;Hello&quot;</span>;							<span class="comment">//字符串数组  </span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;sizeof(str1)=&quot;</span>&lt;&lt;<span class="keyword">sizeof</span>(str1)&lt;&lt;<span class="built_in">endl</span>;		<span class="comment">//sizeof计算占用的空间，包括\0  </span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;strlen(str1)=&quot;</span>&lt;&lt;<span class="built_in">strlen</span>(str1)&lt;&lt;<span class="built_in">endl</span>;		<span class="comment">//strlen计算字符串长度，不包括\0  </span></span><br><span class="line">  </span><br><span class="line">    <span class="keyword">char</span>* str2 = <span class="string">&quot;Hello&quot;</span>;							<span class="comment">//字符串指针  </span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;sizeof(str2)=&quot;</span>&lt;&lt;<span class="keyword">sizeof</span>(str2)&lt;&lt;<span class="built_in">endl</span>;		<span class="comment">//sizeof计算指针=4  </span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;strlen(str2)=&quot;</span>&lt;&lt;<span class="built_in">strlen</span>(str2)&lt;&lt;<span class="built_in">endl</span>;		<span class="comment">//strlen计算字符串长度，不包括\0</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ps:如果操作系统是32位,则指针（无论是什么类型的指针）是按32位寻址的,一个字节8位,所以得出其长度为32/8=4</p>
+<p>延伸阅读：<a target="_blank" rel="noopener" href="http://blog.csdn.net/kangroger/article/details/20653255">sizeof(数组名)和sizeof(指针)</a> 、<a target="_blank" rel="noopener" href="http://blog.csdn.net/yhm_js/article/details/6140779">C++指针长度size</a></p>
+<h2 id="string"><a href="#string" class="headerlink" title="string"></a>string</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span>* str2 = <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line"><span class="comment">//2.string类  </span></span><br><span class="line"><span class="comment">//a.定义和初始化  </span></span><br><span class="line"><span class="built_in">string</span> s1;                          <span class="comment">//默认无参构造，空串  </span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s2</span><span class="params">(s1)</span></span>;                      <span class="comment">//拷贝构造  </span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s3</span><span class="params">(s2,<span class="number">0</span>)</span></span>;                    <span class="comment">//s2内位置字符初始化s3  </span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s4</span><span class="params">(str1)</span></span>;                    <span class="comment">//使用c风格字符串初始化  </span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s5</span><span class="params">(<span class="number">10</span>,<span class="string">&#x27;a&#x27;</span>)</span></span>;                  <span class="comment">//生成10个a的字符串  </span></span><br><span class="line"></span><br><span class="line"><span class="comment">//b.常用操作  </span></span><br><span class="line">s1 = s5;                            <span class="comment">//赋值，也可使用assign。s1内容清空，然后将s5的内容拷贝到s1处  </span></span><br><span class="line">s1 += s5;                           <span class="comment">//尾部添加，也可使用push_back，append  </span></span><br><span class="line">s1.insert(<span class="number">0</span>,str2);                  <span class="comment">//插入字符串  </span></span><br><span class="line">s1.size();                          <span class="comment">//返回字符数量，也可用length  </span></span><br><span class="line">s1.c_str();                         <span class="comment">//返回C风格字符串，data()返回字符数组不包括\0,c_str()包括\0，  </span></span><br><span class="line">                                    <span class="comment">//copy()则把字符串的内容复制或写入既有的c_string或字符数组内  </span></span><br><span class="line">s1.empty();                         <span class="comment">//检测是否为空  </span></span><br><span class="line"><span class="built_in">string</span>::iterator iter = s1.begin(); <span class="comment">//返回迭代器，rbegin为逆向迭代器  </span></span><br><span class="line"></span><br><span class="line">s1.compare(s2);                     <span class="comment">//比较  </span></span><br><span class="line">s1.find(<span class="string">&#x27;a&#x27;</span>,<span class="number">0</span>);                     <span class="comment">//从位置0开始查找a,返回位置  </span></span><br><span class="line">s1.replace(<span class="number">0</span>,<span class="number">10</span>,str2);              <span class="comment">//用str2替换从位置0开始的10个字符  </span></span><br><span class="line">s1.erase(<span class="number">0</span>,<span class="number">10</span>);                     <span class="comment">//删除从位置0开始的10个字符</span></span><br></pre></td></tr></table></figure>
+<p>延伸阅读：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/qlwy/archive/2012/03/25/2416937.html">string中c_str()、data()、copy(p,n)函数的用法</a></p>
+<h2 id="CString类"><a href="#CString类" class="headerlink" title="CString类"></a>CString类</h2><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">CString str;</span><br><span class="line"><span class="function">CString <span class="title">str1</span><span class="params">(_T(<span class="string">&quot;abc&quot;</span>))</span></span>;</span><br><span class="line">CString str2 = _T(<span class="string">&quot;defg&quot;</span>);</span><br><span class="line"> </span><br><span class="line">TCHAR szBuf[] = _T(<span class="string">&quot;kkk&quot;</span>);</span><br><span class="line"><span class="function">CString <span class="title">str3</span><span class="params">(szBuf)</span></span>;</span><br><span class="line">CString str4 = szBuf;</span><br><span class="line"> </span><br><span class="line">TCHAR *p = _T(<span class="string">&quot;1k2&quot;</span>);</span><br><span class="line"><span class="comment">//TCHAR * 转换为 CString</span></span><br><span class="line"><span class="function">CString <span class="title">str5</span><span class="params">(p)</span></span>;</span><br><span class="line">CString str6 = p;</span><br><span class="line"> </span><br><span class="line"><span class="function">CString <span class="title">str7</span><span class="params">(str1)</span></span>;</span><br><span class="line">CString str8 = str7;</span><br></pre></td></tr></table></figure>
+<h3 id="其他基本操作"><a href="#其他基本操作" class="headerlink" title="其他基本操作"></a>其他基本操作</h3><ul>
+<li><p>长度：<code>GetLength();</code></p>
+  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">CString <span class="title">str</span><span class="params">(_T(<span class="string">&quot;abc&quot;</span>))</span></span>;</span><br><span class="line"><span class="keyword">int</span> len = str.GetLength(); <span class="comment">//len == 3</span></span><br></pre></td></tr></table></figure></li>
+<li><p>是否为空，即不含字符：<code>IsEmpty();</code></p>
+</li>
+<li><p>清空字符串：<code>Empty();</code></p>
+  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">CString <span class="title">str</span><span class="params">(_T(<span class="string">&quot;abc&quot;</span>))</span></span>;</span><br><span class="line">BOOL mEmpty = str.IsEmpty(); <span class="comment">//mEmpty == FALSE</span></span><br><span class="line">str.Empty();</span><br><span class="line">mEmpty = str.IsEmpty(); <span class="comment">//mEmpty == TRUE</span></span><br></pre></td></tr></table></figure></li>
+<li><p>转换大小写：<code>MakeUpper</code>、<code>MakeLower</code></p>
+</li>
+<li><p>转换顺序：<code>MakeReverse</code></p>
+  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">CString <span class="title">str</span><span class="params">(_T(<span class="string">&quot;Abc&quot;</span>))</span></span>;</span><br><span class="line">str.MakeUpper(); <span class="comment">//str == ABC</span></span><br><span class="line">str.MakeLower(); <span class="comment">//str == abc</span></span><br><span class="line">str.MakeReverse(); <span class="comment">//str == cba</span></span><br></pre></td></tr></table></figure></li>
+<li><p>字符串的连接：<code>+</code>、<code>+=</code></p>
+  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">CString <span class="title">str</span><span class="params">(_T(<span class="string">&quot;abc&quot;</span>))</span></span>;</span><br><span class="line">str = _T(<span class="string">&quot;de&quot;</span>) + str + _T(<span class="string">&quot;kp&quot;</span>);<span class="comment">//str == deabckp</span></span><br><span class="line">str += _T(<span class="string">&quot;123&quot;</span>); <span class="comment">//str == deabckp123</span></span><br><span class="line">TCHAR szBuf[] = _T(<span class="string">&quot;789&quot;</span>);</span><br><span class="line">str += szBuf; <span class="comment">//str == deabckp123789</span></span><br></pre></td></tr></table></figure></li>
+<li><p>字符串的比较：<code>==</code>、<code>!=</code>、(<code>&lt;</code>、<code>&gt;</code>、<code>&lt;=</code>、<code>&gt;=</code> 不常用)、<code>Compare</code>(区分大小写)、<code>CompareNoCase</code>(不区分大小写)</p>
+  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">CString <span class="title">str1</span><span class="params">(_T(<span class="string">&quot;abc&quot;</span>))</span></span>;</span><br><span class="line">CString str2 = _T(<span class="string">&quot;aBc&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (str1 == str2)&#123;</span><br><span class="line">MessageBox(_T(<span class="string">&quot;str1 等于 str2&quot;</span>));</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">MessageBox(_T(<span class="string">&quot;str1 不等于 str2&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>延伸阅读：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/Caiqinghua/archive/2009/02/16/1391190.html">CString 成员函数用法大全</a></p>
+</li>
+</ul>
+<h1 id="头文件：string-cstring-string-h"><a href="#头文件：string-cstring-string-h" class="headerlink" title="头文件：string\cstring\string.h"></a>头文件：string\cstring\string.h</h1><p>接下来我们再深入一点，说说有关的头文件。（不涉及 Windows）</p>
+<h2 id="先上结论"><a href="#先上结论" class="headerlink" title="先上结论"></a>先上结论</h2><p>参考自：<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_6ce6d0bf010145or.html">cstring,string,string.h 区别比较</a></p>
+<p>首先，要明确的是<strong>cstring, string, string.h 是三个文件名，而不是类名</strong>，如果你将vs 2010（或者其它版本）安装在默认路径下，这三个文件可以在 C:\Program Files\Microsoft Visual Studio 10.0\VC\include 路径下找到，查看每个文件里面的内容，结合网上看的一些帖子，我得出以下结论：</p>
+<ol>
+<li><p>string.h 是C标准库下的文件，C++向下兼容C，所以包含了该文件，这个文件应该是原封不动的与C标准库下一致的。类似这样的文件还有math.h，setjmp.h，stdlib.h，stddef.h等等C标准库下的头文件；</p>
+</li>
+<li><p>cstring 是C++对string.h的简略升级与包装，并将它放置在命名空间 <code>std</code> 下，该文件的所有代码如下：</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cstring standard header</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _CSTRING_</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _CSTRING_</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;yvals.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _STD_USING</span></span><br><span class="line"> <span class="meta">#<span class="meta-keyword">undef</span> _STD_USING</span></span><br><span class="line">  <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"> <span class="meta">#<span class="meta-keyword">define</span> _STD_USING</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span> <span class="comment">/* _STD_USING */</span></span></span><br><span class="line"> <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* _STD_USING */</span></span></span><br><span class="line"></span><br><span class="line"> <span class="meta">#<span class="meta-keyword">if</span> _GLOBAL_USING &amp;&amp; !defined(RC_INVOKED)</span></span><br><span class="line">_STD_BEGIN</span><br><span class="line"><span class="keyword">using</span> _CSTD <span class="keyword">size_t</span>; <span class="keyword">using</span> _CSTD <span class="built_in">memchr</span>; <span class="keyword">using</span> _CSTD <span class="built_in">memcmp</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> _CSTD <span class="built_in">memcpy</span>; <span class="keyword">using</span> _CSTD memmove; <span class="keyword">using</span> _CSTD <span class="built_in">memset</span>;</span><br><span class="line"><span class="keyword">using</span> _CSTD <span class="built_in">strcat</span>; <span class="keyword">using</span> _CSTD <span class="built_in">strchr</span>; <span class="keyword">using</span> _CSTD <span class="built_in">strcmp</span>;</span><br><span class="line"><span class="keyword">using</span> _CSTD strcoll; <span class="keyword">using</span> _CSTD <span class="built_in">strcpy</span>; <span class="keyword">using</span> _CSTD <span class="built_in">strcspn</span>;</span><br><span class="line"><span class="keyword">using</span> _CSTD strerror; <span class="keyword">using</span> _CSTD <span class="built_in">strlen</span>; <span class="keyword">using</span> _CSTD <span class="built_in">strncat</span>;</span><br><span class="line"><span class="keyword">using</span> _CSTD <span class="built_in">strncmp</span>; <span class="keyword">using</span> _CSTD <span class="built_in">strncpy</span>; <span class="keyword">using</span> _CSTD <span class="built_in">strpbrk</span>;</span><br><span class="line"><span class="keyword">using</span> _CSTD <span class="built_in">strrchr</span>; <span class="keyword">using</span> _CSTD <span class="built_in">strspn</span>; <span class="keyword">using</span> _CSTD <span class="built_in">strstr</span>;</span><br><span class="line"><span class="keyword">using</span> _CSTD strtok; <span class="keyword">using</span> _CSTD strxfrm;</span><br><span class="line">_STD_END</span><br><span class="line"> <span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* _GLOBAL_USING */</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* _CSTRING_ */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Copyright (c) 1992-2009 by P.J. Plauger.  ALL RIGHTS RESERVED.</span></span><br><span class="line"><span class="comment"> * Consult your license regarding permissions and restrictions.</span></span><br><span class="line"><span class="comment">V5.20:0009 */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p> 所以，使用 cstring 时要用 <code>using namespace std</code>，cstring 里的内容与方法，应该与 C 标准库下的 string.h 一致。</p>
+</li>
+<li><p>而string就与前面两个有本质差别了。它是C++自己开发封装的类，同样用于字符串操作，其中用到了很多的操作符重载等方法，实现方法和C标准库中的string.h有很大差别。</p>
+</li>
+<li><p>另外容易混淆的是，<strong>在MFC中，还有CString类，它与cstring是有本质区别的</strong>（形式上区分大小写），前者是类名，使用时包含头文件 afx.h，后者是文件名，两者实现的方法也大相径庭。</p>
+</li>
+</ol>
+<h2 id="再讲故事"><a href="#再讲故事" class="headerlink" title="再讲故事"></a>再讲故事</h2><p>参考自：<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_6e7fed390100y2xx.html">string.h cstring string的关系</a></p>
+<p>延伸看一下，C++ 标准库。</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Cpp-Standard-Library.gif"></p>
+<p>C++标准库很大。非常大。难以置信的大。怎么个大法？这么说吧：在C++标准中，关于标准库的规格说明占了密密麻麻300 多页，这还不包括标准C 库，后者只是”作为参考”（老实说，原文就是用的这个词）包含在C++库中。当然，并非总是越大越好，但在现在的情况下，确实越大越好，因为大的库会包含大量的功能。标准库中的功能越多，开发自己的应用程序时能借助的功能就越多。C++库并非提供了一切（很明显的是，没有提供并发和图形用户接口的支持），但确实提供了很多。几乎任何事你都可以求助于它。</p>
+<p>在归纳标准库中有些什么之前，需要介绍一下它是如何组织的。因为标准库中东西如此之多，你（或象你一样的其他什么人）所选择的类名或函数名就很有可能和标准库中的某个名字相同。为了避免这种情况所造成的名字冲突，实际上标准库中的一切都被放在名字空间 <code>std</code> 中。但这带来了一个新问题。无数现有的C++代码都依赖于使用了多年的伪标准库中的功能，例如，声明在 <code>&lt;iostream.h&gt;</code>，<code>&lt;complex.h&gt;</code>，<code>&lt;limits.h&gt;</code> 等头文件中的功能。现有软件没有针对使用名字空间而进行设计，如果用 <code>std</code> 来包装标准库导致现有代码不能用，将是一种可耻行为。（这种釜底抽薪的做法会让现有代码的程序员说出比”可耻” 更难听的话）慑于被激怒的程序员会产生的破坏力，标准委员会决定为包装了 <code>std</code> 的那部分标准库构件创建新的头文件名。</p>
+<p><strong>生成新头文件的方法仅仅是将现有C++头 文件名中的.h 去掉</strong>，方法本身不重要，正如最后产生的结果不一致也并不重要一样。所以 <code>&lt;iostream.h&gt;</code> 变成了 <code>&lt;iostream&gt;</code>，<code>&lt;complex.h&gt;</code> 变成了 <code>&lt;complex&gt;</code> 等等。<strong>对于C 头文件，采用同样的方法，但在每个名字前还要添加一个C。</strong>所以 C 的 <code>&lt;string.h&gt;</code> 变成了 <code>&lt;cstring&gt;</code>，<code>&lt;stdio.h&gt;</code> 变成 <code>&lt;cstdio&gt;</code>。最后一点是，旧的C++头文件是官方所反对使用的（即，明确列出不再支持），但旧的 C 头文件则没有（以保持对 C 的兼容性）。实际上，编译器制造商不会停止对客户现有软件提供支持，所以可以预计，旧的C++头文件在未来几年内还是会被支持。</p>
+<p>所以，实际来说，下面是C++头文件的现状：</p>
+<ul>
+<li>旧的 C++ 头文件名如 <code>&lt;iostream.h&gt;</code> 将会继续被支持，尽管它们不在官方标准中。这些头文件的内容不在名字空间 <code>std</code> 中。</li>
+<li>新的 C++ 头文件如 <code>&lt;iostream&gt;</code> 包含的基本功能和对应的旧头文件相同，但头文件的内容在名字空间 <code>std</code> 中。（在标准化的过程中，库中有些部分的细节被修改了，所以旧头文件和新头文件中的实体不一定完全对应。）</li>
+<li>标准 C 头文件如 <code>&lt;stdio.h&gt;</code> 继续被支持。头文件的内容不在 <code>std</code> 中。</li>
+<li>具有 C 库功能的新 C++ 头文件具有如 <code>&lt;cstdio&gt;</code> 这样的名字。它们提供的内容和相应的旧 C 头文件相同，只是内容在 <code>std</code> 中。</li>
+</ul>
+<h2 id="重申结论"><a href="#重申结论" class="headerlink" title="重申结论"></a>重申结论</h2><p>重要的事情放在最后：</p>
+<ol>
+<li><p><code>&lt;string.h&gt;</code> 是 C 标准库中的字符串处理函数的头文件 如 <code>strcmp</code> <code>strcat</code> 等等函数</p>
+</li>
+<li><p><code>&lt;cstring&gt;</code> 是与 C 标准库的 <code>&lt;string.h&gt;</code> 相对应的，但被加入到 <code>std</code> 名字空间的版本。</p>
+<p> cstring 是 C++ 的组成部分，它可以说是把 C 的 string.h 的升级版，但它不是 C 的组成部分。</p>
+<p> 所以<strong>如果你用的是 C++，那么请用 cstring；如果你用的是 C 请用 string.h。</strong></p>
+</li>
+<li><p><code>&lt;string.h&gt;</code> 和 <code>&lt;string&gt;</code></p>
+<p> string.h 和 C++中的string类是有很大区别的，<code>&lt;string&gt;</code> 并非 <code>&lt;string.h&gt;</code> 的“升级版本”，他们是毫无关系的两个头文件。</p>
+<p> string，它是C++定义的 <code>std::string</code> 所使用的文件，是string类的头文件，属于 STL 范畴。它有很多对字符串操作的方法。</p>
+</li>
+<li><p>string 与 cstring: 看了以上3点，这两者的区别大家应该很明白了，唯一的联系就是都是 C++ 组成部分。</p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/03/extern-static-const/" rel="prev" title="进一步理解extern">
+      <i class="fa fa-chevron-left"></i> 进一步理解extern
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/16/char-wchar-t/" rel="next" title="字符（串）之间的转换">
+      字符（串）之间的转换 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%EF%BC%9Achar-char-string-CString"><span class="nav-number">1.</span> <span class="nav-text">类型：char[]\char*\string\CString</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C%E9%A3%8E%E6%A0%BC%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.1.</span> <span class="nav-text">C风格字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string"><span class="nav-number">1.2.</span> <span class="nav-text">string</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CString%E7%B1%BB"><span class="nav-number">1.3.</span> <span class="nav-text">CString类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.3.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.2.</span> <span class="nav-text">其他基本操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6%EF%BC%9Astring-cstring-string-h"><span class="nav-number">2.</span> <span class="nav-text">头文件：string\cstring\string.h</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E4%B8%8A%E7%BB%93%E8%AE%BA"><span class="nav-number">2.1.</span> <span class="nav-text">先上结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%8D%E8%AE%B2%E6%95%85%E4%BA%8B"><span class="nav-number">2.2.</span> <span class="nav-text">再讲故事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E7%94%B3%E7%BB%93%E8%AE%BA"><span class="nav-number">2.3.</span> <span class="nav-text">重申结论</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

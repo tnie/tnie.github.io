@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="2015年12月22日 14:48:52 这个标题《Makefile 自动生成》 8 号立的，拖到今天刚好两周。ps 2017&#x2F;8&#x2F;24 14:04:25 删改了 2&#x2F;3 的内容，改为现在的标题。 一方面因为最近的工作是关于 MySQL，整理数据库表结构的；另一方面，是直到今天，对于自动生成 Makefile 操作依旧懵懵懂懂，在实际项目中无法使用，还是自己手动写 Makefile 文件。下面进入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Makefile 自动生成 - 三种目录结构">
+<meta property="og:url" content="https://tnie.github.io/2017/04/27/automake1st/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="2015年12月22日 14:48:52 这个标题《Makefile 自动生成》 8 号立的，拖到今天刚好两周。ps 2017&#x2F;8&#x2F;24 14:04:25 删改了 2&#x2F;3 的内容，改为现在的标题。 一方面因为最近的工作是关于 MySQL，整理数据库表结构的；另一方面，是直到今天，对于自动生成 Makefile 操作依旧懵懵懂懂，在实际项目中无法使用，还是自己手动写 Makefile 文件。下面进入">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/4.png">
+<meta property="article:published_time" content="2017-04-27T08:45:04.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.367Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="make">
+<meta property="article:tag" content="makefile">
+<meta property="article:tag" content="automake">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/1.png">
+
+<link rel="canonical" href="https://tnie.github.io/2017/04/27/automake1st/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Makefile 自动生成 - 三种目录结构 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/27/automake1st/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Makefile 自动生成 - 三种目录结构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-27 16:45:04" itemprop="dateCreated datePublished" datetime="2017-04-27T16:45:04+08:00">2017-04-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>2015年12月22日 14:48:52</p>
+<p>这个标题《Makefile 自动生成》 8 号立的，拖到今天刚好两周。ps 2017/8/24 14:04:25 删改了 2/3 的内容，改为现在的标题。</p>
+<p>一方面因为最近的工作是关于 MySQL，整理数据库表结构的；另一方面，是直到今天，对于自动生成 Makefile 操作依旧懵懵懂懂，在实际项目中无法使用，还是自己手动写 Makefile 文件。下面进入主题。</p>
+<p>Makefile 自动生成，实际项目中接触到的工具有：easymake、cmake 和 autotools。 在这里只整理 autotools。</p>
+<ul>
+<li>easymake 怎么用，给个简单使用的参考，进一步的细节和更深程度上的使用，以后用到了再学。<a target="_blank" rel="noopener" href="http://www.cnblogs.com/Pony279/p/3888774.html">通用的 makefile 小工具分享 - Easymake 使用说明</a>。</li>
+<li>cmake 又是值得大书特书的一款工具。<a target="_blank" rel="noopener" href="http://www.hahack.com/codes/cmake/">CMake 入门实战</a></li>
+</ul>
+<p>autotools 作为重点学习，所以发现了很多篇不错的帖子。</p>
+<ol>
+<li><a href="/2017/08/24/autotools/">编译利器：大型项目如何使用Automake和Autoconf完成编译配置(ver+0.6)</a> 内容很棒，却找不到好的排版，将其摘入自己博客</li>
+<li><a target="_blank" rel="noopener" href="http://www.pchou.info/linux/2016/09/16/gnu-build-system-1.html">概念：GNU构建系统和Autotool</a>、<a target="_blank" rel="noopener" href="http://www.pchou.info/linux/2016/09/24/gnu-build-system-2.html">实践：GNU构建系统</a> 作者整理的真心不错，专业功底、语言描述、文章结构都很赞；</li>
+<li><a target="_blank" rel="noopener" href="https://geesun.github.io/posts/2015/02/autotool.html">使用autotools生成Makefile学习笔记</a> 不能当做一篇学习的帖子，其“常用功能分析”一节可以作为参考手册，认清知识点</li>
+</ol>
+<a id="more"></a>
+
+<h1 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h1><p>无论是在 Linux 还是在 Unix 环境中，make 都是一个非常重要的编译命令。不管是自己进行项目开发还是安装应用软件，我们都经常要用到 make 或 make install。利用 make 工具，我们可以将大型的开发项目分解成为多个更易于管理的模块，对于一个包括几百个源文件的应用程序，使用 make 和 makefile 工具就可以轻而易举的理顺各个源文件之间纷繁复杂的相互关系。</p>
+<p>但是如果通过查阅 make 的帮助文档来手工编写 Makefile,对任何程序员都是一场挑战。幸而有 GNU 提供的 Autoconf + Automake 这两套工具使得编写 makefile 不再是一个难题。</p>
+<p>本文将介绍如何利用 GNU Autoconf + Automake 这两套工具来协助我们自动产生 Makefile 文件，并且让开发出来的软件可以像大多数源码包那样，只需”./configure”, “make”,”make install” 就可以把程序安装到系统中。</p>
+<p>以下文字转载自：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/ericdream/archive/2011/12/09/2282359.html">运用 Autoconf 和 Automake 生成 Makefile 的学习之路</a> ，原作者的几处笔误已改正，除此之外，<del>重写第七、八、十节，新添第十一节</del> <strong>放弃作者第六、七、八、十节</strong>。这篇帖子的评论也值得一看。</p>
+<blockquote>
+<p>niel 2017/8/24 8:53:09 补充，再次学习 autotools 时，发现作者写的全都是皮毛。七、八、十节作者纯粹是强行凑字数，估计作者自己就没弄懂——没说到点上不说，好几处地方说的似是而非——初学者看了反而增加学习难度，甚至误入歧途。我在作者基础上重新整理的这三节，当时表述起来就觉得困难，整理完依旧是不清不楚，现在看来根本原因就在于毫无理解，全文都是在介绍表面功夫，一点点原理的东西都没讲。</p>
+</blockquote>
+<blockquote>
+<p>niel 最让人难以忍受的是，看完作者的帖子，你发现你只会例子，做不到举一反三，稍微复杂点的项目（比如使用动态库、配置文件的存放）就无从下手。因为使用 autotools 的关键——怎么编写 configure.ac 和 Makefile.am——作者根本就没讲（没讲明白和没讲等价），从网上滥竽充数的各种帖子里生拉硬拽凑了第七、八、十节，作者自己都不会写 configure.ac、Makefile.am，给我们讲个毛线啊</p>
+</blockquote>
+<p>网上有很多帖子都参考了 IBM 的例解 <a target="_blank" rel="noopener" href="http://www.ibm.com/developerworks/cn/linux/l-makefile/">autoconf 和 automake 生成 Makefile 文件</a>，但相比上面这篇帖子就显得很一般了，只是平台好罢了！</p>
+<h1 id="概念介绍"><a href="#概念介绍" class="headerlink" title="概念介绍"></a>概念介绍</h1><h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><p>　　<br>makefile 用来定义整个工程的编译规则。一个工程中的源文件计数，其按类型、功能、模块分别放在若干个目录中，makefile 定义了一系列的规则来指定，哪些文件需要先编译，哪些文件需要后编译，哪些文件需要重新编译，甚至于进行更复杂的功能操作，因为 makefile 就像一个 Shell 脚本一样，其中也可以执行操作系统的命令。<br>　　<br>makefile 带来的好处就是——“自动化编译”，一旦写好，只需要一个 make 命令，整个工程完全自动编译，极大的提高了软件开发的效率。make 是一个命令工具，是一个解释 makefile 中指令的命令工具，一般来说，大多数的 IDE 都有这个命令，比如：Delphi 的 make，Visual C++ 的 nmake，Linux 下 GNU 的 make。可见，makefile 都成为了一种在工程方面的编译方法。</p>
+<h2 id="Autoconf"><a href="#Autoconf" class="headerlink" title="Autoconf"></a>Autoconf</h2><p>Autoconf 是一个用于生成可以自动地配置软件源码包，用以适应多种UNIX类系统的 shell 脚本（即 configure）工具。由 Autoconf 生成的配置脚本在运行的时候与 Autoconf 是无关的， 就是说配置脚本的用户并不需要拥有 Autoconf。 </p>
+<p>对于每个使用了 Autoconf 的软件包，Autoconf 从一个列举了该软件包需要的，或者可以使用的系统特征的列表的模板文件中生成配置脚本。在 shell 代码识别并响应了一个被列出的系统特征之后，Autoconf 允许多个可能使用（或者需要）该特征的软件包共享该特征。 如果后来因为某些原因需要调整 shell 代码，就只要在一个地方进行修改； 所有的配置脚本都将被自动地重新生成以使用更新了的代码。</p>
+<h2 id="Automake"><a href="#Automake" class="headerlink" title="Automake"></a>Automake</h2><p>Automake 是一个从 “Makefile.am”文件自动生成 “Makefile.in” 的工具。每个“Makefile.am”基本上是一系列 make 的宏定义 （make 规则也会偶尔出现）。生成的“Makefile.in”服从 GNU Makefile 标准。GNU Makefile 标准文档长、复杂，而且会发生改变。Automake 的目的就是解除个人 GNU 维护者维护 Makefile 的负担 （并且让 Automake 的维护者来承担这个负担）。典型的 Automake 输入文件是一系列简单的宏定义。处理所有这样的文件以创建 “Makefile.in”。在一个项目（project）的每个目录中通常包含一个 “Makefile.am”。Automake 在几个方面对一个项目做了限制；例如它假定项目使用 Autoconf 并且对 “configure.in”的内容施加了某些限制。 </p>
+<p><strong>Automake 支持三种目录层次： “flat”、“shallow”和“deep”。</strong></p>
+<ul>
+<li>一个 flat（平）包指的是所有文件都在一个目录中的包。为这类包提供的“Makefile.am” 缺少宏 SUBDIRS。这类包的一个例子是 termutils。</li>
+<li>一个deep（深）包指的是所有的源代码都被储存在子目录中的包；顶层 目录主要包含配置信息。GNU cpio 是这类包的一个很好的例子，GNU tar 也是。deep包的顶层“Makefile.am”将包括宏SUBDIRS，但没有其它定义需要创建的对象的宏。</li>
+<li>一个shallow（浅）包指的是主要的源代码储存在顶层目录中，而 各个部分（典型的是库）则储存在子目录中的包。Automake 本身就是这类包（GNU make 也是如此，它现在已经不使用 automake）。</li>
+</ul>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>libtool 是一款方便生成各种程序库的工具。非必须。</p>
+<p>下面，就以这三种目录层次结构分别讲解。</p>
+<h1 id="Flat-目录结构："><a href="#Flat-目录结构：" class="headerlink" title="Flat 目录结构："></a>Flat 目录结构：</h1><h2 id="目录结构："><a href="#目录结构：" class="headerlink" title="目录结构："></a>目录结构：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Helloworld </span><br><span class="line">|-mytest.h </span><br><span class="line">|-mytest.c </span><br><span class="line">|-mymain.c</span><br></pre></td></tr></table></figure>
+<p>顶级目录 helloworld，该目录下存在三个文件。mytest.h 头文件声明了 <code>sayhello()</code> 方法；mytest.c 中实现了 <code>sayhello()</code> 方法；mymain.c 中的 main 调用了 <code>sayhello()</code> 方法。 </p>
+<h2 id="执行步骤："><a href="#执行步骤：" class="headerlink" title="执行步骤："></a>执行步骤：</h2><ol>
+<li><p>Autoscan </p>
+<p> 在 helloworld 目录下执行 autoscan 命令，其中生成一个 configure.scan 的文件。 </p>
+</li>
+<li><p>将 configure.scan 文件更名为 <del>configure.in</del>（ps 帖子太早，未与时俱进） configure.ac 文件。</p>
+</li>
+<li><p>打开 <del>configure.in</del> configure.ac 文件，修改文件内容</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#                                               -*- Autoconf -*-</span><br><span class="line"># Process this file with autoconf to produce a configure script.</span><br><span class="line"></span><br><span class="line">#AC_INIT([2.68])</span><br><span class="line">AC_INIT([hello], [1.0], [**@126.com]) # 修改</span><br><span class="line">AC_CONFIG_SRCDIR([mymain.c])</span><br><span class="line">#AC_CONFIG_HEADERS([config.h])  # 注释掉了</span><br><span class="line"></span><br><span class="line">#AM_INIT_AUTOMAKE(hello, 1.0)  # 新增 ps 这种语法已经不推荐使用了</span><br><span class="line">AM_INIT_AUTOMAKE # 参考 autoconf 手册</span><br><span class="line"></span><br><span class="line"># Check for programs</span><br><span class="line">AC_PROG_CC</span><br><span class="line"></span><br><span class="line"># Check for libraries</span><br><span class="line"># Check for header files</span><br><span class="line"># Check for typedefs, structures, and compiler characteristics.</span><br><span class="line"># Check for library functions.</span><br><span class="line"></span><br><span class="line">AC_OUTPUT(Makefile)   # 修改</span><br></pre></td></tr></table></figure></li>
+<li><p>然后分别执行以下两个命令： </p>
+<ul>
+<li>aclocal </li>
+<li>autoconf </li>
+<li>autoheader（可选，和 AC_CONFIG_HEADERS 宏有关联，此细节【稍后详细描述】【另，注释掉 AC_CONFIG_HEADERS 宏应该是一种不规范的写法】）</li>
+</ul>
+</li>
+<li><p>在 helloworld 文件夹下创建一个名为 Makefile.am 的文件，并输入以下内容：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AUTOMAKE_OPTIONS&#x3D;foreign</span><br><span class="line">bin_PROGRAMS&#x3D;hello</span><br><span class="line">hello_SOURCES&#x3D;mymain.c mytest.c mytest.h</span><br></pre></td></tr></table></figure></li>
+<li><p>执行命令 <code>automake &lt;--add-missing | -a&gt;</code>，automake 会根据 Makefile.am 文件产生一些文件，其中包含最重要的 Makefile.in。在这里使用选项 <code>&lt;--add-missing | -a&gt;</code> 可以让 automake <strong>自动添加</strong>一些必需的脚本文件，如果不带此参数会因为缺失文件而报错。（更多内容参考最后一章：automake 软件等级）</p>
+</li>
+<li><p>执行“./configure”命令生成 Makefile 文件 </p>
+</li>
+<li><p>执行“make”命令来编译 hello.c 程序，从而生成可执行程序 hello。生成可执行程序 hello 后，执行“./hello”。</p>
+</li>
+</ol>
+<p>哈哈，一定看到你想要的结果了吧。ps：更详细介绍<a href="/2017/04/27/automake2nd/">《Automake 之 Flat 目录机构》</a></p>
+<h1 id="shallow-目录结构"><a href="#shallow-目录结构" class="headerlink" title="shallow 目录结构"></a>shallow 目录结构</h1><h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">helloworld </span><br><span class="line">|-mymain.c </span><br><span class="line">|head </span><br><span class="line">||-mytest.h </span><br><span class="line">||-mytest.c </span><br></pre></td></tr></table></figure>
+<p>　　<br>顶级目录 helloworld，该目录下存在一个主文件 mymain.c 和一个目录 head。head 目录中，mytest.h 头文件声明了 <code>sayhello()</code> 方法；mytest.c 中实现了 <code>sayhello()</code> 方法；mymain.c 中的 main 调用了 <code>sayhello()</code> 方法。 </p>
+<h2 id="执行步骤：-1"><a href="#执行步骤：-1" class="headerlink" title="执行步骤："></a>执行步骤：</h2><ol>
+<li><p>在顶层目录下运行 autoscan 产生 configure.scan 文件 </p>
+</li>
+<li><p>将configure.scan文件更名为 <del>configure.in</del> configure.ac 文件 </p>
+</li>
+<li><p>打开 <del>configure.in</del> configure.ac 文件，修改文件内容</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#                                               -*- Autoconf -*-</span><br><span class="line"># Process this file with autoconf to produce a configure script.</span><br><span class="line"> </span><br><span class="line">#AC_INIT([2.68])</span><br><span class="line">AC_INIT([hello], [1.0], [**@126.com])</span><br><span class="line">AC_CONFIG_SRCDIR([mymain.c])</span><br><span class="line">#AC_CONFIG_HEADERS([config.h])</span><br><span class="line"> </span><br><span class="line">AM_INIT_AUTOMAKE(hello, 1.0)</span><br><span class="line"> </span><br><span class="line"># Check for programs</span><br><span class="line">AC_PROG_CC</span><br><span class="line">#使用静态库编译，需要此宏定义</span><br><span class="line">AC_PROG_RANLIB</span><br><span class="line"></span><br><span class="line"># Check for libraries</span><br><span class="line"># Check for header files</span><br><span class="line"># Check for typedefs, structures, and compiler characteristics.</span><br><span class="line"># Check for library functions.</span><br><span class="line"></span><br><span class="line">AC_OUTPUT(Makefile head&#x2F;Makefile)</span><br></pre></td></tr></table></figure></li>
+<li><p>然后分别执行以下两个命令： </p>
+<ul>
+<li>aclocal </li>
+<li>autoconf </li>
+</ul>
+</li>
+<li><p>在 head 文件夹下创建 Makefile.am 文件，内容如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AUTOMAKE_OPTIONS&#x3D;foreign</span><br><span class="line">noinst_LIBRARIES&#x3D;libmytest.a</span><br><span class="line">libmytest_a_SOURCES&#x3D;mytest.h mytest.c</span><br></pre></td></tr></table></figure></li>
+<li><p>在 helloworld 文件夹下创建 Makefile.am 文件，内容如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AUTOMAKE_OPTIONS&#x3D;foreign</span><br><span class="line">SUBDIRS&#x3D;head</span><br><span class="line">bin_PROGRAMS&#x3D;hello</span><br><span class="line">hello_SOURCES&#x3D;mymain.c</span><br><span class="line">hello_LDADD&#x3D;head&#x2F;libmytest.a</span><br></pre></td></tr></table></figure></li>
+<li><p>执行命令“automake –add-missing”，automake 会根据 Makefile.am 文件产生一些文件，其中包含最重要的 Makefile.in</p>
+</li>
+<li><p>执行“./configure”命令生成 Makefile 文件 </p>
+</li>
+<li><p>执行“make”命令来编译 hello.c 程序，从而生成可执行程序 hello。生成可执行程序 hello 后，执行“./hello”。</p>
+</li>
+</ol>
+<p>哈哈，shallow 的目录结构也搞定了哦。</p>
+<h1 id="Deep-目录结构"><a href="#Deep-目录结构" class="headerlink" title="Deep 目录结构"></a>Deep 目录结构</h1><h2 id="目录结构-1"><a href="#目录结构-1" class="headerlink" title="目录结构"></a>目录结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">helloworld </span><br><span class="line">|head </span><br><span class="line">||-mytest.h </span><br><span class="line">||-mytest.c </span><br><span class="line">|src </span><br><span class="line">||-mymain.c</span><br></pre></td></tr></table></figure>
+<p> 　　<br>顶级目录 helloworld，该目录下存在两个目录 src 和 head。Head 目录中，mytest.h 头文件声明了 <code>sayhello()</code> 方法；mytest.c 中实现了 <code>sayhello()</code>方法；src 目录中的 mymain.c 中的 main 调用了 <code>sayhello()</code> 方法。 </p>
+<h2 id="执行步骤"><a href="#执行步骤" class="headerlink" title="执行步骤"></a>执行步骤</h2><ol>
+<li><p> 在顶层目录下运行 autoscan 产生 configure.scan 文件 </p>
+</li>
+<li><p> 将 configure.scan 文件更名为 <del>configure.in</del> configure.ac 文件 </p>
+</li>
+<li><p>打开 <del>configure.in</del> configure.ac 文件，修改文件内容</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#                                               -*- Autoconf -*-</span><br><span class="line"># Process this file with autoconf to produce a configure script.</span><br><span class="line"> </span><br><span class="line">#AC_INIT([2.68])</span><br><span class="line">AC_INIT([hello], [1.0], [**@126.com])</span><br><span class="line">AC_CONFIG_SRCDIR([src&#x2F;mymain.c])</span><br><span class="line">#AC_CONFIG_HEADERS([config.h])</span><br><span class="line"> </span><br><span class="line">AM_INIT_AUTOMAKE(hello, 1.0)</span><br><span class="line"> </span><br><span class="line"># Check for programs</span><br><span class="line">AC_PROG_CC</span><br><span class="line">#使用静态库编译，需要此宏定义</span><br><span class="line">AC_PROG_RANLIB</span><br><span class="line"></span><br><span class="line"># Check for libraries</span><br><span class="line"># Check for header files</span><br><span class="line"># Check for typedefs, structures, and compiler characteristics.</span><br><span class="line"># Check for library functions.</span><br><span class="line"></span><br><span class="line">AC_OUTPUT(Makefile head&#x2F;Makefile src&#x2F;Makefile)</span><br></pre></td></tr></table></figure></li>
+<li><p>然后分别执行以下两个命令： </p>
+<ul>
+<li>aclocal </li>
+<li>autoconf </li>
+</ul>
+</li>
+<li><p>在 head 文件夹下创建 Makefile.am 文件，内容如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AUTOMAKE_OPTIONS&#x3D;foreign</span><br><span class="line">noinst_LIBRARIES&#x3D;libmytest.a</span><br><span class="line">libmytest_a_SOURCES&#x3D;mytest.h mytest.c</span><br></pre></td></tr></table></figure></li>
+<li><p>在 src 文件夹下创建 Makefile.am 文件，内容如下： </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">AUTOMAKE_OPTIONS&#x3D;foreign</span><br><span class="line">bin_PROGRAMS&#x3D;hello</span><br><span class="line">hello_SOURCES&#x3D;mymain.c</span><br><span class="line">hello_LDADD&#x3D;..&#x2F;head&#x2F;libmytest.a</span><br></pre></td></tr></table></figure></li>
+<li><p>在 helloworld 文件夹下创建 Makefile.am 文件，内容如下： </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AUTOMAKE_OPTIONS&#x3D;foreign</span><br><span class="line">SUBDIRS&#x3D;head src</span><br></pre></td></tr></table></figure></li>
+<li><p> 执行命令“automake –add-missing”，automake 会根据 Makefile.am 文件产生一些文件，其中包含最重要的 Makefile.in </p>
+</li>
+<li><p> 执行“make”命令来编译 hello.c 程序，从而生成可执行程序 hello。生成可执行程序 hello 后，执行“./hello”。</p>
+</li>
+</ol>
+<p>哈哈，deep 目录下的编译与链接也搞定了！</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>以上 3 种目录层次结构的测试代码在 <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/Automake_Test_Code.tar.bz2">附件</a> 中。归纳一下以上所有例子的流程： </p>
+<ol>
+<li>在存放源代码的顶层目录下执行 autoscan 命令生成 configure.scan 文件。 </li>
+<li>将 configure.scan 文件改名为 <del>configure.in</del> configure.ac，并对其默认配置进行修改。 </li>
+<li>执行 aclocal、autoconf 两个命令，分别生成 aclocal.m4、configure 文件。 </li>
+<li>在每个目录下创建一个名为 Makefile.am 的文件，并输入相应的内容。 （ps 下文试验证明最好将此步骤放到最前面）</li>
+<li>执行 automake –add-missing，它根据 Makefile.am 文件，生成 Makefile.in。 （ps 此步骤只能在 aclocal -？autoconf-之后）</li>
+<li>执行 ./configure 脚本文件，它根据 Makefile.in 文件，生成最终的 Makefile 文件。 </li>
+<li>生成 Makefile 之后，执行“make”编译工程并且生成可执行程序。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/1.png" alt="流程图"></p>
+<p>看到这里，你除了跑跑例子什么都不会，只是对于使用 autotools 创建 Makefile 的步骤有了一个模糊的认识，但正如文章开头吐槽的那样，使用 autotools 的<strong>关键</strong>在于 configure.ac 和 Makefile.am 文件的书写。在 <a href="/2017/08/24/autotools/">编译利器：大型项目如何使用Automake和Autoconf完成编译配置(ver+0.6)</a> 中着重介绍了这两个文件的书写规则。</p>
+<h1 id="附：automake-软件等级【测试……】"><a href="#附：automake-软件等级【测试……】" class="headerlink" title="附：automake 软件等级【测试……】"></a>附：automake 软件等级【测试……】</h1><p>在上文的例子中我们看到 Makefile.am 文件的第一行内容就是设置 automake 软件等级。</p>
+<p><img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/4.png" alt="简单的例子"></p>
+<p>AUTOMAKE_OPTIONS 为设置 automake 的选项，由于 GNU 对自己发布的软件有严格的规范，比如必须带许可证声明文件等，否则 automake 执行时会出错，automake 提供了 3 种软件等级：foreign、gnu 和 gnits，让用户选择采用，默认等级为 gnu。在本例中使用 foreign 等级，它只检查必须的文件。</p>
+<h2 id="gun-等级"><a href="#gun-等级" class="headerlink" title="gun 等级"></a>gun 等级</h2><p>automake 软件等级默认 gnu，此等级下执行 automake 需要文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">* install-sh </span><br><span class="line">* missing </span><br><span class="line">* INSTALL </span><br><span class="line">* NEWS </span><br><span class="line">* README </span><br><span class="line">* AUTHORS </span><br><span class="line">* ChangeLog </span><br><span class="line">* COPYING </span><br><span class="line">* depcomp  </span><br></pre></td></tr></table></figure>
+<p>其中，以下文件在执行 automake -a 的时候会自动生成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">* install-sh </span><br><span class="line">* missing </span><br><span class="line">* INSTALL </span><br><span class="line">* COPYING </span><br><span class="line">* depcomp</span><br></pre></td></tr></table></figure>
+<p>所以，接下来手动生成剩下的文件 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost str]# touch NEWS README AUTHORS ChangeLog </span><br></pre></td></tr></table></figure>
+<p>8、执行 automake -a</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost str]# automake -a</span><br><span class="line">configure.ac: installing &#96;.&#x2F;install-sh&#39;</span><br><span class="line">configure.ac: installing &#96;.&#x2F;missing&#39;</span><br><span class="line">Makefile.am: installing &#96;.&#x2F;INSTALL&#39;</span><br><span class="line">Makefile.am: installing &#96;.&#x2F;COPYING&#39;</span><br><span class="line">Makefile.am: installing &#96;.&#x2F;compile&#39;</span><br><span class="line">Makefile.am: installing &#96;.&#x2F;depcomp&#39;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/make/" rel="tag"># make</a>
+              <a href="/tags/makefile/" rel="tag"># makefile</a>
+              <a href="/tags/automake/" rel="tag"># automake</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/04/26/gxx/" rel="prev" title="linux 指令之 g++">
+      <i class="fa fa-chevron-left"></i> linux 指令之 g++
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/04/27/automake2nd/" rel="next" title="Automake 之 Flat 目录机构">
+      Automake 之 Flat 目录机构 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E5%AD%90"><span class="nav-number">1.</span> <span class="nav-text">引子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">概念介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile"><span class="nav-number">2.1.</span> <span class="nav-text">Makefile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Autoconf"><span class="nav-number">2.2.</span> <span class="nav-text">Autoconf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Automake"><span class="nav-number">2.3.</span> <span class="nav-text">Automake</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Flat-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">Flat 目录结构：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="nav-number">3.1.</span> <span class="nav-text">目录结构：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="nav-number">3.2.</span> <span class="nav-text">执行步骤：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shallow-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="nav-number">4.</span> <span class="nav-text">shallow 目录结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="nav-number">4.1.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E6%AD%A5%E9%AA%A4%EF%BC%9A-1"><span class="nav-number">4.2.</span> <span class="nav-text">执行步骤：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Deep-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="nav-number">5.</span> <span class="nav-text">Deep 目录结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84-1"><span class="nav-number">5.1.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E6%AD%A5%E9%AA%A4"><span class="nav-number">5.2.</span> <span class="nav-text">执行步骤</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%EF%BC%9Aautomake-%E8%BD%AF%E4%BB%B6%E7%AD%89%E7%BA%A7%E3%80%90%E6%B5%8B%E8%AF%95%E2%80%A6%E2%80%A6%E3%80%91"><span class="nav-number">7.</span> <span class="nav-text">附：automake 软件等级【测试……】</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gun-%E7%AD%89%E7%BA%A7"><span class="nav-number">7.1.</span> <span class="nav-text">gun 等级</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

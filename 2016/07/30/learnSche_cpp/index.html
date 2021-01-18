@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="跌跌撞撞，兜来绕去，终究还是在 C++ 这个圈子里。毕业时，因为身外事去选择工作单位，而工作单位决定了工作性质，决定了自己处在做软件的边缘，甚至一度成为网管。两年之后跳出陷阱时，背负着“过去的选择”走进了 C++ 的世界，因为一无所长，在诸多技术更迭交替的 IT 圈我像个刚入门的新人似的，只了解一点点 VC++。我没有从头来过的魄力，我也并不清楚 Java 是否更有前途，互联网是否更多辛苦。 在毕">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习 C++">
+<meta property="og:url" content="https://tnie.github.io/2016/07/30/learnSche_cpp/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="跌跌撞撞，兜来绕去，终究还是在 C++ 这个圈子里。毕业时，因为身外事去选择工作单位，而工作单位决定了工作性质，决定了自己处在做软件的边缘，甚至一度成为网管。两年之后跳出陷阱时，背负着“过去的选择”走进了 C++ 的世界，因为一无所长，在诸多技术更迭交替的 IT 圈我像个刚入门的新人似的，只了解一点点 VC++。我没有从头来过的魄力，我也并不清楚 Java 是否更有前途，互联网是否更多辛苦。 在毕">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-07-30T03:00:15.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.392Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="cpp">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2016/07/30/learnSche_cpp/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>学习 C++ | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/07/30/learnSche_cpp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习 C++
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-07-30 11:00:15" itemprop="dateCreated datePublished" datetime="2016-07-30T11:00:15+08:00">2016-07-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>跌跌撞撞，兜来绕去，终究还是在 C++ 这个圈子里。毕业时，因为身外事去选择工作单位，而工作单位决定了工作性质，决定了自己处在做软件的边缘，甚至一度成为网管。两年之后跳出陷阱时，背负着“过去的选择”走进了 C++ 的世界，因为一无所长，在诸多技术更迭交替的 IT 圈我像个刚入门的新人似的，只了解一点点 VC++。我没有从头来过的魄力，我也并不清楚 Java 是否更有前途，互联网是否更多辛苦。</p>
+<p>在毕业刚好三年的边上，想着“就是 C++ 了”其实很愚蠢。通过做决定安慰自己“明智”，其实只是没得选择的妥协。此时此刻应该想的是“如何学好 C++”，更现实一点“掌握 C++ 的哪些内容，能找到更好的工作”。暂时确定的目标：</p>
+<ol>
+<li>会写代码。强调编码规范。</li>
+<li>会编写类，使用类。强调抽象思维。</li>
+<li>数据库操作，封装</li>
+<li>并发（多线程），POSIX、boost、C++11原生支持</li>
+<li>通信，socket 编程</li>
+</ol>
+<p>曾经完美主义，现在坚持实用主义。站在公司的角度考虑，现实中生产使用，强调实用性。如果新特性带不来生产力上的提升，是不会有公司买账的。就是说是否掌握 C++11 甚至更新的特性，对找工作没有最直接的影响，如果带不了更高的生产力，都是空谈。不应该只为了关注新特性，学究式地死板地投入时间精力，要明白花时间做一件事的初衷、目的、意义和价值。举例来说，做并发时是否使用 C++11 的原生支持，在投产使用时没有什么影响的，重要的是能否解决问题，解决问题的能力，关键是把并发做出来，用什么技术往往并不重要。</p>
+<p>那就好好学 C++11。工欲善其事，必先利其器。有兴趣可以看看<a target="_blank" rel="noopener" href="http://www.csdn.net/article/2012-08-13/2808540">各编译器对 C++11 的支持情况</a>、<a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/compiler_support">C++ compiler support</a>，但选择 g++ 总是省心的，前提是版本足够新，有条件就用最新的。编译器有了，<strong>编辑</strong>代码呢？主要关注代码提示，开发者体验。</p>
+<ul>
+<li>在 Windows 上考虑使用 VS2015，<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/23776769">轮子哥的观点 - 知乎</a>。个人观点，除了太大并不排斥 VS。</li>
+<li>Linux 上呢？很难找到完善支持 C++11 代码提示的 IDE…<a target="_blank" rel="noopener" href="http://zuyunfei.com/2013/05/16/killer-plugin-of-vim-youcompleteme/">Vim代码补全</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/22096642">Vim 和 IDE 之争 - 知乎</a>，个人观点，两者会越来越像，追求生产力。</li>
+</ul>
+<a id="more"></a>
+
+<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><p>在此介绍基础知识，惯用函数，std::string常用方法，常用容器的使用等等，原则就是“作为日常编写代码时的参考”。</p>
+<h1 id="网站"><a href="#网站" class="headerlink" title="网站"></a>网站</h1><p>我把 C++ 学习过程中整理的帖子分为三类：</p>
+<ol>
+<li>code？这个名字待定，多是一些基本操作、函数的用法等等，标题可以用“如何XXXX”开篇的</li>
+<li>idioms 惯用法，包括 RAII 等，广义上还包括设计模式在内</li>
+<li>concept 概念，指对 C++ 中概念的理解，广义上包括对关键词的理解</li>
+<li>others 比如学习计划、学习书籍和学习笔记等，但也都和 C++ 有关。这个不再单拎出来，就在 cpp 下</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cpp/" rel="tag"># cpp</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/07/15/Flume%20&%20Redis/" rel="prev" title="Flume & Redis 学习笔记V0.1">
+      <i class="fa fa-chevron-left"></i> Flume & Redis 学习笔记V0.1
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/08/13/headfile/" rel="next" title="怎么写头文件：内部链接、外部链接">
+      怎么写头文件：内部链接、外部链接 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%AB%99"><span class="nav-number">2.</span> <span class="nav-text">网站</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

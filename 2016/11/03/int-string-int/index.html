@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="每次用到时，都要到网上搜索一下的感觉很不好。尤其是经常用到，每次搜索时你完全能认识到你已经查过很多遍了。另外，和不自信（拿不准的心理）以及养成了这种坏习惯都有关系，查得多了自然知道调用 C 标准库 atoi（itoa 不是 C 标准库函数）以及使用 stringstream 流来解决问题，但每每觉得差那么一点意思，不够简洁。每次用到时都要搜索一下，可能是希望找到一种让内心舒坦的转换“手法”吧。 参">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++中int型和std::string互相转换">
+<meta property="og:url" content="https://tnie.github.io/2016/11/03/int-string-int/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="每次用到时，都要到网上搜索一下的感觉很不好。尤其是经常用到，每次搜索时你完全能认识到你已经查过很多遍了。另外，和不自信（拿不准的心理）以及养成了这种坏习惯都有关系，查得多了自然知道调用 C 标准库 atoi（itoa 不是 C 标准库函数）以及使用 stringstream 流来解决问题，但每每觉得差那么一点意思，不够简洁。每次用到时都要搜索一下，可能是希望找到一种让内心舒坦的转换“手法”吧。 参">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-11-03T08:22:07.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.392Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2016/11/03/int-string-int/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C++中int型和std::string互相转换 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/int-string-int/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++中int型和std::string互相转换
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-03 16:22:07" itemprop="dateCreated datePublished" datetime="2016-11-03T16:22:07+08:00">2016-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>每次用到时，都要到网上搜索一下的感觉很不好。尤其是经常用到，每次搜索时你完全能认识到你已经查过很多遍了。另外，和不自信（拿不准的心理）以及养成了这种坏习惯都有关系，查得多了自然知道调用 C 标准库 atoi（itoa 不是 C 标准库函数）以及使用 stringstream 流来解决问题，但每每觉得差那么一点意思，不够简洁。每次用到时都要搜索一下，可能是希望找到一种让内心舒坦的转换“手法”吧。</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/community/forums/html/topic?id=21b31ae2-0960-4068-a555-ce9e6c27da9b">C++11 中的 string - atoi/itoa</a>，岂止是参考，根本就是抄袭。可是好不喜欢原文的排版。</p>
+<a id="more"></a>
+
+<p>我哭，我发现又是从<a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/community/blogs/5894415f-be62-4bc0-81c5-3956e82276f3/entry/atoi_and_itoa_conversions_in_c_11?lang=en">英文原文</a>翻译过来的，大致看了一眼，就明白了翻译的不可靠啊。比如译文中叙述</p>
+<blockquote>
+<p>相比于 atoi，strtol 多了最后一个参数 “radix” 表明函数采用的是几进制（这个进制数可以从2到34，这个数值范围的原因显而易见）</p>
+</blockquote>
+<p>34显而易见你妹啊，当时就觉得诡异（当然再google一下就知道怎么回事了），相信译者也是笔误而已。来看英文原文：</p>
+<blockquote>
+<p>strtol’s third parameter specifies the radix whose value is between 2 and 36 inclusively. </p>
+</blockquote>
+<p>多简洁的表述！！！额。。。译者貌似不是笔误，看英文原文下的评论，汗</p>
+<p>我们对比另一个位置的表述：（我怎么这么幼稚呢。。）</p>
+<blockquote>
+<p>值得注意的是，在 C++98 代码中，虽然字符串的存储使用字符串数组也是完全可以的，</p>
+<p>It is noteworthy that although strings can still be stored in c-arrays in C++ code,</p>
+</blockquote>
+<p>一定要抽空看英文啊，上面发现的问题真是瞟了一眼，并没有通读原文的。<strong>转帖中，认为译文表述不恰当的地方已经用英文原文替代。</strong></p>
+<p>懂得历史，才能明白现在。在处理 atoi/itoa 问题时觉得凌乱、不成体系是因为在工作中只求开发效率，只看解决方法时看到的只是时间的一张快照，要回去探索历史，明白其中各自归属就能和内心“和解”了。下面依序描述 C，C++98，C++11 是如何处理 atoi/itoa 问题的：</p>
+<h1 id="在C时代"><a href="#在C时代" class="headerlink" title="在C时代"></a>在C时代</h1><h2 id="atoi"><a href="#atoi" class="headerlink" title="atoi"></a>atoi</h2><p>在 C 时代，通常我们遇到 atoi（字符串到数值转换）的问题的时候我们会使用 <code>&lt;stdlib.h&gt;</code> 中的 <code>atoi</code> 函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> num = atoi(cstr);</span><br></pre></td></tr></table></figure>
+<p>这里的 <code>cstr</code> 通常为 <code>char*</code> 或者 <code>const char*</code> 类型的字符串。函数返回的结果则是该字符串所表示的一个十进制的 integer。函数的整个效果则等同于 <code>&lt;stdlib.h&gt;</code> 中的另外一个函数<code>strtol</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> num = strtol(cstr, <span class="literal">NULL</span>, <span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<p>strtol’s third parameter specifies the radix whose value is between 2 and 36 inclusively. 。除去 <code>strtol</code> 会在出错时设置全局的 <code>errno</code> 外，其效果与 atoi 系列中的<code>atol</code>则几乎是完全等同的。</p>
+<h2 id="itoa"><a href="#itoa" class="headerlink" title="itoa"></a>itoa</h2><p>而 C 时代解决 itoa（数值到字符串的转换）的时候，则采用了 sprintf 函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> myint;</span><br><span class="line"><span class="keyword">char</span> buf[SIZE];</span><br><span class="line"><span class="built_in">sprintf</span>(buf, <span class="string">&quot;my data is %d&quot;</span>, myint);</span><br></pre></td></tr></table></figure>
+<p>这里字符的输出控制交给了 <code>%d</code> 这样的特殊字符。通过特殊字符以及变长参数的配合（<code>sprintf</code>是变长参数函数），我们获得预期的 formatted I/O 的输出。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这里我们可以看到 C 中对 atoi/itoa 的处理的特点，基本可以归纳如下：</p>
+<ol>
+<li>atoi 不检查字符串中错误。这对使用 API 的程序员而言意味着他必须检查错误，或者必须判断出错误在实际使用中总是不存在或者是可以被程序忍受的。</li>
+<li>atoi 的替代版本 strtol 检查字符串的错误，但使用的是 POSIX中 的标准方式，设置 errno。这意味着使用 strtol 的程序员如果要检测字符串中的错误，需要在调用 strtol 后检测全局变量 errno。</li>
+<li>sprintf 不负责任何的内存管理。通常情况下，程序员都会被告诫使用 snprintf 或者其它有内存边界检查的版本替代 sprintf 。这样一来会减少发生缓冲区溢出的可能性。不过总的来说这只是一种编程中的防御手段，从程序员的角度而言，内存管理的烦恼依然存在。</li>
+<li>sprintf 跟 printf 一样，不检查参数类型（因为是以变长函数的方式实现的），所以如果参数和 escape character 不匹配的话，会在运行时才发现不匹配的输出。不过相对于其它三点，这种错误是最容易修正的。</li>
+</ol>
+<p>所以说 C 中的 atoi/itoa 问题的解决方式并算不得让程序员愉悦。在坏的输入情况下，程序员必须小心处理各种异常，以防程序误入歧途。不过反过来看，C 中的 atoi/itoa 的处理也非常直观，易于理解，所以即使在 C++ 中这样的代码也并非少见。</p>
+<h1 id="C-98时代"><a href="#C-98时代" class="headerlink" title="C++98时代"></a>C++98时代</h1><p>先强调一点：在 C++ 代码中，虽然字符串的存储使用C风格的字符数组也是完全可以的，但在 C++ 代码中使用 <code>std::string</code> 类型，内存可以自行有效地管理，而且成员函数可以抛出异常，所以更适用于 C++ 代码。</p>
+<h2 id="atoi-itoa"><a href="#atoi-itoa" class="headerlink" title="atoi/itoa"></a>atoi/itoa</h2><p>到了 C++98 时代，atoi/itoa 可以使用新的 C++ 标准库来完成。具体地就是使用 C++ 的流（stream）模板类。而关于 <code>std::string</code> 类型的流模板类型就是 <code>std::stringstream</code>。通过全局重载的 operator <code>&lt;&lt;</code>以及 operator <code>&gt;&gt;</code>，<code>std::stringstream</code> 可以很轻松地完成 atoi 或者是 itoa 的任务，比如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ostringstream</span> oss;</span><br><span class="line">oss &lt;&lt; <span class="number">15</span> &lt;&lt; <span class="string">&quot; is int, &quot;</span> &lt;&lt; <span class="number">3.14f</span> &lt;&lt; <span class="string">&quot; is float.&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; oss.str();</span><br></pre></td></tr></table></figure>
+<p>oss 就是一个字符串流对象，可以用于 itoa 的工作。而</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">istringstream</span> <span class="title">iss</span><span class="params">(<span class="string">&quot;12 14.1f&quot;</span>)</span></span>;</span><br><span class="line"><span class="keyword">int</span> a;</span><br><span class="line"><span class="keyword">float</span> b;</span><br><span class="line">iss &gt;&gt; a &gt;&gt; b;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; a &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; b &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<p>上面代码中的 iss 字符串流对象，则可用作 atoi。</p>
+<h2 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h2><p>从设计上讲，<code>std::stringstream</code> 算得上是一种好的设计。这是由于使用 <code>std::stringstream</code> 的代码看起来非常地直观。As a standard component of ISO C++ library, it relieves programmers of handling exceptions–因为如果代码没有 try-catch block 的话，exception 一旦抛出，程序就会直接直接终止（调用 std::terminate）。这种解决出错的方式对于程序员来说更为爽快，因为程序在问题点终止，就很容易找到出问题的代码位置。而 C 时代的 atoi/itoa，如同我们讲到的，需要程序员关注异常，如果漏过处理异常之后（其实这很常见），程序可能带病运行。当然，由于 stringstream 总是”附着”于一个内存可以自行管理的 string 对象，所以程序员通常也不必担心任何的内存分配问题。</p>
+<p>从设计角度出发看，<code>std::stringstream</code> 几乎无可挑剔。但在实际使用中，如我们在上面提到的，很多人还是愿意使用 C 中的处理方法来完成 atoi/itoa。这大概有两方面的原因：</p>
+<ol>
+<li><code>std::stringstream</code> 在概念上的间接性。这点间接性来源于 <code>std::stringstream</code> 和 <code>std::string</code> 间的关联。通常情况下，一个 <code>std::stringstream</code> 对象总是会与其”附着”的 <code>std::string</code> 对象发生联系。或者其是从一个string对象（上例中的 <code>iss(&quot;12 14.1f&quot;)</code>）构造而来以使用，或者其必须转化为一个string对象（上例中的 <code>oss.str()</code>）而使用。而新手常会会直觉地写出 <code>string a &lt;&lt; 12 &lt;&lt; &quot; is int&quot;;</code> 这样的错误代码。</li>
+<li>格式化输出的不便利性。相比于<code>sprintf</code>，<code>std::stringstream</code>是一个流对象，意味着其也有了更高的学习代价。简单的 sprintf，只需要翻查 escape character 的手册，就能漂亮地进行格式化的输出。而使用流进行格式化输出的话，则需要控制一个状态机。很多时候，程序员需要关心上一状态对现有输出的影响。而且通常也意味着需要输入更多的代码。很多时候程序员都会觉得非常麻烦。所以即使 <code>sprintf</code> 在C++代码中缺失了类型匹配、异常处理、内存管理等等，程序员依然义无反顾地使用了它。（关于这一点，boost::format 可能给出了一种跨平台的中间的解决方案）</li>
+</ol>
+<p>从以上两个方面看，使用 <code>std::stringstream</code> 完成 atoi/itoa 虽然是更为 C++ 风格地、功能完备方式，但由于学习代价的增高以及格式化输出中的不便利性，其在实际场景中的应用也大大受限。</p>
+<h1 id="C-11时代"><a href="#C-11时代" class="headerlink" title="C++11时代"></a>C++11时代</h1><p>新标准中又有什么新特性等着我们呢？</p>
+<h2 id="itoa-1"><a href="#itoa-1" class="headerlink" title="itoa"></a>itoa</h2><p>到了 C++11 中，标准委员会可能是注意到这种”简单比完备”更重要的情况，于是在 C++11 中，标准增加了全局函数 <code>std::to_string</code>，以及 <code>std::stoi/stol/stoll</code> 等等函数。（最初的 paper 称之为 simple numeric access，N1982）其用法非常简单：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> s;</span><br><span class="line">s += to_string(<span class="number">12</span>) + <span class="string">&quot; is int, &quot;</span>;</span><br><span class="line">s += to_string(<span class="number">3.14f</span>) + <span class="string">&quot; is float.&quot;</span>;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; s &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<p>这里的 <code>to_string</code> 会根据参数的类型完成相应类型地转换。在多线程中禁用，要么加锁——好坑爹</p>
+<blockquote>
+<p><code>std::to_string</code> 由于格式化目的依赖本地环境，从而从多个线程同时调用 <code>std::to_string</code> 可能会导致调用的部分序列化结果。 C++17 提供高性能、不依赖本地环境的替用品 <code>std::to_chars</code> 。</p>
+</blockquote>
+<h2 id="atoi-1"><a href="#atoi-1" class="headerlink" title="atoi"></a>atoi</h2><p>而： </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s</span><span class="params">(<span class="string">&quot;12&quot;</span>)</span></span>;</span><br><span class="line"><span class="keyword">int</span> i = stoi(s);</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<p>这样的代码则可以顺利完成 atoi 的任务。由于其是 C++11 引入的函数，所以具备 C 所不具备的所有的 C++ 库代码特征：根据类型的处理，抛出异常，以及自动内存管理。</p>
+<h2 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h2><p>可以看到，<code>std::to_string</code> 在实际使用中可能会涉及一些字符串的连结。如我们在文章一开始提到的，C++98 中字符串连结一直是 C++ 语言被诟病性能低于C的一个重要方面。而这在 C++11 引入了右值引用后得到了很大的缓解。因此此时 <code>std::to_string</code> 这样的函数的实用性就大大增强了。不过 <code>std::to_string</code> 并不是itoa的一种终极方式。以浮点数为例， <code>to_string</code> 甚至连浮点数小数位显示控制这样基本的控制功能都不具备，因此其最大地特点还是突出在其易用性上。C++ 程序员不必定义一个 <code>std::stringstream</code> 对象就可以完成安全有效且不必关心任何内存的 itoa 工作。</p>
+<p>而 std::stoi/stol/stoll…系列更是简单到只能完成一个数值的转换，比起总是返回 <code>std::stringstream &amp;</code> 的 operator <code>&gt;&gt;</code> 比起来功能性就差很远了。后者能在一行代码中转化出多个数值。但前者最大地特点仍然突出在易用性上，不必”附着”一个 <code>std::stringstream</code> 类型。这对很多无需复杂 atoi 的程序而言也就足够了。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/03/initialization/" rel="prev" title="初始化">
+      <i class="fa fa-chevron-left"></i> 初始化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/03/multiThread/" rel="next" title="在C++类中创建线程函数">
+      在C++类中创建线程函数 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8C%E6%97%B6%E4%BB%A3"><span class="nav-number">1.</span> <span class="nav-text">在C时代</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#atoi"><span class="nav-number">1.1.</span> <span class="nav-text">atoi</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#itoa"><span class="nav-number">1.2.</span> <span class="nav-text">itoa</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">1.3.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-98%E6%97%B6%E4%BB%A3"><span class="nav-number">2.</span> <span class="nav-text">C++98时代</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#atoi-itoa"><span class="nav-number">2.1.</span> <span class="nav-text">atoi&#x2F;itoa</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-1"><span class="nav-number">2.2.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-11%E6%97%B6%E4%BB%A3"><span class="nav-number">3.</span> <span class="nav-text">C++11时代</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#itoa-1"><span class="nav-number">3.1.</span> <span class="nav-text">itoa</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#atoi-1"><span class="nav-number">3.2.</span> <span class="nav-text">atoi</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-2"><span class="nav-number">3.3.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

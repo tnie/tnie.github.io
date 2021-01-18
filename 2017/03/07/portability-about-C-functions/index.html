@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="2015年11月17日 17:09:46 有一个很好的链接：Standard C 语言标准函数库速查。不在其中的自然就不是 C 标准库中的函数，不过有一点点瑕疵，这个速查的搜索功能不好用。  即便是标准库中的函数，在不同平台也是会有差异的（但标准规定的部分应该是相同的）。比如：fflush、fopen； 不在标准库中的函数：不同的平台使用了相似（甚至相同）的名字实现了相似的功能，所谓“相似”则必然">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些 C 函数，痛苦的移植性">
+<meta property="og:url" content="https://tnie.github.io/2017/03/07/portability-about-C-functions/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="2015年11月17日 17:09:46 有一个很好的链接：Standard C 语言标准函数库速查。不在其中的自然就不是 C 标准库中的函数，不过有一点点瑕疵，这个速查的搜索功能不好用。  即便是标准库中的函数，在不同平台也是会有差异的（但标准规定的部分应该是相同的）。比如：fflush、fopen； 不在标准库中的函数：不同的平台使用了相似（甚至相同）的名字实现了相似的功能，所谓“相似”则必然">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/snprintf-in-vc.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/snprintf-in-gcc.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/the-output-of-fflush-in-windows.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/the-output-of-fflush-in-linux.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/the-output-without-fflush-in-windows.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/func-about-cstr.png">
+<meta property="article:published_time" content="2017-03-07T01:27:48.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.400Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/snprintf-in-vc.png">
+
+<link rel="canonical" href="https://tnie.github.io/2017/03/07/portability-about-C-functions/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>一些 C 函数，痛苦的移植性 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/07/portability-about-C-functions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          一些 C 函数，痛苦的移植性
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-03-07 09:27:48" itemprop="dateCreated datePublished" datetime="2017-03-07T09:27:48+08:00">2017-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>2015年11月17日 17:09:46</p>
+<p>有一个很好的链接：<a target="_blank" rel="noopener" href="http://ganquan.info/standard-c/">Standard C 语言标准函数库速查</a>。不在其中的自然就不是 C 标准库中的函数，不过有一点点瑕疵，这个速查的搜索功能不好用。</p>
+<ol>
+<li>即便是标准库中的函数，在不同平台也是会有差异的（但标准规定的部分应该是相同的）。比如：<code>fflush</code>、<code>fopen</code>；</li>
+<li>不在标准库中的函数：不同的平台使用了相似（甚至相同）的名字实现了相似的功能，所谓“相似”则必然有不同，其中的区别就是我们编码过程中的<strong>陷阱</strong>！（极端一点）可以认为只是不同平台不同实现选择了相同的名字而已。比如：<code>snprintf</code>、<code>access</code> 并不是标准 c 标准或者 c++ 标准中规定的函数。</li>
+</ol>
+<a id="more"></a>
+
+<h1 id="snprintf-在-VC-和-GCC-上的不同"><a href="#snprintf-在-VC-和-GCC-上的不同" class="headerlink" title="snprintf 在 VC 和 GCC 上的不同"></a><a target="_blank" rel="noopener" href="http://blog.csdn.net/bweaglegao/article/details/8539754"><code>snprintf</code> 在 VC 和 GCC 上的不同</a></h1><p><code>printf</code>、<code>sprintf</code> 属于 I/O库 函数，<code>snprintf</code> 函数并不是标准 c/c++ 中规定的函数，但是在许多编译器中，厂商提供了其实现的版本。其声明同样放在了声明 “standard input &amp; output”（标准输入输出）的 <code>&lt;stdio.h&gt;</code> 中。 <strong>在 gcc 中，该函数名称就 <code>snprintf</code>；而在 VC 中称为 <code>_snprintf</code>。</strong></p>
+<h2 id="在windows下："><a href="#在windows下：" class="headerlink" title="在windows下："></a>在windows下：</h2><ol>
+<li>VC 中的 <code>_snprintf</code> 的 count 参数（第二个参数）表示，会向 buff 中写入 count 个字符，不包括 <code>&#39;\0&#39;</code> 字符；</li>
+<li>并且不会在字符串末尾添加 <code>&#39;\0&#39;</code> 符；</li>
+<li>并且，如果字符串（第三个参数）超过 count，函数返回 <code>-1</code> 以标志可能导致的错误；</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/snprintf-in-vc.png" alt="windows-snprintf"></p>
+<h2 id="在linux下："><a href="#在linux下：" class="headerlink" title="在linux下："></a>在linux下：</h2><p>参考 <a target="_blank" rel="noopener" href="http://blog.csdn.net/crfoxzl/article/details/2062139"><code>snprintf</code> 函数用法</a></p>
+<ol>
+<li>gcc 中的 <code>snprintf</code> 函数的 count 参数（第二个参数）表示，向 buff 中写入 count 个字符，包括 <code>&#39;\0&#39;</code> 字符；</li>
+<li>并且，若成功则返回欲写入的字符串长度，若出错则返回负值；</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/snprintf-in-gcc.png" alt="linux-snprintf"></p>
+<h1 id="access-函数，注意参数含义"><a href="#access-函数，注意参数含义" class="headerlink" title="access 函数，注意参数含义"></a><code>access</code> 函数，注意参数含义</h1><ul>
+<li>在windows下：<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_69ebf25c0100m57t.html">Access函数判断文件是否存在</a></li>
+<li>在linxu下：<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_6a1837e90100uh5d.html">linux C之access函数</a></li>
+</ul>
+<p>两者的<strong>头文件自然不同</strong>。而且两者的参数列表和类型虽然相同，但是<strong>第2个参数取值具体的含义却不同</strong>。</p>
+<h1 id="慎用-fflush-stdin-清空输入缓存流"><a href="#慎用-fflush-stdin-清空输入缓存流" class="headerlink" title="慎用 fflush(stdin) 清空输入缓存流"></a><a target="_blank" rel="noopener" href="http://my.oschina.net/deanzhao/blog/79790">慎用 <code>fflush</code>(<code>stdin</code>) 清空输入缓存流</a></h1><p>怎么说这个函数呢，如果大家在C标准函数库里查找会发现这个是其中之一，但为什么还要把它放在这呢？来看一下 <strong>C99 对 <code>fflush</code> 函数的定义：</strong></p>
+<blockquote>
+<p><code>int fflush(FILE *stream);</code></p>
+<p>如果 stream 指向输出流或者更新流（update stream），并且这个更新流最近执行的操作不是输入，那么 <code>fflush</code> 函数将把这个流中任何待写数据传送至宿主环境（host environment）写入文件。否则，它的行为是未定义的。</p>
+</blockquote>
+<p>原文如下：</p>
+<blockquote>
+<p><code>int fflush(FILE *stream);</code></p>
+<p>If stream points to an output stream or an update stream in which the most recent operation was not input, the fflush function causes any unwritten data for that stream to be delivered to the host environment to be written to the file; otherwise, the behavior is undefined.</p>
+</blockquote>
+<p>其中，宿主环境可以理解为操作系统或内核等。 由此可知，如果 stream 指向输入流（如 <code>stdin</code>），那么 <code>fflush</code> 函数的行为是不确定的。</p>
+<ul>
+<li><p>gcc 严格执行了标准，所以在 linux 下使用 <code>flush</code>(<code>stdin</code>) 是没有任何效果的，是不确定的，是不安全的；</p>
+</li>
+<li><p>但是在 VC 中使用 <code>flush</code>(<code>stdin</code>) 却可以清空输入缓冲。    看一下MSDN 文档，其中清楚地写着：</p>
+<blockquote>
+<p>fflush on input stream is an extension to the C standard（**<code>fflush</code> 操作输入流是对 C 标准的扩充**）。</p>
+</blockquote>
+</li>
+</ul>
+<p>故 <a target="_blank" rel="noopener" href="http://blog.csdn.net/stpeace/article/details/9063293">fflush函数有什么作用？</a> 这篇帖子里的用法只能在 windows 下有效；在 linux 下是什么样子的并不能保证。</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/the-output-of-fflush-in-windows.png" alt="windows 下使用 fflush"></p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/the-output-of-fflush-in-linux.png" alt="linux 下使用 fflush"></p>
+<p>上图和windows下 注释掉fflush() 效果一致。</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/the-output-without-fflush-in-windows.png" alt="windows 下注释掉 fflush"></p>
+<h2 id="普遍用法"><a href="#普遍用法" class="headerlink" title="普遍用法"></a>普遍用法</h2><p><code>fflush(stdout)：</code></p>
+<ul>
+<li>头文件  ：#include &lt;stdio.h&gt;</li>
+<li>函数定义：int fflush(FILE *stream)</li>
+<li>函数说明：fflush()会强迫将缓冲区内的数据写回参数stream指定的文件中。如果参数stream为NULL， fflush()会将所有打开的文件数据更新。</li>
+<li>返回值  ：成功则返回0,  失败返回EOF, 错误代码存于errno中</li>
+</ul>
+<p>用途：在使用多个输出函数连续进行多次输出时，有可能发现输出错误。因为下一个数据在上一个数据还没输出完毕，还在输出缓冲区中时，下一个 <code>printf</code> 就把另一个数据加入输出缓冲区，结果冲掉了原来的数据，出现输出错误。 在 <code>printf()</code> 后加上 <code>fflush(stdout);</code> 强制马上输出，例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;unistd.h&gt;//unix环境</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">        fflush(<span class="built_in">stdout</span>);</span><br><span class="line">        fork();<span class="comment">//fork()函数通过系统调用创建一个与原来进程几乎完全相同的进程,也就是两个进程可以做完全相同的事</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样输出一个hello</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line"><span class="comment">//      fflush(stdout);</span></span><br><span class="line">        fork();</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样会输出两个hello</p>
+<h1 id="fopen-函数"><a href="#fopen-函数" class="headerlink" title="fopen() 函数"></a><code>fopen()</code> 函数</h1><p>函数用法 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/emanlee/p/4418163.html">C语言的fopen函数（文件操作/读写）</a>：</p>
+<p>在 POSIX 系统，包含 Linux 下都会忽略 b 字符。由 <code>fopen()</code> 所建立的新文件会具有 <code>S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH(0666)</code> 权限，此文件权限也会参考 umask 值。 </p>
+<p>二进制和文本模式的区别：</p>
+<ul>
+<li>在 windows系统中，文本模式下，文件以 <code>\r\n</code> 代表换行。若以文本模式打开文件，并用 <code>fputs</code> 等函数写入换行符 <code>\n</code> 时，函数会自动在 <code>\n</code> 前面加上 <code>\r</code>。即实际写入文件的是 <code>\r\n</code> 。</li>
+<li>在类 Unix/Linux 系统中文本模式下，文件以 <code>\n</code> 代表换行。所以 Linux 系统中在文本模式和二进制模式下并无区别。</li>
+</ul>
+<p>文件操作类型：</p>
+<table>
+<thead>
+<tr>
+<th>打开方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>r</td>
+<td>以只读方式打开文件，该文件必须存在。</td>
+</tr>
+<tr>
+<td>r+</td>
+<td>以读/写方式打开文件，该文件必须存在。</td>
+</tr>
+<tr>
+<td>rb+</td>
+<td>以读/写方式打开一个二进制文件，只允许读/写数据。</td>
+</tr>
+<tr>
+<td>rt+</td>
+<td>以读/写方式打开一个文本文件，允许读和写。</td>
+</tr>
+<tr>
+<td>w</td>
+<td>打开只写文件，若文件存在则长度清为0，即该文件内容消失，若不存在则创建该文件。</td>
+</tr>
+<tr>
+<td>w+</td>
+<td>打开可读/写文件，若文件存在则文件长度清为零，即该文件内容会消失。若文件不存在则建立该文件。</td>
+</tr>
+<tr>
+<td>a</td>
+<td>以附加的方式打开只写文件。若文件不存在，则会建立该文件，如果文件存在，写入的数据会被加到文件尾，即文件原先的内容会被保留（EOF符保留)。</td>
+</tr>
+<tr>
+<td>a+</td>
+<td>以附加方式打开可读/写的文件。若文件不存在，则会建立该文件，如果文件存在，则写入的数据会被加到文件尾后，即文件原先的内容会被保留（原来的EOF符 不保留)。</td>
+</tr>
+<tr>
+<td>wb</td>
+<td>以只写方式打开或新建一个二进制文件，只允许写数据。</td>
+</tr>
+<tr>
+<td>wb+</td>
+<td>以读/写方式打开或建立一个二进制文件，允许读和写。</td>
+</tr>
+<tr>
+<td>wt+</td>
+<td>以读/写方式打开或建立一个文本文件，允许读写。</td>
+</tr>
+<tr>
+<td>at+</td>
+<td>以读/写方式打开一个文本文件，允许读或在文本末追加数据。</td>
+</tr>
+<tr>
+<td>ab+</td>
+<td>以读/写方式打开一个二进制文件，允许读或在文件末追加数据。</td>
+</tr>
+</tbody></table>
+<h1 id="atoi-C标准库函数、itoa-非C标准库函数"><a href="#atoi-C标准库函数、itoa-非C标准库函数" class="headerlink" title="atoi() C标准库函数、itoa() 非C标准库函数"></a><code>atoi()</code> C标准库函数、<code>itoa()</code> 非C标准库函数</h1><p>如果是在 windows 平台下开发，上面两个 <code>int</code> 和 <code>char*</code> 字符串相互转化的函数应该都用过。想当然的也会认为这是一对函数，“夫妻双双……”。其实他俩的出身完全不同。</p>
+<p>在笔记开篇给出了一个查询 C 标准库的链接，在 &lt;stdlib.h&gt; 常用系统函数中列出了以下：</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/func-about-cstr.png" alt="字符串函数"></p>
+<p>是不是觉得自己可以举一反三，猜到将浮点型转为字符串可以用函数 <code>ftoa()</code>，将整型数转为字符串可以用 <code>itoa()</code>……但你查遍 C 的标准库是不是也没找到你以为的 <code>itoa()</code> 函数。事实也正是如此！<strong>itoa并不是一个标准的C函数，它是Windows特有的。</strong></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/02/16/git-credential/" rel="prev" title="Git 凭证辅助工具">
+      <i class="fa fa-chevron-left"></i> Git 凭证辅助工具
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/03/07/BooleanInCoding/" rel="next" title="BOOL 和 bool（C++ 的） 和 _Bool（C 的）">
+      BOOL 和 bool（C++ 的） 和 _Bool（C 的） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#snprintf-%E5%9C%A8-VC-%E5%92%8C-GCC-%E4%B8%8A%E7%9A%84%E4%B8%8D%E5%90%8C"><span class="nav-number">1.</span> <span class="nav-text">snprintf 在 VC 和 GCC 上的不同</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8windows%E4%B8%8B%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">在windows下：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8linux%E4%B8%8B%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">在linux下：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#access-%E5%87%BD%E6%95%B0%EF%BC%8C%E6%B3%A8%E6%84%8F%E5%8F%82%E6%95%B0%E5%90%AB%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">access 函数，注意参数含义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%85%8E%E7%94%A8-fflush-stdin-%E6%B8%85%E7%A9%BA%E8%BE%93%E5%85%A5%E7%BC%93%E5%AD%98%E6%B5%81"><span class="nav-number">3.</span> <span class="nav-text">慎用 fflush(stdin) 清空输入缓存流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%AE%E9%81%8D%E7%94%A8%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">普遍用法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fopen-%E5%87%BD%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">fopen() 函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#atoi-C%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0%E3%80%81itoa-%E9%9D%9EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">atoi() C标准库函数、itoa() 非C标准库函数</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

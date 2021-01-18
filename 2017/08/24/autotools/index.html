@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="这篇帖子很棒！我从百度文库中下载了 此教程，因为未做深度的考证，所以也不知原作者是谁，但在此谢谢作者。以下是作者原文，略有删改，本人有修改部分都已做出备注。  使用过开源 C&#x2F;C++ 项目的同学们都知道，标准的编译过程已经变成了简单的三部曲：configure&#x2F;make&#x2F;make install, 使用起来很方便，不像平时自己写代码，要手写一堆复杂的 Makefile，而且换个编译环境，Makef">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译利器：大型项目如何使用Automake和Autoconf完成编译配置(ver+0.6)">
+<meta property="og:url" content="https://tnie.github.io/2017/08/24/autotools/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="这篇帖子很棒！我从百度文库中下载了 此教程，因为未做深度的考证，所以也不知原作者是谁，但在此谢谢作者。以下是作者原文，略有删改，本人有修改部分都已做出备注。  使用过开源 C&#x2F;C++ 项目的同学们都知道，标准的编译过程已经变成了简单的三部曲：configure&#x2F;make&#x2F;make install, 使用起来很方便，不像平时自己写代码，要手写一堆复杂的 Makefile，而且换个编译环境，Makef">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/autotools/2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/table3.gif">
+<meta property="article:published_time" content="2017-08-24T01:54:33.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.369Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="make">
+<meta property="article:tag" content="makefile">
+<meta property="article:tag" content="automake">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/autotools/2.jpg">
+
+<link rel="canonical" href="https://tnie.github.io/2017/08/24/autotools/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>编译利器：大型项目如何使用Automake和Autoconf完成编译配置(ver+0.6) | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/08/24/autotools/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          编译利器：大型项目如何使用Automake和Autoconf完成编译配置(ver+0.6)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-08-24 09:54:33" itemprop="dateCreated datePublished" datetime="2017-08-24T09:54:33+08:00">2017-08-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这篇帖子很棒！我从百度文库中下载了 <a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/blob/master/autotools/%E7%BC%96%E8%AF%91%E5%88%A9%E5%99%A8%EF%BC%9A%E5%A4%A7%E5%9E%8B%E9%A1%B9%E7%9B%AE%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Automake%E5%92%8CAutoconf%E5%AE%8C%E6%88%90%E7%BC%96%E8%AF%91%E9%85%8D%E7%BD%AE(ver+0.6).docx?raw=true">此教程</a>，因为未做深度的考证，所以也不知原作者是谁，但在此谢谢作者。以下是作者原文，略有删改，本人有修改部分都已做出备注。</p>
+<hr>
+<p>使用过开源 C/C++ 项目的同学们都知道，标准的编译过程已经变成了简单的三部曲：configure/make/make install, 使用起来很方便，不像平时自己写代码，要手写一堆复杂的 Makefile，而且换个编译环境，Makefile 还需要修改（Eclipse 也是这样）。</p>
+<p>这么好的东东当然要拿来用了，但 GNU 的 Autotool 系列博大精深，工具数量又多，涉及的语言也多，要是自己从头看到尾，黄花菜都凉了，项目估计早就结束了；上网搜样例倒是有一大堆，但都是“hello world”的样例，离真正完成大型项目的目标还差得远。</p>
+<p>没有办法，对照网上的样例，再找几个开源的源码，然后参考各种 Autotools 的手册，花了 2 天时间，终于完成了一个基本可用的 Autotools。为了避免其他 XDJM 也浪费时间，因此将过程总结下来，就算是新年礼物，送给大家！！</p>
+<a id="more"></a>
+
+<h1 id="提纲挈领：使用-Autotools-其实很简单"><a href="#提纲挈领：使用-Autotools-其实很简单" class="headerlink" title="提纲挈领：使用 Autotools 其实很简单"></a>提纲挈领：使用 Autotools 其实很简单</h1><p>大家不要看到那么多工具，其实使用起来很简单，总结起来就是两部分：</p>
+<ol>
+<li>按照顺序调用各个工具；</li>
+<li>修改或者添加 3 个文件；</li>
+</ol>
+<p>整个操作顺序如下图：</p>
+<p><img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/autotools/2.jpg" alt="流程图"></p>
+<blockquote>
+<p>niel:作者这幅图强调的是操作顺序，在表现文件依赖关系上力不从心，所以我又多配了一幅图。</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/1.png" alt="依赖关系"></p>
+<p>听到我这么讲，大家是否觉得有信心了？好的，下面我们来看具体如何操作：</p>
+<ol>
+<li>   源码根目录调用 autoscan 脚本，生成 configure.scan 文件，然后将此文件重命名为 configure.ac</li>
+<li>   修改 <strong>configure.ac</strong>，利用 autoconf 提供的各种 M4 宏，配置项目需要的各种自动化探测项目</li>
+<li>   编写<strong>自定义宏</strong>，建议每个宏一个单独的 *.m4 文件；</li>
+<li>   调用 aclocal 收集 configure.ac 中用到的各种非 Autoconf 的宏，包括自定义宏；</li>
+<li>   调用 autoheader，扫描 configure.ac、acconfig.h（如果存在），生成 config.h.in 宏定义文件，里面主要是根据 configure.ac 中某些特定宏(如 <code>AC_DEFINE</code>)生成的 <code>#define</code> 和 <code>#undefine</code> 宏，configure 在将根据实际的探测结果决定这些宏是否定义（具体见后面例子）。</li>
+<li>   按照 automake 规定的规则和项目的目录结构，编写一个或多个 <strong>Makefile.am</strong>(Makefile.am 数目和存放位置和源码目录结构相关)，Makefile.am 主要写的就是编译的目标及其源码组成。</li>
+<li>   调用 automake，将每个 Makefile.am 转化成 Makefile.in，同时生成满足 GNU 编码规范的一系列文件（带 <code>-a</code> 选项自动添加缺少的文件，但有几个仍需要自己添加，在执行 automake 前需执行<code>$ touch NEWS README AUTHORS ChangeLog</code>）。如果 configure.ac 配置了使用 libtool(定义了 <code>AC_PROG_LIBTOOL</code> 宏（老版本）或 <code>LT_INIT</code> 宏)，需要在此步骤前先在项目根目录执行 <code>$ libtoolize --automake --copy --force</code>，以生成 ltmain.sh，供 automake 和 config.status 调用。</li>
+<li>   调用 autoconf，利用 M4 解析 configure.ac，生成 shell 脚本 configure。以上几步完成后，开发者的工作就算完成了，后面的定制就由开源软件的用户根据需要给 configure 输入不同的参数来完成。</li>
+<li>   用户调用 configure，生成 Makefile，然后 <code>$ make &amp;&amp; make install</code>。</li>
+</ol>
+<p>整个过程步骤有 9 步，但其中有 6 步你只需要简单的敲一个命令即可，只有剩下的三步需要你动手写一些东西，对应上面步骤中的蓝色黑体字部分，而本文的重点就是如何在大型项目中完成这三歩。</p>
+<h1 id="步步为营：三步完成编译配置"><a href="#步步为营：三步完成编译配置" class="headerlink" title="步步为营：三步完成编译配置"></a>步步为营：三步完成编译配置</h1><blockquote>
+<p>niel:关键的三步即：第2步-修改 configure.ac 文件、第3步-编写自定义的 Autoconf 宏、第6步-编写 Makefile.am 文件</p>
+</blockquote>
+<h2 id="修改configure-ac文件"><a href="#修改configure-ac文件" class="headerlink" title="修改configure.ac文件"></a>修改configure.ac文件</h2><p>从上面的步骤可以看到，使用 autoscan 工具扫描后就会生成一个简单的 <del>configure.ac</del>configure.scan 文件，这已经是一个完整的 configure.ac 文件框架了，但还不足以达到我们的要求，因此我们要在框架里面添加一些东西：</p>
+<ol>
+<li><p>添加 <code>AM_INIT_AUTOMAKE</code> 宏</p>
+<p> 在 <code>AC_INIT</code> 宏下一行添加 <code>AM_INIT_AUTOMAKE([foreign -Wall -Werror])</code>，中括号里面的选项可以根据需要来修改，具体请看 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/automake/manual/html_node/Public-Macros.html">automake 手册 6.4.1 节</a> 关于这个宏的说明。</p>
+<blockquote>
+<p>This macro can also be called in another, *deprecated *form: <code>AM_INIT_AUTOMAKE(PACKAGE, VERSION, [NO-DEFINE])</code>.This usage is mostly obsolete because the <code>package</code> and <code>version</code> can be obtained from Autoconf’s <code>AC_INIT</code> macro.</p>
+<p>Today, <code>AM_INIT_AUTOMAKE</code> is called with a single argument: a space-separated list of Automake options that should be applied to every Makefile.am in the tree. The effect is as if each option were listed in <code>AUTOMAKE_OPTIONS</code>. </p>
+</blockquote>
+</li>
+<li><p>如果需要，添加 <code>AC_CONFIG_HEADERS([config.h])</code> 宏</p>
+<p> 添加这个宏很简单，但关键是“如果需要”，什么情况下需要这个宏呢？</p>
+<p> 这个宏的目的是输出 config.h，这是一个 C 的头文件，里面主要是包含很多宏定义 <code>#define</code>，说到这里其实就很明确了，输出这个文件的目的就是提供各种相关的宏，而宏在代码中的作用就是 <code>#ifdef</code>，也就是说：如果你的代码需要用到宏开关进行控制，那么就要输出这个文件。具体的使用方法如下：</p>
+<ol>
+<li>首先确定代码中需要使用什么宏来进行开关定制，确定宏的名称，编写和宏相关的代码，且要包含 config.h 的头文件；</li>
+<li>在 configure.ac 中的各种处理（例如 <code>AC_CHECK_***</code>，<code>AC_ARG_***</code>）中使用 <code>AC_DEFINE</code> 宏定义 C/C++ 的宏，名称和上面的相同；如果是使用 <code>AC_CHECK_HEADERS</code>，会自动添加宏定义；</li>
+<li>执行完第 7 歩（存疑？）后 ，Autoconf 就会自动生成 config .h 文件</li>
+</ol>
+</li>
+<li><p>添加编译链接需要的程序</p>
+<p> 编译、链接需要用到的程序需要添加在 <code># Checks for programs.</code> 注释后面。对于 C/C++ 来说，最常见的就是 gcc、g++、静态库编译、动态库编译，对应的选项如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AC_PROG_CXX</span><br><span class="line">AC_PROG_CC</span><br><span class="line">AC_PROG_RANLIB</span><br></pre></td></tr></table></figure>
+<p> 如果使用 libtool 编译，则选项如下 <code>LT_INIT</code>，注意使用了 libtool 则需要将 <code>AC_PROG_RANLIB</code> 去掉</p>
+</li>
+<li><p>在 configure.ac 代码中各个部分添加自己的检测处理</p>
+<p> 这一步是我们的主要工作，需要根据自己的项目具体情况来编写，常见操作对应的宏和样例请参考本文后面的“【常见操作对应的宏】”：。至于具体添加在哪个地方，configure.ac 中的注释已经清楚的告诉你了，例如：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Checks for libraries.</span><br><span class="line"># Checks for library functions.</span><br></pre></td></tr></table></figure></li>
+<li><p>在 <code>AC_OUTPUT</code> 上一行添加 <code>AC_CONFIG_FILES</code> 宏</p>
+<p> 添加这个宏的目的是制定 Autoconf 输出哪些文件，常见的文件就是 Makefile 文件，config.h 在 <code>AC_CONFIG_HEADERS</code> 宏里面指定了，这里不需要再次指定。例如：</p>
+<p> <code>AC_CONFIG_FILES([Makefile tools/Makefile common/Makefile worker/Makefile])</code></p>
+</li>
+</ol>
+<blockquote>
+<p>niel 补充 - 关于 <code>AC_CONFIG_FILES</code> 宏我有话说，见 <a href="/2017/08/24/automake4th/">Makefile 自动生成 - 渣滓</a></p>
+</blockquote>
+<h2 id="编写自定义的-Autoconf-宏"><a href="#编写自定义的-Autoconf-宏" class="headerlink" title="编写自定义的 Autoconf 宏"></a>编写自定义的 Autoconf 宏</h2><p>Autoconf 虽然提供了很多内置的宏，但在实际项目中，这些宏不可能满足所有的要求，有的处理还是要自己完成。虽然在 configure.ac 文件中可以直接编写各种处理代码，但这样做有几个缺点：</p>
+<ul>
+<li>很不美观：打开 configure.ac 文件，密密麻麻的一大段花花绿绿的 Shell 代码，看着眼花缭乱；</li>
+<li>修改起来很麻烦：要找半天才能找到要修改的位置，一不小心就改错了；</li>
+<li>niel 补充：编写跨平台的 shell 脚本太考验能力</li>
+</ul>
+<p>就像写 C/C++ 代码要进行封装一样，Autoconf 的处理也需要进行封装，这个封装就是自定宏，定义完成后在 configure.ac 中调用，看起来很清爽，修改也很简单。下面我们来看如何自定义宏：</p>
+<ol>
+<li><p>新建一个单独的目录，用于存放自定义宏，一般定义为 m4</p>
+</li>
+<li><p>新建自定义宏文件</p>
+<p> 建议每个宏一个文件，文件必须以 .m4 结尾，文件名就是宏名（当然如果你非要不这么做也可以，文件名随便取）</p>
+</li>
+<li><p>编写 Autoconf 宏</p>
+<p> 具体的编写方式请参考 Autoconf 的手册第 10 章节，最好边看手册边对照一个开源软件的样例，这样效果最好了。这里说明几个需要注意的地方：</p>
+<ul>
+<li><p>m4宏不是 shell，请不要直接在文件中写 shell 代码，而要在宏的各个部分里面写代码；</p>
+<p>  最常见的就是 if-else 判断，如果要在代码中编写 if-else 判断，需要使用 <code>AS_IF</code> 宏，或者在其它宏里面写，例如 <code>AC_ARG_WITH</code>, <code>AC_CACHE_CHECK</code>；</p>
+</li>
+<li><p><code>AC_DEFUN</code> 是定义 autoconf 的宏，<code>AC_DEFINE</code> 是定义 C/C++ 的 config .h 里面的宏，不要混淆了；</p>
+</li>
+</ul>
+</li>
+<li><p>运行 aclocal 工具，生成 aclocal.m4</p>
+<p> 由于自定义宏是放在我们新建的目录中的，configure.ac 并没有像 C/C++ 那样的 include 语句可用，因此也就找不到这些宏，这时就需要 aclocal 工具了：aclocal 会将自定义宏编译成configure.ac 可用的宏，保存在和 configure.ac 同级目录下的 aclocal.m4 文件中，这样在 configure.ac 就能够直接使用了。具体的编译方法如下（m4 就是你的目录）: <code>aclocal -I m4</code></p>
+<p> 同时需要在根目录下的 Makefile.am 中添加 <code>ACLOCAL_AMFLAGS = -I m4</code>。</p>
+</li>
+</ol>
+<p>还有一种方法是将所有的自定义宏都放入到一个 acinclude.m4 文件中，不过不推荐这种方法，原因是因为这种方法的缺点和直接将所有自定义宏放入 configure.ac 中没有多大差别。</p>
+<h2 id="编写Makefile-am文件"><a href="#编写Makefile-am文件" class="headerlink" title="编写Makefile.am文件"></a>编写Makefile.am文件</h2><p>对于大型项目来说，代码一般都是分目录存放的，而不会像 Hello world 样例那样简单的就几个文件，因此写 Makefile.am 就麻烦一些，但其实主要是工作量增加了，原则都是一样的：</p>
+<ul>
+<li><p>原则1：每个目录一个 Makefile.am 文件；同时在 configure.ac 的 <code>AC_CONFIG_FILES</code> 宏中指定输出所有的 Makefile 文件，例如：</p>
+<p>  <code>AC_CONFIG_FILES([Makefile tools/Makefile common/Makefile worker/Makefile])</code></p>
+</li>
+<li><p>原则2：父目录需要包含子目录</p>
+<p>  在父目录下的 Makefile.am 中添加: <code>SUBDIRS = 所有子目录</code>，例如 <code>SUBDIRS=test tools</code></p>
+</li>
+<li><p>原则3：Makefile.am 中指明当前目录如何编译</p>
+<p>  前两个原则很简单，这里就不多说了，重点说一下如何编写 Makefile.am。</p>
+</li>
+</ul>
+<blockquote>
+<p>niel 补充 - 在 Makefile.am 中尽量使用相对路径，系统预定义了两个基本路径：</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/table3.gif" alt="Makefile.am 中可用的路径变量"></p>
+<blockquote>
+<p>niel 补充 - 这两个路径的区别：$(top_builddir)引用的是 make 发生时的工作目录，上文提到，我们将在 build 目录下进行构建，那么库文件会生成在 build 目录下，而不是源码根目录下，所以$(top_builddir) 实际就是 gnu-build/build 目录，而这样可以很好的支持在另一个目录中编译程序。与之相对应的是 $(top_srcdir) 对应的是源码的根目录，即 gnu-build 目录。 <a target="_blank" rel="noopener" href="http://www.pchou.info/linux/2016/09/24/gnu-build-system-2.html">引用来源</a></p>
+<p>niel 补充 - 这篇帖子缺失了“外部编译”的知识点，上述引用出处刚好补上。</p>
+</blockquote>
+<p>编写 Makefile.am 主要是完成 3 件事情：编译(make)、安装(make install)、打包(make dist)，下面我们一一来进行讲解。</p>
+<h3 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h3><p>编译和安装的规则是绑定在一起的，通过同一条语句同时指定了编译和安装的处理方式，<strong>具体的格式</strong>为：<code>安装目录_编译类型=编译目标</code></p>
+<h4 id="安装目录"><a href="#安装目录" class="headerlink" title="安装目录"></a>安装目录</h4><p>例如：<code>bin_PROGRAMS = hello subdir/goodbye</code>，其中安装目录是 bin，编译类型是 PROGRAMS，编译目标是两个程序 hello, goodbye。</p>
+<p>常用缺省的安装目录如下</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>Makefile.am 中的变量</th>
+<th>使用方式</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>prefix</td>
+<td>/usr/local</td>
+<td>安装目录，通过–prefix指定</td>
+<td></td>
+</tr>
+<tr>
+<td>exec_prefix</td>
+<td>${prefix}</td>
+<td>同prefix</td>
+<td></td>
+</tr>
+<tr>
+<td>bindir</td>
+<td>${exec_prefix}/bin</td>
+<td>bin_编译类型</td>
+<td></td>
+</tr>
+<tr>
+<td>libdir</td>
+<td>${exec_prefix}/lib</td>
+<td>lib_编译类型</td>
+<td></td>
+</tr>
+<tr>
+<td>includedir</td>
+<td>${prefix}/include</td>
+<td>include_编译类型</td>
+<td></td>
+</tr>
+<tr>
+<td>noinstdir</td>
+<td>无</td>
+<td>noinst_编译类型，特殊的目录，表示编译目标不安装。</td>
+<td></td>
+</tr>
+<tr>
+<td>datadir</td>
+<td>$(prefix)/share</td>
+<td>data_编译类型</td>
+<td>niel 新增，<a target="_blank" rel="noopener" href="http://www.ibm.com/developerworks/cn/linux/l-makefile/">引用来源</a></td>
+</tr>
+<tr>
+<td>sysconfdir</td>
+<td>$(prefix)/etc</td>
+<td></td>
+<td>niel 新增，引用来源同上</td>
+</tr>
+</tbody></table>
+<p>除了常用的缺省目录外，有时候我们还需要自定义目录，例如我们希望安装完成后安装目录下有一个配置文件目录 config，同时将指定的 test.ini 拷贝到 config 目录，则 config 目录需要通过自定义目录方式定义，然后按照缺省目录的使用方式使用。例如：</p>
+<p>在根目录下的 Makefile.am 中添加如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 定义一个自定义的目录名称 config,注意 dir 后缀是固定的</span><br><span class="line">configdir&#x3D;$&#123;prefix&#125;&#x2F;config </span><br><span class="line"># 使用自定义的目录 config，必须要有这句，否则目录不会创建，</span><br><span class="line">config_DATA&#x3D;</span><br><span class="line"># &#x3D;等号后面如果有对应的文件，安装时会将对应的文件拷贝到config目录下。</span><br><span class="line">config_DATA&#x3D;config&#x2F;test.ini</span><br></pre></td></tr></table></figure>
+<h4 id="编译类型"><a href="#编译类型" class="headerlink" title="编译类型"></a>编译类型</h4><p>常见编译类型如下，没有自定义编译类型</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+<th>使用方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PROGRAMS</td>
+<td>可执行程序</td>
+<td>bin_PROGRAMS</td>
+</tr>
+<tr>
+<td>LIBRARIES</td>
+<td>库文件</td>
+<td>lib_LIBRARIES</td>
+</tr>
+<tr>
+<td>LTLIBRARIES (Libtool libraries)</td>
+<td>libtool库文件</td>
+<td>lib_LTLIBRARIES</td>
+</tr>
+<tr>
+<td>HEADERS</td>
+<td>头文件</td>
+<td>include_HEADERS</td>
+</tr>
+<tr>
+<td>SCRIPTS</td>
+<td>脚本文件，有可执行权限</td>
+<td>test_SCRIPTS（需要自定义test目录）</td>
+</tr>
+<tr>
+<td>DATA</td>
+<td>数据文件，无可执行权限</td>
+<td>conf_DATA(需要自定义conf目录)</td>
+</tr>
+</tbody></table>
+<h4 id="编译目标"><a href="#编译目标" class="headerlink" title="编译目标"></a>编译目标</h4><p>译目标其实就是编译类型对应的具体文件，其中需要 make 生成的文件主要有如下几个：可执行程序_PROGRAMS，普通库文件_LIBRARIES，libtool 库文件_LTLIBRARIES,其它类型对应的编译目标不需要编译，源文件就是目标文件。</p>
+<p><strong>标准的编译配置</strong></p>
+<p>如果你熟悉 gcc 的编译命令写法，那么 Automake 的 Makefile.am 编译过程就很好写了。因为 Automake 只是将写在一行 gcc 命令里的各个不同部分的信息分开定义而已。我们来看具体是如何定义的：</p>
+<ul>
+<li>target_SOURCES：对应 gcc 命令中的源代码文件</li>
+<li>target_LIBADD：编译链接库时需要链接的其它库，对应 gcc 命令中的 *.a 等文件</li>
+<li>target_LDADD：编译链接程序时需要链接的其他库，对应 gcc 命令中的 *.a 等文件</li>
+<li>target_LDFLAGS：链接选项，对应 gcc 命令中的 -L, -l, -shared, -fpic 等选项</li>
+<li>target_LIBTOOLFLAGS：libtool 编译时的选项</li>
+<li>target_**FLAGS(例如 _CFLAGS/_CXXFLAGS)：编译选项，对应 gcc 命令中的 -O2, -g, -I 等选项</li>
+</ul>
+<blockquote>
+<p>niel 补充 <del>【TODO】- xxx_LDADD：为链接器增加参数，一般用于第三方库的引用。比如-L -l；xxx_LIBADD：声明库文件引用，一般对于本项目中的库文件引用采用这种形式。<a target="_blank" rel="noopener" href="http://www.pchou.info/linux/2016/09/24/gnu-build-system-2.html">引用来源</a></del></p>
+<p>Use the <code>LIBADD</code> primary for libraries, and <code>LDADD</code> for executables. <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/23685981/what-is-the-difference-between-ldadd-and-libadd">引用来源</a><br>ps 相比国内博客，我更倾向于 StackOverflow 上的答案。</p>
+</blockquote>
+<p>举例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#不同的编译类型只是第一句不一样，后面的编译配置都是一样的</span><br><span class="line">bin_PROGRAMS&#x3D; myproject</span><br><span class="line">myproject_SOURCES &#x3D; main.c</span><br><span class="line">myproject_LDADD   &#x3D; .&#x2F;utils&#x2F;libutils.a .&#x2F;module1&#x2F;libmodule1.a .&#x2F;core1&#x2F;libcore.a</span><br><span class="line">myproject_LDFLAGS &#x3D; -L&#x2F;home&#x2F;test&#x2F;local -lmemcached</span><br><span class="line">myproject_CFLAGS  &#x3D; -I.&#x2F;core1&#x2F; -I.&#x2F;module1&#x2F; -I.&#x2F;utils&#x2F; -O2 -g</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>niel 补充 - 可以参考 <a href="/2017/08/24/automake4th/">Makefile 自动生成 - 渣滓</a>，其中提到的全局变量及个别编译配置此文未涉及。</p>
+</blockquote>
+<p><strong>如何编译可执行程序</strong></p>
+<p>对于大型项目来说，代码基本上都是分目录存放的，如果是直接写 makefile 文件，一般都是将所有源文件首先编译成 <code>*.o</code> 的文件，再链接成最终的二进制文件。但在 Automake 里面这样是行不通的，因为你只要仔细看编译类型表格就会发现，并没有一种编译类型能够编译 <code>*.o</code> 文件，无法像常规 makefile 那样来编写，所以就需要采取一些技巧。</p>
+<p>其实这个技巧也很简单：将非 main 函数所在目录的文件编译成静态链接库，然后采用链接静态库的方式编译可执行程序。样例如下：</p>
+<p>=================根目录Makefile.am======================</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#对应Makefile.am原则2</span><br><span class="line">SUBDIRS &#x3D; tools common worker</span><br></pre></td></tr></table></figure>
+<p>=================tool目录Makefile.am======================</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#只是为了编译而生成的.a库文件，没有必要安装, 所以是noinst</span><br><span class="line">noinst_LIBRARIES&#x3D;libtools.a </span><br><span class="line">libtools_a_SOURCES&#x3D;.&#x2F;urlcode.h \</span><br><span class="line">                   .&#x2F;stringtools.cpp \</span><br><span class="line">                   .&#x2F;stringtools.h \</span><br><span class="line">                   .&#x2F;urlcode.c</span><br></pre></td></tr></table></figure>
+<p>===============common目录Makefile.am======================</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#只是为了编译而生成的.a库文件，没有必要安装, 所以是noinst</span><br><span class="line">noinst_LIBRARIES&#x3D;libcommon.a</span><br><span class="line">libcommon_a_SOURCES&#x3D;.&#x2F;iniparser.c \</span><br><span class="line">                    (省略很多文件, 实际使用时要一一填写)</span><br><span class="line">                    .&#x2F;exception.h \</span><br></pre></td></tr></table></figure>
+<p>==============worker目录Makefile.am============================</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bin_PROGRAMS&#x3D;worker</span><br><span class="line">worker_SOURCES&#x3D;.&#x2F;workeralgorithm.cpp \</span><br><span class="line">                .&#x2F;worker.cpp \</span><br><span class="line">                (省略很多文件, 实际使用时要一一填写)</span><br><span class="line">               .&#x2F;worker.h</span><br><span class="line">#通过_LDADD告诉Automake需要链接哪些库</span><br><span class="line">worker_LDADD&#x3D;..&#x2F;tools&#x2F;libtools.a ..&#x2F;common&#x2F;libcommon.a</span><br></pre></td></tr></table></figure>
+<p><strong>如何编译静态库</strong></p>
+<p>Automake 天然支持编译静态库，只需要将编译类型指定为 _LIBRARIES 即可。</p>
+<p><strong>如何编译动态库</strong></p>
+<p>需要注意的是：_LIBRARIES 只支持静态库(即 <code>*.a</code> 文件),而不支持编译动态库(<code>*.so</code>)文件，要编译动态链接库,需要使用_PROGRAMS。除此之外，还需要采用自定义目录的方式避开 Automake 的两个隐含的限制：</p>
+<ul>
+<li>如果使用 bin_PROGRAMS, 则库文件会安装到 bin 目录下，这个不符合我们对动态库的要求；</li>
+<li>automake 不允许用 <code>lib_ PROGRAMS</code></li>
+</ul>
+<p>下面假设将 utils 编译成 so，采用自定义目录的方式，修改 Makefile.am 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mylibdir&#x3D;$libdir         #$libdir其实就是lib目录，请参考【安装目录】表格</span><br><span class="line">mylib_PROGRAMS&#x3D; libutils.so</span><br><span class="line">libutils_so_SOURCES &#x3D; utils.c utils.h</span><br><span class="line">libutils_so_LDFLAGS &#x3D; -shared –fpic  #这个就是gcc编译动态库的选项</span><br></pre></td></tr></table></figure>
+<p><strong>如何编译libtool库</strong></p>
+<p>对于跨平台可移植的库来说，推荐使用 libtool 编译，而且 Automake 内置了 libtool 的支持，只需要将编译类型修改为 <code>_LTLIBRARIES</code> 即可。</p>
+<p>需要注意的是：如果要使用 libtool 编译，需要在 configure.ac 中添加 <code>LT_INIT</code> 宏，同时注释掉 <code>AC_PROG_RANLIB</code>，因为使用了 <code>LT_INIT</code> 后，<code>AC_PROG_RANLIB</code> 就没有作用了。</p>
+<h3 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h3><p>Automake 缺省情况下会自动打包，自动打包包含如下内容：</p>
+<ol>
+<li>所有源文件</li>
+<li>所有 Makefile.am/Makefile.in 文件</li>
+<li>configure 读取的文件</li>
+<li>Makefile.am’s (using include) 和 configure.ac’ (using m4_include)包含的文件</li>
+<li>缺省的文件，例如 README, ChangeLog, NEWS, AUTHORS</li>
+</ol>
+<p>如果除了这些缺省的文件外，你还想将其它文件打包(一般包括静态库、头文件、配置文件、帮助文件)，有如下两种方法：</p>
+<ul>
+<li><p>粗粒度方式：通过 EXTRA_DIST 来指定，指定文件就打包文件，指定目录就打包目录，例如：</p>
+<p>  <code>EXTRA_DIST=conf/config.ini  test  tools/initialize.sh</code><br>  如果 test 是目录，那么会将 test 目录下所有的文件和目录都打包。</p>
+</li>
+<li><p>细粒度方式：在“安装目录_编译类型=编译目标”前添加 dist(表示需要打包), 或者 nodist(不需要打包)，例如：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#将data_DATA&#x3D; distribute-this打包</span><br><span class="line">dist_data_DATA &#x3D; distribute-this</span><br><span class="line"></span><br><span class="line">#foo_ SOURCES不打包</span><br><span class="line">bin_PROGRAMS &#x3D; foo</span><br><span class="line">nodist_foo_SOURCES &#x3D; do-not-distribute.c</span><br></pre></td></tr></table></figure>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1></li>
+</ul>
+<p>GNU Autotool 工具博大精深，我也是结合项目的实际应用来使用的，并没有完整的研究所有的工具，因此难免存在瑕疵和纰漏，如果大家发现有疑问或者问题的地方，欢迎大家指正。当然，GNU 自己的手册是最权威的，如果你有疑问的话，参考手册，以手册为准。</p>
+<p>如果想了解 autotools 的工作原理和流程以及更高级的技巧，请参考胡华强写的《autoconf and automake介绍与典型应用.doc》。</p>
+<blockquote>
+<p>niel 补充 - 这篇 doc 在网上找不到，困惑。如何使用产生的 Makefile 文件，以及 ./configure 的一些参数可以参考 <a href="/2017/08/24/automake3rd/">Makefile 自动生成 - configure &amp; make</a></p>
+<p>niel 补充 - 我读了好多篇帖子之后才反应过来 <code>AC_</code> 开头的宏是 autoconf 的宏，<code>AM_</code> 开头的宏是 automake 的宏。这个理解没错吧？</p>
+</blockquote>
+<h1 id="常见操作对应的宏"><a href="#常见操作对应的宏" class="headerlink" title="常见操作对应的宏"></a>常见操作对应的宏</h1><ul>
+<li><p>给 <code>./configure</code> 添加 <code>--with-package</code> 参数，例如：<code>./configure  --with-libmemcached</code></p>
+<p>  <code>AC_ARG_WITH</code>，具体如何写请参考 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/autoconf/manual/autoconf.html#External-Software">autoconf 手册 15.2 章节</a>，里面给了一个完整的样例。</p>
+</li>
+<li><p>给 <code>./configure</code> 添加 <code>–enable-feature</code> 参数，例如：<code>./configure –enable-multithread</code></p>
+<p>  <code>AC_ARG_ENABLE</code>，顾名思义，这个宏的意思就是打开开关，这个开关可以是编译开关，也可以是代码功能开关。a) 如果是编译开关，则要配合 <code>AM_CONDITIONAL</code> 宏来使用（样例请看 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/automake/manual/html_node/Usage-of-Conditionals.html">automake 手册 20.1 章节</a> 的 <code>AM_CONDITIONAL</code> 宏说明）；b) 如果是代码功能开关，则要配合 <code>AC_DEFINE</code> 宏来使用（请参考 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/autoconf/manual/autoconf.html#External-Software">autoconf 手册 15.2 章节</a> 的 <code>AC_ARG_WITH</code> 宏的样例）</p>
+</li>
+<li><p>在 <code>./configure</code> 的时候检查头文件</p>
+<p>  <code>AC_CHECK_HEADER</code>: 检查一个头文件；<code>AC_CHECK_HEADERS</code>：检查一批头文件</p>
+</li>
+<li><p>在 <code>./configure</code>时检查库文件</p>
+<p>  <code>AC_CHECK_LIB</code>：样例请参考 autoconf 手册 15.2 章节的 AC_ARG_WITH 宏的样例</p>
+</li>
+<li><p>修改 make 行为</p>
+<p>  如果你想修改默认的make行为，可以先使用AC_ARG_WITH或者AC_ARG_ENABLE添加./configure参数，再结合如下两个宏来完成：</p>
+<p>  <code>AM_CONDITIONAL</code>：在 ./configure.ac 中增加一个 automake 宏，在 Makefile.am 中使用 if-else-endif 来使用宏；<br>  <code>AC_SUBST</code>：在 ./configure.a c中直接修改 automake 的变量，例如 <code>AM_CXXFLAGS</code>，<code>AM_CFLAGS</code> 等编译链接。</p>
+</li>
+</ul>
+<h1 id="完整样例"><a href="#完整样例" class="headerlink" title="完整样例"></a>完整样例</h1><p><a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/blob/master/autotools/GNU%20Autotools%E6%A0%B7%E4%BE%8B.rar?raw=true">GNU Atuotools 样例.rar</a></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>   入门材料：<a target="_blank" rel="noopener" href="http://sources.redhat.com/autobook/autobook/autobook_toc.html">http://sources.redhat.com/autobook/autobook/autobook_toc.html</a> 。</li>
+<li>   autoconf手册：<a target="_blank" rel="noopener" href="http://www.gnu.org/software/autoconf/manual/autoconf.html">http://www.gnu.org/software/autoconf/manual/autoconf.html</a> 。</li>
+<li>   automake手册：<a target="_blank" rel="noopener" href="http://sources.redhat.com/automake/automake.html">http://sources.redhat.com/automake/automake.html</a> 。</li>
+<li>   libtool手册：<a target="_blank" rel="noopener" href="http://www.gnu.org/software/libtool/manual/libtool.html">http://www.gnu.org/software/libtool/manual/libtool.html</a> </li>
+<li>   tutorial：<a target="_blank" rel="noopener" href="http://www.lrde.epita.fr/~adl/dl/autotools.pdf">http://www.lrde.epita.fr/~adl/dl/autotools.pdf</a> 。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/make/" rel="tag"># make</a>
+              <a href="/tags/makefile/" rel="tag"># makefile</a>
+              <a href="/tags/automake/" rel="tag"># automake</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/07/04/UUID/" rel="prev" title="UUID 入门">
+      <i class="fa fa-chevron-left"></i> UUID 入门
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/08/24/automake3rd/" rel="next" title="Makefile 自动生成 - configure & make">
+      Makefile 自动生成 - configure & make <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%90%E7%BA%B2%E6%8C%88%E9%A2%86%EF%BC%9A%E4%BD%BF%E7%94%A8-Autotools-%E5%85%B6%E5%AE%9E%E5%BE%88%E7%AE%80%E5%8D%95"><span class="nav-number">1.</span> <span class="nav-text">提纲挈领：使用 Autotools 其实很简单</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A5%E6%AD%A5%E4%B8%BA%E8%90%A5%EF%BC%9A%E4%B8%89%E6%AD%A5%E5%AE%8C%E6%88%90%E7%BC%96%E8%AF%91%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">步步为营：三步完成编译配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9configure-ac%E6%96%87%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">修改configure.ac文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84-Autoconf-%E5%AE%8F"><span class="nav-number">2.2.</span> <span class="nav-text">编写自定义的 Autoconf 宏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E5%86%99Makefile-am%E6%96%87%E4%BB%B6"><span class="nav-number">2.3.</span> <span class="nav-text">编写Makefile.am文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="nav-number">2.3.1.</span> <span class="nav-text">编译安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E7%9B%AE%E5%BD%95"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">安装目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">编译类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E7%9B%AE%E6%A0%87"><span class="nav-number">2.3.1.3.</span> <span class="nav-text">编译目标</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%8C%85"><span class="nav-number">2.3.2.</span> <span class="nav-text">打包</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E6%93%8D%E4%BD%9C%E5%AF%B9%E5%BA%94%E7%9A%84%E5%AE%8F"><span class="nav-number">4.</span> <span class="nav-text">常见操作对应的宏</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E6%A0%B7%E4%BE%8B"><span class="nav-number">5.</span> <span class="nav-text">完整样例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

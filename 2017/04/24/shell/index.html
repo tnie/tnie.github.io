@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="2016&#x2F;3&#x2F;16 12:17:18 汇总 3 篇。此处 shell 指工具，不涉及 shell 编程、脚本等知识。 shell 和简单操作shell 简介Shell 是什么呢？ 确切地说，Shell 就是一个命令行解释器，它的作用就是遵循一定的语法将输入的命令加以解释并传给操作系统内核，它为用户提供了一个向 Linux 发送请求以便运行程序的接口，用户可以用 Shell 来启动、挂起、停止甚至是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell 及 环境变量">
+<meta property="og:url" content="https://tnie.github.io/2017/04/24/shell/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="2016&#x2F;3&#x2F;16 12:17:18 汇总 3 篇。此处 shell 指工具，不涉及 shell 编程、脚本等知识。 shell 和简单操作shell 简介Shell 是什么呢？ 确切地说，Shell 就是一个命令行解释器，它的作用就是遵循一定的语法将输入的命令加以解释并传给操作系统内核，它为用户提供了一个向 Linux 发送请求以便运行程序的接口，用户可以用 Shell 来启动、挂起、停止甚至是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/7.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/9.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/a.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/b.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/c.png">
+<meta property="article:published_time" content="2017-04-24T01:25:47.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.402Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/1.png">
+
+<link rel="canonical" href="https://tnie.github.io/2017/04/24/shell/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>shell 及 环境变量 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/24/shell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          shell 及 环境变量
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-24 09:25:47" itemprop="dateCreated datePublished" datetime="2017-04-24T09:25:47+08:00">2017-04-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>2016/3/16 12:17:18</p>
+<p>汇总 3 篇。此处 shell 指工具，不涉及 shell 编程、脚本等知识。</p>
+<h1 id="shell-和简单操作"><a href="#shell-和简单操作" class="headerlink" title="shell 和简单操作"></a>shell 和简单操作</h1><h2 id="shell-简介"><a href="#shell-简介" class="headerlink" title="shell 简介"></a>shell 简介</h2><p><a target="_blank" rel="noopener" href="http://book.51cto.com/art/201107/277600.htm">Shell 是什么呢？</a> 确切地说，Shell 就是一个命令行解释器，它的作用就是遵循一定的语法将输入的命令加以解释并传给操作系统内核，它为用户提供了一个向 Linux 发送请求以便运行程序的接口，用户可以用 Shell 来启动、挂起、停止甚至是编写一些程序。</p>
+<p><a target="_blank" rel="noopener" href="http://book.51cto.com/art/201107/277601.htm">Linux Shell的种类</a> 很多，目前流行的 Shell 包括 ash、bash、ksh、csh、zsh 等，用户可以通过查看 /etc/shells 文件中的内容来查看自己主机中当前有哪些种类的 Shell。</p>
+<a id="more"></a>
+
+<h2 id="定义-shell-变量"><a href="#定义-shell-变量" class="headerlink" title="定义 shell 变量"></a>定义 shell 变量</h2><p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/1.png" alt="定义变量"></p>
+<ul>
+<li>“取值包含空格，必须用双引号括起来”√，</li>
+<li>“shell变量可以用大小写字母”，但是环境变量一般大写，个人声明变量一般小写，以作区分。</li>
+</ul>
+<h2 id="echo-显示变量"><a href="#echo-显示变量" class="headerlink" title="echo 显示变量"></a>echo 显示变量</h2><p>使用 <code>echo</code> 命令可以显示单个变量取值，并在变量名前加 <code>$</code>，例如：</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/2.png" alt="13"></p>
+<p>备注：红色矩形框标注部分，为正确方式。</p>
+<p>其中 ，<code>echo “$LOGNAME”</code> 并不是合理书写方式，只是效果相同而已。取 <code>$LOGNAME</code> 值 rmq ，然后 <code>echo “rmq”</code>，所以也是输出 rmq。</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/3.png" alt="131"></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>以下内容在 shell 脚本中使用得更多一些。对于不接触 shell 编程，只关心怎么设置环境变量的人来说并不需要了解。放在这里也只是当初花费了时间和精力，不忍当 <a href="/2017/04/25/shell-sub1/">垃圾</a> 一样丢掉。</p>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><h2 id="角度A-由简入繁"><a href="#角度A-由简入繁" class="headerlink" title="角度A:由简入繁"></a>角度A:由简入繁</h2><ol>
+<li><p>我们启动一个 shell 实例（通常是 bash），在其中以 <code>var=value</code> 的形式定义变量，那么这个变量 <code>var</code> 的作用域只限于当前 shell，既不能在另一实例（同类型 shell、不同类型 shell）中使用，<strong>也不能传递给当前实例的子进程（由当前 shell 实例启动的进程）</strong>；生存周期和当前实例的生存周期相同（如果不使用 <code>unset</code> 命令清除此变量的话），即随着实例的关闭而消失。</p>
+</li>
+<li><p><code>export var</code> 之后呢？Exporting a variable causes the variable to be inherited，This is the most common way of setting variables for use of subsequently started processes in a shell。但是其他特性不变。</p>
+<hr>
+<p> 以上都是临时的；<br> 每种 shell 都有自己特有的变量，比如 bash shell 中的 BASH，这些变量处于“shell类型”这个层次。<br> 以下都是永久的。</p>
+<hr>
+</li>
+</ol>
+<ol start="3">
+<li><p>那么如何让一个变量在两个 shell中（同类型）同时起作用呢？或者在关闭并重新打开一个shell时，如何使之前定义的变量依旧有效呢？</p>
+<p> ——持久化的话可以落盘成文件。针对 bash shell，我们可以将变量定义在 <code>~/.bashrc</code> 文件中，每一个 non-login interactive shell 在启动时都会首先读入这个配置文件，而 login shell 在登录时会读入 <code>~/.profile</code>（一般在此文件中包含 <code>.bashrc</code> 文件）。因为只有在 shell 启动 <code>/login</code> 时才会读入，所以在 shell 中更改配置文件后并不会立即生效，我们可以 <code>exit</code> 重启（针对 non-login shell）或者 logout 重新 login（针对 login shell），或者使用 <code>source filename</code> 命令重新执行刚修改的初始化文件，使之立即生效。</p>
+<p> 理解到这，<strong>已经足够我们日常使用 linux了</strong>。因为一方面我们只使用系统默认的 shell（linux 下基本都是 bash），另一方面我们也不是系统管理员，没有 root 权限做系统层面的维护。</p>
+</li>
+<li><p>那么如何让变量在不同类型 shell 中都有效？如何让变量在不同用户中都有效？不能同步修改所有类型 shell 的配置文件，同步修改所有用户的配置文件吧</p>
+<p> ——针对不同类型 shell，可以修改 <code>~/.profile</code> 文件或者 <code>/etc/profile</code> 文件；针对所有用户，可以修改 <code>/etc/profile</code> 文件。ps：针对多用户的 bash shell，可以修改 <code>/etc/bashrc</code> 文件。</p>
+</li>
+</ol>
+<h2 id="角度B-整体回顾"><a href="#角度B-整体回顾" class="headerlink" title="角度B:整体回顾"></a>角度B:整体回顾</h2><p>经常见到“环境变量”一词，那么这种变量究竟有什么特殊之处？它的定义又是怎样的呢？</p>
+<ol>
+<li>环境变量是操作系统环境设置的变量，适用于整个系统的用户进程； </li>
+<li>环境变量可以在命令中设置，但是用户注销的时候将会丢失这些设置值； </li>
+<li>若要重复适用，则最好在 <code>.profile</code> 中定义；环境变量的使用与本地变量的使用方法相同， </li>
+<li>但是在使用之前，必须用 <code>export</code> 命令导出。</li>
+</ol>
+<hr>
+<p>核心在于弄清楚<strong>局部变量和全局变量的作用范围、生存周期</strong>，以及局部变量可以导出为全局变量，进一步可持久化存储到配置文件中。</p>
+<p>按变量的生存周期来划分，Linux 变量可分为两类：</p>
+<ul>
+<li>永久的：需要修改配置文件，变量永久生效。</li>
+<li>临时的：使用 <code>export</code> 命令声明即可，变量在关闭 shell 时失效。</li>
+</ul>
+<p>故此，可分出：</p>
+<ol>
+<li>永久全局变量：永久代表持久化为文件，全局代表在各种 shell、跨应用使用，（文件名中无“bash”）</li>
+<li>永久局部变量：一般指各种 shell（例如 bash）在自身配置文件中储存了的变量，只能在 bash 中使用，不能再 csh 等其他 shell 中使用，（文件名中包含“bash”）；</li>
+<li>临时局部变量：在 shell 中通过 <code>key=value</code> 定义的变量；</li>
+<li>临时全局变量：将临时局部变量通过 <code>export</code> 命令导出，即可全局使用，但因为未存储到文件中，所以在用户注销，下次登录之后就会失效；</li>
+</ol>
+<p>所以，环境变量其实没有什么特殊之处。不过我们说环境变量一般还是指全局的：</p>
+<p><strong>全局变量，即环境变量（临时的&amp;永久的）</strong>。局部变量又称 shell 私有变量。所谓永久其实就是开机/登录/打开shell时把文件中诸多 <code>export key=value</code> 命令先执行。</p>
+<hr>
+<p>知道以上区别，就知其所以然，不必只知其然而较真死记硬背了。也不必较真在某一句话里环境变量用的不恰当啊什么的了，不必较真变量分类。难得糊涂！</p>
+<h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><p>先声明一点，在下文中不再叙述：系统目录（/etc）中的配置文件信息对所有用户有效；用户主目录下的配置文件信息只对当前用户有效。</p>
+<h2 id="Debian环境变量文件描述"><a href="#Debian环境变量文件描述" class="headerlink" title="Debian环境变量文件描述"></a>Debian环境变量文件描述</h2><p>以Debian8.1 Jessie为例，截图如下：</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/4.png" alt="debian 8.1"></p>
+<p>来源：/etc/profile</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/5.png" alt="debian 8.1"></p>
+<p>来源：~/.profile</p>
+<p>可以从中看到“登录 shell”的概念，与之对应的就是“非登录 shell”。</p>
+<p>很明确的指出了这两个配置文件，是用于“登录 shell”的。在“非登录 shell”中是不会读取/执行这两个文件的，也就是说在这两个文件中配置的环境变量等信息在“非登录 shell”中是不奏效的。</p>
+<p>另外，这两文件都是针对系统中所有 shell 的，包括但不限于常用的 bash、sh、ksh 等。</p>
+<p>但是<strong>针对 bash</strong>，有一点特殊的地方：如果在用户主目录下存在 <code>.bash_profile</code> 或者 <code>.bash_login</code> 文件，则 <code>.profile</code> 是不会被读取的。强调优先级，且只读取其中一个。</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/6.png" alt="debian 8.1"></p>
+<p>来源：/etc/bash.bashrc</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/7.png" alt="debian 8.1"></p>
+<p>来源：~/.bashrc</p>
+<p>可以从中看到“交互式 shell”的概念，与之对应的就是“非交互式 shell”。下图中也出现了“非登录 shell”字样。</p>
+<p>首先明确，这两个文件值针对 bash 的，对其他 shell 无效。且这两个文件被用于“非登录交互式 shell”。</p>
+<p>那么问题来了：（只针对 bash）</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>login shell</th>
+<th>non-login shell</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>interactive shell</td>
+<td>.profile √ <code>&lt;&lt;</code> .bashrc ×</td>
+<td>.profile × <code> </code> .bashrc √</td>
+</tr>
+<tr>
+<td>non-interactive shell</td>
+<td>.profile √ <code>&lt;&lt;</code> .bashrc ×</td>
+<td>.profile × <code> </code> .bashrc ×</td>
+</tr>
+</tbody></table>
+<p>可以看到：</p>
+<ol>
+<li>对于“非登录且非交互式的 shell”，是没有配置方法的。不过貌似我们也不需要。</li>
+<li>/etc/bash.bashrc 和 ~/.bashrc 文件对于“登录 shell” 是无效的。</li>
+<li>/etc/profile 和 ~/.profile 文件对于“非登录 shell” 是无效的。</li>
+</ol>
+<h2 id="non-login-interactive"><a href="#non-login-interactive" class="headerlink" title="(non-)login/interactive"></a>(non-)login/interactive</h2><p>第一章只是复述了系统文件自带的描述，并无意外的知识。但是什么样是“login shell”，什么又是“non-login shell”呢？什么是“interactive shell”，什么又是“non-interactive shell”呢？</p>
+<ol>
+<li><p>可以参考“<a target="_blank" rel="noopener" href="http://smilejay.com/2012/10/interactive-shell-login-shell/">交互式SHELL和非交互式SHELL、登录SHELL和非登录SHELL的区别</a>”，这篇帖子讲的还是非常不错的。</p>
+<p> 特别强调一点：“在 Gnome 或 KDE 中打开一个“终端”（terminal）窗口程序也是一个非登录 shell。”</p>
+</li>
+<li><p>我越来越感觉到“<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/18186929/what-are-the-differences-between-a-login-shell-and-interactive-shell">stackoverflow-differences between login shell and interactive shell</a> ”网站对于 C++ 开发者的重要了。</p>
+<p> 重点关注最后一段话，我想答主提到“shell scripts”时，等价表示“非登录且非交互式”。</p>
+</li>
+<li><p>也可以看看“<a target="_blank" rel="noopener" href="http://www.cnblogs.com/qcly/p/3273373.html">login shell与non-login shell的区别</a>”，这篇帖子有几处表述不恰当的地方，记录如下：</p>
+<ul>
+<li><p>在提到login shell启动读取配置文件顺序时，没有区分bash shell 和shell 。两者的区别是需要强调的！</p>
+</li>
+<li><p>“如果使用命令”sh”调用bash……”，我想作者通过这一句是想表达调用bash脚本，表明“非交互式shell”</p>
+<p>（依旧）转载这篇帖子最重要的原因是他告诉了我们<strong>以下知识</strong>：</p>
+</li>
+<li><p>“非交互式的non-login shell不读取上述所有配置文件，而是查找环境变量BASH_ENV，读取并执行 <a target="_blank" rel="noopener" href="http://huangyandong.blog.51cto.com/1396940/662272">BASH_ENV</a> 指向的文件中的命令。”</p>
+</li>
+<li><p>“通常我们要定制一些配置时，将配置写在<del>/.bashrc中，然后在</del>/.bash_profile中读取~/.bashrc，这样可以保证login shell和交互式non-login shell得到相同的配置。”</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/8.png" alt="debian 8.1"></p>
+<p>来源：~/.profile</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/9.png" alt="debian 8.1"></p>
+<p>来源：/etc/profile</p>
+</li>
+</ul>
+</li>
+<li><p>懂得了以上，<a target="_blank" rel="noopener" href="http://www.cnblogs.com/starspace/archive/2009/02/23/1396254.html">其中是非论断</a> 就很 easy 了。</p>
+<p> <img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/a.png" alt="debian 8.1"></p>
+</li>
+</ol>
+<h2 id="Ubuntu-环境变量文件介绍"><a href="#Ubuntu-环境变量文件介绍" class="headerlink" title="Ubuntu 环境变量文件介绍"></a><a target="_blank" rel="noopener" href="http://blog.csdn.net/cscmaker/article/details/7261921">Ubuntu 环境变量文件介绍</a></h2><h3 id="系统级："><a href="#系统级：" class="headerlink" title="系统级："></a>系统级：</h3><p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/b.png" alt="debian 8.1"></p>
+<ul>
+<li>/etc/profile：该文件是用户登录时，操作系统定制用户环境时使用的第一个文件，应用于登录到系统的每一个用户。该文件一般是调用/etc/bash.bashrc文件。</li>
+<li>/etc/bash.bashrc：系统级的bashrc文件。</li>
+<li><strong>/etc/environment</strong>：在登录时操作系统使用的第二个文件,系统在读取你自己的profile前,设置环境文件的环境变量。（这个文件大师我还没有研究过）</li>
+</ul>
+<h3 id="用户级（这些文件处于-home-目录下）："><a href="#用户级（这些文件处于-home-目录下）：" class="headerlink" title="用户级（这些文件处于 home 目录下）："></a>用户级（这些文件处于 home 目录下）：</h3><p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/shell/c.png" alt="debian 8.1"></p>
+<ul>
+<li>~/.profile：每个用户都可使用该文件输入专用于自己使用的shell信息,当用户登录时,该文件仅仅执行一次!默认情况下,他设置一些环境变量,执行用户的.bashrc文件。这里是推荐放置个人设置的地方</li>
+<li>~/.bashrc：该文件包含专用于你的bash shell的bash信息,当登录时以及每次打开新的shell时,该该文件被读取。不推荐放到这儿，因为每开一个shell，这个文件会读取一次，效率肯定有影响。</li>
+<li>~/.bash_profile or ~./bash_login：这里没有引用作者的，下面会提到</li>
+<li>~/.pam_environment：用户级的环境变量设置文件，没有做测试，不知道管不管用。</li>
+</ul>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>通过上面的文件介绍，就能明白我们需要设置环境变量的时候，需要修改什么文件，要想对所有的用户生效，那就需要设置系统级的环境变量。反之，需要修改用户级的文件（最好是修改.profile文件，理由上面已经讲了）。</p>
+<p>另外，我使用的是 Ubuntu10.04，之前在查找资料设置用户级环境变量的时候，有资料说要修改 ~.bash_profile 文件，但是在 ubuntu10.04 系统中是没有该文件。经查找，在 <a target="_blank" rel="noopener" href="https://help.ubuntu.com/community/EnvironmentVariables">ubuntu 官网</a> 上找到了这个文件的说明：</p>
+<blockquote>
+<p><del>/.bash_profile or ~./bash_login - If one of these file exist, bash executes it rather then “</del>/.profile” when it is started as a login shell. (Bash will prefer “<del>/.bash_profile” to “</del>/.bash_login”). However, these files won’t influence a graphical session by default.</p>
+</blockquote>
+<p>意思应该是说当这个文件存在时，在登录 shell 时会读取 ./bash_profile 文件，而不是 .profile 文件。我认为该文件实现的目的跟 .profile 文件是一样的，当查找的资料中需要你修改 .bash_profile 文件，但却你没有该文件的时候，也可以修改 .profile 来完成实现。</p>
+<p>以上仅为个人观点，如有错误请批评指正！感激涕零……</p>
+<h1 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h1><p>以上你都看懂了，你还不会设置环境变量吗？</p>
+<p>有一篇讲解还比较到位的帖子：<a target="_blank" rel="noopener" href="http://www.51testing.com/html/76/227476-99672.html">Linux设置环境变量小结</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/04/24/DevelopmentOnLinux/" rel="prev" title="怎样的linux开发方式？很原始的">
+      <i class="fa fa-chevron-left"></i> 怎样的linux开发方式？很原始的
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/04/25/shell-sub1/" rel="next" title="shell 及环境变量 -1.4 其他">
+      shell 及环境变量 -1.4 其他 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#shell-%E5%92%8C%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">shell 和简单操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#shell-%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">shell 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89-shell-%E5%8F%98%E9%87%8F"><span class="nav-number">1.2.</span> <span class="nav-text">定义 shell 变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#echo-%E6%98%BE%E7%A4%BA%E5%8F%98%E9%87%8F"><span class="nav-number">1.3.</span> <span class="nav-text">echo 显示变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">2.</span> <span class="nav-text">背景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%92%E5%BA%A6A-%E7%94%B1%E7%AE%80%E5%85%A5%E7%B9%81"><span class="nav-number">2.1.</span> <span class="nav-text">角度A:由简入繁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%92%E5%BA%A6B-%E6%95%B4%E4%BD%93%E5%9B%9E%E9%A1%BE"><span class="nav-number">2.2.</span> <span class="nav-text">角度B:整体回顾</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Debian%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.1.</span> <span class="nav-text">Debian环境变量文件描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#non-login-interactive"><span class="nav-number">3.2.</span> <span class="nav-text">(non-)login&#x2F;interactive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ubuntu-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%96%87%E4%BB%B6%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.3.</span> <span class="nav-text">Ubuntu 环境变量文件介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E7%BA%A7%EF%BC%9A"><span class="nav-number">3.3.1.</span> <span class="nav-text">系统级：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%BA%A7%EF%BC%88%E8%BF%99%E4%BA%9B%E6%96%87%E4%BB%B6%E5%A4%84%E4%BA%8E-home-%E7%9B%AE%E5%BD%95%E4%B8%8B%EF%BC%89%EF%BC%9A"><span class="nav-number">3.3.2.</span> <span class="nav-text">用户级（这些文件处于 home 目录下）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">3.3.3.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">设置环境变量</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

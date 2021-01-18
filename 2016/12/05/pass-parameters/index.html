@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="我们先从最简单的内置类型说起，结合汇编代码说说三者之间的联系和区别；然后我们再讲用户自定义类类型的三种传参方式的优劣。 内置类型内置类型的传值是最简单的，也是其他传参形式的基础。此处的“其它传参形式”指所有传参方式，包括内置类型的传指针、传引用，也包括自定义类类型的传值、传指针和传引用。 传指针也是传值内存地址（指针）也是一个数值，所以从汇编代码的层次看，传值和传指针其实是一样的（《Head Fi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="传值、传指针和传引用">
+<meta property="og:url" content="https://tnie.github.io/2016/12/05/pass-parameters/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="我们先从最简单的内置类型说起，结合汇编代码说说三者之间的联系和区别；然后我们再讲用户自定义类类型的三种传参方式的优劣。 内置类型内置类型的传值是最简单的，也是其他传参形式的基础。此处的“其它传参形式”指所有传参方式，包括内置类型的传指针、传引用，也包括自定义类类型的传值、传指针和传引用。 传指针也是传值内存地址（指针）也是一个数值，所以从汇编代码的层次看，传值和传指针其实是一样的（《Head Fi">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-12-05T08:16:33.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.398Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2016/12/05/pass-parameters/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>传值、传指针和传引用 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/05/pass-parameters/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          传值、传指针和传引用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-12-05 16:16:33" itemprop="dateCreated datePublished" datetime="2016-12-05T16:16:33+08:00">2016-12-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>我们先从最简单的内置类型说起，结合汇编代码说说三者之间的联系和区别；然后我们再讲用户自定义类类型的三种传参方式的优劣。</p>
+<h1 id="内置类型"><a href="#内置类型" class="headerlink" title="内置类型"></a>内置类型</h1><p>内置类型的传值是最简单的，也是其他传参形式的基础。此处的“其它传参形式”指所有传参方式，包括内置类型的传指针、传引用，也包括自定义类类型的传值、传指针和传引用。</p>
+<h2 id="传指针也是传值"><a href="#传指针也是传值" class="headerlink" title="传指针也是传值"></a>传指针也是传值</h2><p>内存地址（指针）也是一个数值，所以从汇编代码的层次看，传值和传指针其实是一样的（《Head First C》中也提到 C 语言所有的传参都是传值）。传值之后的操作更大程度上依赖于业务：</p>
+<a id="more"></a>
+
+<ol>
+<li><p>传值（不包括传指针的情形），被调用函数声明为 <code>func(const int i)</code> 或 <code>func(int i)</code> 的形式，但后者在其多数的使用场景中其实并不规范，往往应该用 <code>const</code> 修饰。在 <code>func()</code> 的定义中一般不会对 i 进行取地址操作。这是最基础的使用情形。</p>
+</li>
+<li><p>传值（特指传指针），被调用函数多声明为 <code>func(int *pi)</code> 的形式，也有变种 <code>func(int * const pi)</code> 和 <code>func(const int *pi)</code>。传指针的应用场景又可以分为两种：</p>
+<ul>
+<li>需要解引用。一般使用场景为修改指针指向的值的内容，此时不可以声明为 <code>func(const int *pi)</code></li>
+<li>不需要解引用。只是单纯的对指针做一些操作，比如重新指向，或者加减指针操作，此时不可以声明为 <code>func(int * const pi)</code></li>
+</ul>
+</li>
+</ol>
+<h2 id="引用的实现往往基于指针"><a href="#引用的实现往往基于指针" class="headerlink" title="引用的实现往往基于指针"></a>引用的实现往往基于指针</h2><p>广义的传值是包括传指针的。传引用，个人认为是对传指针的一种包装，更易于使用，更少的出错可能性。实际上引用的实现往往基于指针，我们可以粗略的认为“传引用 = 传指针 + 解引用”。传引用也可以分为两种使用场景：</p>
+<ol>
+<li>不会对引用进行取地址操作。这是最常用的情形。</li>
+<li>会对引用进行取地址操作。这其实是存在性能浪费的，为什么不直接传指针呢？如果说你是回避指针，减少出错的可能性，但既然还是要取地址，那不如从一开始就面对；另一种可能性是函数定义中多数操作是非指针操作，取地址只是个小比例。</li>
+</ol>
+<h2 id="代码怎么写更好"><a href="#代码怎么写更好" class="headerlink" title="代码怎么写更好"></a>代码怎么写更好</h2><p>上述列举了 5 种代码场景，我们通过业务场景再进行一次分类：</p>
+<h3 id="不改实参"><a href="#不改实参" class="headerlink" title="不改实参"></a>不改实参</h3><p>我们不需要在被调用函数中修改实参</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func(<span class="keyword">const</span> <span class="keyword">int</span> i);</span><br><span class="line">func(<span class="keyword">const</span> <span class="keyword">int</span>* pi);</span><br><span class="line">func(<span class="keyword">const</span> <span class="keyword">int</span>&amp; ref);</span><br></pre></td></tr></table></figure>
+
+<p>虽然上述 3 种都可以实现目的，但哪一种更好呢？先说结论，在《Effective C++》里提到</p>
+<blockquote>
+<p>对内置(C-like)类型在函数传参时pass by value比pass by reference更高效，当用OO的c++自定义类型(存在构造/析构等)pass by reference to const 更好，STL里的迭代器和函数对象是用C指针实现的，因此pass by value更好。</p>
+</blockquote>
+<p>我们先不讨论自定义类类型。如果有特殊的业务要求，比如要根据指针获得下一个内存块，那么使用指针更合适，但最普通的使用场景下，传指针（包括传引用）比传值多一个解引用步骤（传指针需要显示解引用，传引用是隐式解引用），除此之外两者的开销其实是一样的，就像前面提到的，在汇编代码层次，传递指针和传递数值指令是一样的。</p>
+<h3 id="要改实参"><a href="#要改实参" class="headerlink" title="要改实参"></a>要改实参</h3><p>我们有修改实参的需求</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func(<span class="keyword">int</span> * <span class="keyword">const</span> pi);</span><br><span class="line">func(<span class="keyword">int</span>&amp; ref);</span><br></pre></td></tr></table></figure>
+<p>哪一种更好呢？如果没有必须使用指针的理由，为了减少出现错误的可能性，个人认为还是选择引用更好一些。貌似 Google 的编码规范中统一接口形式，要求使用指针。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ol>
+<li>对于内置类型，传值比传引用更高效。虽然我无法确定内置类型没有构造函数（我个人倾向于没有构造的观点），参考 <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/5113365/do-built-in-types-have-default-constructors">Do built-in types have default constructors?</a></li>
+<li>内置类型的初始化和赋值成本一样（参考《Effective C++》 第28页）</li>
+<li>来看 《Effective Modern C++》第 50 页的一句话，重点看我加粗的这一句。可以看出大师对“内置类型初始化和赋值区别”的态度——对于使用者来说，两者的区别不值一提。由此推断，对使用者来说可以认为两者的成本是一样的。同大师在上一版本的作品中给出的结论一致。</li>
+</ol>
+<blockquote>
+<p>The “confusing mess” lobby points out that the use of an equals sign for initialization（使用 <code>=</code> 的初始化） often misleads C++ newbies into thinking that an assignment is taking place（误认为是赋值操作）, even though it’s not. <strong>For built-in types like int, the difference is academic</strong>（学术的，理论的）, but for userdefined types, it’s important to distinguish initialization from assignment</p>
+</blockquote>
+<h1 id="类类型"><a href="#类类型" class="headerlink" title="类类型"></a>类类型</h1><p>我们之前讨论内置类型时，提到一点“内置类型的传值和传引用（传指针），在撇开解引用步骤之外开销是一样的”。因为内置类型传值是传递一个数值，传指针也是传递一个数值。</p>
+<p>我们都知道类类型是对数据的封装——对内置类型或类类型的封装，继承体系中派生类对基类的封装。只关注首尾，类其实是对很多个内置类型的数据成员的封装。从自然语义上说，类类型的传值得包括其所有数据成员的传值，如此就意味着得传递很多个（内置类型）数值了。从严格的语法定义上，类类型传值需要付出类对象初始化（拷贝构造）和销毁（析构）成本，而传引用（指针）可以通过“传地址 + 解引用”来避免这些成本，这基本上是稳赚的——类封装起来的内置类型成员越多，代价越大；而传地址只是传递一个数值，解引用只是一步寻址操作，成本是固定的。只封装一个内置类型成员的类多见于测试代码，实际应用中基本不会出现。</p>
+<p>用户自定义的类类型，函数调用时传常量引用比传值更高效，因为前者不会有类对象初始化（拷贝构造）和销毁（析构）成本。</p>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><h2 id="汇编代码"><a href="#汇编代码" class="headerlink" title="汇编代码"></a>汇编代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 所有的汇编指令都是对内存块的操作，其参数都是内存标记（寄存器或内存地址）</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">cout</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Print</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> j = i;</span><br><span class="line"><span class="comment">//008A181E  mov         eax,dword ptr [i]  </span></span><br><span class="line"><span class="comment">//008A1821  mov         dword ptr [j],eax</span></span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; j &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Print2</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span>&amp; i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> j = i;</span><br><span class="line">  <span class="comment">// 引用多用指针实现</span></span><br><span class="line"><span class="comment">//00DB179E  mov         eax,dword ptr [i]     // 跟传指针一样。直接将 [] 中的 i 臆想为 pi</span></span><br><span class="line"><span class="comment">//00DB17A1  mov         ecx,dword ptr [eax]   // </span></span><br><span class="line"><span class="comment">//00DB17A3  mov         dword ptr [j],ecx</span></span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; j &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Print3</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> *pi)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> j = *pi;</span><br><span class="line"><span class="comment">//009C181E  mov         eax,dword ptr [pi]    // 将内存地址 pi 中的数据（pi 的值，即 i 的地址）赋给eax</span></span><br><span class="line"><span class="comment">//009C1821  mov         ecx,dword ptr [eax]   // 将内存地址 eax 中的数据赋给 ecx，ecx 得到 i 的值</span></span><br><span class="line"><span class="comment">//009C1823  mov         dword ptr [j],ecx</span></span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; j &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> value = <span class="number">10</span>;</span><br><span class="line"><span class="comment">//008A1908  mov         dword ptr [value],0Ah  // 将 0Ah 赋给内存地址 value 中的数据</span></span><br><span class="line">  Print(value);</span><br><span class="line"><span class="comment">//008A190F  mov         eax,dword ptr [value]  // 将内存地址 value 中的数据赋给 eax</span></span><br><span class="line"><span class="comment">//008A1912  push        eax</span></span><br><span class="line"><span class="comment">//008A1913  call        Print (08A111Dh)  </span></span><br><span class="line"><span class="comment">//008A1918  add         esp,4  </span></span><br><span class="line">  Print2(value);</span><br><span class="line"><span class="comment">//00DB191B  lea         eax,[value]            // 将 value 存储单元的有效地址（偏移地址）传送到 eax。</span></span><br><span class="line"><span class="comment">//00DB191E  push        eax  </span></span><br><span class="line"><span class="comment">//00DB191F  call        Print2 (0DB1082h)  </span></span><br><span class="line"><span class="comment">//00DB1924  add         esp,4 </span></span><br><span class="line">  Print3(&amp;value);</span><br><span class="line"><span class="comment">//009C4317  lea         eax,[value]  </span></span><br><span class="line"><span class="comment">//009C431A  push        eax  </span></span><br><span class="line"><span class="comment">//009C431B  call        Print3 (09C1370h)  </span></span><br><span class="line"><span class="comment">//009C4320  add         esp,4  </span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/30/sscanf-regular/" rel="prev" title="sscanf 和正则表达式">
+      <i class="fa fa-chevron-left"></i> sscanf 和正则表达式
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/12/09/Makefile2nd/" rel="next" title="不同场景下的 Makefile">
+      不同场景下的 Makefile <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">内置类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E6%8C%87%E9%92%88%E4%B9%9F%E6%98%AF%E4%BC%A0%E5%80%BC"><span class="nav-number">1.1.</span> <span class="nav-text">传指针也是传值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%BE%80%E5%BE%80%E5%9F%BA%E4%BA%8E%E6%8C%87%E9%92%88"><span class="nav-number">1.2.</span> <span class="nav-text">引用的实现往往基于指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%80%8E%E4%B9%88%E5%86%99%E6%9B%B4%E5%A5%BD"><span class="nav-number">1.3.</span> <span class="nav-text">代码怎么写更好</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E6%94%B9%E5%AE%9E%E5%8F%82"><span class="nav-number">1.3.1.</span> <span class="nav-text">不改实参</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A6%81%E6%94%B9%E5%AE%9E%E5%8F%82"><span class="nav-number">1.3.2.</span> <span class="nav-text">要改实参</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">类类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">3.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81"><span class="nav-number">3.1.</span> <span class="nav-text">汇编代码</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

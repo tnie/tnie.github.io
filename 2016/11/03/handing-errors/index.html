@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="在项目开发中，非主体逻辑的部分在整体代码量中占得比重往往更大。比如我们做一个加减乘除计算器，需要处理用户输入非数字怎么办，数字太大溢出怎么办，零作为除数了怎么办等等；比如我们要读取配置文件中的用户名、密码，我们得首先处理配置文件不存在，内容格式不正确，用户名过长等等。 机器（具体说就是一门语言，比如 C++）是一板一眼的，你告诉它了它就能做，你没告诉的它就不知道。对机器来说不存在“常识”这个词。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C&#x2F;C++ 对错误的处理">
+<meta property="og:url" content="https://tnie.github.io/2016/11/03/handing-errors/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="在项目开发中，非主体逻辑的部分在整体代码量中占得比重往往更大。比如我们做一个加减乘除计算器，需要处理用户输入非数字怎么办，数字太大溢出怎么办，零作为除数了怎么办等等；比如我们要读取配置文件中的用户名、密码，我们得首先处理配置文件不存在，内容格式不正确，用户名过长等等。 机器（具体说就是一门语言，比如 C++）是一板一眼的，你告诉它了它就能做，你没告诉的它就不知道。对机器来说不存在“常识”这个词。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-11-03T06:36:03.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.385Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="exception">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2016/11/03/handing-errors/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C/C++ 对错误的处理 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/handing-errors/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C/C++ 对错误的处理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-03 14:36:03" itemprop="dateCreated datePublished" datetime="2016-11-03T14:36:03+08:00">2016-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-idioms/" itemprop="url" rel="index"><span itemprop="name">cpp-idioms</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 在项目开发中，非主体逻辑的部分在整体代码量中占得比重往往更大。比如我们做一个加减乘除计算器，需要处理用户输入非数字怎么办，数字太大溢出怎么办，零作为除数了怎么办等等；比如我们要读取配置文件中的用户名、密码，我们得首先处理配置文件不存在，内容格式不正确，用户名过长等等。</p>
+<p>机器（具体说就是一门语言，比如 C++）是一板一眼的，你告诉它了它就能做，你没告诉的它就不知道。对机器来说不存在“常识”这个词。</p>
+<blockquote>
+<p>用 C++ 写代码的时候总是避免不了处理错误，一般来说有两种方式：通过函数的返回值 return code；抛出异常 exceptions。</p>
+</blockquote>
+<h1 id="使用返回值的缺点"><a href="#使用返回值的缺点" class="headerlink" title="使用返回值的缺点"></a>使用返回值的缺点</h1><p>从 C 语言过渡过来的开发者可能更习惯使用返回值。就我自己的开发经历（给某个风场使用 Labwindows/CVI 开发自动化采集软件）来说，使用返回值有四点很是不爽的地方：</p>
+<a id="more"></a>
+
+<ol>
+<li><p>与业务真正的返回值混用，需要规定一个错误代码。比如我们用 <code>int statistics(int id)</code> 统计员工今天检测的样品数目，从业务角度来说返回值是非负数，所以可以使用负数作为错误代码——这就是“混用”。</p>
+<p> 我们也可以强制改为 <code>int statistics(int id, int* count)</code>，严格限制返回值只能用于记录运行状态，而将统计结果置于参数列表中。这样又会引入新的问题：<del>输入参数、输出参数混用，且</del> 调用之前必须提前声明变量，而不能将声明和调用在同一条语句中执行。参考 <a target="_blank" rel="noopener" href="https://www.byvoid.com/blog/cpp-constructor-exception">其他语言中的错误处理</a> 中 GO 语言</p>
+</li>
+<li><p>错误信息简陋。尤其是函数被调用后如果存在多种错误状态，单独使用错误码根据其不同的数值标识不同的状态，然后在调用函数中根据错误代码编辑并打印对应的错误信息，这是很不合理的：一方面调用函数和被调用函数很可能不是同一开发者，存在沟通成本；另一方面，即便是同一开发者，在存在多个调用函数的情况下，也可能出现同一错误代码打印的错误信息内容却不一致的尴尬。</p>
+<p> 针对这一点不足，我们可以在每个被调用函数中再添一个输出参数，用于保存错误信息。比如 <code> int statistics(int id, int* count, std::string&amp; errinfo)</code>。这样做的问题，是针对每次调用我们都需要<strong>额外</strong>多使用一个字符串，而且同前者一样（比前者更甚），将错误处理方式和“执行逻辑”混在了一起：一方面都是使用控制流；另一方面，大多情况下还都是在同一控制流中。</p>
+<p> <a target="_blank" rel="noopener" href="https://isocpp.org/wiki/faq/exceptions#exceptions-avoid-two-return-types">exceptions simplify my function return type and parameter types.</a></p>
+<p> <a target="_blank" rel="noopener" href="https://isocpp.org/wiki/faq/exceptions#exceptions-separate-good-and-bad-path">exceptions separate the “good path” (or “happy path”) from the “bad path”.</a></p>
+</li>
+<li><p>每个可能产生错误的函数在调用后都需要判断是否有错误，一旦发生了不可解决的错误，就要终止当前函数（并释放当前函数申请的资源），然后向上<strong>传递错误</strong>。而且<strong>每个调用层</strong>都需要检查错误。代码会变得很丑陋。<a target="_blank" rel="noopener" href="https://isocpp.org/wiki/faq/exceptions#exceptions-avoid-spreading-out-error-logic">This “error propagation” often needs to go through dozens of functions.</a></p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> fd = open(<span class="string">&quot;path/to/file&quot;</span>, O_RDONLY);</span><br><span class="line">  <span class="keyword">if</span> (fd == <span class="number">-1</span>) &#123;</span><br><span class="line">     <span class="keyword">return</span> ERROR_OPEN;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">int</span>* <span class="built_in">array</span> = <span class="keyword">new</span>[n];</span><br><span class="line">  <span class="keyword">int</span> err;</span><br><span class="line">  err = do_something(fd, <span class="built_in">array</span>);</span><br><span class="line">  <span class="keyword">if</span> (err != SUCCESS) &#123;</span><br><span class="line">     <span class="keyword">delete</span>[] <span class="built_in">array</span>;</span><br><span class="line">     <span class="keyword">return</span> err;</span><br><span class="line">  &#125;</span><br><span class="line">  err = do_other_thing();</span><br><span class="line">  <span class="keyword">if</span> (err != SUCCESS) &#123;</span><br><span class="line">     <span class="keyword">delete</span>[] <span class="built_in">array</span>;</span><br><span class="line">     <span class="keyword">return</span> err;</span><br><span class="line">  &#125;</span><br><span class="line">  err = do_more_thing();</span><br><span class="line">  <span class="keyword">if</span> (err != SUCCESS) &#123;</span><br><span class="line">     <span class="keyword">delete</span>[] <span class="built_in">array</span>;</span><br><span class="line">     <span class="keyword">return</span> err;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">delete</span>[] <span class="built_in">array</span>;</span><br><span class="line">  <span class="keyword">return</span> SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// func 的调用者还需要再次检查错误</span></span><br></pre></td></tr></table></figure></li>
+<li><p>开发过程中很容易忘记处理错误返回值，程序带着错误执行的不确定性。等程序宕掉的时候，可能距离错误源十万八千里远，调试起来老费劲了。</p>
+</li>
+</ol>
+<p>实际上，上述只是涉及 <code>errorcode func(var1, var...)</code> 形式，更多：</p>
+<ol>
+<li>Error-codes as Return Values</li>
+<li>Error-code as out-parameter</li>
+<li>Error Singletons</li>
+</ol>
+<h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><p>到目前为止，除了学习异常时写过几个小的测试程序，对于异常并没有更多的认识。主要源于 google 编码规范中“禁止使用 C++ 异常”，以及有些大牛也不推荐使用异常（<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/22889420">参考</a>），所以下意识地对 <code>exception</code> 有些回避。</p>
+<p>相比使用返回值的缺点，异常的优点有：</p>
+<ol>
+<li>程序逻辑和错误处理分离。</li>
+<li>错误信息丰富，便于获得错误现场。我们可以自定义异常对象。</li>
+<li>代码相对简短，不需要判断每个函数的返回值</li>
+<li>开发者如果忘记处理异常，程序会直接宕掉。</li>
+</ol>
+<p>想获得上述优点，肯定要付出点代价。使用 <code>exception</code> 的开销相对较大。</p>
+<p>写到这里，我自己突然很倾向使用异常了。但也不能盲目地将所有使用返回值的地方全部替换成异常，很可能使得<strong>控制流变得复杂，难以追踪</strong>。</p>
+<blockquote>
+<p>我的观点是，用异常来表示真正的、而且不太可能发生的错误。所谓不太可能发生的错误，指的是真正难以预料，但发生了却又不得不单独处理的，譬如内存耗尽、读文件发生故障。</p>
+<p>一句话来概况就是<strong>不要用异常代替正常的控制流</strong>。只有当程序真的「不正常」的时候，才使用异常；反过来，当程序真正发生错误了，一定要使用异常而不是返回一个错误代码，因为错误代码总是倾向于被忽略。<a target="_blank" rel="noopener" href="https://www.byvoid.com/blog/cpp-constructor-exception">引用来源</a></p>
+</blockquote>
+<p>C++ 标准的中的 <a target="_blank" rel="noopener" href="https://isocpp.org/wiki/faq/exceptions">Exceptions and Error Handling</a></p>
+<h1 id="构造函数中的错误"><a href="#构造函数中的错误" class="headerlink" title="构造函数中的错误"></a>构造函数中的错误</h1><p>接下来说说处理构造函数中的错误，通常有三种常见的处理方法：</p>
+<blockquote>
+<p>使用一个额外的 <code>initialize()</code> 函数来初始化；标记错误状态；或者直接抛出异常。</p>
+</blockquote>
+<ol>
+<li>第一种方式，违背了对象产生和初始化要在一起的原则，强迫用户记住调用一个额外的初始化函数，一旦没有调用直接使用了其他函数，其行为很可能是未定义的。</li>
+<li>标记状态的方法在实践中相当丑陋，因为在使用前总是需要判断它是否「真的创建成功了」。</li>
+<li>最直接的方法还是在构造函数中抛出异常。构造函数抛出异常以后析构函数是不会被调用的，所以如果你在构造函数里面申请了内存或者打开了资源，需要在异常产生时关闭。</li>
+</ol>
+<p>如何在构造函数中捕获异常，语法方面具体怎么写可以参考原文，也请自行学习。</p>
+<p>ps 整篇笔记主要参考自 <a target="_blank" rel="noopener" href="https://www.byvoid.com/blog/cpp-constructor-exception">如何处理C++构造函数中的错误</a>，作者的专业知识值得肯定，但文字功底就不敢恭维了：有些描述起承转合很是僵硬，逻辑上毫无关系的两句话竟然用的逗号衔接，有些段落在文字顺序、排版上强加因果，误导读者。总之，文章很不错，如果读到某个地方觉得别扭，考虑重组语句，甚至重组段落。</p>
+<h1 id="怎么用好-exception"><a href="#怎么用好-exception" class="headerlink" title="怎么用好 exception"></a>怎么用好 exception</h1><p>上述也就是在说 exception 的优缺点以及 exception 的必要性。可怎么样才是用好 exception，发挥了其优点，而非滥用、误用，放大了其缺点？仅仅知道其语法没甚意义。 </p>
+<p><a target="_blank" rel="noopener" href="https://isocpp.org/wiki/faq/exceptions#mindset-for-proper-use-of-eh">避免以下 mindset（观念模式/思维倾向）：</a></p>
+<h1 id="std-expected"><a href="#std-expected" class="headerlink" title="std::expected"></a>std::expected</h1><p>错误处理的新方式。但其作为一项提案，截止到 2019 年 3 月尚未成为标准。</p>
+<p><a target="_blank" rel="noopener" href="https://hackernoon.com/error-handling-in-c-or-why-you-should-use-eithers-in-favor-of-exceptions-and-error-codes-f0640912eb45">Error Handling in C++ or: Why You Should Use Eithers in Favor of Exceptions and Error-codes</a></p>
+<ul>
+<li>The return-codes mindset</li>
+<li>The Java mindset</li>
+<li>Organizing the exception classes around the physical thrower rather than the logical reason for the throw</li>
+<li>Using the bits / data within an exception object to differentiate different categories of errors</li>
+<li>Designing exception classes on a subsystem by subsystem basis</li>
+<li>Use of raw (as opposed to smart) pointers</li>
+<li>Confusing logical errors with runtime situations</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/exception/" rel="tag"># exception</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/02/aboutJavaProj/" rel="prev" title="开发 Java 项目（日志网关）用到的网址汇总">
+      <i class="fa fa-chevron-left"></i> 开发 Java 项目（日志网关）用到的网址汇总
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/03/memoryLayout/" rel="next" title="从 static 到对象的内存布局">
+      从 static 到对象的内存布局 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">使用返回值的缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8"><span class="nav-number">2.</span> <span class="nav-text">异常</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E9%94%99%E8%AF%AF"><span class="nav-number">3.</span> <span class="nav-text">构造函数中的错误</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E7%94%A8%E5%A5%BD-exception"><span class="nav-number">4.</span> <span class="nav-text">怎么用好 exception</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#std-expected"><span class="nav-number">5.</span> <span class="nav-text">std::expected</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

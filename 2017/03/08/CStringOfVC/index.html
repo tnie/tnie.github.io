@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="2015年12月7日 16:55:34 说说 CString 的几个函数。  CString 对象在内存中用一个计数器来维持可用缓冲区的大小。 另外，CString 内，GetLength() 获取字符串长度并不是动态计算的，而是在赋值操作后计算并保存在一个 int 变量内的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CString 类">
+<meta property="og:url" content="https://tnie.github.io/2017/03/08/CStringOfVC/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="2015年12月7日 16:55:34 说说 CString 的几个函数。  CString 对象在内存中用一个计数器来维持可用缓冲区的大小。 另外，CString 内，GetLength() 获取字符串长度并不是动态计算的，而是在赋值操作后计算并保存在一个 int 变量内的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/the-output-of-GetBuffer-ReleaseBuffer.png">
+<meta property="article:published_time" content="2017-03-08T03:17:37.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.357Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="develop">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/the-output-of-GetBuffer-ReleaseBuffer.png">
+
+<link rel="canonical" href="https://tnie.github.io/2017/03/08/CStringOfVC/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CString 类 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/08/CStringOfVC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CString 类
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-03-08 11:17:37" itemprop="dateCreated datePublished" datetime="2017-03-08T11:17:37+08:00">2017-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/windows/" itemprop="url" rel="index"><span itemprop="name">windows</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>2015年12月7日 16:55:34</p>
+<p>说说 CString 的几个函数。</p>
+<ul>
+<li>CString 对象在内存中用一个计数器来维持可用缓冲区的大小。</li>
+<li>另外，CString 内，<code>GetLength()</code> 获取字符串长度并不是动态计算的，而是在赋值操作后计算并保存在一个 int 变量内的。</li>
+</ul>
+<a id="more"></a>
+
+<h1 id="CString-GetBuffer-和-ReleaseBuffer"><a href="#CString-GetBuffer-和-ReleaseBuffer" class="headerlink" title="CString:GetBuffer() 和 ReleaseBuffer()"></a>CString:GetBuffer() 和 ReleaseBuffer()</h1><h2 id="GetBuffer-函数原型"><a href="#GetBuffer-函数原型" class="headerlink" title="GetBuffer() 函数原型"></a>GetBuffer() 函数原型</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CString::GetBuffer</span><br><span class="line"><span class="function">LPTSTR <span class="title">GetBuffer</span><span class="params">( <span class="keyword">int</span> nMinBufLength )</span></span>;</span><br><span class="line"><span class="keyword">throw</span>( CMemoryException );</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>Return Value</p>
+<p>  An <code>LPTSTR</code> pointer to the object’s (null-terminated) character buffer.</p>
+</li>
+<li><p>Parameters</p>
+<p>  nMinBufLength - The minimum size of the character buffer in characters. This value does not include space for a null terminator.</p>
+</li>
+<li><p>Remarks</p>
+<p>  Returns a pointer to the internal character buffer for the CString object. The returned <code>LPTSTR</code> is not const and thus allows direct modification of CString contents.</p>
+<p>  If you use the pointer returned by <code>GetBuffer</code> to change the string contents, you must call <code>ReleaseBuffer</code> before using any other CString member functions.</p>
+</li>
+</ul>
+<p>翻译过来的意思就是：</p>
+<ul>
+<li><p>返回值：一个指向对象的（以空字符结尾的）字符缓冲区的 <code>LPTSTR</code> 指针。</p>
+</li>
+<li><p>参数：nMinBufLength  字符缓冲区的以字符数表示的最小容量。这个值不包括一个结尾的空字符的空间。</p>
+</li>
+<li><p>说明：</p>
+<p>  此成员函数返回一个指向 CString 对象的内部字符缓冲区的指针。返回的 <code>LPTSTR</code> 不是 const，因此可以允许直接修改 CString 的内容。</p>
+<p>  如果你使用由 <code>GetBuffer</code> 返回的指针来改变字符串的内容，你必须在使用其它的 CString 成员函数之前调用 <code>ReleaseBuffer</code> 函数。</p>
+</li>
+</ul>
+<h2 id="GetBuffer-函数作用及使用范围"><a href="#GetBuffer-函数作用及使用范围" class="headerlink" title="GetBuffer() 函数作用及使用范围"></a>GetBuffer() 函数作用及使用范围</h2><p>对一个 CString 变量，你可以使用的唯一合法转换符是 <code>LPCTSTR</code>，直接转换成非常量指针（<code>LPTSTR</code>-[const] char*）是错误的。正确的得到一个指向缓冲区的非常量指针的方法是调用 <code>GetBuffer()</code> 方法。</p>
+<p><code>GetBuffer()</code> 主要作用是将字符串的缓冲区长度锁定，<code>ReleaseBuffer()</code> 则是解除锁定，使得 CString 对象在以后的代码中继续可以实现长度自适应增长的功能。参考 <code>ReleaseBuffer()</code>函数作进一步了解。</p>
+<p><code>CString ::GetBuffer()</code> 有两个重载版本:</p>
+<ul>
+<li><code>LPTSTR GetBuffer();</code></li>
+<li><code>LPTSTR GetBuffer(int nMinBufferLength);</code></li>
+</ul>
+<p>在第二个版本中，</p>
+<ul>
+<li>当设定的长度小于原字符串长度时，nMinBufLength = nOldLen，该参数会被忽略，不分配内存，指向原 CString；</li>
+<li>当设定的长度大于原字符串本身的长度时就要重新分配（reallocate）一块比较大的空间出来。</li>
+</ul>
+<p>而调用第一个版本时，应如通过传入0来调用第二个版本一样。</p>
+<p>是否需要在 <code>GetBuffer</code> 后面调用 <code>ReleaseBuffer()</code>，是根据你的后面的程序是否需要继续使用该字符串变量，并且是否动态改变其长度而定的。如果你 <code>GetBuffer</code> 以后程序自函数就退出，局部变量都不存在了，调用不调用 <code>ReleaseBuffer</code> 没什么意义了。</p>
+<p>最典型的应用就是读取文件：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CFile file;</span><br><span class="line"><span class="comment">// FILE_NAME 为实现定义好的文件名称</span></span><br><span class="line"><span class="keyword">if</span>(file.Open(FILE_NAME,CFile::modeRead))</span><br><span class="line">&#123;</span><br><span class="line">       CString szContent;</span><br><span class="line">       <span class="keyword">int</span> nFileLength = file.GetLength();</span><br><span class="line">       file.Read(szContent.GetBuffer(nFileLength),nFileLength);</span><br><span class="line">       szContent.ReleaseBuffer();</span><br><span class="line">       <span class="comment">// 取得文件內容放在szContent中，我们之后可以对其操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ReleaseBuffer-函数原型"><a href="#ReleaseBuffer-函数原型" class="headerlink" title="ReleaseBuffer() 函数原型"></a>ReleaseBuffer() 函数原型</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ReleaseBuffer</span><span class="params">( <span class="keyword">int</span> nNewLength = <span class="number">-1</span> )</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">      <span class="keyword">if</span>( nNewLength == <span class="number">-1</span> ) </span><br><span class="line">      &#123; </span><br><span class="line">           nNewLength = StringLength( m_pszData ); </span><br><span class="line">      &#125; </span><br><span class="line">      SetLength( nNewLength ); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ReleaseBuffer-函数作用及使用范围"><a href="#ReleaseBuffer-函数作用及使用范围" class="headerlink" title="ReleaseBuffer() 函数作用及使用范围"></a>ReleaseBuffer() 函数作用及使用范围</h2><p>CString 对象在内存中用一个计数器来维持可用缓冲区的大小，很明显 <code>ReleaseBuffer</code> 的作用就是更新字符串的长度。CString 内，<code>GetLength</code> 获取字符串长度并不是动态计算的，而是读取的某成员变量的值（此成员变量在赋值操作后计算并更新），当通过 <code>GetBuffer</code> 直接修改 CString时，那个 int 变量（记录长度的成员变量）并不可能自动更新，于是便有了 <code>ReleaseBuffer</code>。</p>
+<p>当你用 <code>ReleaseBuffer</code> 来释放该缓冲区时，如果指定长度参数，则不应该包含结尾的空字符（如果有的话）。建议不指定参数，使用空参数调用，让 <code>ReleaseBuffer</code> 对该缓冲区执行 <code>strlen</code> 来确定它的长度。</p>
+<p>在调用 <code>ReleaseBuffer</code> 之后，由 <code>GetBuffer</code> 返回的地址<strong>也许</strong>就无效了，因为其它的 CString 操作可能会导致 CString 缓冲区被重新分配。如果你没有改变此 CString 的长度，则缓冲区不会被重新分配。当此 CString 对象被销毁时，其缓冲区内存将被自动释放。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>下面的例子说明了如何用 <code>CString::GetBuffer</code> 和 <code>CString::ReleaseBuffer</code>（最好逐步调试观察值和地址的变化）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;afxwin.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="function">CString <span class="title">s</span><span class="params">(<span class="string">&quot;abcd&quot;</span>)</span></span>; </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> i = s.GetLength(); </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, s); </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;s length1 is %d\n&quot;</span>, i);</span><br><span class="line">    </span><br><span class="line">    LPTSTR p = s.GetBuffer(<span class="number">6</span>); </span><br><span class="line">    <span class="built_in">strcpy</span>( p, <span class="string">&quot;12345&quot;</span>); </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, s); </span><br><span class="line">    <span class="keyword">int</span> j = s.GetLength(); </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;s length2 is %d\n&quot;</span>, j);</span><br><span class="line">    s.ReleaseBuffer(); </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, s);</span><br><span class="line">    <span class="keyword">int</span> k = s.GetLength(); </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;s length3 is %d\n&quot;</span>, k);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">strcpy</span>( p, <span class="string">&quot;a1b2c3&quot;</span>);     <span class="comment">// 这里新指定的字串若为&quot;a1b2c3e&quot;则会在此中断</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, s); </span><br><span class="line">    <span class="keyword">int</span> m = s.GetLength(); </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;s length4 is %d\n&quot;</span>, m);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果为：</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/the-output-of-GetBuffer-ReleaseBuffer.png" alt="运行结果"></p>
+<p>参考：<a target="_blank" rel="noopener" href="http://blog.163.com/shi_shun/blog/static/23707849201023133945192/">CString的GetBuffer用法</a> 、<a target="_blank" rel="noopener" href="http://www.cnblogs.com/ziwuge/archive/2011/06/17/2083999.html">CString:GetBuffer和ReleaseBuffer的作用</a></p>
+<h1 id="CString-Format-函数与格式输入与输出"><a href="#CString-Format-函数与格式输入与输出" class="headerlink" title="CString::Format() 函数与格式输入与输出"></a>CString::Format() 函数与格式输入与输出</h1><p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/kent9/archive/2008/12/30/1365389.html">http://www.cnblogs.com/kent9/archive/2008/12/30/1365389.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/develop/" rel="tag"># develop</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/03/08/stscanf-s/" rel="prev" title="_stscanf_s 函数">
+      <i class="fa fa-chevron-left"></i> _stscanf_s 函数
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/03/08/vim-profile/" rel="next" title="Vim 操作及其配置">
+      Vim 操作及其配置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CString-GetBuffer-%E5%92%8C-ReleaseBuffer"><span class="nav-number">1.</span> <span class="nav-text">CString:GetBuffer() 和 ReleaseBuffer()</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GetBuffer-%E5%87%BD%E6%95%B0%E5%8E%9F%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">GetBuffer() 函数原型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GetBuffer-%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8%E5%8F%8A%E4%BD%BF%E7%94%A8%E8%8C%83%E5%9B%B4"><span class="nav-number">1.2.</span> <span class="nav-text">GetBuffer() 函数作用及使用范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReleaseBuffer-%E5%87%BD%E6%95%B0%E5%8E%9F%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">ReleaseBuffer() 函数原型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReleaseBuffer-%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8%E5%8F%8A%E4%BD%BF%E7%94%A8%E8%8C%83%E5%9B%B4"><span class="nav-number">1.4.</span> <span class="nav-text">ReleaseBuffer() 函数作用及使用范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.5.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CString-Format-%E5%87%BD%E6%95%B0%E4%B8%8E%E6%A0%BC%E5%BC%8F%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA"><span class="nav-number">2.</span> <span class="nav-text">CString::Format() 函数与格式输入与输出</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

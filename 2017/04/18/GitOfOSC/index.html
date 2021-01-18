@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="2016&#x2F;2&#x2F;14 16:15:47 整理这篇笔记总共花费了差不多一个工作日的时间（8h），其他的笔记也很费事。所以我在思考一个问题，我整理笔记的方式是不是有问题？花费如此多的时间是否正常？ 以上疑惑留待以后，下面进入正题。 问题描述与思考这个标题可能不恰当，稍后修改。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git@OSC禁止推送大于100M文件【…Q5】">
+<meta property="og:url" content="https://tnie.github.io/2017/04/18/GitOfOSC/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="2016&#x2F;2&#x2F;14 16:15:47 整理这篇笔记总共花费了差不多一个工作日的时间（8h），其他的笔记也很费事。所以我在思考一个问题，我整理笔记的方式是不是有问题？花费如此多的时间是否正常？ 以上疑惑留待以后，下面进入正题。 问题描述与思考这个标题可能不恰当，稍后修改。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/cabf9db1-007f-4c8f-be92-9afbfe6b9051.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/c82407c2-e263-45ff-af61-1bc5c82f4cb2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/6593750.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/8283156.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/ee54a94c-8c08-4ff4-9f24-2653c4435591.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/865760ef-32f4-4c3f-8dcd-f64e11f37f3e.png">
+<meta property="article:published_time" content="2017-04-18T09:22:02.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.360Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/cabf9db1-007f-4c8f-be92-9afbfe6b9051.png">
+
+<link rel="canonical" href="https://tnie.github.io/2017/04/18/GitOfOSC/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Git@OSC禁止推送大于100M文件【…Q5】 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/18/GitOfOSC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git@OSC禁止推送大于100M文件【…Q5】
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-18 17:22:02" itemprop="dateCreated datePublished" datetime="2017-04-18T17:22:02+08:00">2017-04-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>2016/2/14 16:15:47</p>
+<p>整理这篇笔记总共花费了差不多一个工作日的时间（8h），其他的笔记也很费事。所以我在思考一个问题，我整理笔记的方式是不是有问题？花费如此多的时间是否正常？</p>
+<p>以上疑惑留待以后，下面进入正题。</p>
+<h1 id="问题描述与思考"><a href="#问题描述与思考" class="headerlink" title="问题描述与思考"></a>问题描述与思考</h1><p>这个标题可能不恰当，稍后修改。</p>
+<a id="more"></a>
+
+<p>起因是，前一阵子我开始把从网上找到的一些使用手册（chm格式）、电子书（pdf）等参考学习的资源放到版本控制的文档文件夹中，起初文件都不大，几百 KB，最大的不过 10M 左右，进行本地提交和远程推送都正常。直到，</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/cabf9db1-007f-4c8f-be92-9afbfe6b9051.png" alt="大文件"></p>
+<p>这个逾百 M 文件的出现。本地提交正常，可是进行远程推送报错：</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/c82407c2-e263-45ff-af61-1bc5c82f4cb2.png" alt="报错信息"></p>
+<p>报错给出的提示信息很明确，我使用的开源中国 OSC 的网站限制（暂时不打算更换其他的代码托管服务，更具体的说，目前 OSC 是最适合我的）100M  大小。</p>
+<ol>
+<li>最开始我以为“git@oschina 网站不允许 single 文件大于 100M 的内容，所以把 C++ Primer 中文第 5 版使用 Adobe Acrobat 9 Pro 拆分后上传”，至于 200M+ 的大文件进行了“删除并添加到忽略列表”且“保留本地复本”，可是推送时依旧报错；</li>
+<li>然后我以为“git@oschina 每次上传文件总和不能大于 100M，所以拆分后的 7 个子 pdf（一共 198M）分 3 次上传”，依旧报错。ps：通过在网上看到的一些介绍，以及回顾自己之前的使用经历，后者的猜测应该是错误的，毕竟若真是如此的话，那么在老东家时唐龙科技的整个几百兆的项目又是怎么推送的呢。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/6593750.png" alt="文件清单"></p>
+<p>至此，才开始认真考虑“265.pdf is 198.32 MB”这个信息，工作目录中肯定是没有这个文件，那么只能是 .git 隐藏目录了。发现 .git/objects  文件夹有将近 500M，肯定是有些太大了点，从网上搜到一条指令：（ps 通过《Pro Git 第2版》了解 <code>git gc</code> 这个命令，发现在这里使用根本就是驴唇不对马嘴）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#清理本地版本库</span><br><span class="line">$ git gc --prune&#x3D;now</span><br></pre></td></tr></table></figure>
+<p>执行完毕后，.git/objects 文件夹缩小到 273M。不过报错依旧。</p>
+<p>进一步思考，发现自己还是没有认真思考错误提示，并且对 git 的工作方式的理解不够灵活。最终猜测，“虽然对文件（特指未拆分的大于 200M 的 pdf 文件）进行了删除操作且已再次提交过了，但是作为版本控制库，为了保证还原到上一版本，所以库中肯定是有文件的备份的”，若如此的话，合并新添此文件和删除此文件的两次提交（如果两次提并非相邻提交，则需要合并多个）即可解决问题。也不需要“规避小文件总体超标”（这个错误理解）。</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/8283156.png" alt="合并前"></p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/ee54a94c-8c08-4ff4-9f24-2653c4435591.png" alt="合并，且放弃最新提交后"></p>
+<p>再次推送，成功！YES</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gitofosc/865760ef-32f4-4c3f-8dcd-f64e11f37f3e.png" alt="推送成功"></p>
+<h2 id="课后总结"><a href="#课后总结" class="headerlink" title="课后总结"></a>课后总结</h2><p>Q1：最好找到开源中国对于代码服务推送文件大小限制的官方说明<br>——找不到，放弃。官方只有关于附件的一个说明，但目前我用不到“上传附件”的功能。</p>
+<p>Q2：如果在新的提交上删除了之前提交的文件，库中肯定留有备份。但是如果已经 100% 确认肯定用不到了，那么这种备份如何从库中释放？除了上面合并两者（包含）之间所有的提交这种直接，但是却比较笨的方法，设想如果新添、删除两次提交不相邻，甚至有十几次、几十次提交了，还这么做肯定是不现实的。<br>——参考《Pro Git 第2版》中第7章 重写历史一节的 <code>filter-branch</code> 命令；参考 <a target="_blank" rel="noopener" href="http://blog.csdn.net/meteor1113/article/details/4407209">从git中永久删除文件以节省空间</a></p>
+<p>Q3：如果是旧的提交中有，后来进行新提交时删除了（同上），而且添加到了 .gitignore 忽略文件，<strong>感觉</strong>应该自动从库中释放备份了呀，但事实上不会（例如上文中）。纠正此错误认知——考虑，其实 .gitignore 文件自身也可以是版本管理目标之一，也就是说如果还原到 A 提交，那么不单单 A、B 两次提交中间删除的文件的要还原，.gitignore 文件也要重置到 A 提交时未新添忽略项时的版本。.gitignore 文件忽略的项并不是时间轴上的全局，并不是一经修改，通吃过去和现在的。此文件只是针对提交的，并不是针对仓库的。<br>——在 D 盘进行试验，参考《Git 权威指南》第 7 章，使用 <code>git reset</code> 重置命令，注意其选项 <code>--mixed</code>、<code>--hard</code>、<code>--soft</code></p>
+<p>Q5：将学习材料、阅读材料使用云盘同步，因为这些文档不存在版本控制的问题；清理 OSC 版本库的提交<br>——迁移到了 onedrive 同步盘中。</p>
+<h1 id="git文件过大，如何清理"><a href="#git文件过大，如何清理" class="headerlink" title=".git文件过大，如何清理"></a>.git文件过大，如何清理</h1><p>强调一点，上面遇到的问题是代码托管服务平台的限制，所以我需要删除个别大文件，从所有有关提交中删除；.git 文件过大和前者完全是两个不同的问题，前者牵扯 <code>git gc</code> 操作完全是我个人理解上的错误。两者之间唯一的联系其实是“如何从每一个提交移除一个文件”，都使用 <code>filter-branch</code> 命令。</p>
+<p>Q4：那么 .git 隐藏目录中的缓存、垃圾之类的是怎么来的？又该如何清理呢？</p>
+<h2 id="治标不治本"><a href="#治标不治本" class="headerlink" title="治标不治本"></a>治标不治本</h2><p>——这方面暂时不需要了解。如果觉得 clone 本地版本库时太大，可以指定深度，如下，为 1 即表示只克隆最近一次 commit。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;xxoo --depth 1</span><br></pre></td></tr></table></figure>
+<p>远程版本库，也可以先删除，然后完全重建版本库。前提是只要结果，过程已无任何价值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ rm -rf .git</span><br><span class="line">$ git init</span><br><span class="line">$ git add .</span><br><span class="line">$ git cm &quot;first commit&quot;</span><br><span class="line">$ git remote add origin &lt;your_github_repo_url&gt;</span><br><span class="line">$ git push -f -u origin master</span><br></pre></td></tr></table></figure>
+<h2 id="系统性的清理"><a href="#系统性的清理" class="headerlink" title="系统性的清理"></a>系统性的清理</h2><p>以上只是治标不治本的方法，也有其使用限制。但是胜在快刀斩乱麻，不需要花费大量时间、精力去整理执行。系统性的清理参考以下：<a target="_blank" rel="noopener" href="https://blog.eood.cn/how-to-clean-up-git-repo">如何清洗 Git Repo 代码仓库。</a></p>
+<p>知乎上看到一个答案，不知道合不合适，仅作参考：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/29769130">如何解决GitHub commit次数过多.git文件过大的问题</a></p>
+<h1 id="网络资源"><a href="#网络资源" class="headerlink" title="网络资源"></a>网络资源</h1><p>后期在网上找到以下帖子，和我遇到的问题完全一致：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/qmmq/p/4604862.html">处理GitHub不允许上传大于100M文件问题</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"># git</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/04/18/devcpp/" rel="prev" title="devcpp 5.1.1 在 win8.1 x64 系统上">
+      <i class="fa fa-chevron-left"></i> devcpp 5.1.1 在 win8.1 x64 系统上
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/04/18/tools/" rel="next" title="为知笔记目录安排">
+      为知笔记目录安排 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%E4%B8%8E%E6%80%9D%E8%80%83"><span class="nav-number">1.</span> <span class="nav-text">问题描述与思考</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E5%90%8E%E6%80%BB%E7%BB%93"><span class="nav-number">1.1.</span> <span class="nav-text">课后总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git%E6%96%87%E4%BB%B6%E8%BF%87%E5%A4%A7%EF%BC%8C%E5%A6%82%E4%BD%95%E6%B8%85%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">.git文件过大，如何清理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B2%BB%E6%A0%87%E4%B8%8D%E6%B2%BB%E6%9C%AC"><span class="nav-number">2.1.</span> <span class="nav-text">治标不治本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E6%80%A7%E7%9A%84%E6%B8%85%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">系统性的清理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E8%B5%84%E6%BA%90"><span class="nav-number">3.</span> <span class="nav-text">网络资源</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

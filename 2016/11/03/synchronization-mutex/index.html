@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="由生产者-消费者模式展开，学习其编程的最佳实践，却发现自己不知“信号量”的概念，忘了PV操作，困惑于“使用数组做循环队列时，判断满、空的条件怎么写”，为什么不直接使用 STL 的容器做队列？进出队列是不是严格需要锁？获取队列大小时是不是严格需要锁？ 进程和线程管理参考来源：C 语言中文网 进程控制块（PCB）  为了使参与并发执行的程序（含数据）能独立地运行，必须为之配置一个专门的数据结构，称为进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="同步与互斥">
+<meta property="og:url" content="https://tnie.github.io/2016/11/03/synchronization-mutex/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="由生产者-消费者模式展开，学习其编程的最佳实践，却发现自己不知“信号量”的概念，忘了PV操作，困惑于“使用数组做循环队列时，判断满、空的条件怎么写”，为什么不直接使用 STL 的容器做队列？进出队列是不是严格需要锁？获取队列大小时是不是严格需要锁？ 进程和线程管理参考来源：C 语言中文网 进程控制块（PCB）  为了使参与并发执行的程序（含数据）能独立地运行，必须为之配置一个专门的数据结构，称为进">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-11-03T08:07:30.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.408Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="c++11">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2016/11/03/synchronization-mutex/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>同步与互斥 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/synchronization-mutex/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          同步与互斥
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-03 16:07:30" itemprop="dateCreated datePublished" datetime="2016-11-03T16:07:30+08:00">2016-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>由生产者-消费者模式展开，学习其编程的最佳实践，却发现自己不知“信号量”的概念，忘了PV操作，困惑于“使用数组做循环队列时，判断满、空的条件怎么写”，为什么不直接使用 STL 的容器做队列？进出队列是不是严格需要锁？获取队列大小时是不是严格需要锁？</p>
+<h1 id="进程和线程管理"><a href="#进程和线程管理" class="headerlink" title="进程和线程管理"></a>进程和线程管理</h1><p>参考来源：<a target="_blank" rel="noopener" href="http://c.biancheng.net/cpp/html/2589.html">C 语言中文网</a></p>
+<p>进程控制块（PCB）</p>
+<blockquote>
+<p>为了使参与并发执行的程序（含数据）能独立地运行，必须为之配置一个专门的数据结构，称为进程控制块(Process Control Block, PCB)。系统利用PCB来描述进程的基本情况和运行状态，进而控制和管理进程。相应地，由程序段、相关数据段和PCB三部分构成了进程映像（进程实体）。所谓创建进程，实质上是创建进程映像中的PCB；而撤销进程，实质上是撤销进程的PCB。值得注意的是，进程映像是静态的，进程则是动态的。</p>
+</blockquote>
+<a id="more"></a>
+
+<p>进程的状态：</p>
+<ol>
+<li>创建状态：</li>
+<li>就绪状态：</li>
+<li>运行状态：</li>
+<li>阻塞状态：</li>
+<li>终止状态：</li>
+</ol>
+<p>进程的通信：PV操作是低级通信方式，髙级通信方式是指以较高的效率传输大量数据的通信方式。高级通信方法主要有以下三个类。</p>
+<ol>
+<li><p>共享存储</p>
+<p> 在对共享空间进行写/读操作时，需要使用同步互斥工具（如 P操作、V操作），对共享空间的写/读进行控制。</p>
+<p> 共享存储又分为两种：低级方式的共享是基于数据结构的共享；高级方式则是基于存储区的共享。</p>
+</li>
+<li><p>消息传递</p>
+</li>
+<li><p>管道通信</p>
+<p> 所谓“管道”，是指用于连接一个读进程和一个写进程以实现它们之间通信的一个共享文件，又名pipe文件。</p>
+<p> 为了协调双方的通信，管道机制必须提供以下三方面的协调能力：互斥、同步和确定对方的存在。</p>
+</li>
+</ol>
+<h2 id="进程同步的基本概念"><a href="#进程同步的基本概念" class="headerlink" title="进程同步的基本概念"></a>进程同步的基本概念</h2><p>临界资源：虽然多个进程可以共享系统中的各种资源，但其中许多资源一次只能为一个进程所使用，我们把一次仅允许一个进程使用的资源称为临界资源。</p>
+<p>临界区：对临界资源的访问，必须互斥地进行，在每个进程中，访问临界资源的那段代码称为临界区。为了保证临界资源的正确使用，可以把临界资源的访问过程分成四个部分：</p>
+<ol>
+<li>进入区-为了进入临界区使用临界资源，在进入区要检查可否进入临界区，如果可以进入临界区，则应设置正在访问临界区的标志，以阻止其他进程同时进入临界区。</li>
+<li>临界区-进程中访问临界资源的那段代码，又称临界段。</li>
+<li>退出区-将正在访问临界区的标志清除。</li>
+<li>剩余区-代码中的其余部分。</li>
+</ol>
+<p>同步：同步亦称直接制约关系，它是指为完成某种任务而建立的两个或多个进程，这些进程因为需要在某些位置上协调它们的工作次序而等待、传递信息所产生的制约关系。进程间的直接制约关系就是源于它们之间的相互合作。</p>
+<p>互斥：互斥亦称间接制约关系。当一个进程进入临界区使用临界资源时，另一个进程必须等待, 当占用临界资源的进程退出临界区后，另一进程才允许去访问此临界资源。</p>
+<h2 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h2><p><strong>原语</strong>：原语是指完成某种功能且不被分割不被中断执行的操作序列。</p>
+<p>信号量：信号量机制是一种功能较强的机制，可用来解决互斥与同步的问题，它只能被两个标准的原语wait(S)和signal(S)来访问，也可以记为“P操作”和“V操作”。</p>
+<blockquote>
+<p>P和V是来源于两个荷兰语词汇，P—— passeren，中文译为”通过”；V—— vrijgeven，中文译为”释放/发布”。</p>
+</blockquote>
+<ul>
+<li>整型信号量</li>
+<li>记录信号量</li>
+</ul>
+<p>利用信号量可以解决的问题：</p>
+<ol>
+<li>利用信号量实现同步</li>
+<li>利用信号量实现互斥</li>
+<li>利用信号量实现前驱关系</li>
+</ol>
+<p>分析进程同步和互斥问题的方法步骤：</p>
+<ol>
+<li>关系分析-找出问题中的进程数，并且分析它们之间的同步和互斥关系。同步、互斥、前驱关系直接按照上面例子中的经典范式改写。</li>
+<li>整理思路-找出解决问题的关键点，并且根据做过的题目找出解决的思路。根据进程的操作流程确定P操作、V操作的大致顺序。</li>
+<li>设置信号量-根据上面两步，设置需要的信号量，确定初值，完善整理。</li>
+</ol>
+<h2 id="管程"><a href="#管程" class="headerlink" title="管程"></a>管程</h2><p>管程：系统中的各种硬件资源和软件资源，均可用数据结构抽象地描述其资源特性，即用少量信息和对资源所执行的操作来表征该资源，而忽略了它们的内部结构和实现细节。管程是由一组数据以及定义在这组数据之上的对这组数据的操作组成的软件模块，这组操作能初始化并改变管程中的数据和同步进程。</p>
+<p>管程的基本特征之一是：每次仅允许一个进程在管程内执行某个内部过程。</p>
+<p>由于管程是一个语言成分，所以管程的互斥访问完全由编译程序在编译时自动添加，无需程序员关注，而且保证正确。</p>
+<p>在 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E9%97%AE%E9%A2%98">维基百科 - 生产者消费者问题</a> 中介绍“使用管程的算法”时特别强调了使用 <code>while</code> 的重要性和正确性。然后我并没有看懂啊，囧。</p>
+<p>针对多消费者（或多生产者），有可能造成竞争条件：</p>
+<blockquote>
+<p>某一消费者在一项数据被放入缓冲区中时被唤醒，但是另一消费者已经在管程上等待了一段时间并移除了这项数据。</p>
+</blockquote>
+<p>但前文提到：</p>
+<blockquote>
+<p>管程的基本特征之一是：每次仅允许一个进程在管程内执行某个内部过程。</p>
+</blockquote>
+<p>这两点不冲突吗？所以，管程到底是什么？</p>
+<h2 id="经典进程同步问题"><a href="#经典进程同步问题" class="headerlink" title="经典进程同步问题"></a>经典进程同步问题</h2><ol>
+<li>生产者-消费者问题</li>
+<li>读者-写者问题</li>
+<li>哲学家进餐问题</li>
+<li>吸烟者问题</li>
+</ol>
+<p>真心好玩！</p>
+<h2 id="我的困惑"><a href="#我的困惑" class="headerlink" title="我的困惑"></a>我的困惑</h2><p>管程在 C++ 中有对应的实现吗？代码的实例。做出进一步地了解之后，复习“管程”章节。</p>
+<p>在 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E9%97%AE%E9%A2%98">维基百科 - 生产者消费者问题</a> 中也提到了不使用信号量和管程实现生产者消费者问题的方式。</p>
+<blockquote>
+<p>对于生产者消费者问题来说，特别是当只有一个生产者和一个消费者时，实现一个先进先出结构或者通信通道非常重要。这样，生产者-消费者模式就可以在不依赖信号灯、互斥变量或管程的的情况下高效地传输数据。</p>
+<p>人们喜欢用先进先出结构或者通信通道，只是因为可以避免端与端之间的原子性同步。</p>
+</blockquote>
+<p>问题一：使用信号量解决生产者消费者问题时做同步能理解，但为什么要做互斥？是针对缓冲区的修改吗？插入和删除可能正好是同一块存储？</p>
+<p>问题二：保证先进先出就能够保证互斥？同步由 <code>while</code> 实现？</p>
+<h1 id="POSIX"><a href="#POSIX" class="headerlink" title="POSIX"></a>POSIX</h1><p>参考来源：<a target="_blank" rel="noopener" href="http://blog.csdn.net/yusiguyuan/article/details/14160081">线程间同步–互斥锁、条件变量、信号量</a></p>
+<h2 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h2><p><strong>互斥锁</strong>是最常用的。使用时包含 <code>#include &lt;pthread.h&gt;</code> 头文件即可。</p>
+<p>对于多线程的程序，访问冲突的问题是很普遍的，解决的办法是引入互斥锁（Mutex，Mutual Exclusive Lock），获得锁的线程可以完成“读-修改-写”的操作，然后释放锁给其它线程，没有获得锁的线程只能等待而不能访问共享数据，这样“读-修改-写”三步操作组成一个原子操作，要么都执行，要么都不执行，不会执行到中间被打断，也不会在其它处理器上并行做这个操作。</p>
+<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><p><strong>条件变量</strong>：在pthread库中通过条件变量（Condition Variable）来阻塞等待一个条件，或者唤醒等待这个条件的线程。</p>
+<p>——问题1：开发实践中应用得多吗？某些场景下感觉可以用 <code>while-sleep</code> 替换，使用条件变量有什么优点吗？</p>
+<blockquote>
+<p>其实想一想，pthread_cond_wait函数也可以用一个while死循环来等待条件的成立，但要注意的是，使用while死循环会严重消耗CPU，而pthread_cond_wait则是采用线程睡眠的方式，它是一种等待模式，而不是一直的检查模式。<a target="_blank" rel="noopener" href="http://blog.csdn.net/yusiguyuan/article/details/14161225">引用来源</a></p>
+</blockquote>
+<p>——问题2：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/clover-toeic/p/4029269.html">Linux线程编程之生产者消费者问题</a> 中条件变量的代码使用了 <code>while</code>，和上一章节“管程”中的使用一致。和使用 <code>if</code> 有特别大的区别吗？我是指两者在多消费者（或多生产者）的情况下，无论是用 <code>while</code>，还是 <code>if</code> 都可能造成竞争吧？</p>
+<blockquote>
+<p><code>pthread_cond_wait()</code> 返回时，互斥量再次被锁定并被调用线程拥有。</p>
+</blockquote>
+<p>——问题3：针对上一问题中使用 <code>while</code> 的必要性</p>
+<blockquote>
+<p>虚假唤醒(spurious wakeup)指没有线程明确调用cond_signal/broadcast()时，cond_wait()偶尔也会返回；或者条件状态尚不满足时就调用cond_signal/broadcast()。此时，线程虽被唤醒但条件并不成立，若不再次检查条件而往下执行，很可能导致后续的处理出现错误。因此，当从cond_wait()返回时，线程应重新测试条件成立与否。该过程一般用while循环实现。</p>
+<p>使用while循环不仅能避免虚假唤醒造成的错误，还能避免唤醒线程间竞争导致的“惊群效应”。</p>
+<p>例如，ProducerThread()内，调用cond_wait()对互斥量自动解锁后，在允许消费者线程修改条件的同时，也允许其他生产者线程调用该函数依次阻塞。当这些线程被唤醒时(如队列由满变为非满)，会再次竞争相应的互斥量。获得互斥量的那个线程进入临界区处理，这可能改变测试条件(如产出一件使得队列再次变满)。该线程释放互斥量后，其他某个处于等待状态的线程获得该互斥量时，虽然cond_wait()成功返回但很可能条件已不成立。因此，调用cond_wait()成功返回时，线程需要重新测试条件是否满足。 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/clover-toeic/p/4029269.html">引用来源</a></p>
+</blockquote>
+<p><strong>强烈推荐</strong> <a target="_blank" rel="noopener" href="http://www.cnblogs.com/clover-toeic/p/4029269.html">Linux线程编程之生产者消费者问题</a> 帖子中的 2.3注意事项 ☆☆☆☆☆，尤其是其中的第1项、第5项、第7项、第8项和第9项。</p>
+<p>互斥锁和条件变量的区别：</p>
+<ol>
+<li>互斥锁和条件变量的初始化很一致；</li>
+<li>使用上，互斥锁先是调用 <code>pthread_mutex_lock</code> 获得锁，获取到则向下执行，如果未获取到则阻塞，直到其被释放（<code>pthread_mutex_unlock</code>）；</li>
+<li>而条件变量调用 <code>pthread_cond_wait</code> 之后直接阻塞，直到被唤醒（<code>pthread_cond_signal</code>）；</li>
+</ol>
+<p><code>int pthread_cond_wait(pthread_cond_t *restrict cond, pthread_mutex_t *restrict mutex); </code> 函数做以下三步操作：</p>
+<ol>
+<li>释放 Mutex</li>
+<li>阻塞等待</li>
+<li>当被唤醒时，重新获得 Mutex并返回</li>
+</ol>
+<p>需要强调的是前两个操作是原子性的（不包括第3个）。</p>
+<p>这些本质上都是条件判断，为什么不能用全局变量？参见 <a target="_blank" rel="noopener" href="http://c.biancheng.net/cpp/html/2589.html">C 语言中文网 - 实现临界区互斥的基本方法</a></p>
+<p>Mutex变量是非0即1的，可看作一种资源的可用数量，初始化时Mutex是1，表示有一个可用资源，加锁时获得该资源，将Mutex减到0，表示不再有可用资源，解锁时释放该资源，将Mutex重新加到1，表示又有了一个可用资源。</p>
+<h2 id="信号量-1"><a href="#信号量-1" class="headerlink" title="信号量"></a>信号量</h2><p><strong>信号量</strong>（Semaphore）和Mutex类似，表示可用资源的数量，和Mutex不同的是这个数量可以大于1。如果使用 POSIX semaphore库，需要包含 <code>#include &lt;semaphore.h&gt;</code>，这种信号量不仅可用于同一进程的线程间同步，也可用于不同进程间的同步。</p>
+<blockquote>
+<p>使用Posix信号量可模拟互斥量和条件变量，而且通常更有优势。<a target="_blank" rel="noopener" href="http://www.cnblogs.com/clover-toeic/p/4029269.html">引用来源</a></p>
+</blockquote>
+<h1 id="C-11"><a href="#C-11" class="headerlink" title="C++11"></a>C++11</h1><p>接下来说说 C++11 中用并发怎么写生产者消费者问题。</p>
+<p>参考来源：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/haippy/p/3252092.html">C++11 并发指南九</a>，正确与否暂且不论。作者可真够啰嗦的，又不是写论文，凑啥篇幅。推荐作者系列文章：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/haippy/p/3284540.html">C++11 并发指南系列</a></p>
+<p>使用“c++ 生产者消费者”作为关键字 google，其结果前 2 页含有有效代码的网页中，基本以数组（做环形队列）做有限缓冲，有两个例子使用了 STL 的 vector，一个例子使用 queue</p>
+<ol>
+<li>使用 vector <a target="_blank" rel="noopener" href="http://www.voidcn.com/blog/nyist327/article/p-5038823.html">例子一</a></li>
+<li>使用 vector <a target="_blank" rel="noopener" href="http://my.oschina.net/myspaceNUAA/blog/61239">例子二</a>，代码比较糟糕，不支持多生产者（或多消费者）</li>
+<li>使用 queue <a target="_blank" rel="noopener" href="http://www.lai18.com/content/5955636.html">例子</a></li>
+</ol>
+<p>具体业务场景具体分析，但更具通用性（同时适用于多生产者或多消费者的情况）的上锁方式，是将“获取缓冲区大小，进出缓冲区”都作为临界区，严格上锁。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c-11/" rel="tag"># c++11</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/03/RAII/" rel="prev" title="RAII">
+      <i class="fa fa-chevron-left"></i> RAII
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/03/typeConversion/" rel="next" title="类型转换">
+      类型转换 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">进程和线程管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%90%8C%E6%AD%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">进程同步的基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">1.2.</span> <span class="nav-text">信号量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">管程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E8%BF%9B%E7%A8%8B%E5%90%8C%E6%AD%A5%E9%97%AE%E9%A2%98"><span class="nav-number">1.4.</span> <span class="nav-text">经典进程同步问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E5%9B%B0%E6%83%91"><span class="nav-number">1.5.</span> <span class="nav-text">我的困惑</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#POSIX"><span class="nav-number">2.</span> <span class="nav-text">POSIX</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%92%E6%96%A5%E9%94%81"><span class="nav-number">2.1.</span> <span class="nav-text">互斥锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="nav-number">2.2.</span> <span class="nav-text">条件变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F-1"><span class="nav-number">2.3.</span> <span class="nav-text">信号量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-11"><span class="nav-number">3.</span> <span class="nav-text">C++11</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

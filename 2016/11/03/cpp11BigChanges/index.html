@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="The Biggest Changes in C++11 (and Why You Should Care)，译文：C++11 的重大改变 事实上，核心 C++11 已经有了很大的改变。C++11 标准库同样增加了新的内容。捎带一句，C++11, also formerly known as C++0x … Core 事实上，核心 C++11 已经有了很大的改变。现在它支持 lambda 表达式，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++11 的重大改变">
+<meta property="og:url" content="https://tnie.github.io/2016/11/03/cpp11BigChanges/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="The Biggest Changes in C++11 (and Why You Should Care)，译文：C++11 的重大改变 事实上，核心 C++11 已经有了很大的改变。C++11 标准库同样增加了新的内容。捎带一句，C++11, also formerly known as C++0x … Core 事实上，核心 C++11 已经有了很大的改变。现在它支持 lambda 表达式，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-11-03T07:03:22.000Z">
+<meta property="article:modified_time" content="2021-01-18T05:30:33.375Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="c++11">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2016/11/03/cpp11BigChanges/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C++11 的重大改变 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/cpp11BigChanges/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++11 的重大改变
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-03 15:03:22" itemprop="dateCreated datePublished" datetime="2016-11-03T15:03:22+08:00">2016-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a target="_blank" rel="noopener" href="http://blog.smartbear.com/c-plus-plus/the-biggest-changes-in-c11-and-why-you-should-care/">The Biggest Changes in C++11 (and Why You Should Care)</a>，译文：<a target="_blank" rel="noopener" href="http://www.devbean.net/2012/11/biggest-changes-in-c11/">C++11 的重大改变</a></p>
+<p>事实上，核心 C++11 已经有了很大的改变。C++11 标准库同样增加了新的内容。捎带一句，<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/9538701/what-is-the-difference-between-c0x-and-c11">C++11, also formerly known as C++0x …</a></p>
+<h1 id="Core"><a href="#Core" class="headerlink" title="Core"></a>Core</h1><blockquote>
+<p>事实上，核心 C++11 已经有了很大的改变。现在它支持 lambda 表达式，自动类型推断，统一的初始化语法，委托构造函数，已删除和默认函数声明，nullptr，以及最重要的，右值引用——一种预言将会改变创造和处理对象方法的技术。</p>
+</blockquote>
+<h2 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0">匿名函数</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/20125256">Lambda 表达式有何用处？如何使用？ - KE meng 的回答</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://msdn.microsoft.com/zh-cn/library/dd293608.aspx">C++ 中的 Lambda 表达式</a></p>
+</li>
+<li><p>查看 C++ Primer 有关章节，讲解的很详细的。</p>
+<ul>
+<li>lambda 的函数调用运算符为 const-by-value，但对 <code>mutable</code> 关键字的使用可将其取消</li>
+</ul>
+</li>
+</ul>
+<h2 id="自动类型推断和-decltype"><a href="#自动类型推断和-decltype" class="headerlink" title="自动类型推断和 decltype"></a>自动类型推断和 decltype</h2><p>赋予 <code>auto</code> 关键词新生： <a target="_blank" rel="noopener" href="http://www.cppblog.com/amazon/archive/2009/12/09/102847.html">数据存储类型</a></p>
+<p><code>auto</code> 自动推导类型，轻度用户（不涉及模板）谨慎使用，在书写便利和代码易读两者之间寻求，滥用降低代码可读性。</p>
+<p>注意使用的限制</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">size_t</span> length = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> diff = <span class="number">0</span> - length;</span><br><span class="line"><span class="keyword">auto</span> diff2 = <span class="number">0</span> - length;</span><br><span class="line"><span class="comment">// diff != diff2</span></span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; (<span class="number">0</span> - length) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"><span class="comment">// NOTE 并未像我们预期的那这样子输出 -10</span></span><br></pre></td></tr></table></figure>
+<h2 id="统一初始化语法"><a href="#统一初始化语法" class="headerlink" title="统一初始化语法"></a>统一初始化语法</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/POD_(%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1)">POD (程序设计) - wikipedia</a></p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C%2B%2B%E7%B1%BB">C++类 - wikipedia</a>，其中提到了“聚合类”和“POD”结构。值得抽时间全部看看</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/tingshuo/archive/2013/03/25/2981197.html">怎样理解 C++ 中的 Aggregate 和 POD 类型</a>，这是译文—<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special">An answer from stackoverflow</a>，这是原文。强调理论。<del>建议查看原文，其中 “What changes for C++11?” 一节在 cnblog 中并未出现，而关于 POD 的定义，C++03 标准和 C++11 并不相同。</del> 这是后半部分,<a target="_blank" rel="noopener" href="http://www.cnblogs.com/tingshuo/archive/2013/03/28/2986236.html">怎样理解C++ 11中的trivial和standard-layout</a></p>
+<blockquote>
+<p>新标准中已经很少使用POD这个术语了，而是更多的在使用更精确的概念：trival和stand-layout。</p>
+</blockquote>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://blog.csdn.net/aqtata/article/details/35618709">【C++11】POD 数据类型</a>，只放定义和代码，看不懂。强调实用性。</p>
+<p>看了以上几篇帖子之后，知道了几个名词：Aggregate 和 POD，trivial 和 standard-layout。但详细的概念很是混乱，其中一条条的“是与不是”、“有与没有”难道是让人用来背诵记忆的吗？实用主义不要求学究钻研，编码过程用到了再回来复习。目前，水过不学了。其实真要较真的话，应该直接去找 C++ 的新标准，网上的终究是个参考，会有出入。</p>
+</li>
+</ul>
+</li>
+<li><p>列表初始化，见 wiz 中另一篇笔记《初始化.md》</p>
+<blockquote>
+<p>初始化操作的多种变体是令人感觉困扰的重要原因之一。C++11 使用统一的大括号标记清除了这种混乱。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="删除和默认函数"><a href="#删除和默认函数" class="headerlink" title="删除和默认函数"></a>删除和默认函数</h2><ul>
+<li>多看书，多写代码</li>
+</ul>
+<h2 id="nullptr"><a href="#nullptr" class="headerlink" title="nullptr"></a>nullptr</h2><ul>
+<li><p>在此之前是什么样子？会有什么问题？深度探索一下。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://szjoshua.farbox.com/post/c-11nullptr">c++11中的nullptr详解</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/22203461">NULL 和 0 - 蓝色的回答</a></p>
+<ul>
+<li>不推荐使用宏，甚至不承认宏。包括 <code>NULL</code>，C++标准是没有承认 <code>NULL</code> 是 null pointer constant的。</li>
+<li>赋予 null pointer，应该是使用 <code>0</code>，而非 <code>NULL</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="委托构造函数"><a href="#委托构造函数" class="headerlink" title="委托构造函数"></a>委托构造函数</h2><ul>
+<li>减少代码量？</li>
+<li>委托构造函数<strong>在初始化列表中</strong>调用目标构造函数。我们把调用者称为委托构造函数，被调用者称为目标构造函数。</li>
+<li><a target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/cpp-11-faq/content/10.html">委托构造函数（Delegating constructors）</a></li>
+</ul>
+<h2 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h2><ul>
+<li><p>区分“左值”和“右值”。引用自 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8">右值引用 - wikipedia</a></p>
+<blockquote>
+<p>在C++11提出右值引用之前，C++03及更早的C++标准中，表达式的“值分类”（<a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/value_category">value categories</a>）属性为左值或右值。左值是对应（refer to）内存中有确定存储地址的对象的表达式的值，而右值是所有不是左值的表达式的值。因而，右值可以是字面量、临时对象等表达式。能否被赋值不是区分C++左值与右值的依据。C++的const左值是不可赋值的；而作为临时对象的右值可能允许被赋值。左值与右值的根本区别在于<strong>是否允许取地址&amp;运算符获得对应的内存地址</strong>。</p>
+</blockquote>
+</li>
+<li><p>移动语义？学习 C++ Prime</p>
+<ul>
+<li><p>移动构造函数、移动赋值运算符</p>
+<blockquote>
+<p>C++11 标准库大量使用了移动语义。许多算法和容器也为移动语义做了优化。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://jxq.me/2012/06/06/%E8%AF%91%E8%AF%A6%E8%A7%A3c%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8/#section_05">【译】详解C++右值引用</a>，阅读笔记如下</p>
+<ol>
+<li><p>概述中# &amp;foobar() 是取 foobar() 函数执行结果的地址，而不是函数指针，&amp;foobar 才是函数指针。</p>
+</li>
+<li><p>右值引用，总算渐渐明朗了。但前提是分清左值/右值。</p>
+<p> const 常量是左值，还是右值呢？——左值，因为 <code>const int max = 100;</code> 中 max 是可以使用 <code>&amp;</code> 取地址的。</p>
+</li>
+<li><p>move语义# 中“当赋值操作符的右边是右值的时候，我们希望赋值操作符被定义成下面这样：”，醍醐灌顶啊</p>
+<p> 此处的右值，在后续代码中可能会再次被用来给变量赋值吗？</p>
+<blockquote>
+<p>“move语义：当一个变量（a）作为拷贝构造函数或者赋值的来源时，这个变量要么就是以后都不会再使用，要么就是（使用时）作为赋值操作的目标（a = b）。”</p>
+</blockquote>
+<p> 也就是，这个变量不能再用了。</p>
+<p> ——参考 右值引用是右值吗？#</p>
+<blockquote>
+<p>“move语义的重点在于将其应用于那些不重要的东西上面，那些move之后会马上销毁而不会被再次用到的东西上面。”</p>
+</blockquote>
+</li>
+<li><p>强制move语义# 中：</p>
+<blockquote>
+<p>C++11中的swap函数是这样的:…</p>
+</blockquote>
+<p> swap函数不能只做 <code>a = std::move(b);</code> 吗？</p>
+<blockquote>
+<p>值得注意的是对那些没有实现move语义的类型来说（没有针对右值引用重载拷贝构造函数和赋值操作符），新的swap仍然和旧的一样。</p>
+</blockquote>
+<p> 可能只是为了兼容。参考 Debian8Light 代码验证。</p>
+</li>
+<li><p>右值引用是右值吗# 中读不懂：</p>
+<blockquote>
+<p>理论上来说goo()所引用的对象也可能在X x = goo();后被访问的到。但是回想一下，这种行为不正是我们想要的吗？我们也想随心所欲的在左值上面使用move语义。</p>
+</blockquote>
+</li>
+<li><p>move语义与编译器优化# 暂时读不懂</p>
+</li>
+<li><p><strong>完美转发相关内容暂时未看，涉及范型编程之泛型函数</strong></p>
+</li>
+</ol>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.ibm.com/developerworks/cn/aix/library/1307_lisl_c11/">C++11 标准新特性: 右值引用与转移语义</a></p>
+</li>
+</ul>
+<h1 id="Library"><a href="#Library" class="headerlink" title="Library"></a>Library</h1><blockquote>
+<p>2003年，C++ 以库技术报告 1（TR1）的形式经历了一次大型重构。TR1 包含了新的容器类（unordered_set，unordered_map，unordered_multiset和unordered_multimap）和许多新的库，例如正则表达式，元组，函数对象包装器。随着 C++11 的颁布，TR1 连同新的库一起正式集成到 C++ 标准中。下面是 C++11 标准库的特性：</p>
+</blockquote>
+<h2 id="线程库"><a href="#线程库" class="headerlink" title="线程库"></a>线程库</h2><blockquote>
+<p>毫无疑问，从程序员角度看，C++11 最重要的改进就是并发。</p>
+</blockquote>
+<h2 id="新的智能指针类"><a href="#新的智能指针类" class="headerlink" title="新的智能指针类"></a>新的智能指针类</h2><blockquote>
+<p>C++98 只定义了一个智能指针类，auto_ptr，而这个类现在已经被废弃了。C++11 包含了新的智能指针类：shared_ptr 和最近新加的 unique_ptr。</p>
+</blockquote>
+<h2 id="新的算法"><a href="#新的算法" class="headerlink" title="新的算法"></a>新的算法</h2><p>THE END</p>
+<p>延伸阅读：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/cpp-11-faq/content/88.html">C++11 FAQ中文版</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C%2B%2B11">C++11 - wikipedia</a>，还是很值得一看的。</li>
+<li><a target="_blank" rel="noopener" href="http://coolshell.cn/articles/5265.html">C++11 中值得关注的几大变化（详解）</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c-11/" rel="tag"># c++11</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/03/sizeof-strlen-length-size/" rel="prev" title="内存和长度">
+      <i class="fa fa-chevron-left"></i> 内存和长度
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/03/RAII/" rel="next" title="RAII">
+      RAII <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Core"><span class="nav-number">1.</span> <span class="nav-text">Core</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">Lambda 表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E7%B1%BB%E5%9E%8B%E6%8E%A8%E6%96%AD%E5%92%8C-decltype"><span class="nav-number">1.2.</span> <span class="nav-text">自动类型推断和 decltype</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E5%88%9D%E5%A7%8B%E5%8C%96%E8%AF%AD%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">统一初始化语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E5%92%8C%E9%BB%98%E8%AE%A4%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.</span> <span class="nav-text">删除和默认函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nullptr"><span class="nav-number">1.5.</span> <span class="nav-text">nullptr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A7%94%E6%89%98%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">1.6.</span> <span class="nav-text">委托构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8"><span class="nav-number">1.7.</span> <span class="nav-text">右值引用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Library"><span class="nav-number">2.</span> <span class="nav-text">Library</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%BA%93"><span class="nav-number">2.1.</span> <span class="nav-text">线程库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%B1%BB"><span class="nav-number">2.2.</span> <span class="nav-text">新的智能指针类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E7%AE%97%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">新的算法</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
