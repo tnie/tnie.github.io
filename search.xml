@@ -5326,6 +5326,45 @@
       </tags>
   </entry>
   <entry>
+    <title>GTD</title>
+    <url>/2017/04/17/gtd/</url>
+    <content><![CDATA[<p>2016&#x2F;3&#x2F;23 9:27:13</p>
+<p>相信“GTD 这个系统本来也不是给初学者用的，整个系统过于复杂，难度过高，维持 GTD 系统本身就要花费很大的精力和时间”，引自 <a href="https://www.zhihu.com/question/23051794/answer/24689356">GTD 入门应该从哪些资料开始？ —— warfalcon 的回答</a>。</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gtd/2a199e39-7741-4bff-a885-7aacb7dbca1b.png" alt="初学者应该学什么"></p>
+<p>我在一年前为了使用 doit.im 还买了会员账户，当时肯定是真爱，期待也相信这个工具能够给我带来帮助，甚至是改变。事实是，跳槽之后（15年10月）我已经很少使用它了。也就是我迷恋这款应用只持续了三个月左右。</p>
+<span id="more"></span>
+
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gtd/doit.png" alt="doit"></p>
+<p>现在反思原因，下意识会认为自己并不需要这款应用，后来的冷淡也是喜新厌旧，过了蜜月期自然无爱了。可是我认为我当初既然愿意花费金钱，doit 必然是有其可取之处的。进一步思考，一方面我仍旧有收集任务、安排任务的需要，另一方面我并没有使用其他替代的工具，那究竟是为什么放弃了？——因为没有时间，没有条件。</p>
+<ol>
+<li>交代背景：我换工作没多久，丫头也就在智慧流开始新工作了，从 11 月份到今年的 3 月份，周一到周五，乃至周六都是七点半出门，九点上班，八点半下班，十点到家的节奏。</li>
+<li>日程安排其实更适合于放在通勤时间去规划，可是我的 wp 太坑爹；另外，任务收集其实大多也来源于碎片时间。以前虽然碎片时间没有利用起来，但每天还是有两三个小时个人时间的，总是会开电脑的，捎带做一下输入工作还是很方便的。</li>
+<li>而那小半年忙碌的时间，在工作日里唯一的个人时间就是睡觉的时候了。在工作日里，我基本就没用过自己的电脑。</li>
+<li>也并不是完全不可以做。但人是有惰性的，当做事情的方便性大大折扣，自然就慢慢放弃了。</li>
+</ol>
+<p>要重新启用 doit！碎片时间的利用需要移动端的支持……联想的低端安卓机，还是丫头的苹果 4，或者买新手机？</p>
+<p>对应用生态环境完善的移动端设备（说人话就是，安卓手机&#x2F;苹果手机）需求越来越大了。</p>
+<ul>
+<li>doit</li>
+<li>wiz</li>
+<li>evernote</li>
+<li>Dropbox</li>
+<li>？Delicious</li>
+<li>手机银行（工行、民生）</li>
+<li>支付宝</li>
+<li>……</li>
+</ul>
+<p>当某一天需要替换 doit 时，可以略作参考，当然到时候肯定还是会 Google 的。帖子肯定会过时的</p>
+<ul>
+<li><a href="http://www.zhihu.com/question/23452348">GTD类的工具（如Doit.im，Anydo等）哪种免费且好用点？</a></li>
+</ul>
+<p>另，omnifocus，据传为苹果系统上的 GTD 神器。收费应用，需购买。</p>
+]]></content>
+      <categories>
+        <category>tools</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Git Submoudle使用完整教程</title>
     <url>/2018/04/02/git_submodule/</url>
     <content><![CDATA[<p>自从看了蒋鑫的《Git权威指南》之后就开始使用Git Submodule功能，团队也都熟悉了怎么使用，多个子系统（模块）都能及时更新到最新的公共资源，把使用的过程以及经验和容易遇到的问题分享给大家。</p>
@@ -5543,45 +5582,6 @@
       <tags>
         <tag>git</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>GTD</title>
-    <url>/2017/04/17/gtd/</url>
-    <content><![CDATA[<p>2016&#x2F;3&#x2F;23 9:27:13</p>
-<p>相信“GTD 这个系统本来也不是给初学者用的，整个系统过于复杂，难度过高，维持 GTD 系统本身就要花费很大的精力和时间”，引自 <a href="https://www.zhihu.com/question/23051794/answer/24689356">GTD 入门应该从哪些资料开始？ —— warfalcon 的回答</a>。</p>
-<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gtd/2a199e39-7741-4bff-a885-7aacb7dbca1b.png" alt="初学者应该学什么"></p>
-<p>我在一年前为了使用 doit.im 还买了会员账户，当时肯定是真爱，期待也相信这个工具能够给我带来帮助，甚至是改变。事实是，跳槽之后（15年10月）我已经很少使用它了。也就是我迷恋这款应用只持续了三个月左右。</p>
-<span id="more"></span>
-
-<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gtd/doit.png" alt="doit"></p>
-<p>现在反思原因，下意识会认为自己并不需要这款应用，后来的冷淡也是喜新厌旧，过了蜜月期自然无爱了。可是我认为我当初既然愿意花费金钱，doit 必然是有其可取之处的。进一步思考，一方面我仍旧有收集任务、安排任务的需要，另一方面我并没有使用其他替代的工具，那究竟是为什么放弃了？——因为没有时间，没有条件。</p>
-<ol>
-<li>交代背景：我换工作没多久，丫头也就在智慧流开始新工作了，从 11 月份到今年的 3 月份，周一到周五，乃至周六都是七点半出门，九点上班，八点半下班，十点到家的节奏。</li>
-<li>日程安排其实更适合于放在通勤时间去规划，可是我的 wp 太坑爹；另外，任务收集其实大多也来源于碎片时间。以前虽然碎片时间没有利用起来，但每天还是有两三个小时个人时间的，总是会开电脑的，捎带做一下输入工作还是很方便的。</li>
-<li>而那小半年忙碌的时间，在工作日里唯一的个人时间就是睡觉的时候了。在工作日里，我基本就没用过自己的电脑。</li>
-<li>也并不是完全不可以做。但人是有惰性的，当做事情的方便性大大折扣，自然就慢慢放弃了。</li>
-</ol>
-<p>要重新启用 doit！碎片时间的利用需要移动端的支持……联想的低端安卓机，还是丫头的苹果 4，或者买新手机？</p>
-<p>对应用生态环境完善的移动端设备（说人话就是，安卓手机&#x2F;苹果手机）需求越来越大了。</p>
-<ul>
-<li>doit</li>
-<li>wiz</li>
-<li>evernote</li>
-<li>Dropbox</li>
-<li>？Delicious</li>
-<li>手机银行（工行、民生）</li>
-<li>支付宝</li>
-<li>……</li>
-</ul>
-<p>当某一天需要替换 doit 时，可以略作参考，当然到时候肯定还是会 Google 的。帖子肯定会过时的</p>
-<ul>
-<li><a href="http://www.zhihu.com/question/23452348">GTD类的工具（如Doit.im，Anydo等）哪种免费且好用点？</a></li>
-</ul>
-<p>另，omnifocus，据传为苹果系统上的 GTD 神器。收费应用，需购买。</p>
-]]></content>
-      <categories>
-        <category>tools</category>
-      </categories>
   </entry>
   <entry>
     <title>linux 指令之 g++</title>
@@ -7120,6 +7120,49 @@
       </categories>
   </entry>
   <entry>
+    <title>C++ 接口形式</title>
+    <url>/2021/06/11/interface/</url>
+    <content><![CDATA[<p>记录编写 C++ 代码过程中的疑惑、避坑的技巧等</p>
+<h1 id="深入理解-C"><a href="#深入理解-C" class="headerlink" title="深入理解 C++"></a>深入理解 C++</h1><ul>
+<li>引用折叠：<a href="https://blog.csdn.net/big_yellow_duck/article/details/52433305">Effective Modern C++ 条款28 理解引用折叠</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/language/value_category">Value categories</a></li>
+</ul>
+<h1 id="模板遇上-DLL-导出"><a href="#模板遇上-DLL-导出" class="headerlink" title="模板遇上 DLL 导出"></a>模板遇上 DLL 导出</h1><p>模板是为了共用代码，使用模板时首先要完成实例化，而实例化要求看到模板的完整定义才可以。所以，如果给用户使用暴露模板，就要暴露模板的实现细节。</p>
+<p>DLL 是为了隐藏实现，只给用户暴露使用的接口，其中的具体实现用户是看不到的，也不需要关心。DLL 包装起来的是类的定义，而不是模板。所以，不存在“导出模板”，如果暴露模板定义给用户，那么用户是应当看到模板所有细节的，直接使用模板实例化（类或者函数）来用即可。</p>
+<p>如果不想暴露具体的实现，只能先实例化成具体的类或函数，然后将类或者函数导出。</p>
+<span id="more"></span>
+
+<h2 id="模板函数遇上-DLL"><a href="#模板函数遇上-DLL" class="headerlink" title="模板函数遇上 DLL"></a>模板函数遇上 DLL</h2><p>待补充</p>
+<h2 id="模板类遇上-DLL"><a href="#模板类遇上-DLL" class="headerlink" title="模板类遇上 DLL"></a>模板类遇上 DLL</h2><p>一般无需导出整个类，只需导出部分 <code>public</code> 成员函数即可。</p>
+<ol>
+<li><p>在 windows 平台编译 glog 库，在 StockDataLayer 项目中使用 glog 输出日志；</p>
+</li>
+<li><p>补全 DMSGConsumer 分发任务时的 else if 分支、</p>
+</li>
+<li><p>将对象池模板、延迟发送等代码生成动态库，供 test 源码调用，验证 dll 边界</p>
+<p> 暴露了 Stock 模板定义给用户</p>
+</li>
+<li><p>因为核心代码 Stock 及其对象池都是模板，考虑能否以 single header file 的形式供用户使用</p>
+</li>
+<li><p>在模板基础上全部实例化，针对实例化之后的类做导入导出；</p>
+</li>
+<li><p>包装回调签名中的数据交换类，相应地增加「增删回调」接口；</p>
+</li>
+</ol>
+<h1 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a>虚函数</h1><p>用户未定义，编译器自动合成的析构函数是否会直接设定成虚函数？还是会上下文推导当其存在子类时才加 <code>virtual</code>，否则不加 <code>virtual</code>？所以定义基类（声明接口）时无需显式定义 <code>virtual dtor() = default;</code> ？多写这一行没意义吧？</p>
+<p>当基类中某个函数设置为虚函数之后，子类 override 时即便不加 virtual 关键词，其（子类中的）依旧是虚函数吧？不然再次继承时，无法 <code>override</code>。</p>
+<h1 id="考虑虚函数的替代者"><a href="#考虑虚函数的替代者" class="headerlink" title="考虑虚函数的替代者"></a>考虑虚函数的替代者</h1><p>工作中 YDData2 接口中的回调，以及指标公式回传结果。都让我想起一段文字：</p>
+<blockquote>
+<p>ACE 犯了早期 C++ 库都会犯的一个错误，过度设计， 过度java化。所谓 java 化， 就是以对象代替接口，以虚函数代替回调，以继承代替组合。以虚类代替模板。对象间关系错综复杂，牵一发而动全身。<a href="https://microcai.org/2015/09/14/history-of-network-libraries-part-one.html">那些年我们追过的网络库</a></p>
+</blockquote>
+<p><a href="https://www.cnblogs.com/harlanc/p/6607535.html">《effective c++》 Item 35 考虑虚函数的替代者</a></p>
+]]></content>
+      <categories>
+        <category>cpp</category>
+        <category>cpp-concept</category>
+      </categories>
+  </entry>
+  <entry>
     <title>iocp</title>
     <url>/2020/12/25/iocp/</url>
     <content><![CDATA[<p>内核对象的概念，是什么？</p>
@@ -7216,49 +7259,6 @@
       <tags>
         <tag>windows</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>C++ 接口形式</title>
-    <url>/2021/06/11/interface/</url>
-    <content><![CDATA[<p>记录编写 C++ 代码过程中的疑惑、避坑的技巧等</p>
-<h1 id="深入理解-C"><a href="#深入理解-C" class="headerlink" title="深入理解 C++"></a>深入理解 C++</h1><ul>
-<li>引用折叠：<a href="https://blog.csdn.net/big_yellow_duck/article/details/52433305">Effective Modern C++ 条款28 理解引用折叠</a></li>
-<li><a href="https://en.cppreference.com/w/cpp/language/value_category">Value categories</a></li>
-</ul>
-<h1 id="模板遇上-DLL-导出"><a href="#模板遇上-DLL-导出" class="headerlink" title="模板遇上 DLL 导出"></a>模板遇上 DLL 导出</h1><p>模板是为了共用代码，使用模板时首先要完成实例化，而实例化要求看到模板的完整定义才可以。所以，如果给用户使用暴露模板，就要暴露模板的实现细节。</p>
-<p>DLL 是为了隐藏实现，只给用户暴露使用的接口，其中的具体实现用户是看不到的，也不需要关心。DLL 包装起来的是类的定义，而不是模板。所以，不存在“导出模板”，如果暴露模板定义给用户，那么用户是应当看到模板所有细节的，直接使用模板实例化（类或者函数）来用即可。</p>
-<p>如果不想暴露具体的实现，只能先实例化成具体的类或函数，然后将类或者函数导出。</p>
-<span id="more"></span>
-
-<h2 id="模板函数遇上-DLL"><a href="#模板函数遇上-DLL" class="headerlink" title="模板函数遇上 DLL"></a>模板函数遇上 DLL</h2><p>待补充</p>
-<h2 id="模板类遇上-DLL"><a href="#模板类遇上-DLL" class="headerlink" title="模板类遇上 DLL"></a>模板类遇上 DLL</h2><p>一般无需导出整个类，只需导出部分 <code>public</code> 成员函数即可。</p>
-<ol>
-<li><p>在 windows 平台编译 glog 库，在 StockDataLayer 项目中使用 glog 输出日志；</p>
-</li>
-<li><p>补全 DMSGConsumer 分发任务时的 else if 分支、</p>
-</li>
-<li><p>将对象池模板、延迟发送等代码生成动态库，供 test 源码调用，验证 dll 边界</p>
-<p> 暴露了 Stock 模板定义给用户</p>
-</li>
-<li><p>因为核心代码 Stock 及其对象池都是模板，考虑能否以 single header file 的形式供用户使用</p>
-</li>
-<li><p>在模板基础上全部实例化，针对实例化之后的类做导入导出；</p>
-</li>
-<li><p>包装回调签名中的数据交换类，相应地增加「增删回调」接口；</p>
-</li>
-</ol>
-<h1 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a>虚函数</h1><p>用户未定义，编译器自动合成的析构函数是否会直接设定成虚函数？还是会上下文推导当其存在子类时才加 <code>virtual</code>，否则不加 <code>virtual</code>？所以定义基类（声明接口）时无需显式定义 <code>virtual dtor() = default;</code> ？多写这一行没意义吧？</p>
-<p>当基类中某个函数设置为虚函数之后，子类 override 时即便不加 virtual 关键词，其（子类中的）依旧是虚函数吧？不然再次继承时，无法 <code>override</code>。</p>
-<h1 id="考虑虚函数的替代者"><a href="#考虑虚函数的替代者" class="headerlink" title="考虑虚函数的替代者"></a>考虑虚函数的替代者</h1><p>工作中 YDData2 接口中的回调，以及指标公式回传结果。都让我想起一段文字：</p>
-<blockquote>
-<p>ACE 犯了早期 C++ 库都会犯的一个错误，过度设计， 过度java化。所谓 java 化， 就是以对象代替接口，以虚函数代替回调，以继承代替组合。以虚类代替模板。对象间关系错综复杂，牵一发而动全身。<a href="https://microcai.org/2015/09/14/history-of-network-libraries-part-one.html">那些年我们追过的网络库</a></p>
-</blockquote>
-<p><a href="https://www.cnblogs.com/harlanc/p/6607535.html">《effective c++》 Item 35 考虑虚函数的替代者</a></p>
-]]></content>
-      <categories>
-        <category>cpp</category>
-        <category>cpp-concept</category>
-      </categories>
   </entry>
   <entry>
     <title>kubernetes 笔记</title>
@@ -8028,7 +8028,7 @@
 <li><a href="http://www.mindmanager.cc/zhucema-jihuoma-xuliehao.html">各版本MindManager注册码-激活码-序列号地址</a></li>
 <li><a href="http://www.weiyu.la/2013/2332.html">Mindjet MindManager 14.0.334 正式发布（最后更新：2013-11-11）</a></li>
 </ul>
-<p>ps：目前在用的版本和中文汉化包，都在百度云盘中上传了备份。<a href="mailto:&#x6e;&#105;&#101;&#108;&#111;&#x6e;&#x67;&#50;&#48;&#49;&#x34;&#64;&#49;&#54;&#51;&#x2e;&#99;&#x6f;&#109;">&#x6e;&#105;&#101;&#108;&#111;&#x6e;&#x67;&#50;&#48;&#49;&#x34;&#64;&#49;&#54;&#51;&#x2e;&#99;&#x6f;&#109;</a></p>
+<p>ps：目前在用的版本和中文汉化包，都在百度云盘中上传了备份。<a href="mailto:&#110;&#x69;&#x65;&#108;&#x6f;&#110;&#x67;&#x32;&#48;&#49;&#52;&#64;&#x31;&#54;&#51;&#46;&#x63;&#x6f;&#x6d;">&#110;&#x69;&#x65;&#108;&#x6f;&#110;&#x67;&#x32;&#48;&#49;&#52;&#64;&#x31;&#54;&#51;&#46;&#x63;&#x6f;&#x6d;</a></p>
 <p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/mindmanager/117c25cd-6171-4608-b210-336c5df6f9cc.jpg" alt="启动时弹出对话框"></p>
 ]]></content>
       <categories>
@@ -10640,7 +10640,7 @@
 <span id="more"></span>
 
 <h1 id="tools-标签下第一篇"><a href="#tools-标签下第一篇" class="headerlink" title="tools 标签下第一篇"></a>tools 标签下第一篇</h1><p>2016年1月5日 14:34:16</p>
-<p>此目录主要是和工具有关的笔记，重点在于使用工具的经验、教训和心得，是自己实实在在尝试过、折腾过的（比如 <a href="/2017/03/27/VersionControl/">版本控制</a> 这篇单纯罗列的帖子就不应该在此目录下，而应该整理到思维导图中）。<br>另，百度网盘 <a href="mailto:&#110;&#105;&#101;&#108;&#111;&#x6e;&#x67;&#50;&#x30;&#x31;&#52;&#x40;&#49;&#54;&#x33;&#x2e;&#x63;&#x6f;&#x6d;">&#110;&#105;&#101;&#108;&#111;&#x6e;&#x67;&#50;&#x30;&#x31;&#52;&#x40;&#49;&#54;&#x33;&#x2e;&#x63;&#x6f;&#x6d;</a> 中，上传了部分软件工具。</p>
+<p>此目录主要是和工具有关的笔记，重点在于使用工具的经验、教训和心得，是自己实实在在尝试过、折腾过的（比如 <a href="/2017/03/27/VersionControl/">版本控制</a> 这篇单纯罗列的帖子就不应该在此目录下，而应该整理到思维导图中）。<br>另，百度网盘 <a href="mailto:&#110;&#105;&#101;&#108;&#111;&#x6e;&#103;&#50;&#x30;&#49;&#x34;&#64;&#x31;&#54;&#51;&#46;&#99;&#x6f;&#109;">&#110;&#105;&#101;&#108;&#111;&#x6e;&#103;&#50;&#x30;&#49;&#x34;&#64;&#x31;&#54;&#51;&#46;&#99;&#x6f;&#109;</a> 中，上传了部分软件工具。</p>
 <p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/tools/f5cf1fe2-a2b3-45de-95f3-b741994ce323.png" alt="来源：工具（2016-01-05）.mmap"></p>
 <p>附件：<a href="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/tools/%E5%B7%A5%E5%85%B7%EF%BC%882016-01-05%EF%BC%89.mmap">工具（2016-01-05）.mmap</a></p>
 ]]></content>
