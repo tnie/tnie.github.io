@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="其实很简单的：甭管是打包还是压缩，参数一般以 vf 结尾，后跟包名称；打包的情况就是从 c（打包） x（解包） t（查看） 中挑一个；有压缩的话再从 z（gzip） j（bzip2） 中挑一个。Ok， 打完收工。  如果打包的文件很多很多，造成刷屏，就需要把 v 参数去掉； 包中追加（r）、更新（u）内容，使用率一般不是很高；">
+<meta property="og:type" content="article">
+<meta property="og:title" content="打包和压缩">
+<meta property="og:url" content="https://tnie.github.io/2016/12/14/tar/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="其实很简单的：甭管是打包还是压缩，参数一般以 vf 结尾，后跟包名称；打包的情况就是从 c（打包） x（解包） t（查看） 中挑一个；有压缩的话再从 z（gzip） j（bzip2） 中挑一个。Ok， 打完收工。  如果打包的文件很多很多，造成刷屏，就需要把 v 参数去掉； 包中追加（r）、更新（u）内容，使用率一般不是很高；">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-12-14T09:00:24.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.664Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2016/12/14/tar/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2016/12/14/tar/","path":"2016/12/14/tar/","title":"打包和压缩"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>打包和压缩 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%93%E5%8C%85%E5%91%BD%E4%BB%A4-tar"><span class="nav-number">1.</span> <span class="nav-text">打包命令 tar</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">语法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">压缩命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gzip"><span class="nav-number">2.1.</span> <span class="nav-text">gzip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bzip2"><span class="nav-number">2.2.</span> <span class="nav-text">bzip2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compress"><span class="nav-number">2.3.</span> <span class="nav-text">compress</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%87%E6%80%BB"><span class="nav-number">2.4.</span> <span class="nav-text">汇总</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%86%E5%8C%85-%E8%A7%A3%E5%8E%8B%E7%BC%A9"><span class="nav-number">3.</span> <span class="nav-text">拆包&#x2F;解压缩</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E8%8C%83%E4%BE%8B"><span class="nav-number">4.</span> <span class="nav-text">特殊范例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Windows-%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">Windows 下的压缩文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#zip"><span class="nav-number">5.1.</span> <span class="nav-text">.zip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rar"><span class="nav-number">5.2.</span> <span class="nav-text">.rar</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F"><span class="nav-number">6.</span> <span class="nav-text">结束</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/14/tar/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="打包和压缩 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          打包和压缩
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-12-14 17:00:24" itemprop="dateCreated datePublished" datetime="2016-12-14T17:00:24+08:00">2016-12-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p> 其实很简单的：甭管是打包还是压缩，参数一般以 vf 结尾，后跟包名称；打包的情况就是从 c（打包） x（解包） t（查看） 中挑一个；有压缩的话再从 z（gzip） j（bzip2） 中挑一个。Ok， 打完收工。</p>
+<ol>
+<li>如果打包的文件很多很多，造成刷屏，就需要把 v 参数去掉；</li>
+<li>包中追加（r）、更新（u）内容，使用率一般不是很高；</li>
+</ol>
+<hr>
+<span id="more"></span>
+
+<p>打包和压缩是两个概念。打包是指将一大堆文件或目录变成一个总的文件；压缩则是将一个大的文件通过一些压缩算法变成一个小文件。</p>
+<p>为什么要区分这两个概念呢？这源于 Linux 中很多压缩程序只能针对一个文件进行压缩，这样当你想要压缩一大堆文件时，你得先将这一大堆文件先打成一个包（tar命令），然后再用压缩程序进行压缩（gzip bzip2命令）。</p>
+<p>linux下最常用的打包程序就是 tar 了，使用 tar 程序打出来的包我们常称为 tar 包，tar 包文件通常都是以 .tar 结尾的。生成 tar 包后，就可以用其它的程序来进行压缩。</p>
+<h1 id="打包命令-tar"><a href="#打包命令-tar" class="headerlink" title="打包命令 tar"></a>打包命令 tar</h1><p>首先就来讲讲 tar 命令的基本用法： </p>
+<p>tar 命令的选项有很多(用 <code>man tar</code> 可以查看到)，但常用的就那么几个选项，下面来举例说明一下： </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tar -cf all.tar *.jpg </span><br><span class="line"><span class="comment"># 这条命令是将所有.jpg的文件打成一个名为all.tar的包。-c是表示产生新的包，-f指定包的文件名。 </span></span><br><span class="line">tar -rf all.tar *.gif </span><br><span class="line"><span class="comment"># 这条命令是将所有.gif的文件增加到all.tar的包里面去。-r是表示增加文件的意思。 </span></span><br><span class="line">tar -uf all.tar logo.gif </span><br><span class="line"><span class="comment"># 这条命令是更新原来tar包all.tar中logo.gif文件，-u是表示更新文件的意思。 </span></span><br><span class="line">tar -tf all.tar </span><br><span class="line"><span class="comment"># 这条命令是列出all.tar包中所有文件，-t是列出文件的意思 </span></span><br><span class="line">tar -xf all.tar </span><br><span class="line"><span class="comment"># 这条命令是解出all.tar包中所有文件，-x是解开的意思 </span></span><br></pre></td></tr></table></figure>
+
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p>语法：tar [主选项+辅选项] 文件或者目录</p>
+<p>使用该命令时，主选项是必须要有的，它告诉tar要做什么事情，辅选项是辅助使用的，可以选用。</p>
+<p>主选项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-c: 创建新的档案文件。如果用户想备份一个目录或是一些文件，就要选择这个选项。相当于打包。</span><br><span class="line">-x：从档案文件中释放文件。相当于拆包。</span><br><span class="line">-t：列出档案文件的内容，查看已经备份了哪些文件。</span><br><span class="line">-r：向归档文件末尾追加文件</span><br><span class="line">-u：更新原打包文件中的文件</span><br></pre></td></tr></table></figure>
+
+<p>这五个是独立的命令，打包拆包都要用到其中一个，可以和别的命令连用但只能用其中一个。</p>
+<p>辅助选项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-v ：打包/拆包的过程中显示文件，这个常用</span><br><span class="line">-f ：使用档名名字，请注意，在 f 之后要立即接档案名，不要再加其他参数</span><br><span class="line">-p ：使用原文件的原来属性（属性不会依据使用者而变）</span><br><span class="line">--exclude FILE：在压缩的过程中，不要将 FILE 打包</span><br><span class="line">-z ：</span><br><span class="line">-j ：</span><br><span class="line">-Z ：</span><br></pre></td></tr></table></figure>
+
+<p>参数 <code>-f</code> 是必须的！</p>
+<p>为了方便用户在打包解包的同时可以压缩或解压文件，tar 提供了一种特殊的功能。这就是 tar 可以在打包或解包的同时调用其它的压缩程序，比如调用 gzip、bzip2 等。</p>
+<h1 id="压缩命令"><a href="#压缩命令" class="headerlink" title="压缩命令"></a>压缩命令</h1><p>有很多个……</p>
+<h2 id="gzip"><a href="#gzip" class="headerlink" title="gzip"></a>gzip</h2><p>gzip 是 GNU 组织开发的一个压缩程序，.gz 结尾的文件就是 gzip 压缩的结果。与 gzip 相对的解压程序是 gunzip。tar 中使用 <code>-z</code> 这个参数来调用 gzip。下面来举例说明一下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -czf all.tar.gz *.jpg </span><br><span class="line"><span class="comment"># 这条命令是将所有.jpg的文件打成一个tar包，并且将其用gzip压缩，生成一个 gzip压缩过的包，包名为all.tar.gz </span></span><br><span class="line">tar -xzf all.tar.gz </span><br><span class="line"><span class="comment"># 这条命令是将上面产生的包解开。</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="bzip2"><a href="#bzip2" class="headerlink" title="bzip2"></a>bzip2</h2><p>bzip2 是一个压缩能力更强的压缩程序，.bz2 结尾的文件就是 bzip2 压缩的结果。与 bzip2 相对的解压程序是 bunzip2。tar 中使用 <code>-j</code> 这个参数来调用 gzip。下面来举例说明一下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -cjf all.tar.bz2 *.jpg </span><br><span class="line"><span class="comment"># 这条命令是将所有.jpg的文件打成一个tar包，并且将其用bzip2压缩，生成一个 bzip2压缩过的包，包名为all.tar.bz2 </span></span><br><span class="line">tar -xjf all.tar.bz2 </span><br><span class="line"><span class="comment"># 这条命令是将上面产生的包解开。</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="compress"><a href="#compress" class="headerlink" title="compress"></a>compress</h2><p>compress 也是一个压缩程序，但是好象使用 compress 的人不如 gzip 和 bzip2 的人多。.Z 结尾的文件就是 compress 压缩的结果。与 compress 相对的解压程序是 uncompress 。tar 中使用 <code>-Z</code> 这个参数来调用 compress。下面来举例说明一下： </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -cZf all.tar.Z *.jpg </span><br><span class="line"><span class="comment"># 这条命令是将所有.jpg的文件打成一个tar包，并且将其用compress压缩，生成一个uncompress压缩过的包，包名为all.tar.Z </span></span><br><span class="line">tar -xZf all.tar.Z </span><br><span class="line"><span class="comment"># 这条命令是将上面产生的包解开</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="汇总"><a href="#汇总" class="headerlink" title="汇总"></a>汇总</h2><p>下面的参数是根据需要在压缩或解压档案时可选的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-z：是否同时具有 gzip 的属性？亦即是否需要用 gzip 压缩或解压？ 一般格式为xx.tar.gz或xx. tgz</span><br><span class="line">-j：是否同时具有 bzip2 的属性？亦即是否需要用 bzip2 压缩或解压？一般格式为xx.tar.bz2</span><br><span class="line">-Z：有compress属性的</span><br></pre></td></tr></table></figure>
+
+<h1 id="拆包-解压缩"><a href="#拆包-解压缩" class="headerlink" title="拆包&#x2F;解压缩"></a>拆包&#x2F;解压缩</h1><p>下面对于 拆包&#x2F;解压缩 做一个小结：</p>
+<ul>
+<li><p>对于 .tar 结尾的文件</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xf all.tar</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于 .gz 结尾的文件</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gzip -d all.gz</span><br><span class="line">gunzip all.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于 .tgz 或 .tar.gz 结尾的文件 </p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -xzf all.tar.gz </span><br><span class="line">tar -xzf all.tgz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于 .bz2 结尾的文件 </p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bzip2 -d all.bz2 </span><br><span class="line">bunzip2 all.bz2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于 tar.bz2 结尾的文件</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xjf all.tar.bz2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于 .Z 结尾的文件</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uncompress all.Z</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于 .tar.Z 结尾的文件</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xZf all.tar.z</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="特殊范例"><a href="#特殊范例" class="headerlink" title="特殊范例"></a>特殊范例</h1><p>此章节中不在严格区分打包&#x2F;压缩，拆包&#x2F;解压 字面，不再咬文嚼字。</p>
+<ol>
+<li>将某一目录下的压缩文件解压到另一目录；将某一目录下的打包文件解包到另一目录；</li>
+<li>只解压压缩包中的个别文件，而非全部；</li>
+<li>要压缩某一目录，但个别文件除外；</li>
+<li>改变工作目录，神奇的 C 参数（大写，不是 c）；</li>
+</ol>
+<p>以上情况，因为在实际使用中涉及过少，不在此详述。参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/li-hao/archive/2011/10/03/2198480.html">linux下使用tar命令</a> 范例三、四、五 及其后续</p>
+<h1 id="Windows-下的压缩文件"><a href="#Windows-下的压缩文件" class="headerlink" title="Windows 下的压缩文件"></a>Windows 下的压缩文件</h1><p>对于Window下的常见压缩文件 .zip 和 .rar，Linux 也有相应的方法来解压它们： </p>
+<h2 id="zip"><a href="#zip" class="headerlink" title=".zip"></a>.zip</h2><p>linux 下提供了 zip 和 unzip 程序，zip 是压缩程序，unzip 是解压程序。它们的参数选项很多，这里只做简单介绍，依旧举例说明一下其用法： </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">zip all.zip *.jpg </span><br><span class="line"><span class="comment"># 这条命令是将所有.jpg的文件压缩成一个zip包 </span></span><br><span class="line">unzip all.zip </span><br><span class="line"><span class="comment"># 这条命令是将all.zip中的所有文件解压出来 </span></span><br></pre></td></tr></table></figure>
+
+<h2 id="rar"><a href="#rar" class="headerlink" title=".rar"></a>.rar</h2><p>要在 linux 下处理 .rar 文件，需要安装 <a target="_blank" rel="noopener" href="http://www.rarlab.com/download.htm">RAR for Linux</a>，RAR for Linux 不是免费的；</p>
+<p>下载之后解压直接 make 就安装好了，安装后就有了 rar 和 unrar 这两个程序，rar 是压缩程序，unrar 是解压程序。它们的参数选项很多，这里只做简单介绍，依旧举例说明一下其用法： </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rar a all *.jpg </span><br><span class="line"><span class="comment"># 这条命令是将所有.jpg的文件压缩成一个rar包，名为all.rar，该程序会将.rar扩展名将自动附加到包名后。 </span></span><br><span class="line">unrar e all.rar </span><br><span class="line"><span class="comment"># 这条命令是将all.rar中的所有文件解压出来</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>到此为至，我们已经介绍过 linux 下的 tar、gzip、gunzip、bzip2、bunzip2、compress 、 uncompress、 zip、unzip、rar、unrar 等程式，你应该已经能够使用它们对 .tar 、.gz、.tar.gz、.tgz、.bz2、.tar.bz2、. Z、.tar.Z、.zip、.rar 这10种压缩文件进行解压了，以后应该不需要为下载了一个软件而不知道如何在 Linux 下解开而烦恼了。而且以上方法对于 Unix 也基本有效。</p>
+<p>以上主要参考自：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="http://www.jb51.net/LINUXjishu/43356.html">linux下tar.gz、tar、bz2、zip等解压缩、压缩命令小结</a></p>
+<p>  前半部分介绍思路清晰，奉行“拿来主义”只对排版略作调整。后部分所谓“以下补充”太过滥竽充数，估计这篇文章不是原帖。</p>
+</li>
+<li><p>The End</p>
+</li>
+</ul>
+<p>其实很简单的：甭管是打包还是压缩，参数一般以 vf 结尾，后跟包名称；打包的情况就是从 c（打包） x（解包） t（查看） 中挑一个；有压缩的话再从 z（gzip） j（bzip2） 中挑一个。Ok， 打完收工。</p>
+<ol>
+<li>如果打包的文件很多很多，造成刷屏，就需要把 v 参数去掉；</li>
+<li>包中追加（r）、更新（u）内容，使用率一般不是很高；</li>
+</ol>
+<p>想要更详细的，哥哥啊，你干嘛不 <code>man tar</code> 呢。就一个命令，从网上查查常用法、惯用伎俩，要想再多懂一些就别再网上折腾了，浪费时间啊，老老实实 man ，最不济 –help 也行啊</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/12/09/library-static-dynamic/" rel="prev" title="共享库 & 静态库">
+                  <i class="fa fa-angle-left"></i> 共享库 & 静态库
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/12/14/memo-url/" rel="next" title="有料的博客">
+                  有料的博客 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

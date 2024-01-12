@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="TODO  蓝牙网络连接，什么作用？删掉或禁用有影响吗？ 如何自动切换网关 将 共享目录从台式机移到笔记本中，使用网线已经没有带宽限制了。  装机Windows预先安装环境（英语：Microsoft Windows Preinstallation Environment），简称 Windows PE 或 WinPE，是 Microsoft Windows 的轻量版本。 关于装机的知识，通过 微PE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="软路由 OpenWRT">
+<meta property="og:url" content="https://tnie.github.io/2021/02/18/openwrt/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="TODO  蓝牙网络连接，什么作用？删掉或禁用有影响吗？ 如何自动切换网关 将 共享目录从台式机移到笔记本中，使用网线已经没有带宽限制了。  装机Windows预先安装环境（英语：Microsoft Windows Preinstallation Environment），简称 Windows PE 或 WinPE，是 Microsoft Windows 的轻量版本。 关于装机的知识，通过 微PE">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-18T03:52:42.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.648Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2021/02/18/openwrt/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2021/02/18/openwrt/","path":"2021/02/18/openwrt/","title":"软路由 OpenWRT"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>软路由 OpenWRT | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A3%85%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">装机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">虚拟机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%9C%BA%E5%90%8E%E8%87%AA%E5%8A%A8%E5%90%AF%E5%8A%A8%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">2.1.</span> <span class="nav-text">开机后自动启动虚拟机</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AF%E8%B7%AF%E7%94%B1"><span class="nav-number">3.</span> <span class="nav-text">软路由</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenWrt-%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.1.</span> <span class="nav-text">OpenWrt 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Openwrt-%E5%BC%80%E5%8F%91%E4%B8%8E-Luci-%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.2.</span> <span class="nav-text">Openwrt 开发与 Luci 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%81%E8%B7%AF%E7%94%B1%E5%92%8C%E5%8D%95%E8%87%82%E8%B7%AF%E7%94%B1"><span class="nav-number">3.3.</span> <span class="nav-text">旁路由和单臂路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E5%BC%80%E6%9C%BA"><span class="nav-number">3.4.</span> <span class="nav-text">定时开机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E5%99%A8%E5%90%AF%E5%8A%A8%E5%90%8E%E8%87%AA%E5%8A%A8%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC"><span class="nav-number">3.4.1.</span> <span class="nav-text">路由器启动后自动执行脚本</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%81%E6%9C%89%E4%BA%91-NAS"><span class="nav-number">4.</span> <span class="nav-text">私有云 NAS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91"><span class="nav-number">5.</span> <span class="nav-text">科学上网</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E5%85%B3"><span class="nav-number">6.</span> <span class="nav-text">网关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E9%80%9F%E5%BA%A6"><span class="nav-number">7.</span> <span class="nav-text">科学上网速度</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8C%E7%B3%BB%E7%BB%9F"><span class="nav-number">8.</span> <span class="nav-text">双系统</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/02/18/openwrt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="软路由 OpenWRT | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          软路由 OpenWRT
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-02-18 11:52:42" itemprop="dateCreated datePublished" datetime="2021-02-18T11:52:42+08:00">2021-02-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>TODO</p>
+<ol start="4">
+<li>蓝牙网络连接，什么作用？删掉或禁用有影响吗？</li>
+<li>如何自动切换网关</li>
+<li>将 共享目录从台式机移到笔记本中，使用网线已经没有带宽限制了。</li>
+</ol>
+<h1 id="装机"><a href="#装机" class="headerlink" title="装机"></a>装机</h1><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Windows%E9%A0%90%E5%85%88%E5%AE%89%E8%A3%9D%E7%92%B0%E5%A2%83">Windows预先安装环境</a>（英语：Microsoft Windows Preinstallation Environment），简称 Windows PE 或 WinPE，是 Microsoft Windows 的轻量版本。</p>
+<p>关于装机的知识，通过 <a target="_blank" rel="noopener" href="http://www.wepe.com.cn/ubook/">微PE优盘使用说明书</a> 可以学习，虽然我们并不购买他家的优盘。以下摘录部分笔记。</p>
+<span id="more"></span>
+
+<p>搞清楚 UEFI 和 Legacy (俗称 BIOS )启动方式区别很重要：</p>
+<ul>
+<li>当您的机器支持 UEFI 的话（新机器一般同时支持 Legacy 和 UEFI ），在这个启动项中一般会出现两个 U 盘的选项，一个是 UEFI 开头的，另一个是不带 UEFI 开头的或叫 Legacy 的：</li>
+<li>当您的机器（老机器）只支持 Legacy 时，在这个主板的启动项中就只会出现一个 U 盘的选项：</li>
+</ul>
+<blockquote>
+<p>一些新机器默认了只开通了 UEFI 启动，如果需要打开 Legacy 启动，需要进 BIOS 设置中关闭 SecureBoot。</p>
+</blockquote>
+<p>硬盘分区表有两种类型：</p>
+<ul>
+<li>GPT 新型分区表类型，需对应 UEFI 启动，支持快速启动，支持 2TB 以上硬盘</li>
+<li>MBR 传统分区表类型，需对应 Legacy 启动，旧机器上比较常见</li>
+</ul>
+<p>原版的 Windows7 比较老，原生连 USB3.0 驱动都没有，只能装到比较老的机器上。在新机器上要么蓝屏，要么鼠标键盘动不了。</p>
+<p>优盘量产的概念有二：恢复和分区。后者可以在淘宝店的介绍 <a target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?id=531137342803">U 盘 PE 的写入方式</a> 中了解。</p>
+<h1 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h1><p>虚拟机在宿主机上模拟的两张 VMnet1 和 VMnet8 分别是什么作用？参考 <a target="_blank" rel="noopener" href="https://blog.csdn.net/u012110719/article/details/42318717">虚拟机vmnet0、vmnet1和vmnet8的区别</a></p>
+<ul>
+<li>vmnet1，Host-Only 网络模式下虚拟机的网关</li>
+<li>vmnet8，NAT 方式下虚拟机的网关 </li>
+<li>桥接模式，和这两张网卡无关</li>
+</ul>
+<h2 id="开机后自动启动虚拟机"><a href="#开机后自动启动虚拟机" class="headerlink" title="开机后自动启动虚拟机"></a>开机后自动启动虚拟机</h2><p>网上很容易就能查到启动虚拟机的脚本，和一些开机自启的设定。分为计划任务和组策略两种方式。</p>
+<p>需要注意的是，好多帖子里并非开机自启动，而是要求用户登录的“登录后自动启动”。比如 <a target="_blank" rel="noopener" href="https://blog.51cto.com/4746316/2330911">Windows 设置 VMware workstation 虚拟机开机启动</a></p>
+<p>目前是通过计划任务实现的：开机启动虚拟机计划任务，以及每周固定时间的关机任务，都不要使用默认的“只有在用户登录时运行”选项，要切换到“不管用户是否登录都要运行+不存储密码”。</p>
+<p>虽然 <a target="_blank" rel="noopener" href="https://blog.csdn.net/CJF_iceKing/article/details/71725935">Windows中实现不依赖账户登录的开机启动程序</a> 提到要使用 SYSYTEM 用户，但我实际操作后并不需要。</p>
+<p>组策略分为计算机配置和用户配置：前者包含脚本（启动&#x2F;关机）；后者包含脚本（登录&#x2F;注销）。我自己尝试组策略-计算机配置（而非用户配置），也不行的。计划任务能实现，也就没有再深究。使用组策略可能以下问题：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/troubleshoot/windows-client/group-policy/logon-scripts-not-run-for-long-time">登录脚本在用户登录到基于 Windows 8.1 的计算机后 5 分钟不运行</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.kafan.cn/thread-2039459-1-1.html">windows10通过组策略添加关机脚本不执行</a></li>
+</ul>
+<h1 id="软路由"><a href="#软路由" class="headerlink" title="软路由"></a>软路由</h1><p>先区分两类网口：</p>
+<blockquote>
+<p>LAN，全称Local Area Network，中文名叫做局域网。WAN，全称Wide Area Network，中文名叫做广域网。</p>
+</blockquote>
+<h2 id="OpenWrt-介绍"><a href="#OpenWrt-介绍" class="headerlink" title="OpenWrt 介绍"></a>OpenWrt 介绍</h2><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/OpenWrt">OpenWrt</a> 分支：</p>
+<ul>
+<li>lede, OpenWrt 另有一个复刻分支项目，名为 LEDE，两者于 2018年1月合并，合并后的项目使用 OpenWrt 的名字、LEDE 的源代码。</li>
+<li>Lean 的 Openwrt 源码，<a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf/lede/issues/6197">另立门户</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Lienol/openwrt">lienol 的 openwrt</a>，群雄乱起。<a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf/lede/issues/5659">PassWall和Clash怎么安装</a>，由此问题了解到 passwall 是 lienol 项目的。但大神因为政策已经从源码中删掉科学上网插件了</li>
+<li>eSir 的精品小包和高大全，基于 Lean 的源码编译</li>
+</ul>
+<p>在虚拟机中安装 openwrt 参考 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/832af1b3b4cd">在VMWare虚拟机下创建Openwrt LEDE软路由系统</a></p>
+<blockquote>
+<p>帖子里端口给了个 8080 是错的，默认使用的就是 http 协议的 80 端口。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://firmware.koolshare.cn/LEDE_X64_fw867/">kookshare 网站</a> 是提供了虚拟机 vmdk 文件的。</p>
+<p>openwrt 安装完毕之后，更新不了酷软中心怎么做？如何科学上网呢？</p>
+<ul>
+<li>按照网上的说明自定义了 DNS 还是无法更新。<del>非关键步骤，暂缓处理</del> 忘了设置网关</li>
+<li>科学上网的插件从酷软中心移除，只能 <a target="_blank" rel="noopener" href="https://hq450.github.io/fancyss/">屏蔽关键词</a> 进行 <a target="_blank" rel="noopener" href="https://github.com/hq450/fancyss_history_package/tree/master/fancyss_X64">离线安装</a>，这个插件识别 v2ray 合法配置时报错，<strong>增删改配置存在重大 BUG</strong>，也不是大佬们常用插件，放弃</li>
+</ul>
+<blockquote>
+<p>由于软路由一般不带无线 WIFI，我们得自己连接无线路由器或无线 AP，设置为 AP 模式或静态地址，路由器 AP 模式只做无线转发，我们就能让他变成无线软路由啦！</p>
+</blockquote>
+<p>热门科学上网插件 ssr+ 和 passwall 不是 koolshare 上固件配套的，分别是国内两位 L 大神在各自分支中支持的。</p>
+<h2 id="Openwrt-开发与-Luci-介绍"><a href="#Openwrt-开发与-Luci-介绍" class="headerlink" title="Openwrt 开发与 Luci 介绍"></a>Openwrt 开发与 Luci 介绍</h2><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/bfb93c4e8dc9">https://www.jianshu.com/p/bfb93c4e8dc9</a></p>
+<blockquote>
+<p>Luci 是 Lua ConﬁgurationInterface的简称，意在 OpenWrt 整个系统的配置集中化。</p>
+</blockquote>
+<h2 id="旁路由和单臂路由"><a href="#旁路由和单臂路由" class="headerlink" title="旁路由和单臂路由"></a>旁路由和单臂路由</h2><p>旧笔记本可以做软路由吗？可以。先考虑做旁路由（网关服务器）而非主路由。</p>
+<ul>
+<li>网卡数量的限制，</li>
+<li>百兆无线网口的限制。</li>
+<li>有线网口是千兆的</li>
+<li>两个 usb3.0 数据口</li>
+</ul>
+<p>手机呢？</p>
+<p><strong>不能用无线网卡</strong>：网上搜到的文字教程或视频教程，我按部就班操作之后，配置宿主机或者手机之后就是无法上网。后来发现相同操作与配置，换用有线网卡之后没问题。 </p>
+<p>作为主路由的两种方法：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=9AEL3Q0bhBI">旧笔记本改装软路由作为家里主路由</a></p>
+<ul>
+<li>单臂路由，单一网口同时作为 WAN 口和 LAN 口</li>
+<li>购买 usb 转千兆网口的线</li>
+</ul>
+<h2 id="定时开机"><a href="#定时开机" class="headerlink" title="定时开机"></a>定时开机</h2><p>因为 x240 系统是 win10，从稳定性和能耗两个角度希望能够定时关机、定时启动。比如每晚十一点关机，每天早上七点开机</p>
+<p>定时关机使用系统定时任务能够完成，操作并不复杂。但定时开机就需要考虑外部操作了。</p>
+<ul>
+<li>使用手机的 Tasker app 做局域网唤醒。多引入一套设备，不作为优先选项。</li>
+<li>路由器的局域网唤醒。手动唤醒我之前就使用过，在后台管理 web 页面傻瓜式操作</li>
+</ul>
+<p>但如何自动化呢？参考了好多篇帖子，踩了两个大坑之后总算补全了技术路线：其实就是三步走</p>
+<ol start="0">
+<li>远程 SSH 登录进去</li>
+<li>局域网唤醒的命令行 <code>ether-wake</code></li>
+<li>增加定时任务 <code>cru</code>，还得自行启动 <code>crond</code> 服务</li>
+<li>重启路由后定时任务依然有效</li>
+</ol>
+<p>首先要 SSH 进入路由器系统，需要先在“系统管理-系统设置-服务-Enable SSH” 中开启登录，用户名和密码就是 web 控制台的用户名和密码。</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://post.smzdm.com/p/a25dgzmq/">写个脚本让路由器网络更可靠</a> 学到日志：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">打印日志，可以在路由器 web 控制台“系统记录”中查看</span></span><br><span class="line">logger -c &quot;log message&quot;</span><br><span class="line">/usr/bin/logger -c &quot;log message&quot;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://koolshare.cn/thread-115602-1-1.html">定时自动唤醒</a>，这篇帖子的内容在我的路由器 AC1200G 上不适用，WOL 的指令在 <code>/usr/bin/ether-wake </code> 而非  <code>/usr/sbin/ether-wake</code> 中。创建定时任务，不是常用的 <code>crontab</code> 命令，而是 <code>cru</code> 指令，它并不是 <code>crontab</code> 的别名。</p>
+<p>增加定时任务之后，任务不执行。是因为 <code>crond</code> 服务默认并未启动 <code>ps | grep crond</code>，需要手动执行。</p>
+<p>以下定时任务执行完毕后，能够成功 wol 关机的台式机。但现在重启路由后，定时任务丢失</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line">touch /tmp/home/root/created_by_jffs.autorun_.txt</span><br><span class="line">logger &#x27;run jffs.autorun script, by x1502.&#x27;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">cru a main <span class="string">&quot;* * * * * /usr/bin/logger &#x27;wol main of x1502&#x27; &amp;&amp; /usr/bin/ether-wake -i br0 2C:F0:5D:0A:CE:B4&quot;</span></span></span><br><span class="line">cru a x240 &quot;10 7 * * * /usr/bin/logger &#x27;wol x240 of x1502&#x27; &amp;&amp; /usr/bin/ether-wake -i br0 28:D2:44:E9:0D:91&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">start only one crond</span></span><br><span class="line">ps | grep crond | grep -v grep</span><br><span class="line">if [ $? -ne 0 ]</span><br><span class="line">then</span><br><span class="line">logger &quot;start crond by x1502&quot;</span><br><span class="line">crond</span><br><span class="line">else</span><br><span class="line">logger &quot;crond process is running. do nothing.&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<p>单独验证每条指令的有效性，再拼装：</p>
+<ol>
+<li>cru 指令的 “min hour day month week command” 如果 <del>使用了两个空格间隔就会失效，ε&#x3D;(´ο｀*)))唉</del>，command 不要使用 #tag# 等特殊字符</li>
+<li>外接移动硬盘触发 <code>script_usbmount=</code> 脚本时，如果移动硬盘分区 n 个，也就会挂载 n 次，启动 n 个 crond 进程。所以需要判断 crond 进程是否存在</li>
+</ol>
+<h3 id="路由器启动后自动执行脚本"><a href="#路由器启动后自动执行脚本" class="headerlink" title="路由器启动后自动执行脚本"></a>路由器启动后自动执行脚本</h3><p>翻阅了好多帖子，都是中高端路由器或梅林系统，技术路线也都是 jffs 分区，启用 <code>jffs2_exec=</code> 配置。但我屡次尝试就是不执行，难免怀疑是不是低端路由器不支持（硬件架构差异或阉割软件）：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/gygy/asus_factory_image">开启原厂固件 JFFS2</a>，我也碰到 <a target="_blank" rel="noopener" href="https://github.com/gygy/asus_factory_image/issues/5">issue#5</a> 问题，可惜无解。</li>
+</ul>
+<p>付出是有回报的，我也是幸运的。<code>jffs2_exec=</code> 配置项已经不再支持（被阉割了），改用挂载 usb 设备触发脚本执行：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.snbforums.com/threads/how-to-start-srcript-automatically-after-reboot-rt-ac86u.67453/#post-630902">Maybe the jffs2_exec option doesn’t work any more.</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.snbforums.com/threads/3-0-0-4-384-45717-removes-x-attribute-in-jffs-files.57334/#post-501965">I found several workarounds. The simplest one requires a USB stick or drive mounted to your router.</a></li>
+</ul>
+<h1 id="私有云-NAS"><a href="#私有云-NAS" class="headerlink" title="私有云 NAS"></a>私有云 NAS</h1><p>谷歌相册即将停止无限上传高质量画质的服务，考虑 NAS</p>
+<p>备选的方案有三个，每个都有亮点和痛点，似乎只能逐一尝试：</p>
+<ul>
+<li>黑群晖，传说插件完善，但 app 的评分都不及格，似乎只能亲自下场试试了</li>
+<li>Windows 阵营，吃资源，台式机还行，x240 的笔记本就有点捉急了。<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/138153055">Windows server 2019 启用 SMB</a> 分析了好多，但落地也就只用了 SMB，作为媒体中心只读够用，但照片同步、外网访问怎么办呢</li>
+<li>OMV，<a target="_blank" rel="noopener" href="https://post.smzdm.com/p/akmr2w9e/">OpenMediaVault 用作家用 NAS 和 HTPC</a> 有哪些插件呢，也是的亲自下场一试</li>
+</ul>
+<p>针对相册功能的讨论：<a target="_blank" rel="noopener" href="https://www.chiphell.com/thread-2204942-1-1.html">自建 NAS 相册管理软件的选择</a></p>
+<p>Kodi 刮削器最近（2021年1月22日）都不能用了，需要“绕过局域网地址”翻墙才能够正常使用，如果还是异常就重启 kodi 再次“扫描新的内容”。</p>
+<h1 id="科学上网"><a href="#科学上网" class="headerlink" title="科学上网"></a>科学上网</h1><p>两个目标，稳定和简单。链路稳定，配置稳定，速度稳定；操作简单，家人使用时不晓得它的存在最好。</p>
+<p>YouTubekids 的画质</p>
+<p>youtube 720p 视频都无法流程播放</p>
+<h1 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h1><p>作用</p>
+<p>为什么要将上网设备的 DNS 改成软路由的 ip 地址呢？</p>
+<h1 id="科学上网速度"><a href="#科学上网速度" class="headerlink" title="科学上网速度"></a>科学上网速度</h1><p>vultr 是不是废了？为什么我的下载速度只有几百 K</p>
+<p>谷歌云</p>
+<h1 id="双系统"><a href="#双系统" class="headerlink" title="双系统"></a>双系统</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41649565/article/details/96441936">解决双系统 Windows 10 更新后进入 grub rescue 模式</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/shenyuanfeng/p/10990512.html">Debian 忘记密码重置</a></p>
+<p><a target="_blank" rel="noopener" href="https://answers.microsoft.com/zh-hans/windows/forum/all/win10%E8%AE%BF%E9%97%AE%E5%B1%80%E5%9F%9F%E7%BD%91/94f80434-d5e8-4a7f-aa02-31f927709a2a">Win10 访问局域网中计算机共享文件要求输入网络凭据</a>，但安卓手机等就不用用户名、密码，能够直接访问文件。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/02/function-template/" rel="prev" title="函数模板">
+                  <i class="fa fa-angle-left"></i> 函数模板
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/03/26/coroutine1/" rel="next" title="COROUTINES INTRODUCTION">
+                  COROUTINES INTRODUCTION <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

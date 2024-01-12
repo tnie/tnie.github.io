@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="C&#x2F;C++ 的 socket 编程。开篇  socket 编程貌似是从 *nix 到的 windows？ socket 编程源于 C，但 C++ 似乎并没有原生的支持，依旧是 C 语言下的 socket 编程？ C++ 的网络编程，包含哪些具体的内容？单单是 socket 吗？ socket 编程不应该是更接近 C 语言吗？   socket 编程，入门学习非常推荐吴秦的 Linux S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="socket 编程">
+<meta property="og:url" content="https://tnie.github.io/2017/07/04/socket/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="C&#x2F;C++ 的 socket 编程。开篇  socket 编程貌似是从 *nix 到的 windows？ socket 编程源于 C，但 C++ 似乎并没有原生的支持，依旧是 C 语言下的 socket 编程？ C++ 的网络编程，包含哪些具体的内容？单单是 socket 吗？ socket 编程不应该是更接近 C 语言吗？   socket 编程，入门学习非常推荐吴秦的 Linux S">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-07-04T08:54:05.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.664Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="cpp">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2017/07/04/socket/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2017/07/04/socket/","path":"2017/07/04/socket/","title":"socket 编程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>socket 编程 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#htonl-%E5%87%BD%E6%95%B0%E3%80%81htons-%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">htonl() 函数、htons() 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#INADDR-ANY-%E5%AE%8F"><span class="nav-number">1.1.</span> <span class="nav-text">INADDR_ANY 宏</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#inet-pton-%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">inet_pton() 函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#inet-addr-%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">inet_addr() 函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0-libevent"><span class="nav-number">4.</span> <span class="nav-text">学习 libevent</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%96%91%E9%97%AE"><span class="nav-number">4.1.</span> <span class="nav-text">疑问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90"><span class="nav-number">4.2.</span> <span class="nav-text">资源</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/07/04/socket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="socket 编程 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          socket 编程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-07-04 16:54:05" itemprop="dateCreated datePublished" datetime="2017-07-04T16:54:05+08:00">2017-07-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>C&#x2F;C++ 的 socket 编程。开篇</p>
+<ol>
+<li>socket 编程貌似是从 *nix 到的 windows？</li>
+<li>socket 编程源于 C，但 C++ 似乎并没有原生的支持，依旧是 C 语言下的 socket 编程？</li>
+<li>C++ 的网络编程，包含哪些具体的内容？单单是 socket 吗？ socket 编程不应该是更接近 C 语言吗？</li>
+<li></li>
+</ol>
+<p>socket 编程，入门学习非常推荐吴秦的 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/skynet/archive/2010/12/12/1903949.html">Linux Socket编程（不限Linux）</a>。当做学习 socket 编程的第一篇完全足够，甩开网上其他的帖子一万八千里，强烈推荐。本意是整理 socket 的学习笔记，但有上述帖子完全足够，在此只记录一些“边边角角”的零碎知识。</p>
+<p>手册推荐：<a target="_blank" rel="noopener" href="http://beej.us/guide/bgnet/output/html/multipage/index.html">Beej’s Guide to Network Programming</a></p>
+<h1 id="htonl-函数、htons-函数"><a href="#htonl-函数、htons-函数" class="headerlink" title="htonl() 函数、htons() 函数"></a><code>htonl()</code> 函数、<code>htons()</code> 函数</h1><p>在吴秦的博客里重点强调了主机字节序（host byte order）与网络字节序（network byte order）的，上述两个函数就是用来实现两者之间的转换的。参考 <a target="_blank" rel="noopener" href="http://beej.us/guide/bgnet/output/html/multipage/htonsman.html">Beej’s Guide to Network Programming</a> 我们能够找到以下函数原型：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">uint32_t</span> <span class="title function_">htonl</span><span class="params">(<span class="type">uint32_t</span> hostlong)</span>;</span><br><span class="line"><span class="type">uint16_t</span> <span class="title function_">htons</span><span class="params">(<span class="type">uint16_t</span> hostshort)</span>;</span><br><span class="line"><span class="type">uint32_t</span> <span class="title function_">ntohl</span><span class="params">(<span class="type">uint32_t</span> netlong)</span>;</span><br><span class="line"><span class="type">uint16_t</span> <span class="title function_">ntohs</span><span class="params">(<span class="type">uint16_t</span> netshort)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>不需要死记硬背，函数的命名通俗易懂。强调一下，转换 ip 地址使用长整型转换函数，转换 port 使用短整型转换函数。我在码代码学习时，误用 <code>htonl(6666)；</code> 转换端口编译通过，运行时也不报错，启动多个服务程序也不报错 ps 正常情况重复启动服务程序时会报错“端口已经占用”。</p>
+<h2 id="INADDR-ANY-宏"><a href="#INADDR-ANY-宏" class="headerlink" title="INADDR_ANY 宏"></a><code>INADDR_ANY</code> 宏</h2><p>详细解释参考 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/16508685/understanding-inaddr-any-for-socket-programming-c">understanding INADDR_ANY for socket programming - c</a>。在此只强调一点，<code>INADDR_ANY</code> 表示的是一个服务器上所有的网卡。</p>
+<h1 id="inet-pton-函数"><a href="#inet-pton-函数" class="headerlink" title="inet_pton() 函数"></a><code>inet_pton()</code> 函数</h1><p>IP地址转换函数，可以在将 IP 地址在“点分十进制”和“二进制整数”之间转换。在 <a target="_blank" rel="noopener" href="http://beej.us/guide/bgnet/output/html/multipage/inet_ntopman.html">Beej’s Guide to Network Programming</a> 我们找到的描述以及函数原型：</p>
+<blockquote>
+<p>Convert IP addresses to human-readable form and back.</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">char</span> *<span class="title function_">inet_ntop</span><span class="params">(<span class="type">int</span> af, <span class="type">const</span> <span class="type">void</span> *src,</span></span><br><span class="line"><span class="params">                      <span class="type">char</span> *dst, <span class="type">socklen_t</span> size)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">inet_pton</span><span class="params">(<span class="type">int</span> af, <span class="type">const</span> <span class="type">char</span> *src, <span class="type">void</span> *dst)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>强调一点，<code>inet_pton()</code> 同样支持 “localhost”。</p>
+<h1 id="inet-addr-函数"><a href="#inet-addr-函数" class="headerlink" title="inet_addr() 函数"></a><del><code>inet_addr()</code> 函数</del></h1><blockquote>
+<p>Convert IP addresses from a dots-and-number string to a <code>struct in_addr</code> and back</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ALL THESE ARE DEPRECATED!  Use inet_pton()  or inet_ntop() instead!!</span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> *<span class="title function_">inet_ntoa</span><span class="params">(<span class="keyword">struct</span> in_addr in)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">inet_aton</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *cp, <span class="keyword">struct</span> in_addr *inp)</span>;</span><br><span class="line"><span class="type">in_addr_t</span> <span class="title function_">inet_addr</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *cp)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到其中的注释，这三个函数即将淘汰。</p>
+<h1 id="学习-libevent"><a href="#学习-libevent" class="headerlink" title="学习 libevent"></a>学习 libevent</h1><h2 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h2><ol>
+<li><p><code>select()</code> 函数第一个参数为什么要 <code>maxfd+1</code>？不理解 <a target="_blank" rel="noopener" href="http://www.wangafu.net/~nickm/libevent-book/01_intro.html">官方手册</a> 中讲述 <code>select()</code> 低效的这段话：</p>
+<blockquote>
+<p>On the userspace side, …But on the kernel side,…</p>
+</blockquote>
+</li>
+<li><p>为什么在 Example: select()-based ROT13 server 中需要 <code>make_nonblocking()</code> ？为什么 Example: A low-level ROT13 server with Libevent 中需要 <code>evutil_make_socket_nonblocking()</code>？</p>
+</li>
+<li><p><code>setvbuf(stdout, NULL, _IONBF, 0);</code> 的意义？</p>
+</li>
+</ol>
+<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><p>最初步的认识，最简单的例子：<a target="_blank" rel="noopener" href="http://hahaya.github.io/hello-in-libevent/">使用libevent输出Hello</a></p>
+<blockquote>
+<p>（niel）这里只提到了 <code>strcut event_base</code>、<code>struct event</code>。给出的简单示例代码里，有一处瑕疵： <code>event_base_set()</code> 函数属于过时的函数，在 2.0 之前的版本中配合 <code>event_set()</code> 使用，在 2.0 及其之后的版本中这两者被  <code>event_new()</code> 替代，所以作者混用 <code>event_new()</code> + <code>event_base_set()</code> 表明了作者并未多花时间学习。</p>
+</blockquote>
+<p>接下来，我们可以学习一下：<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_9db214690101cet0.html">libevent入门教程：Echo Server based on libevent </a></p>
+<blockquote>
+<p>（niel）这篇博客循序渐进，讲到了 <code>strcut buffevent</code> 及其相关操作。美中不足的是作者在介绍过程中穿插记录了自己的疑惑，新手读起来打破了学习的连贯性，本就在学习新知识，却也要困于作者的“泥潭”。只能说这真的只是作者的学习笔记，并未从读者的角度做考虑。总的来说，帖子很不错！初次学习时，这些问题的存在让人很难受，影响学习进度、学习动力；但熟悉作者讲的知识之后，这些问题反而才是“金子”，认真思考这些问题。</p>
+</blockquote>
+<p>接下来推荐的学习资源就是官方手册了：<a target="_blank" rel="noopener" href="http://www.wangafu.net/~nickm/libevent-book/">Programming with Libevent</a></p>
+<blockquote>
+<p>（niel）虽然是用英文写的，但阅读起来毫无障碍，很容易理解。marks  C0、C1、R0 ~ R4、R8 认真阅读；R5、R6 重点关注了小部分函数，其余走马观花浏览了一下；R6a、R7、R9 三节没有看。开发过程中，查阅函数原型肯定是得翻这个手册的！</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000005594871">Libevent 官方文档学习笔记</a>，这篇帖子可以看一看，和自己读英文手册理解的相互佐证。</p>
+<p><a target="_blank" rel="noopener" href="https://taozj.org/201605/learn-note-of-libevent-(1)-basic-usage.html">Libevent学习笔记（一）：基本使用</a>，检验自己的学习成果。</p>
+<blockquote>
+<p>总的来说，后面这两篇帖子并不适合用来学习。更多的定位于作者知识的整理，并不是面向新手的入门介绍。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cpp/" rel="tag"># cpp</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/04/27/automake2nd/" rel="prev" title="Automake 之 Flat 目录机构">
+                  <i class="fa fa-angle-left"></i> Automake 之 Flat 目录机构
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/07/04/UUID/" rel="next" title="UUID 入门">
+                  UUID 入门 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

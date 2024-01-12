@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="进阶操作不包含基础，进阶分为两部分：使用分支和修改提交。主要整理自 猴子都能懂的 GIT 入门。关于工作流，罗列了几个链接，值得反复阅读学习。 其实我们在 Git 官网 就能找到最好的学习材料：《Pro Git》。知识点讲得很全，也讲得很好。无论是进行系统的学习，还是作为参考手册都是不二之选！但如果你真的只有 5 分钟时间，还要快速上手使用，拿这么一本书显然是不合适的，所以就推荐了上面的入门贴。实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 进阶操作和工作流">
+<meta property="og:url" content="https://tnie.github.io/2016/11/02/git-workflow/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="进阶操作不包含基础，进阶分为两部分：使用分支和修改提交。主要整理自 猴子都能懂的 GIT 入门。关于工作流，罗列了几个链接，值得反复阅读学习。 其实我们在 Git 官网 就能找到最好的学习材料：《Pro Git》。知识点讲得很全，也讲得很好。无论是进行系统的学习，还是作为参考手册都是不二之选！但如果你真的只有 5 分钟时间，还要快速上手使用，拿这么一本书显然是不合适的，所以就推荐了上面的入门贴。实">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-11-02T03:29:18.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.633Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2016/11/02/git-workflow/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2016/11/02/git-workflow/","path":"2016/11/02/git-workflow/","title":"Git 进阶操作和工作流"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Git 进阶操作和工作流 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%88%86%E6%94%AF"><span class="nav-number">1.</span> <span class="nav-text">使用分支</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Merge-%E5%88%86%E6%94%AF"><span class="nav-number">1.1.</span> <span class="nav-text">Merge 分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Topic-%E5%88%86%E6%94%AF"><span class="nav-number">1.2.</span> <span class="nav-text">Topic 分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E7%9A%84%E5%90%88%E5%B9%B6"><span class="nav-number">1.3.</span> <span class="nav-text">分支的合并</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#merge"><span class="nav-number">1.3.1.</span> <span class="nav-text">merge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rebase"><span class="nav-number">1.3.2.</span> <span class="nav-text">rebase</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%B9%E5%86%99%E6%8F%90%E4%BA%A4"><span class="nav-number">2.</span> <span class="nav-text">改写提交</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%9C%80%E8%BF%91%E7%9A%84%E6%8F%90%E4%BA%A4"><span class="nav-number">2.1.</span> <span class="nav-text">修改最近的提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E6%B6%88%E8%BF%87%E5%8E%BB%E7%9A%84%E6%8F%90%E4%BA%A4%EF%BC%88%E5%86%85%E5%AE%B9%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">取消过去的提交（内容）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%97%E5%BC%83%E6%8F%90%E4%BA%A4"><span class="nav-number">2.3.</span> <span class="nav-text">遗弃提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E6%8F%90%E4%BA%A4"><span class="nav-number">2.4.</span> <span class="nav-text">提取提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B9%E5%86%99%E6%8F%90%E4%BA%A4%E7%9A%84%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95"><span class="nav-number">2.5.</span> <span class="nav-text">改写提交的历史记录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%AF%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="nav-number">2.5.1.</span> <span class="nav-text">副作用？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%87%E5%90%88%E5%88%86%E6%94%AF%E4%B8%8A%E7%9A%84%E6%8F%90%E4%BA%A4%EF%BC%8C%E7%84%B6%E5%90%8E%E4%B8%80%E5%90%8C%E5%90%88%E5%B9%B6%E5%88%B0%E5%88%86%E6%94%AF"><span class="nav-number">2.6.</span> <span class="nav-text">汇合分支上的提交，然后一同合并到分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TortoiseGit-%E7%9A%84-Show-RefLog"><span class="nav-number">2.7.</span> <span class="nav-text">TortoiseGit 的 Show RefLog</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">3.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-windows-%E4%B8%8B%E6%90%AD%E5%BB%BA-git-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">3.1.</span> <span class="nav-text">在 windows 下搭建 git 服务器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-number">4.</span> <span class="nav-text">工作流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E7%9A%84%E5%AE%89%E6%8E%92"><span class="nav-number">4.1.</span> <span class="nav-text">分支的安排</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gitlab-flow"><span class="nav-number">4.1.1.</span> <span class="nav-text">gitlab flow</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E8%8A%82%E7%82%B9%E7%9A%84%E5%AE%89%E6%8E%92"><span class="nav-number">4.2.</span> <span class="nav-text">分布式节点的安排</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96-1"><span class="nav-number">4.3.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/02/git-workflow/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Git 进阶操作和工作流 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git 进阶操作和工作流
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-11-02 11:29:18" itemprop="dateCreated datePublished" datetime="2016-11-02T11:29:18+08:00">2016-11-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>进阶操作不包含基础，进阶分为两部分：使用分支和修改提交。主要整理自 <a target="_blank" rel="noopener" href="http://backlogtool.com/git-guide/cn/">猴子都能懂的 GIT 入门</a>。关于工作流，罗列了几个链接，值得反复阅读学习。</p>
+<p>其实我们在 <a target="_blank" rel="noopener" href="https://git-scm.com/">Git 官网</a> 就能找到最好的学习材料：<a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2">《Pro Git》</a>。知识点讲得很全，也讲得很好。无论是进行系统的学习，还是作为参考手册都是不二之选！但如果你真的只有 5 分钟时间，还要快速上手使用，拿这么一本书显然是不合适的，所以就推荐了上面的入门贴。实际工作中，碰到什么问题，我都是来翻书的。</p>
+<h1 id="使用分支"><a href="#使用分支" class="headerlink" title="使用分支"></a>使用分支</h1><p><strong>先确定运用规则才可以有效地利用分支。</strong></p>
+<h2 id="Merge-分支"><a href="#Merge-分支" class="headerlink" title="Merge 分支"></a>Merge 分支</h2><blockquote>
+<p>Merge 分支是为了可以随时发布 release 而创建的分支，它还能作为 Topic 分支的源分支使用。保持分支稳定的状态是很重要的。如果要进行更改，通常先创建 Topic 分支，而针对该分支，可以使用Jenkins 之类的 CI 工具进行<strong>自动化编译以及测试</strong>。</p>
+<p>通常，大家会将 master 分支当作 Merge 分支使用。</p>
+</blockquote>
+<h2 id="Topic-分支"><a href="#Topic-分支" class="headerlink" title="Topic 分支"></a>Topic 分支</h2><blockquote>
+<p>Topic 分支是为了开发新功能或修复 Bug 等任务而建立的分支。若要同时进行多个的任务，请创建多个的 Topic 分支。</p>
+<p>Topic 分支是从稳定的 Merge 分支创建的。完成作业后，要把 Topic 分支合并回 Merge 分支。</p>
+</blockquote>
+<h2 id="分支的合并"><a href="#分支的合并" class="headerlink" title="分支的合并"></a>分支的合并</h2><p>完成作业后的 topic 分支，最后要合并回 merge 分支。合并分支有2种方法：使用 merge 或 rebase。使用这2种方法，合并后分支的历史记录会有很大的差别。</p>
+<h3 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h3><p>进行 merge 的话，分为两种情况：</p>
+<ol>
+<li><p>fast-forward（快进）合并</p>
+<p> 合并 bugfix 分支到 master 分支时，如果 master 分支的状态没有被更改过，那么这个合并是非常简单的。 bugfix 分支的历史记录包含 master 分支所有的历史记录，所以只要把 bugfix 移动到 master 分支就可以导入 bugfix 分支的内容了（即<strong>将 master 的 HEAD 移动到 bugfix 的 HEAD 这里</strong>）。这样的合并被称为 fast-forward（快进）合并。</p>
+<p> <strong>这种场景不会产生新的提交。</strong></p>
+</li>
+<li><p>non fast-forward</p>
+<p> 但是，master 分支的历史记录有可能在 bugfix 分支分叉出去后有新的更新。这种情况下，要把 master 分支的修改内容和 bugfix 分支的修改内容汇合起来。</p>
+<p> 因此，合并两个修改会生成一个提交。这时，master 分支的 HEAD 会移动到该提交上。</p>
+</li>
+</ol>
+<p>Note</p>
+<blockquote>
+<p>执行合并时，如果设定了 non fast-forward （<code>--no-ff</code>）选项，即使在能够 fast-forward 合并的情况下也会生成新的提交并合并。</p>
+<p>执行 non fast-forward 后，分支会维持原状。那么要查明在这个分支里的操作就很容易了。</p>
+</blockquote>
+<p>阮一峰老师写到：</p>
+<blockquote>
+<p>使用 <code>--no-ff</code> 参数后，会执行正常合并，在 Master 分支上生成一个新节点。为了保证版本演进的清晰，我们希望采用这种做法。</p>
+</blockquote>
+<h3 id="rebase"><a href="#rebase" class="headerlink" title="rebase"></a><a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA">rebase</a></h3><p>这个没有亲自实践过，要认真学学。</p>
+<ol>
+<li><p>首先，rebase bugfix 分支到 master 分支, bugfix 分支的历史记录会添加在 master 分支的后面。</p>
+<p> 这时移动提交 X 和 Y 有可能会发生冲突，所以需要修改各自的提交时发生冲突的部分。</p>
+</li>
+<li><p>rebase 之后，master 的 HEAD 位置不变（此时就是典型的 fast-forward merge 场景了）。因此，要合并 master 分支和 bugfix 分支，即是将 master 的 HEAD 移动到 bugfix 的 HEAD 这里。</p>
+</li>
+</ol>
+<p>rebase 最大的优点是：<strong>历史记录成一条线，相当整洁</strong>。在《Pro Git》书中提到：</p>
+<blockquote>
+<p>变基使得提交历史更加整洁。 你在查看一个经过变基的分支的历史记录时会发现，尽管实际的开发工作是并行的，但它们看上去就像是先后串行的一样，提交历史是一条直线没有分叉。</p>
+<p>一般我们这样做的目的是为了确保在向远程分支推送时能保持提交历史的整洁——例如向某个别人维护的项目贡献代码时。在这种情况下，你首先在自己的分支里进行开发，当开发完成时你需要先将你的代码变基到 origin&#x2F;master 上，然后再向主项目提交修改。 这样的话，该<strong>项目的维护者就不再需要进行整合工作</strong>，只需要快进合并便可。</p>
+</blockquote>
+<p>同样，在书中也提到了变基的风险，作为新手我们并不需要做过多的学习。</p>
+<p>具体练习见 <a target="_blank" rel="noopener" href="http://backlogtool.com/git-guide/cn/stepup/stepup2_8.html">用 rebase 合并</a>。</p>
+<h1 id="改写提交"><a href="#改写提交" class="headerlink" title="改写提交"></a>改写提交</h1><p>参考自 <a target="_blank" rel="noopener" href="http://backlogtool.com/git-guide/cn/stepup/stepup6_1.html">改写提交</a>。改写提交非常容易出现冲突，需要人工合并。</p>
+<p>“改写提交”，我觉得《Pro Git》的表达更好一些——“重写历史”。因为有关的操作大多比较敏感，都有后遗症，操纵不当更会变成灾难，所以建议 <a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E9%87%8D%E5%86%99%E5%8E%86%E5%8F%B2">认真读书</a>、反复练习之后再在实际项目中操作。</p>
+<p>在进入正文之前，我们必须清楚 <code>^</code> 和 <code>~</code> 的区别：<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/2221658/whats-the-difference-between-head-and-head-in-git">What’s the difference between HEAD^ and HEAD~ in Git?</a></p>
+<p><strong>强调</strong>：<code>~</code> 是对 <code>^</code> 的复合运算，而不是 <code>^n</code> 的复合运算。</p>
+<h2 id="修改最近的提交"><a href="#修改最近的提交" class="headerlink" title="修改最近的提交"></a>修改最近的提交</h2><p>git commit –amend</p>
+<h2 id="取消过去的提交（内容）"><a href="#取消过去的提交（内容）" class="headerlink" title="取消过去的提交（内容）"></a>取消过去的提交（内容）</h2><p>git revert 可以取消指定的提交内容。</p>
+<p>虽然使用后面要提到的 rebase -i 或 reset 可以直接删除提交，但是有时候并不合适（甚至不能）直接删除提交，比如不能随便删除已经<strong>发布的</strong>提交。这时就可以通过 revert 创建（否定某一次提交的）提交。</p>
+<h2 id="遗弃提交"><a href="#遗弃提交" class="headerlink" title="遗弃提交"></a>遗弃提交</h2><p>git reset 除了默认的 mixed 模式，还有 soft 和 hard 模式。</p>
+<table>
+<thead>
+<tr>
+<th>模式名称</th>
+<th>HEAD 的位置</th>
+<th>索引</th>
+<th>工作树</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>soft</td>
+<td>修改</td>
+<td><em>不修改</em></td>
+<td><em>不修改</em></td>
+</tr>
+<tr>
+<td>mixed</td>
+<td>修改</td>
+<td>修改</td>
+<td><em>不修改</em></td>
+</tr>
+<tr>
+<td>hard</td>
+<td>修改</td>
+<td>修改</td>
+<td>修改</td>
+</tr>
+</tbody></table>
+<p>主要使用的场合：</p>
+<ul>
+<li>复原修改过的索引的状态(mixed)</li>
+<li>彻底取消最近的提交(hard)</li>
+<li>只取消提交(soft)</li>
+</ul>
+<h2 id="提取提交"><a href="#提取提交" class="headerlink" title="提取提交"></a>提取提交</h2><p>cherry 樱桃</p>
+<p>git cherry-pick 可以从其他分支复制指定的提交，然后导入到现在的分支。</p>
+<p>例如，假设我们有个稳定版本的分支，叫 v2.0，另外还有个开发版本的分支 v3.0，我们不能直接把两个分支合并，这样会导致稳定版本混乱，但是又想增加一个 v3.0 中的功能到 v2.0 中，这里就可以使用 cherry-pick 了。</p>
+<h2 id="改写提交的历史记录"><a href="#改写提交的历史记录" class="headerlink" title="改写提交的历史记录"></a><a target="_blank" rel="noopener" href="http://backlogtool.com/git-guide/cn/stepup/stepup6_5.html">改写提交的历史记录</a></h2><p>git rebase -i</p>
+<p>这个命令很强大，在 rebase 指定 <code>-i</code>（interactive，交互式的） 选项，可以改写、替换、删除或合并提交。但也有一些副作用……</p>
+<p>请翻书，<a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E9%87%8D%E5%86%99%E5%8E%86%E5%8F%B2">重写历史</a></p>
+<h3 id="副作用？"><a href="#副作用？" class="headerlink" title="副作用？"></a>副作用？</h3><p>场景描述：今天进行 rebase -i 操作后发现 merge –no-ff 的分支合并记录都没了</p>
+<p>![merge –no-ff](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/nielong0610/MarkdownPhotos/master/merge">https://raw.githubusercontent.com/nielong0610/MarkdownPhotos/master/merge</a> –no-ff.png)</p>
+<p>ps：借着这张图，复习一下 <code>^</code> 和 <code>~</code> 的知识。</p>
+<ul>
+<li>git reset head~，head 变更为 7c8d8a；</li>
+<li>git reset head~2，head 变更为 6af94；</li>
+<li>git reset head~^2，head 变更为 78663f；</li>
+<li>git reset head<del>4，报错！因为 head</del>4 不存在</li>
+<li><strong>强调</strong>：<code>~</code> 是对 <code>^</code> 的复合运算，而不是 <code>^n</code> 的复合运算。(7c8d8a)^2~ &#x3D; 6af94d &#x3D; (7c8d8a)~</li>
+</ul>
+<p>返回来继续说，执行 git rebase -i head~3 后结果如下：</p>
+<p>![merge –no-ff](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/nielong0610/MarkdownPhotos/master/merge">https://raw.githubusercontent.com/nielong0610/MarkdownPhotos/master/merge</a> –no-ff 2.png)</p>
+<p>在执行 git rebase -i head~3 时对话框如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pick 6af94d1 modify name.txt</span><br><span class="line">pick 78663ff new age.txt            （笔者注：7c8d8a2 透明的）</span><br><span class="line">pick 915b8b1 re modify name.txt</span><br><span class="line"></span><br><span class="line"># Rebase d0cd09d..915b8b1 onto d0cd09d (3 command(s))</span><br><span class="line">#</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，是不存在任何合并节点的。这也是 rebase 的目的！</p>
+<p><strong>疑问</strong>：如果我只是想改写 7c8d8a 之前某个 commit 的备注信息，且不想丢失分支演进，改怎么做呢？</p>
+<p><strong>结论</strong>：其实这算不得 rebase -i 的副作用，<code>git rebase</code> 默认 ignore merges。我自己以期上述目的，是用错了命令，<del>虽然我至今不知道怎么实现上述目的</del> 查看 <code>--preserve-merges</code> 参数。再往深的追究，其实我至今都不知道该怎么使用 git 去实现一个完善的工作流程，我了解一些命令的用法，但去不知道该怎么组织一个工程，怎么对一个项目进行细致的、完整的版本管理？</p>
+<p>参见 <a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-rebase#git-rebase---preserve-merges"><code>git rebase --preserve-merges</code> 手册</a>。此参数的某些使用情景很乱，见 <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/15915430/what-exactly-does-gits-rebase-preserve-merges-do-and-why">What exactly does git’s “rebase –preserve-merges” do (and why?)</a></p>
+<h2 id="汇合分支上的提交，然后一同合并到分支"><a href="#汇合分支上的提交，然后一同合并到分支" class="headerlink" title="汇合分支上的提交，然后一同合并到分支"></a>汇合分支上的提交，然后一同合并到分支</h2><p>git merge –squash</p>
+<h2 id="TortoiseGit-的-Show-RefLog"><a href="#TortoiseGit-的-Show-RefLog" class="headerlink" title="TortoiseGit 的 Show RefLog"></a>TortoiseGit 的 Show RefLog</h2><p>TODO：感觉很有用哎，今天进行 rebase -i 操作后发现 merge –no-ff 的分支合并记录都没了，而且进行了两次 reabse -i，所以也没办法通过 git reset ORIG_HEAD 恢复。幸运的是发现了 RefLog 的存在，不知道这是 Git 本身的功能，还是 TortoiseGit 的功能扩展。抽空查探一下。</p>
+<p>是 Git 自身的机制，很强大！<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-reflog">官方手册</a>，真心没有探索的欲望，怎么破？</p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>Tips</p>
+<p>不同类别的修改 (如：Bug修复和功能添加) 要尽量分开提交，以方便以后从历史记录里查找特定的修改内容。</p>
+<p>Tips</p>
+<p>查看其他人提交的修改内容或自己的历史记录的时候，提交信息是需要用到的重要资料。所以请用心填写修改内容的提交信息，以方便别人理解。</p>
+<p>以下是Git的标准注解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">第1行：提交修改内容的摘要</span><br><span class="line">第2行：空行</span><br><span class="line">第3行以后：修改的理由</span><br></pre></td></tr></table></figure>
+<p>请以这种格式填写提交信息。</p>
+<p>Get</p>
+<p>切换分支使用 checkout，检出文件也使用 checkout……不是因为作者懒得起名字，而是因为两者本质是同一种操作，都是从版本库（或索引）检出文件到工作区。分支本质上是某一个提交（的引用），切换分支就是检出对应的提交。</p>
+<p>Get</p>
+<blockquote>
+<p>如果在log命令添加 <code>--decorate</code> 选项执行，可以显示包含标签资料的历史记录。</p>
+</blockquote>
+<h2 id="在-windows-下搭建-git-服务器"><a href="#在-windows-下搭建-git-服务器" class="headerlink" title="在 windows 下搭建 git 服务器"></a>在 windows 下搭建 git 服务器</h2><p>2016&#x2F;12&#x2F;15 12:49:18 前两天将写的代码误删了，没有用版本管理工具。代码在一台连不上互联网的服务器上，因为系统老旧的原因，使用上有好多限制，负责人担心在新系统上写的代码拿到旧系统（最终必须部署在旧系统上）上用还得再次修改兼容性之类的问题，所以一般都是在旧系统上直接一个字母一个字母的敲代码。误删上周的工作内容后，后悔之余，也得考虑以后怎么避免这种情况。</p>
+<p>在旧系统上凑活能装上 git，很原始的版本了。但它只能访问到我的笔记本（局域网），而不能访问互联网，所以就需要在 E431 windows7 的电脑上部署 Git 仓库。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://blog.michiru.me/posts/git-server-on-windows.html">在 Windows 上搭建 Git 服务器</a></li>
+</ul>
+<p>依据上一篇搭建完成之后，操作中报错：（看着好像是不能是 <code>--bare</code> Repo 啊）</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://rwmj.wordpress.com/2009/03/06/git-fatal-no-matching-remote-head/">git “fatal: no matching remote head”</a></li>
+</ul>
+<h1 id="工作流"><a href="#工作流" class="headerlink" title="工作流"></a>工作流</h1><p>工作流 flow，对于大团队和个人肯定是不一样的，不能一概而论。对于个人开发，其重点最终要落在对分支 branch 的利用上，只要合理安排分支基本就可以了。对于人员很多，强调合作开发的团队，在上述基础上还要找准各节点（每个开发人员）的定位，会变得复杂很多。</p>
+<p>一个完整的工作流包括对分支的利用、对节点的安排。好在大多时候我们只需关注前面一部分就能达到目的。</p>
+<h2 id="分支的安排"><a href="#分支的安排" class="headerlink" title="分支的安排"></a>分支的安排</h2><p>在 <a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E5%BC%80%E5%8F%91%E5%B7%A5%E4%BD%9C%E6%B5%81">3.4 Git 分支 - 分支开发工作流</a> 中描述了“长期分支”和“特性分支”两个概念。</p>
+<p>在 <a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2012/07/git.html">Git分支管理策略 - 阮一峰</a> 中使用了两个常设分支（长期分支）和三个临时分支（特性分支）。master 用于正式发布，develop 用于日常开发；feature 功能分支，Release 预发布分支，fixbug 修补分支。此策略即 <strong>Git flow</strong>。</p>
+<blockquote>
+<p>合并分支使用 <code>--no-ff</code> 选项。</p>
+</blockquote>
+<p>Git flow 并不完美，<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2015/12/git-workflow.html">Git 工作流程 - 阮一峰</a> 中又讲解了另外两种分支策略：Github flow、Gitlab flow。推荐 Gitlab flow。<strong>在摸索中学习，在学习后实践。</strong></p>
+<p>ps：2017&#x2F;2&#x2F;23 15:23:53 我现在认为基于“版本发布”的，还是使用 git flow 更好一些，更<strong>符合直觉</strong>，更何况有那么多的前辈们（非 web 开发）都是如此呢。</p>
+<h3 id="gitlab-flow"><a href="#gitlab-flow" class="headerlink" title="gitlab flow"></a>gitlab flow</h3><p><a target="_blank" rel="noopener" href="http://mojito515.github.io/blog/2016/03/09/ru-he-shi-yong-gitlabde-flowyi-ji-dai-ma-review/">如何使用gitlab的flow以及代码review</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.15yan.com/story/6yueHxcgD9Z/">GitLab Flow的使用</a></p>
+<h2 id="分布式节点的安排"><a href="#分布式节点的安排" class="headerlink" title="分布式节点的安排"></a>分布式节点的安排</h2><p>在 <a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2/%E5%88%86%E5%B8%83%E5%BC%8F-Git-%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B">5.1 分布式 Git - 分布式工作流程</a> 中提到三种</p>
+<blockquote>
+<p>集中式工作流、集成管理者工作流、司令官与副官工作流。</p>
+</blockquote>
+<p>个人开发或者小团队开发，使用前者足够了。这种单点协作模型完全符合人们的直觉，好多人虽然不知道“集中式工作流”这个名词，但已经在这么用了。</p>
+<h2 id="其他-1"><a href="#其他-1" class="headerlink" title="其他"></a>其他</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/xirong/my-git/blob/master/how-to-use-github.md">how-to-use-github</a></p>
+<p>  对网络上众多资源的一个整理。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%82%A8%E8%97%8F%E4%B8%8E%E6%B8%85%E7%90%86">7.3 Git 工具 - 储藏与清理</a></p>
+<p>  <code>git stash</code> 和 <code>git clean</code></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"># git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/10/27/writing/" rel="prev" title="码字，第一篇博客">
+                  <i class="fa fa-angle-left"></i> 码字，第一篇博客
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/11/02/netAndvs-setup/" rel="next" title="微软和 Visual C++">
+                  微软和 Visual C++ <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

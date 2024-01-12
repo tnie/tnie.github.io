@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="事情源于我想将局域网内服务器上的代码上传到互联网上的远程仓库：repo-133 -&gt; repo-E431 -&gt; repo-remote  代码编写以及编译运行只能在 133 服务器上，此机器无法连接互联网； 133 服务器可以访问我自己的笔记本 E431，毕竟我要通过 xshell 访问 133 进行开发； E431 笔记本可以访问互联网，针对私有代码我一般使用开源中国作为远程仓库。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 凭证辅助工具">
+<meta property="og:url" content="https://tnie.github.io/2017/02/16/git-credential/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="事情源于我想将局域网内服务器上的代码上传到互联网上的远程仓库：repo-133 -&gt; repo-E431 -&gt; repo-remote  代码编写以及编译运行只能在 133 服务器上，此机器无法连接互联网； 133 服务器可以访问我自己的笔记本 E431，毕竟我要通过 xshell 访问 133 进行开发； E431 笔记本可以访问互联网，针对私有代码我一般使用开源中国作为远程仓库。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-02-16T07:32:22.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.617Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2017/02/16/git-credential/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2017/02/16/git-credential/","path":"2017/02/16/git-credential/","title":"Git 凭证辅助工具"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Git 凭证辅助工具 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git-hook"><span class="nav-number">1.</span> <span class="nav-text">git hook</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">交互式命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-credential"><span class="nav-number">3.</span> <span class="nav-text">git credential</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-credential-xxx"><span class="nav-number">3.1.</span> <span class="nav-text">git credential-xxx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-credential-1"><span class="nav-number">3.2.</span> <span class="nav-text">git credential</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows-%E4%B8%8B%E7%9A%84%E5%87%AD%E8%AF%81%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7"><span class="nav-number">3.3.</span> <span class="nav-text">windows 下的凭证辅助工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">最后的问题</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/02/16/git-credential/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Git 凭证辅助工具 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git 凭证辅助工具
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-02-16 15:32:22" itemprop="dateCreated datePublished" datetime="2017-02-16T15:32:22+08:00">2017-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>事情源于我想将局域网内服务器上的代码上传到互联网上的远程仓库：repo-133 -&gt; repo-E431 -&gt; repo-remote</p>
+<ul>
+<li>代码编写以及编译运行只能在 133 服务器上，此机器无法连接互联网；</li>
+<li>133 服务器可以访问我自己的笔记本 E431，毕竟我要通过 xshell 访问 133 进行开发；</li>
+<li>E431 笔记本可以访问互联网，针对私有代码我一般使用开源中国作为远程仓库。</li>
+</ul>
+<p>实现这个打算很容易，问题出在精益求精的摸索过程中。我在 E431 上中转时使用的是 Bitvise SSH Server，搭建方法参考 <a target="_blank" rel="noopener" href="http://blog.michiru.me/posts/git-server-on-windows.html">在 Windows 上搭建 Git 服务器</a>。（我在 E431 上建立的并不是裸仓库）搭建完毕，从 repo-133 向其推送时会失败：<a target="_blank" rel="noopener" href="https://rwmj.wordpress.com/2009/03/06/git-fatal-no-matching-remote-head/">git “fatal: no matching remote head”</a>，当时因为有别的工作，通过将 repo-E431 检出一个无用分支规避错误。</p>
+<span id="more"></span>
+
+<p>最近有时间，想着上述解决方案太粗糙了，用着也不方便，就打算再花时间“打磨”一下，没曾想竟然用了整整两天的时间。主要是花在了弄清楚 git credential 机制（凭证辅助工具系统）上。</p>
+<p>包括上述提到推送失败，原方案存在两个问题：将 E431 的版本库建立成 非 bare 的，133 向 E431 提交时必须绕开工作区所在分支；133 提交后，还需要在 E431 上手工再一次提交。针对上述两个问题，分别改进（133 上的代码、配置不需要做任何更改）：E431 使用 <code>git init --bare</code> 重新建立仓库，并使用 git hook 自动提交。</p>
+<p>上面的解决思路是正确的。将 E431 仓库改为裸仓库之后，因为不存在工作区所以就不会再有冲突，但同样的因为不存在工作区，在裸仓库中许多涉及工作区的命令都是不能用的，比如 <code>git pull</code></p>
+<h1 id="git-hook"><a href="#git-hook" class="headerlink" title="git hook"></a>git hook</h1><p>参考 <a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000003836345#articleHeader5">配置 Git Hook</a> 帖子，了解 <a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2/%E8%87%AA%E5%AE%9A%E4%B9%89-Git-Git-%E9%92%A9%E5%AD%90">8.3 自定义 Git - Git 钩子</a>，发现要实现我的目的只需要在 <code>DirMonitor.git/hooks/</code> 目录下创建 post-receive 文件即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line">echo &quot;&quot; &amp;&amp; echo &quot;start transfer...&quot;</span><br><span class="line">git push --all</span><br><span class="line">echo &quot;done&quot; &amp;&amp; echo &quot;&quot;</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+
+<p>虽然涉及到的知识点较多，但如果只要求实现上述目的，对涉及到的知识点完全不需要做什么了解就可以完成。</p>
+<p>胜利在望，在 133 更新、提交并推送，咔嚓，折了。至此，遇到了第一个难题。根据报错的信息在网上各种查阅，都不对症，最后绕回来还是以 stackoverflow 上的两个解答为契机，结合自己使用 Bitvise SSH Server，有了猜测。Bitvise SSH Server 更换虚拟账户，新添 windows 本地账户（133 使用此账户访问远程主机）解决了此问题。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/5697210/msysgit-error-with-hooks-git-error-cannot-spawn-git-hooks-post-commit-no-su">msysgit error with hooks: “git error: cannot spawn .git&#x2F;hooks&#x2F;post-commit: No such file or directory”</a></li>
+<li><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/13297100/how-do-i-execute-a-post-receive-hook-on-msysgit-on-windows-hosted-by-apache">How do I execute a post-receive hook on msysgit on Windows hosted by Apache?</a></li>
+</ul>
+<p>我碰到的问题和第一篇问答中报错信息相仿 “git error: cannot spawn .git&#x2F;hooks&#x2F;post-receive: No such file or directory”，但赞同数最高的答案是 SHEBANG，很明显这不是我的问题，第一次看到这篇问答时忽略了其余的回答。等后来还是解决不了，偶然撞上第二篇问答，相互佐证，猜测我碰到的问题可能类似：</p>
+<blockquote>
+<p>Apache must run as a regular user instead of Local System, in order to benefit from the environment variables defined for said regular user.</p>
+</blockquote>
+<p>事实上，我新增 windows 系统登录用户到 Bitvise SSH Server，并将 133-repo 访问远程的用户同步修改后的确不再报此错误，能够执行 hook 脚本并打印输出，但在 <code>git push -all</code> 时卡死，始终不返回——欲知后事如何，且看下节精彩。</p>
+<p>扩展学习：</p>
+<blockquote>
+<p>在计算机科学中，Shebang（也称为 Hashbang ）是一个由井号和叹号构成的字符序列 #! ，其出现在文本文件的第一行的前两个字符。引用自 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Shebang">维基百科</a></p>
+</blockquote>
+<ol>
+<li>post-receive 和 post-update 的区别</li>
+<li><code>unset GIT_DIR</code> 存在的必要：源于 <a target="_blank" rel="noopener" href="https://x-front-team.github.io/2016/09/03/%E4%BD%BF%E7%94%A8git%E9%92%A9%E5%AD%90%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1/">使用git钩子自动部署服务</a></li>
+<li>脚本语言</li>
+<li>expect 语法：源于 <a target="_blank" rel="noopener" href="https://www.404forest.com/2016/10/28/use-expect-and-git-hooks-to-automate-deployment-tasks/#2-expect">使用 expect&#x2F;git hooks 实现项目在服务器端的自动部署</a></li>
+</ol>
+<h1 id="交互式命令"><a href="#交互式命令" class="headerlink" title="交互式命令"></a>交互式命令</h1><p>面对上一节末尾出现的问题，毫无思路，在网上也查不到任何信息。只能自己摸索，而我根本不会写脚本，只能将 post-receive 中的 git push 换成其他的 git 命令，比如 git remote 和 git remote show origin。因为实在查阅不到什么有价值的信息，而且僵在这个问题上让我很烦，所以就自行摸索了（可能稍微懂脚本的同学一眼就能看到问题所在，╮(╯▽╰)╭）穷则思变</p>
+<p>发现 git remote 本地操作的命令可以正常执行；但 git remote show origin 这种需要网络访问的就存在问题。进一步使用 <code>ping git.oschina.net</code> 过滤掉“网络可能未连通”之后，将矛头对准了交互。事后弄清原因之后，发现造成这种困扰并让我花费很多时间才做出正确的推断是一件很“凑巧”的事情：</p>
+<p>如果使用 <code>https://</code> 协议</p>
+<ul>
+<li>使用 git credential 存在多种凭证辅助工具：cache、store 和 manager</li>
+<li>[√]不使用 git credential，直接在 url 中包含用户名和密码 <code>https://username:password@github.com/username/repository.git</code></li>
+<li>不使用 git credential，使用常规 url。在每次访问远程时都手动输入用户名、密码。</li>
+</ul>
+<p>如果使用 <code>ssh://</code> 协议</p>
+<ul>
+<li>使用 passphrase</li>
+<li>[√]不使用 passphrase</li>
+</ul>
+<p>新版本 Git for Windows（2.9）一路默认安装，并使用了 Windows Credential Store 凭证辅助工具，以至于我在 E431 上敲入 git push、git remote show origin 等命令时直接就执行了，无需输入用户名、密码（我使用的 <code>https://</code> 协议，并且在之前我肯定输入了 username &amp; password，但我却无意识究竟发生了什么，代表着什么——这个下一节介绍）</p>
+<p>为了证实猜测，我做了两次尝试验证。悲伤的是，两次验证的方向都是正确的，但源于别的小问题，却阻碍了我坚定信心，沿着既定方向一路摸索下去的决心，推迟了我看到真相的时间。</p>
+<ol>
+<li><p>使用 <code>https://</code> 协议，放弃 git credential 凭证辅助工具，直接在 url 中包含用户名和密码</p>
+<p> 这个解决方案是正确的。可是 <code>https://username:password@github.com/username/repository.git</code> 这样子写有个例外，就是 password 不能包含 <code>/</code>。当时含有 <code>/</code> 报错 “Couldn’t resolve host ‘username’”，害的我一度以为 OSChina 和 Github 放弃了这种方法，毕竟使用明文密码很不友好。</p>
+<p> 后来我将 OSChina 账户的密码改了，不再包含 <code>/</code>，就顺利地执行了。</p>
+</li>
+<li><p>使用 <code>ssh://</code> 协议。虽然我中间尝试过改用此协议，但我忽略了 passphrase 的存在，当初 <code>ssh-keygen</code> 时敲入了密码，造成现在即便使用 <code>ssh://</code> 协议，依旧存在交互。</p>
+<p> 重新生成密钥，不再使用 passphrase，同样顺利地执行了。</p>
+</li>
+</ol>
+<p>遗留问题：</p>
+<ol>
+<li>如果坚持使用含有 <code>/</code> 字符的密码，那么该如何在 url 使用密码呢？ <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/24718519/clone-a-repo-with-slash-in-password">Clone a repo with Slash in Password</a> 无解</li>
+<li>如果  OSChina 或 Github 使用了双重认证，对此有何影响？</li>
+<li>我在 Git for Windows 中执行帖子 <a target="_blank" rel="noopener" href="http://www.au92.com/archives/remove-passphrase-password-from-private-rsa-key.html">SSH私钥取消密码（passphrase）</a> 中描述的命令时直接僵死，没有反应，为什么？</li>
+</ol>
+<h1 id="git-credential"><a href="#git-credential" class="headerlink" title="git credential"></a>git credential</h1><p>这真的是一块我之前完全忽略了的知识点。只能说 Git 做的太好了，让普通用户感受不到凭证辅助工具系统的存在，对用户来说是透明的。</p>
+<p>在这一节中，我就不再叙述学习过程中的曲折了，因为着实绕了个大弯才重新回到正道上。就直接说结果了。</p>
+<ul>
+<li>提纲挈领，也是让我认识到 git credential 存在的一篇好贴 <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/5343068/is-there-a-way-to-skip-password-typing-when-using-https-on-github">Is there a way to skip password typing when using https:&#x2F;&#x2F; on GitHub?</a></li>
+<li>读书 <a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%87%AD%E8%AF%81%E5%AD%98%E5%82%A8">7.14 Git 工具 - 凭证存储</a></li>
+<li>看手册 <a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-credential">git-credential</a>、<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-credential-store">git-credential-store</a>、<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-credential-cache">git-credential-cache</a>，因为这三条命令的使用说明都是英文的，没有读。想着上面那本书挺经典的，只读书也能理解个七七八八，结果误了，译文表达欠妥也是重要原因之一。</li>
+</ul>
+<h2 id="git-credential-xxx"><a href="#git-credential-xxx" class="headerlink" title="git credential-xxx"></a><code>git credential-xxx</code></h2><p>凭证辅助工具有很多种，甚至用户可以自己写一个，只要满足特定的接口就可以。常见的几种凭证辅助工具：cache、store、windows 下的 Windows Credential Store、mac 下的 osxkeychain。</p>
+<p>在 Git 中操作这几种工具的命令分别是：<code>git credential-cache</code>、<code>git credential-store</code>、<code>git credential-manager</code>（mac 下的我不知道）。这些命令的使用有点奇葩：</p>
+<blockquote>
+<p>这个命令接收一个参数，并通过标准输入获取更多的参数。</p>
+</blockquote>
+<p>前文提到凭证辅助工具必须满足特定的接口，此“特定的接口”就是指增加、查询和删除。当然，还可以有更多的功能，但至少得有这三个接口。接口的使用方式也是死的，分别通过 <code>store</code>、<code>get</code> 和 <code>erase</code> 参数 —— 即引用中提到的“一个参数”中的“参数”。</p>
+<h2 id="git-credential-1"><a href="#git-credential-1" class="headerlink" title="git credential"></a><code>git credential</code></h2><p>git credential 命令的存在是为了抹掉辅助工具和 Git 之间的耦合，毕竟 Git 命令执行只关心交互时的凭证，不必操心这些凭证哪来的——鸡蛋好吃就行，何必找下蛋的那只鸡呢。</p>
+<p>使用 git credential 之前可以通过 <code>git config [--global] credential.helper xxx</code> 配置凭证辅助工具。git credential 的用法和上述 git credential-xxx 的用法非常相似，只是参数不一样：</p>
+<ul>
+<li><code>fill</code>，可以理解为查询，从配置的所有辅助工具中查询，如果没查找，就伸手<strong>和用户要</strong></li>
+<li><code>approve</code>，可以理解为添加，如果用户给的凭证经验证有效，（git）就调用这个命令将凭证保存到配置的所有辅助工具中</li>
+<li><code>reject</code>，可以理解为删除，调用这个命令会从配置的所有辅助工具中把与 description 匹配的凭证删掉</li>
+</ul>
+<p>git credential 命令是给 Git 调用的接口，不是给程序员，不是给 git 使用者的——理解这一点很重要。</p>
+<p>容易存在的一个误解是，上述加粗部分。<code>git credential fill</code> 从用户输入得到的用户名、密码是不会存储的。但 git push、git remote show origin 等远程交互命令会存储源于其对 <code>git credential fill</code> + core features + <code>git credential approve</code> 的封装：从标准输入得到用户名、密码之后，进行访问验证，如果成功 git 会调用 <code>git credential approve</code> 将此组 protocol、host、username、password 添加到辅助工具中。参考 <a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-credential#_typical_use_of_git_credential">_typical_use_of_git_credential</a></p>
+<p>强调，git credential 凭证辅助工具系统是针对 <code>http[s]://</code> 协议的，和 <code>ssh://</code> 协议无关。</p>
+<blockquote>
+<p>如果你使用的是 SSH 方式连接远端，并且设置了一个没有口令的密钥，这样就可以在不输入用户名和密码的情况下安全地传输数据。</p>
+<p>然而，这对 HTTP 协议来说是不可能的 —— 每一个连接都是需要用户名和密码的。 这在使用双重认证的情况下会更麻烦，因为你需要输入一个随机生成并且毫无规律的 token 作为密码。幸运的是，Git 拥有一个凭证系统来处理这个事情。</p>
+</blockquote>
+<p>扩展学习：</p>
+<p>git 存在三个层次的配置文件？全局的应该是在 <code>D:\Program Files\Git\mingw32\etc\gitconfig</code> 下；用户主目录下应该有一份 .gitconfig；每个 repo 下有一份，在 .git&#x2F;config 文件。修改时分别用什么参数呢？</p>
+<h2 id="windows-下的凭证辅助工具"><a href="#windows-下的凭证辅助工具" class="headerlink" title="windows 下的凭证辅助工具"></a>windows 下的凭证辅助工具</h2><ol>
+<li><p>在 windows 下 cache 辅助工具不能用，<code>git credential-cache</code> 不是有效命令。</p>
+<p> 参考链接：<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/11693074/git-credential-cache-is-not-a-git-command">git: ‘credential-cache’ is not a git command</a></p>
+</li>
+<li><p>在 windows 下 store 辅助工具也有问题，执行 <code>git credential-store XXX</code> 会报错。</p>
+<p> 参考链接：<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/37505843/fatal-unable-to-get-credential-storage-lock-file-exists">fatal: unable to get credential storage lock: File exists</a>，解决方案意义不大，如果我坚持使用 store 辅助工具呢？</p>
+</li>
+<li><p>我一度还碰到 “Fatal: Exception encountered” 错误。</p>
+<p> 参考链接：<a target="_blank" rel="noopener" href="https://github.com/projectkudu/kudu/issues/2044">Fatal: Exception encountered.</a></p>
+</li>
+<li><p>有上述两个前提，在 windows 下凭证辅助工具只能用 <code>git credential-manager</code> 了。</p>
+<p> 直接在开始菜单搜索框中输入“Windows Credential Store”，可以使用窗口操作凭证。</p>
+</li>
+</ol>
+<h1 id="最后的问题"><a href="#最后的问题" class="headerlink" title="最后的问题"></a>最后的问题</h1><p>为什么 hook 脚本中交互式命令不能直接使用凭证辅助工具中保存的用户名、密码呢？有什么方法可以做到呢？</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"># git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/02/08/git-clone/" rel="prev" title="两个仓库之间的联系">
+                  <i class="fa fa-angle-left"></i> 两个仓库之间的联系
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/03/07/portability-about-C-functions/" rel="next" title="一些 C 函数，痛苦的移植性">
+                  一些 C 函数，痛苦的移植性 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

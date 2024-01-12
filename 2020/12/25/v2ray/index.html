@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="最近两会，科学上网又宕机了。打算专心学习一下 v2ray 的插件和配置，此笔记用于备忘操作过程中的细节。也涉及 linux 系统的基础操作。 为了安全（和方便），提出以下要求或目标：禁用账号密码登录，全部改用密钥。 建立 vps 后的第一步 关于 v2ray xray v2fly，可以看看 V2Ray、Trojan、XRay">
+<meta property="og:type" content="article">
+<meta property="og:title" content="科学上网">
+<meta property="og:url" content="https://tnie.github.io/2020/12/25/v2ray/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="最近两会，科学上网又宕机了。打算专心学习一下 v2ray 的插件和配置，此笔记用于备忘操作过程中的细节。也涉及 linux 系统的基础操作。 为了安全（和方便），提出以下要求或目标：禁用账号密码登录，全部改用密钥。 建立 vps 后的第一步 关于 v2ray xray v2fly，可以看看 V2Ray、Trojan、XRay">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-25T08:18:36.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.664Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2020/12/25/v2ray/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2020/12/25/v2ray/","path":"2020/12/25/v2ray/","title":"科学上网"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>科学上网 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E6%89%8B%E4%B8%8A%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">新手上路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#v2ray"><span class="nav-number">2.</span> <span class="nav-text">v2ray</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%AA%E8%A3%85%E5%92%8C%E6%B7%B7%E6%B7%86"><span class="nav-number">2.1.</span> <span class="nav-text">伪装和混淆</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E7%AB%AF%E5%8F%A3"><span class="nav-number">2.1.1.</span> <span class="nav-text">动态端口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#websocket-tls-web"><span class="nav-number">2.2.</span> <span class="nav-text">websocket + tls + web</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E8%AF%81%E4%B9%A6%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">2.2.1.</span> <span class="nav-text">生成证书的注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%81%E8%AE%B8%E5%86%85%E7%BD%91%E8%BD%AC%E5%8F%91"><span class="nav-number">2.2.2.</span> <span class="nav-text">允许内网转发</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2020/12/25/v2ray/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="科学上网 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          科学上网
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-12-25 16:18:36" itemprop="dateCreated datePublished" datetime="2020-12-25T16:18:36+08:00">2020-12-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>最近两会，科学上网又宕机了。打算专心学习一下 v2ray 的插件和配置，此笔记用于备忘操作过程中的细节。也涉及 linux 系统的基础操作。</p>
+<p>为了安全（和方便），提出以下要求或目标：禁用账号密码登录，全部改用密钥。 <a href="https://tnie.github.io/2020/12/25/vps_first/">建立 vps 后的第一步</a></p>
+<p>关于 v2ray xray v2fly，可以看看 <a target="_blank" rel="noopener" href="https://www.chengxiaobai.com/essays/v2ray-trojan-xray">V2Ray、Trojan、XRay</a></p>
+<span id="more"></span>
+
+<h1 id="新手上路"><a href="#新手上路" class="headerlink" title="新手上路"></a>新手上路</h1><p>请移步到 <a target="_blank" rel="noopener" href="https://www.v2fly.org/guide/start.html">V2Fly 项目的新手上路</a></p>
+<p>相比 Project V 项目，上述说明要友好很多。</p>
+<h1 id="v2ray"><a href="#v2ray" class="headerlink" title="v2ray"></a>v2ray</h1><p>在 shell 中修改 config.json 是不够友好的，推荐通过在线或离线的 json 工具编辑之后整体拷贝。</p>
+<p>使用 v2ray 本质是学习如何配置其 config.json，配置的核心在于其路由模块分流和传输配置。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检测配置文件合法性</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">/usr/bin/v2ray/v2ray -<span class="built_in">test</span> -config ./config.json</span></span><br></pre></td></tr></table></figure>
+
+<p>如果没有配置路由（或没有匹配的规则时），会以 outbounds 中的第一个出口作为默认的出口。</p>
+<p>路由规则中 domain 和 ip 格式约定：<a target="_blank" rel="noopener" href="https://www.v2ray.com/chapter_02/03_routing.html">路由功能</a></p>
+<p>在 V2Ray 中，星号 * 不具备通配符的意义，如果想要匹配所有子域名，正确的格式是： <code>domain:jd.com</code>，而非 <code>*.jd.com</code>。</p>
+<blockquote>
+<p><code>domain:</code> 代表子域名</p>
+</blockquote>
+<p>服务端部署，推荐 <a target="_blank" rel="noopener" href="https://github.com/233boy/v2ray/wiki/V2Ray%E4%B8%80%E9%94%AE%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC]">一键安装脚本</a><br>Mux 多路复用，只需在客户端开启，服务器会自动识别，所以只给客户端的配置。</p>
+<h2 id="伪装和混淆"><a href="#伪装和混淆" class="headerlink" title="伪装和混淆"></a>伪装和混淆</h2><p>保持低调</p>
+<p>v2ray 可以自行选择传输层的形式。</p>
+<blockquote>
+<p>mKCP 使用 UDP 来模拟 TCP 连接，请确定主机上的防火墙配置正确。</p>
+</blockquote>
+<p>windows 下验证 tcp 端口使用 <code>telnet 127.0.0.1 80</code> 即可，但要验证 udp 端口却没有合适的命令，需要下载工具包 <a target="_blank" rel="noopener" href="https://nmap.org/download.html">nmap 网站</a>，不需要 exe 安装，下载其命令行压缩包即可</p>
+<p>windows 平台的 v2rayN 提到 <a target="_blank" rel="noopener" href="https://github.com/2dust/v2rayNG/issues/155">放弃 kcp 了</a>。</p>
+<h3 id="动态端口"><a href="#动态端口" class="headerlink" title="动态端口"></a>动态端口</h3><blockquote>
+<p>客户端不用额外设定</p>
+</blockquote>
+<p>怎么确认动态端口生效？</p>
+<ul>
+<li><p>通过查看服务端 v2ray 占用的端口，可以验证其是否生效。</p>
+</li>
+<li><p>在 Windows 客户端通过 wireshark 监控流量，可以验证是否生效。</p>
+<p>  v2rayN 一直没生效呀；客户端使用 Qv2ray 验证是可以的。</p>
+</li>
+</ul>
+<p>延迟测试、连通性测试等选项，需要更换通信方式：</p>
+<ul>
+<li>imcp 的 ping 连通，不一定能用。意义不大</li>
+<li>tcp 在改用 kcp&#x2F;udp 后肯定不通</li>
+<li>通过代理访问某个 url 的方式，推荐（windows 平台 v2rayN 快捷键 <code>ctrl-r</code>）</li>
+</ul>
+<h2 id="websocket-tls-web"><a href="#websocket-tls-web" class="headerlink" title="websocket + tls + web"></a>websocket + tls + web</h2><p>为什么需要 websocket + tls + web? 我之前使用的基础配置，今天醒来所有客户端通信异常，能够 ping 成功，但端口被禁了。换了个端口使用正常，但也就说明已经被 GFW 盯上了。2020年5月21日</p>
+<p>通过 namesilo 购买域名，配置域名解析。</p>
+<p><del>使用 <a target="_blank" rel="noopener" href="https://github.com/233boy/v2ray/wiki/V2Ray%E4%B8%80%E9%94%AE%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC]">一键安装脚本</a> 选项 4 部署即可。自行调整防火墙端口</del> 不再推荐此脚本源于：</p>
+<ul>
+<li><p>Caddy 启动失败，无法创建证书</p>
+<blockquote>
+<p>failed to obtain certificate: acme: Error -&gt; One or more domains had a problem</p>
+</blockquote>
+</li>
+<li><p>并不能一步到位，比如，更安全的 <a target="_blank" rel="noopener" href="https://toutyrater.github.io/advanced/wss_and_web.html#%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE">只监听本地</a>；</p>
+</li>
+</ul>
+<p>TLS 证书生成和更新，<a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/%E8%AF%B4%E6%98%8E">使用 acme.sh 指南</a>，安装后 acme.sh 会自动检测所有的证书, 如果快过期了, 需要更新, 则会自动更新证书（但依旧需要执行 <code>--install-cert</code> 命令手工拷贝证书）。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/sudo">acme.sh</a> 的源站提到：</p>
+<blockquote>
+<p>Remember: Using <code>sudo</code> is not recommended.</p>
+</blockquote>
+<p>实际操作之后，发现全程使用 root 用户是最方便的，创建普通用户反而束手束脚（即便授权 sudo 也意义不大）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 nginx</span></span><br><span class="line">yum install nginx</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动服务</span></span><br><span class="line">systemctl start nginx</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成证书</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">acme.sh --issue -d ilyw.xyz -k ec-256 --nginx</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装证书（2021年1月18日，单独执行此命令拷贝）</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">acme.sh --installcert -d ilyw.xyz \</span></span><br><span class="line"><span class="language-bash">	--fullchainpath /etc/pki/nginx/server.crt \</span></span><br><span class="line"><span class="language-bash">	--keypath /etc/pki/nginx/private/server.key \</span></span><br><span class="line"><span class="language-bash">	--ecc \</span></span><br><span class="line"><span class="language-bash">	--reloadcmd <span class="string">&quot;service nginx force-reload&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>默认生成的证书都放在安装目录下: <code>~/.acme.sh/</code>, 请不要直接使用此目录下的文件。正确的使用方法是使用 <code>--install-cert</code> 命令,并指定目标位置, 然后证书文件会被 copy 到相应的位置</p>
+</blockquote>
+<h3 id="生成证书的注意事项"><a href="#生成证书的注意事项" class="headerlink" title="生成证书的注意事项"></a>生成证书的注意事项</h3><p>使用 acme.sh 生成证书，容易踩坑。但是 Let’s Encrypt 有申请错误的限制，同一域名同一账号连续失败 5 次后会被暂停申请 1 个小时，然后就出现如下提示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Create new order error. Le_OrderFinalize not found. &#123;</span><br><span class="line">  &quot;type&quot;: &quot;urn:ietf:params:acme:error:rateLimited&quot;,</span><br><span class="line">  &quot;detail&quot;: &quot;Error creating new order :: too many failed authorizations recently: see https://letsencrypt.org/docs/rate-limits/&quot;,</span><br><span class="line">  &quot;status&quot;: 429</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个就是频繁提交失败后被服务器暂停申请了，等 1 个小时再试就好了。为了避免频繁申请，就要做好前期工作：</p>
+<ul>
+<li>避免报错 <code>Can not find conf file for domain</code>， 参考 <a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/issues/1065">issue1065</a> 修改 nginx.conf 的 <code>server_name _;</code> 配置。</li>
+<li>保证 nginx.conf 配置有效性（没有有效证书时，保持 TLS server 部分处于注释的状态）</li>
+<li>避免报错 <code>nginx: [error] invalid PID number &quot;&quot; in &quot;/run/nginx.pid&quot;</code>，先启动 nginx 服务再尝试申请证书。</li>
+</ul>
+<h3 id="允许内网转发"><a href="#允许内网转发" class="headerlink" title="允许内网转发"></a>允许内网转发</h3><p>如果在设置完成之后不能成功使用，可能是由于 SElinux 机制（如果你是 CentOS 7 的用户请特别留意 SElinux 这一机制）阻止了 Nginx 转发向内网的数据。如果是这样的话，在 V2Ray 的日志里不会有访问信息，在 Nginx 的日志里会出现大量的 “Permission Denied” 字段，要解决这一问题需要在终端下键入以下命令： <code>setsebool -P httpd_can_network_connect 1</code></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/12/25/vps_first/" rel="prev" title="建立 vps 后的第一步">
+                  <i class="fa fa-angle-left"></i> 建立 vps 后的第一步
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/12/25/nas/" rel="next" title="试验虚拟机安装黑群晖">
+                  试验虚拟机安装黑群晖 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

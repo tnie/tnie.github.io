@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="查看 std::exception 的定义，除了析构函数，其他包括默认构造和拷贝构造在内的函数都声明为 noexcept：  因为不允许复制 std::exception 抛出异常，故当派生类（例如 std::runtime_error ）必须管理用户定义的诊断信息时，常将它实现为写时复制的字符串。  查看 std::logic_error 的定义 或 std::runtime_error 的定义">
+<meta property="og:type" content="article">
+<meta property="og:title" content="异常 std::exception">
+<meta property="og:url" content="https://tnie.github.io/2020/12/25/exception/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="查看 std::exception 的定义，除了析构函数，其他包括默认构造和拷贝构造在内的函数都声明为 noexcept：  因为不允许复制 std::exception 抛出异常，故当派生类（例如 std::runtime_error ）必须管理用户定义的诊断信息时，常将它实现为写时复制的字符串。  查看 std::logic_error 的定义 或 std::runtime_error 的定义">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-25T08:18:36.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.617Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2020/12/25/exception/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2020/12/25/exception/","path":"2020/12/25/exception/","title":"异常 std::exception"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>异常 std::exception | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%A8%E7%BA%BF%E7%A8%8B%E4%BD%BF%E7%94%A8%E5%BC%82%E5%B8%B8"><span class="nav-number">1.</span> <span class="nav-text">跨线程使用异常</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#logic-error"><span class="nav-number">2.</span> <span class="nav-text">logic_error</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#invalid-argument"><span class="nav-number">2.1.</span> <span class="nav-text">invalid_argument.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#domain-error"><span class="nav-number">2.2.</span> <span class="nav-text">domain_error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#length-error"><span class="nav-number">2.3.</span> <span class="nav-text">length_error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#out-of-range"><span class="nav-number">2.4.</span> <span class="nav-text">out_of_range</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#future-error-C-11"><span class="nav-number">2.5.</span> <span class="nav-text">future_error(C++11)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#runtime-error"><span class="nav-number">3.</span> <span class="nav-text">runtime_error</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#range-error"><span class="nav-number">3.1.</span> <span class="nav-text">range_error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#overflow-error"><span class="nav-number">3.2.</span> <span class="nav-text">overflow_error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#underflow-error"><span class="nav-number">3.3.</span> <span class="nav-text">underflow_error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#regex-error-C-11"><span class="nav-number">3.4.</span> <span class="nav-text">regex_error(C++11)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tx-exception-TM-TS"><span class="nav-number">3.5.</span> <span class="nav-text">tx_exception(TM TS)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nonexistent-local-time-C-20"><span class="nav-number">3.6.</span> <span class="nav-text">nonexistent_local_time(C++20)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ambiguous-local-time-C-20"><span class="nav-number">3.7.</span> <span class="nav-text">ambiguous_local_time(C++20)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#format-error-C-20"><span class="nav-number">3.8.</span> <span class="nav-text">format_error(C++20)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#system-error-C-11"><span class="nav-number">3.9.</span> <span class="nav-text">system_error(C++11)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ios-base-failure-C-11"><span class="nav-number">3.9.1.</span> <span class="nav-text">ios_base::failure(C++11)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filesystem-filesystem-error-C-17"><span class="nav-number">3.9.2.</span> <span class="nav-text">filesystem::filesystem_error(C++17)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-optional-access-C-17"><span class="nav-number">4.</span> <span class="nav-text">bad_optional_access(C++17)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-typeid"><span class="nav-number">5.</span> <span class="nav-text">bad_typeid</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-cast"><span class="nav-number">6.</span> <span class="nav-text">bad_cast</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bad-any-cast-C-17"><span class="nav-number">6.1.</span> <span class="nav-text">bad_any_cast(C++17)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-weak-ptr-C-11"><span class="nav-number">7.</span> <span class="nav-text">bad_weak_ptr(C++11)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-function-call-C-11"><span class="nav-number">8.</span> <span class="nav-text">bad_function_call(C++11)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-alloc"><span class="nav-number">9.</span> <span class="nav-text">bad_alloc</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bad-array-new-length-C-11"><span class="nav-number">9.1.</span> <span class="nav-text">bad_array_new_length(C++11)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-exception"><span class="nav-number">10.</span> <span class="nav-text">bad_exception</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-variant-access-C-17"><span class="nav-number">11.</span> <span class="nav-text">bad_variant_access(C++17)</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2020/12/25/exception/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="异常 std::exception | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          异常 std::exception
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-12-25 16:18:36" itemprop="dateCreated datePublished" datetime="2020-12-25T16:18:36+08:00">2020-12-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>查看 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/error/exception"><code>std::exception</code> 的定义</a>，除了析构函数，其他包括默认构造和拷贝构造在内的函数都声明为 <code>noexcept</code>：</p>
+<blockquote>
+<p>因为不允许复制 <code>std::exception</code> 抛出异常，故当派生类（例如 <code>std::runtime_error</code> ）必须管理用户定义的诊断信息时，常将它实现为<strong>写时复制</strong>的字符串。</p>
+</blockquote>
+<p>查看 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/error/logic_error"><code>std::logic_error</code> 的定义</a> 或 <code>std::runtime_error</code> 的定义：</p>
+<blockquote>
+<p>因为不容许复制 <code>std::logic_error</code> 抛出异常，通常将此消息在内部存储为分离分配的<strong>引用计数</strong>字符串。这也是构造函数不接收 <code>std::string&amp;&amp;</code> 参数的理由：无论如何它必须复制内容。</p>
+</blockquote>
+<span id="more"></span>
+
+<ol>
+<li><p>为什么 <code>std::exception</code> 拷贝构造不允许抛出异常？ </p>
+<p> 反证法。如果允许其构造抛出异常，异常又继承自 <code>std::exception</code>，还是直接崩溃更合理。</p>
+</li>
+<li><p><code>std::logic_error</code> 等以字符串为入参的构造函数是可能抛出 <code>std::bad_alloc</code> 异常的，为什么子类的拷贝构造不能抛出异常？</p>
+<p> 不抛异常是理想状态，能够实现就尽力实现。</p>
+</li>
+</ol>
+<p><code>domain_error</code> <code>overflow_error</code> 和 <code>underflow_error</code>，并未用于数学函数中</p>
+<blockquote>
+<p>mathematical functions report domamin&#x2F;overflow&#x2F;underflow errors as specified in math_errhandling.</p>
+</blockquote>
+<p>标准库里的异常都是按需建立的，大多服务于特定的函数或库。能够在项目中借鉴、使用的也就七八个类型：</p>
+<ul>
+<li><code>logic_error</code> 及其大部分子类：<code>invalid_argument</code>, <code>domain_error</code>, <code>length_error</code>, <code>out_of_range</code></li>
+<li><code>runtime_error</code> 及其部分子类：<code>range_error</code>, <code>overflow_error</code>, <code>underflow_error</code></li>
+</ul>
+<p>相同层级的各异常类型的使用场景并非严格分离的，多个异常的定义存在重复、交叉，在同一场景中往往存在多个异常都可以使用。比如，</p>
+<ul>
+<li>用于线程库的 <code>future_error</code> 从 <code>logic_error</code> 继承；但</li>
+<li>用于正则表达式库的 <code>regex_error</code> 和用于格式化库的 <code>format_error</code> 又是从 <code>runtime_error</code> 继承；而</li>
+<li>用于 <code>optional</code>、<code>variant</code> 和 <code>any</code> 等类型的 bad_xxx 这些又是直接从 <code>std::exception</code> 继承</li>
+<li>在函数 <code>std::stoi</code> 抛出 <code>out_of_range</code> 的场景是不是更符合 <code>range_error</code> 的定义</li>
+</ul>
+<p>又比如：<code>length_error</code> 和 <code>range_error</code> 很像；<code>invalid_argument</code> 和 <code>domain_error</code> 重叠；</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/38733270/c-when-to-use-which-standard-exception">C++ When to use which (standard) exception?</a></p>
+<p>异常继承体系最初区分 logic error 和 runtime error 就过于理想，最终还是要 <strong>服务于具体的某个函数或库</strong> 才有意义。</p>
+<p>以下表格 <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42078760/article/details/80646206">摘自</a>，并修正错误 </p>
+<table>
+<thead>
+<tr>
+<th>异常</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>std::exception</strong></td>
+<td>该异常是所有标准 C++ 异常的父类。</td>
+</tr>
+<tr>
+<td>std::bad_alloc</td>
+<td>该异常可以通过 new 抛出。</td>
+</tr>
+<tr>
+<td>std::bad_cast</td>
+<td>该异常可以通过 dynamic_cast 抛出。</td>
+</tr>
+<tr>
+<td>std::bad_exception</td>
+<td>这在处理 C++ 程序中无法预期的异常时非常有用。</td>
+</tr>
+<tr>
+<td>std::bad_typeid</td>
+<td>该异常可以通过 typeid 抛出。</td>
+</tr>
+<tr>
+<td><strong>std::logic_error</strong></td>
+<td>理论上可以通过读取代码来检测到的异常。</td>
+</tr>
+<tr>
+<td>std::domain_error</td>
+<td>当使用了一个无效的数学域时，会抛出该异常。</td>
+</tr>
+<tr>
+<td>std::invalid_argument</td>
+<td>当使用了无效的参数时，会抛出该异常。</td>
+</tr>
+<tr>
+<td>std::length_error</td>
+<td>当创建了太长的 std::string 时，会抛出该异常。</td>
+</tr>
+<tr>
+<td>std::out_of_range</td>
+<td>该异常可以通过方法抛出，<del>例如 std::vector 和 <code>std::bitset&lt;&gt;::operator[]()</code></del>。</td>
+</tr>
+<tr>
+<td><strong>std::runtime_error</strong></td>
+<td>理论上不可以通过读取代码来检测到的异常。</td>
+</tr>
+<tr>
+<td>std::overflow_error</td>
+<td>当发生数学上溢时，会抛出该异常。</td>
+</tr>
+<tr>
+<td>std::range_error</td>
+<td>当尝试存储超出范围的值时，会抛出该异常。</td>
+</tr>
+<tr>
+<td>std::underflow_error</td>
+<td>当发生数学下溢时，会抛出该异常。</td>
+</tr>
+</tbody></table>
+<h1 id="跨线程使用异常"><a href="#跨线程使用异常" class="headerlink" title="跨线程使用异常"></a>跨线程使用异常</h1><p>跨线程使用异常，优先使用 <code>std::future</code>，或者请移步 <code>std::exception_ptr</code> 类型。</p>
+<blockquote>
+<p>定义 <code>std::future</code> 使用了后者；而后者就是为跨线程捕获异常新增的特性。 </p>
+</blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaoshiwang/p/10023543.html">多线程 等待一次性事件 异常处理</a></li>
+<li><a target="_blank" rel="noopener" href="http://bitdewy.github.io/blog/2013/09/23/exception-and-multithread/">异常与多线程</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41288428/is-stdexception-ptr-thread-safe">Is std::exception_ptr thread safe?</a></li>
+</ul>
+<h1 id="logic-error"><a href="#logic-error" class="headerlink" title="logic_error"></a>logic_error</h1><p>It reports <del>errors that are a consequence of</del> faulty logic within the program <del>such as violating logical preconditions or class invariants</del> and may be preventable.</p>
+<p>No standard library components throw this exception directly</p>
+<h2 id="invalid-argument"><a href="#invalid-argument" class="headerlink" title="invalid_argument."></a>invalid_argument.</h2><p>an argument value has not been accepted.</p>
+<p>This exception is thrown by <code>std::bitset::bitset</code>, and the <code>std::stoi</code> and <code>std::stof</code> families of functions.</p>
+<h2 id="domain-error"><a href="#domain-error" class="headerlink" title="domain_error"></a>domain_error</h2><p><code>domain_error</code>, that is, situations where the inputs are outside of the domain on which an operation is defined.</p>
+<p>The standard library components do not throw this exception。和 <code>std::invalid_argument</code> 的区别？ </p>
+<h2 id="length-error"><a href="#length-error" class="headerlink" title="length_error"></a>length_error</h2><p>attempt to exceed&#x2F;超出 implementation defined length limits for some object.</p>
+<p>This exception is thrown by member functions of <code>std::basic_string</code> and <code>std::vector::reserve</code></p>
+<h2 id="out-of-range"><a href="#out-of-range" class="headerlink" title="out_of_range"></a>out_of_range</h2><p>attempt to access elements out of defined range.</p>
+<p>It may be thrown by the member functions of <code>std::bitset</code> and <code>std::basic_string</code>, by <code>std::stoi</code> and <code>std::stod</code> families of functions, and by the bounds-checked member access functions (e.g. <code>std::vector::at</code> and <code>std::map::at</code>).</p>
+<h2 id="future-error-C-11"><a href="#future-error-C-11" class="headerlink" title="future_error(C++11)"></a>future_error(C++11)</h2><p>that is thrown on failure by the functions in the thread library.</p>
+<h1 id="runtime-error"><a href="#runtime-error" class="headerlink" title="runtime_error"></a>runtime_error</h1><p>It reports errors that are due to events beyond the scope of the program and can not be easily predicted.</p>
+<p>Exceptions of type <code>std::runtime_error</code> are thrown by the following standard library components: <code>std::locale::locale</code> and <code>std::locale::combine</code>.</p>
+<h2 id="range-error"><a href="#range-error" class="headerlink" title="range_error"></a>range_error</h2><p>range errors (that is, situations where a result of a computation cannot be represented by the destination type).</p>
+<p>The only standard library components that throw this exception are <code>std::wstring_convert::from_bytes</code> and <code>std::wstring_convert::to_bytes</code>.</p>
+<p>template class <code>std::wstring_convert</code> is deprecated in c++17.</p>
+<h2 id="overflow-error"><a href="#overflow-error" class="headerlink" title="overflow_error"></a>overflow_error</h2><p>to report <strong>arithmetic</strong> overflow errors (that is, situations where a result of a computation is too large for the destination type)</p>
+<p>The only standard library components that throw this exception are <code>std::bitset::to_ulong</code> and <code>std::bitset::to_ullong</code>.</p>
+<h2 id="underflow-error"><a href="#underflow-error" class="headerlink" title="underflow_error"></a>underflow_error</h2><p>to report arithmetic underflow errors (that is, situations where the result of a computation is a subnormal floating-point value)</p>
+<p>The standard library components do not throw this exception.</p>
+<h2 id="regex-error-C-11"><a href="#regex-error-C-11" class="headerlink" title="regex_error(C++11)"></a>regex_error(C++11)</h2><p>to report errors in the regular expressions library.</p>
+<h2 id="tx-exception-TM-TS"><a href="#tx-exception-TM-TS" class="headerlink" title="tx_exception(TM TS)"></a>tx_exception(TM TS)</h2><p>can be used to cancel and roll back an atomic transaction initiated by the keyword <code>atomic_cancel</code>.</p>
+<h2 id="nonexistent-local-time-C-20"><a href="#nonexistent-local-time-C-20" class="headerlink" title="nonexistent_local_time(C++20)"></a>nonexistent_local_time(C++20)</h2><p>to report that an attempt was made to convert a nonexistent <code>std::chrono::local_time</code> to a <code>std::chrono::sys_time</code> without specifying a <code>std::chrono::choose</code> (such as <code>choose::earliest</code> or <code>choose::latest</code>).</p>
+<p>This exception is thrown by <code>std::chrono::time_zone::to_sys</code> and functions that call it (such as the constructors of <code>std::chrono::zoned_time</code> that takes a <code>std::chrono::local_time</code>).</p>
+<p>Ambiguous and nonexistent local times can occur as a result of time zone transitions (such as daylight saving time&#x2F;夏令时).</p>
+<h2 id="ambiguous-local-time-C-20"><a href="#ambiguous-local-time-C-20" class="headerlink" title="ambiguous_local_time(C++20)"></a>ambiguous_local_time(C++20)</h2><p>to report that an attempt was made to convert a ambiguous <code>std::chrono::local_time</code> to a <code>std::chrono::sys_time</code> without specifying a <code>std::chrono::choose</code> (such as <code>choose::earliest</code> or <code>choose::latest</code>).</p>
+<p>This exception is thrown by <code>std::chrono::time_zone::to_sys</code> and functions that call it (such as the constructors of <code>std::chrono::zoned_time</code> that takes a <code>std::chrono::local_time</code>).</p>
+<p>Ambiguous and nonexistent local times can occur as a result of time zone transitions (such as daylight saving time&#x2F;夏令时).</p>
+<h2 id="format-error-C-20"><a href="#format-error-C-20" class="headerlink" title="format_error(C++20)"></a>format_error(C++20)</h2><p>to report errors in the formatting library.</p>
+<h2 id="system-error-C-11"><a href="#system-error-C-11" class="headerlink" title="system_error(C++11)"></a>system_error(C++11)</h2><p>thrown by various library functions (typically the functions that interface with the OS facilities, e.g. the constructor of <code>std::thread</code>) when the exception has an associated <code>std::error_code</code>, which may be reported.</p>
+<h3 id="ios-base-failure-C-11"><a href="#ios-base-failure-C-11" class="headerlink" title="ios_base::failure(C++11)"></a>ios_base::failure(C++11)</h3><p>is thrown on failure by the functions in the Input&#x2F;Output library.</p>
+<h3 id="filesystem-filesystem-error-C-17"><a href="#filesystem-filesystem-error-C-17" class="headerlink" title="filesystem::filesystem_error(C++17)"></a>filesystem::filesystem_error(C++17)</h3><p>is thrown on failure by the throwing overloads of the functions in the filesystem library.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::<span class="type">uintmax_t</span> <span class="title">file_size</span><span class="params">( <span class="type">const</span> std::filesystem::path&amp; p )</span></span>;</span><br><span class="line"><span class="function">std::<span class="type">uintmax_t</span> <span class="title">file_size</span><span class="params">( <span class="type">const</span> std::filesystem::path&amp; p, std::error_code&amp; ec )</span> <span class="keyword">noexcept</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h1 id="bad-optional-access-C-17"><a href="#bad-optional-access-C-17" class="headerlink" title="bad_optional_access(C++17)"></a>bad_optional_access(C++17)</h1><p>be thrown by <code>std::optional::value</code> when accessing an optional object that does not contain a value.</p>
+<h1 id="bad-typeid"><a href="#bad-typeid" class="headerlink" title="bad_typeid"></a>bad_typeid</h1><p>is thrown when a <code>typeid</code> operator is applied to a dereferenced null pointer value of a <strong>polymorphic</strong> type.</p>
+<p>多态，含有虚函数的类型。</p>
+<p><code>std::nullptr_t</code> 类型很奇特，它不是指针类型。即 <code>std::nullptr_t p = nullptr;</code> 对变量 <code>*p</code> 解引用是错误的。</p>
+<h1 id="bad-cast"><a href="#bad-cast" class="headerlink" title="bad_cast"></a>bad_cast</h1><p>is thrown when a <code>dynamic_cast</code> to a <strong>reference type</strong> fails the run-time check (e.g. because the types are not related by inheritance), and also from <code>std::use_facet</code> if the requested facet does not exist in the locale.</p>
+<h2 id="bad-any-cast-C-17"><a href="#bad-any-cast-C-17" class="headerlink" title="bad_any_cast(C++17)"></a>bad_any_cast(C++17)</h2><p>be thrown by the value-returning forms of <code>std::any_cast</code> on failure.</p>
+<p>和类型 <code>std::any</code> 相关</p>
+<h1 id="bad-weak-ptr-C-11"><a href="#bad-weak-ptr-C-11" class="headerlink" title="bad_weak_ptr(C++11)"></a>bad_weak_ptr(C++11)</h1><p>thrown by the constructors of <code>std::shared_ptr</code> that take <code>std::weak_ptr</code> as the argument, when the <code>std::weak_ptr</code> refers to an already deleted object.</p>
+<p>优先使用 <code>std::weak_ptr&lt;T&gt;::lock</code> 避免上述异常。</p>
+<h1 id="bad-function-call-C-11"><a href="#bad-function-call-C-11" class="headerlink" title="bad_function_call(C++11)"></a>bad_function_call(C++11)</h1><p>thrown by <code>std::function::operator()</code> if the function wrapper has no target.</p>
+<h1 id="bad-alloc"><a href="#bad-alloc" class="headerlink" title="bad_alloc"></a>bad_alloc</h1><p>thrown as exceptions by the allocation functions to report failure to allocate storage.</p>
+<h2 id="bad-array-new-length-C-11"><a href="#bad-array-new-length-C-11" class="headerlink" title="bad_array_new_length(C++11)"></a>bad_array_new_length(C++11)</h2><p>thrown as exceptions by the new-expressions to report invalid array lengths.</p>
+<h1 id="bad-exception"><a href="#bad-exception" class="headerlink" title="bad_exception"></a>bad_exception</h1><p>thrown by the C++ runtime in the following situations:</p>
+<ul>
+<li>If <code>std::exception_ptr</code> stores a copy of the caught exception and if the copy constructor of the exception object caught by <code>std::current_exception</code> throws an exception, the captured exception is an instance of <code>std::bad_exception</code>.</li>
+</ul>
+<h1 id="bad-variant-access-C-17"><a href="#bad-variant-access-C-17" class="headerlink" title="bad_variant_access(C++17)"></a>bad_variant_access(C++17)</h1><p>thrown in the following situations:</p>
+<ul>
+<li><code>std::get(std::variant)</code> called with an index or type that does not match the currently active alternative</li>
+<li><code>std::visit</code> called to visit a variant that is valueless_by_exception</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/12/25/iocp/" rel="prev" title="iocp">
+                  <i class="fa fa-angle-left"></i> iocp
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/12/25/c++20/" rel="next" title="c++20 特性">
+                  c++20 特性 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

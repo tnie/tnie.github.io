@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="我们从 GoF 说起，书中写到单例模式（Singleton）的意图是：  保证一个类仅有一个实例，并提供一个访问它的全局访问点。  在什么时候会用到单例模式呢？开发过程中常见的应用举例：  日志类，一个应用往往只对应一个日志实例：丑陋的写法是在每个场景都实例化一个日志对象使用。 配置类，应用的配置集中管理，并提供全局访问：丑陋的写法是在每次使用配置时都实例化一个配置对象，然后访问配置文件读取其中的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式之单例模式">
+<meta property="og:url" content="https://tnie.github.io/2016/10/17/singleton1/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="我们从 GoF 说起，书中写到单例模式（Singleton）的意图是：  保证一个类仅有一个实例，并提供一个访问它的全局访问点。  在什么时候会用到单例模式呢？开发过程中常见的应用举例：  日志类，一个应用往往只对应一个日志实例：丑陋的写法是在每个场景都实例化一个日志对象使用。 配置类，应用的配置集中管理，并提供全局访问：丑陋的写法是在每次使用配置时都实例化一个配置对象，然后访问配置文件读取其中的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-10-17T08:58:00.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.648Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="GoF">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2016/10/17/singleton1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2016/10/17/singleton1/","path":"2016/10/17/singleton1/","title":"设计模式之单例模式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>设计模式之单例模式 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%95%E7%BA%BF%E7%A8%8B-Lazy-Singleton"><span class="nav-number">1.</span> <span class="nav-text">单线程 Lazy Singleton</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="nav-number">2.</span> <span class="nav-text">线程安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E6%A3%80%E6%B5%8B%E9%94%81%E6%A8%A1%E5%BC%8F%EF%BC%88Double-Checked-Locking-Pattern%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">双检测锁模式（Double-Checked Locking Pattern）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Eager-Singleton"><span class="nav-number">2.2.</span> <span class="nav-text">Eager Singleton</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Meyers-Singleton"><span class="nav-number">2.3.</span> <span class="nav-text">Meyers Singleton</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E9%94%80%E6%AF%81"><span class="nav-number">3.</span> <span class="nav-text">实例销毁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%B7%A5%E4%BA%BA-RAII"><span class="nav-number">3.1.</span> <span class="nav-text">垃圾工人 RAII</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Meyers-Singleton-1"><span class="nav-number">3.2.</span> <span class="nav-text">Meyers Singleton</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8D%95%E4%BE%8B-vs-%E5%A4%9A%E4%B8%AA%E5%8D%95%E4%BE%8B"><span class="nav-number">4.</span> <span class="nav-text">不同类型的单例 vs. 多个单例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#boost-%E4%B8%AD%E7%9A%84%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">boost 中的单例模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%9D%A5%E6%BA%90"><span class="nav-number">6.</span> <span class="nav-text">参考来源</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/10/17/singleton1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="设计模式之单例模式 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          设计模式之单例模式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-10-17 16:58:00" itemprop="dateCreated datePublished" datetime="2016-10-17T16:58:00+08:00">2016-10-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/cpp-idioms/" itemprop="url" rel="index"><span itemprop="name">cpp-idioms</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>我们从 GoF 说起，书中写到单例模式（Singleton）的意图是：</p>
+<blockquote>
+<p>保证一个类仅有一个实例，并提供一个访问它的全局访问点。</p>
+</blockquote>
+<p>在什么时候会用到单例模式呢？开发过程中常见的应用举例：</p>
+<ul>
+<li>日志类，一个应用往往只对应一个日志实例：丑陋的写法是在每个场景都实例化一个日志对象使用。</li>
+<li>配置类，应用的配置集中管理，并提供全局访问：丑陋的写法是在每次使用配置时都实例化一个配置对象，然后访问配置文件读取其中的配置项。</li>
+<li>管理器，比如我们写了一个 windows 服务，然后我们要封装一个启停此服务的管理器。</li>
+<li>共享资源类，加载资源需要较长时间，使用单例可以避免重复加载资源，并被多个地方共享访问。比如文件连接，数据库连接等</li>
+</ul>
+<span id="more"></span>
+
+<p>下面来看具体的实现。在 C++ 中，虽然将一个对象定义成全局变量可以使其被全局访问，但它不能防止你实例化多个对象，即无法“保证一个类仅有一个实例”。如果你坚持如此使用也能实现功能，但并不优雅。</p>
+<blockquote>
+<p>更好的办法是，让类自身负责保存它的唯一实例。这个类可以保证没有其他实例可以被创建（通过截取创建新对象的请求），并且它可以提供一个访问该实例的办法。</p>
+</blockquote>
+<p>以上描述中涉及 3 个功能点，我们来看看在 C++ 中具体是如何实现的？</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="type">static</span> Singleton* _instance;  <span class="comment">//类自身保存它的唯一实例</span></span><br><span class="line">  <span class="built_in">Singleton</span>();  <span class="comment">// 截取创建新对象的请求</span></span><br><span class="line"><span class="keyword">public</span>：</span><br><span class="line">  <span class="function"><span class="type">static</span> Singleton* <span class="title">Instance</span><span class="params">()</span></span>;  <span class="comment">// 提供一个访问该实例的办法</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>上述定义中未体现类的唯一实例怎么创建的。而恰恰是如何创建实例区分出了以下几种实现：</p>
+<ol>
+<li>Lazy Singleton，命名来源于其中使用了惰性（Lazy）初始化</li>
+<li>双检测锁模式，在上述基础上为线程安全作出修改</li>
+<li>Eager Singleton，不使用惰性初始化</li>
+<li>Meyers Singleton，在新标准下支持多线程，最优雅的一种实现。</li>
+</ol>
+<p>需要强调的是，虽然上述几种实现都是由 Singleton 类创建实例，但这并不是必须的。GoF 书中描述 Singleton 类的职责时也只是“<strong>可能</strong>负责创建它自己的唯一实例”，事实上，在书中讲述单件注册表时就明确提到了：（详细内容请翻看原著）</p>
+<blockquote>
+<p>Singleton 类不再负责创建单件。</p>
+</blockquote>
+<p>为了保证唯一实例，还需要删除拷贝构造函数（和拷贝赋值操作符）。另外，用户获得指针之后可能会以为他负责释放，进而对 <code>Singleton::Instance()</code> 的结果执行 <code>delete</code> 操作，如果我们并不希望如此，可以将析构函数声明为私有的，或者不使用指针（改用引用）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Singleton* pSingleton = Singleton::<span class="built_in">Instance</span>();</span><br><span class="line"><span class="comment">// 以下两个操作是违背单例模式特性的，必须禁止掉。</span></span><br><span class="line">Singleton singleton = *pSingleton;</span><br><span class="line"><span class="function">Singleton <span class="title">singleton2</span><span class="params">(*pSingleton)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 但是这个样子可以</span></span><br><span class="line">Singleton&amp; refSingleton = *pSingleton;</span><br><span class="line"><span class="function">Singleton&amp; <span class="title">refSingleton2</span><span class="params">(*pSingleton)</span></span>;</span><br><span class="line"></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;singleton&#x27;addr is: &quot;</span> &lt;&lt; &amp;singleton &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;pSingleton is: &quot;</span> &lt;&lt; pSingleton &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;singleton2&#x27;addr is: &quot;</span> &lt;&lt; &amp;singleton2 &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+
+<p>建议将移动构造函数、移动赋值操作符也禁用，减少错误使用的可能性。否则，在某个模块中将单例移走之后，另一模块大概率会错误使用。</p>
+<h1 id="单线程-Lazy-Singleton"><a href="#单线程-Lazy-Singleton" class="headerlink" title="单线程 Lazy Singleton"></a>单线程 Lazy Singleton</h1><p>在 GoF 书中给出的实现如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Singleton* Singleton::_instance = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">Singleton::<span class="built_in">Singleton</span>() &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::Instance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (_instance == <span class="number">0</span>) &#123;</span><br><span class="line">    _instance = <span class="keyword">new</span> Singleton;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> _instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种实现被称为“Lazy Singleton”，它使用了惰性初始化：它的返回值直到被第一次访问时才创建和保存。</p>
+<p>惰性初始化：实例直到用到的时候（用户通过 <code>Singleton::Instance()</code> 要获取实例时）才创建，在此之前实例对象是不存在的，避免了潜在浪费资源的可能。对比非惰性初始化的 Eager Singleton 理解，提前把对象初始化，但应用的执行逻辑可能就没有用到此实例。</p>
+<p>但正如 GoF 在第一章引言中指出的一样，上述实现也存在局限。</p>
+<blockquote>
+<p>书中没有讨论与并发或分布式或实时程序设计有关的模式，也没有收录面向特定应用领域的模式。</p>
+</blockquote>
+<p>最突出的就是非线程安全。另外在部分使用场景中，我们还需要考虑 Singleton 的释放问题。</p>
+<h1 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h1><p>Lazy Singleton不是线程安全的，比如现在有线程 A 和线程 B，都通过 <code>_instance == 0</code> 的判断，那么线程 A 和 B 都会创建新实例。单例模式保证生成唯一实例的规则被打破了。</p>
+<h2 id="双检测锁模式（Double-Checked-Locking-Pattern）"><a href="#双检测锁模式（Double-Checked-Locking-Pattern）" class="headerlink" title="双检测锁模式（Double-Checked Locking Pattern）"></a>双检测锁模式（Double-Checked Locking Pattern）</h2><p>Lazy Singleton的一种线程安全改造是在 <code>Instance()</code> 中每次判断是否为 <code>NULL</code>(<code>0</code>) 前加锁，但是加锁是很慢的。而实际上只有第一次实例创建时的 <code>_instance==NULL</code> 判断才需要加锁，创建之后 <code>_instance==NULL</code> 判断不再需要加锁。所以多在加锁之前多加一层判断，需要判断两次所有叫 Double-Checked。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">static</span> Singleton *<span class="title">Instance</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (_instance == <span class="literal">NULL</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">Lock</span>(); <span class="comment">// C++没有直接的Lock操作，请使用其它库的Lock，比如Boost，此处仅为了说明</span></span><br><span class="line">    <span class="keyword">if</span> (_instance == <span class="literal">NULL</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      _instance = <span class="keyword">new</span> <span class="built_in">Singleton</span> ();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">UnLock</span>(); <span class="comment">// C++没有直接的Lock操作，请使用其它库的Lock，比如Boost，此处仅为了说明</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> _instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>理论上问题解决了，但是在实践中有很多坑，如指令重排、多核处理器等问题让 DCLP 实现起来比较复杂，比如需要使用内存屏障，详细的分析可以阅读：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.aristeia.com/Papers/DDJ_Jul_Aug_2004_revised.pdf">C++ and the Perils of Double-Checked Locking</a>，如果阅读英文吃力，在 </li>
+<li><a target="_blank" rel="noopener" href="http://blog.csdn.net/10km/article/details/49777749">c++11单实例(singleton)初始化的几种方法(memory fence,atomic,call_once)</a> 博客中也有详细分析。</li>
+</ul>
+<p><strong>扩展</strong>：在C++11中有全新的内存模型和原子库，可以很方便的用来实现 DCLP。这里不展开。有兴趣可以阅读：</p>
+<ul>
+<li>这篇文章<a target="_blank" rel="noopener" href="http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/">《Double-Checked Locking is Fixed In C++11》</a>。另外，</li>
+<li>在 <a target="_blank" rel="noopener" href="https://www.manning.com/books/c-plus-plus-concurrency-in-action">C++ Concurrency in Action</a> 一书中也有系统的讲解。</li>
+</ul>
+<p>C++11 的并发特性提供了很多语法来实现线程安全的单例模式，其中值得推荐的有两种（在 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/zxh1210603696/p/4157294.html">最简洁的单例模式</a> 有整理）：</p>
+<ul>
+<li>使用 <code>call_once</code></li>
+<li>使用 static local variable，即下文提到 Meyers Singleton</li>
+</ul>
+<h2 id="Eager-Singleton"><a href="#Eager-Singleton" class="headerlink" title="Eager Singleton"></a>Eager Singleton</h2><p>摘自 <a target="_blank" rel="noopener" href="http://www.zkt.name/dan-li-mo-shi-singleton-ji-c-shi-xian/">单例模式(Singleton)及其C++实现</a></p>
+<p>这种实现在程序开始的时候（静态属性 <code>instance</code> 初始化)就完成了实例的创建。这正好和上述的 Lazy Singleton 相反。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//头文件中</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span>  </span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> Singleton&amp; <span class="title">Instance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">Singleton</span>();</span><br><span class="line">    ~<span class="built_in">Singleton</span>();</span><br><span class="line">    <span class="built_in">Singleton</span>(<span class="type">const</span> Singleton&amp;);</span><br><span class="line">    Singleton&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Singleton&amp;);</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    <span class="type">static</span> Singleton instance;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//实现文件中</span></span><br><span class="line">Singleton Singleton::instance;  </span><br></pre></td></tr></table></figure>
+
+<p>由于在 main 函数之前初始化，所以没有线程安全的问题，但是潜在问题在于 <strong>no-local</strong> static对象（函数外的static对象）在不同编译单元（可理解为cpp文件和其包含的头文件）中的初始化顺序是未定义的。如果在初始化完成之前调用 <code>Instance()</code> 方法会返回一个未定义的实例，比如一个全局变量的构造函数中调用了此方法。关于此问题在 <a target="_blank" rel="noopener" href="http://blog.yangyubo.com/2009/06/04/best-cpp-singleton-pattern/">C++ Singleton (单例) 模式最优实现</a> 中有较为详细的分析。</p>
+<h2 id="Meyers-Singleton"><a href="#Meyers-Singleton" class="headerlink" title="Meyers Singleton"></a>Meyers Singleton</h2><p>Scott Meyers 在《Effective C++》（Item 04）中的提出另一种更优雅的单例模式实现，使用 local static 对象（函数内的 static 对象）。当第一次访问 <code>Instance()</code> 方法时才创建实例。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span>  </span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> Singleton&amp; <span class="title">Instance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">      <span class="type">static</span> Singleton instance;</span><br><span class="line">      <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">Singleton</span>();</span><br><span class="line">    ~<span class="built_in">Singleton</span>();</span><br><span class="line">    <span class="built_in">Singleton</span>(<span class="type">const</span> Singleton&amp;);</span><br><span class="line">    Singleton&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Singleton&amp;);</span><br><span class="line">    <span class="built_in">Singleton</span>(Singleton&amp;&amp;);</span><br><span class="line">    Singleton&amp; <span class="keyword">operator</span>=(Singleton&amp;&amp;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>C++0X 以后，要求编译器保证内部静态变量 <strong>初始化</strong> 的线程安全，所以<strong>C++0x之后该实现是线程安全的</strong>，<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/1661529/is-meyers-implementation-of-the-singleton-pattern-thread-safe">is-meyers-implementation-of-the-singleton-pattern-thread-safe</a>。</p>
+<p>返回引用在大多数场景中都是建议的。但返回指针的方式并不是一无是处：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">static</span> Singleton *<span class="title">GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="type">static</span> Singleton m_Instance;</span><br><span class="line">    <span class="keyword">return</span> &amp;m_Instance;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="built_in">Singleton</span>();</span><br><span class="line">  ~<span class="built_in">Singleton</span>();  <span class="comment">// 避免用户 delete 指针</span></span><br><span class="line">  <span class="built_in">Singleton</span>(<span class="type">const</span> Singleton&amp;);</span><br><span class="line">  Singleton&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Singleton&amp;);</span><br><span class="line">  <span class="built_in">Singleton</span>(Singleton&amp;&amp;);</span><br><span class="line">  Singleton&amp; <span class="keyword">operator</span>=(Singleton&amp;&amp;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在 DLL 中使用单例模式时，主函数结束后析构全局变量或 <code>static</code> 变量会出现问题（比如线程无法退出）。此时提供 <code>shutdown()</code> 供用户显式调用，并不比直接暴露指针让用户 <code>delete sington_ptr</code> 高明。</p>
+<p>无论是返回引用，还是返回指针都需要确保：</p>
+<ol>
+<li>构造函数、析构函数 <code>private</code></li>
+<li>拷贝构造函数 <code>= delete</code>； 拷贝赋值操作符 <code>= delete</code></li>
+<li>移动构造函数 <code>= delete</code>； 移动赋值操作符 <code>= delete</code></li>
+</ol>
+<h1 id="实例销毁"><a href="#实例销毁" class="headerlink" title="实例销毁"></a>实例销毁</h1><p>在上述几种实现中，大多使用了 <code>new</code> 操作符实例化对象。我们一般的编程观念是，<code>new</code> 操作符是需要和 <code>delete</code> 操作进行匹配的——这种观念是正确的。接下来我们说一个例外。</p>
+<p>针对单例模式中的唯一实例，在实际项目中，特别是客户端开发，其实是不在乎这个实例的销毁的。因为，全局就这么一个变量，全局都要用，它的生命周期伴随着软件的生命周期，软件结束了，它也就自然而然的结束了，因为一个程序关闭之后，它会释放它占用的内存资源的，所以，也就没有所谓的内存泄漏了。但针对这种特殊性也有例外的地方：</p>
+<p>在类中，有一些文件锁，文件句柄，数据库连接等等。相对应的，在类的析构行为中有必须的操作，比如关闭文件，关闭数据库连接等。如果 <code>new</code> 之后不进行显式的 <code>delete</code>（执行析构），就会造成潜在威胁，比如数据库连接数持续增加。</p>
+<p>最直接的方法就是在程序结束时调用 <code>Instance()</code>，并对返回的指针调用 <code>delete</code> 操作。或者将 <code>delete</code> 的操作封装在 Singleton 类中，然后在程序结束时调用这个类方法。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">DestoryInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (_instance != <span class="literal">NULL</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">delete</span> _instance;</span><br><span class="line">    _instance = <span class="literal">NULL</span> ;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样做可以实现功能，但也很丑陋，而且容易出错。因为<strong>这样的附加代码很容易被忘记</strong>，而且也很难保证在 <code>delete</code> 之后，没有代码再调用 <code>Instance()</code> 函数。</p>
+<h2 id="垃圾工人-RAII"><a href="#垃圾工人-RAII" class="headerlink" title="垃圾工人 RAII"></a>垃圾工人 RAII</h2><p>一个妥善的方法是让这个类自己知道在合适的时候把自己删除，或者说把删除自己的操作挂在操作系统中的某个合适的点上，使其在恰当的时候被自动执行。</p>
+<p>程序在结束的时候，系统会自动析构所有的全局变量。事实上，系统也会析构所有的类的静态成员变量，就像这些静态成员也是全局变量一样（静态变量和全局变量在内存中，都是存储在静态存储区的，所以在析构时，是同等对待的）。利用这个特征，我们可以在单例类中定义一个这样的静态成员变量，而它的唯一工作就是在析构函数中删除单例类的实例。</p>
+<p>如下面的代码中的 CGarbo 类（Garbo 意为垃圾工人）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span>  </span><br><span class="line">&#123;  </span><br><span class="line"><span class="keyword">private</span>:  </span><br><span class="line">  <span class="built_in">Singleton</span>()  </span><br><span class="line">  &#123;  </span><br><span class="line">  &#125;  </span><br><span class="line">  <span class="type">static</span> Singleton *_instance;  </span><br><span class="line"></span><br><span class="line">  <span class="keyword">class</span> <span class="title class_">Garbo</span>   <span class="comment">//它的唯一工作就是在析构函数中删除CSingleton的实例  </span></span><br><span class="line">  &#123;  </span><br><span class="line">  <span class="keyword">public</span>:  </span><br><span class="line">    ~<span class="built_in">Garbo</span>()  </span><br><span class="line">    &#123;  </span><br><span class="line">      <span class="keyword">if</span>(Singleton::_instance)  </span><br><span class="line">        <span class="keyword">delete</span> Singleton::_instance;  </span><br><span class="line">    &#125;  </span><br><span class="line">  &#125;;  </span><br><span class="line">  <span class="type">static</span> Garbo _garbo;  <span class="comment">//定义一个静态成员变量，程序结束时，系统会自动调用它的析构函数  </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:  </span><br><span class="line">  <span class="function"><span class="type">static</span> Singleton * <span class="title">Instance</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function">  </span>&#123;  </span><br><span class="line">    <span class="keyword">if</span>(_instance == <span class="literal">NULL</span>)  <span class="comment">//判断是否第一次调用  </span></span><br><span class="line">      _instance = <span class="keyword">new</span> <span class="built_in">Singleton</span>();  </span><br><span class="line">    <span class="keyword">return</span> _instance;  </span><br><span class="line">  &#125;  </span><br><span class="line">&#125;;  </span><br><span class="line"></span><br><span class="line"><span class="comment">//实现文件中</span></span><br><span class="line">Singleton::Garbo Singleton::_garbo;  <span class="comment">//初始化</span></span><br></pre></td></tr></table></figure>
+
+<p>此时我们不再需要用户销毁实例（避免用户 <code>delete</code> 实例带来的不确定性），应该将析构函数声明为私有的。</p>
+<h2 id="Meyers-Singleton-1"><a href="#Meyers-Singleton-1" class="headerlink" title="Meyers Singleton"></a>Meyers Singleton</h2><p>如果没有 <code>new</code>，当然也就不需要 <code>delete</code>。</p>
+<p>对于 2.3 节 Meyers Singleton 实现，其 <code>Singleton::Instance()</code> 函数中的局部静态变量会自动析构，所以 Singleton 类的析构函数会顺利执行。</p>
+<h1 id="不同类型的单例-vs-多个单例"><a href="#不同类型的单例-vs-多个单例" class="headerlink" title="不同类型的单例 vs. 多个单例"></a>不同类型的单例 vs. 多个单例</h1><p>实现方法：继承，或模板</p>
+<p>构造函数私有就无法继承了。如果有继承的需求，还是改为 <code>protected</code> 修饰。</p>
+<p>如果是相关的单例类，比如 GoF 原著中的正常迷宫工厂、魔法迷宫工厂、炸弹迷宫工厂，可以通过继承父类的方式创建单例。因为从业务逻辑上讲，这三种工厂是“互斥”的，并不会同时存在，而单例类（父类及其延伸出来的子类）保证唯一实例，无法在一个系统中创建一个正常工厂实例和一个魔法工厂实例。</p>
+<p>如果是不相关的单例类，比如系统中存在数据库连接类、配置管理类，此时是要求有各自的唯一的实例的，通过继承实现显然是不合适的（甚至是不可能的）。而这种场景恰恰是经常碰到的，如果每次都要重新写一次单例类的逻辑是很麻烦的。</p>
+<p>如何使用模板实现一个通用的基类。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="title class_">S</span>&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">static</span> S&amp; <span class="title">GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="type">static</span> S instance;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">  &#125;;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="built_in">Singleton</span>()&#123;&#125;;</span><br><span class="line">  <span class="built_in">Singleton</span>(<span class="type">const</span> Singleton &amp; )&#123;&#125;;</span><br><span class="line">  Singleton &amp; <span class="keyword">operator</span> = ( <span class="type">const</span> Singleton &amp; rhs )&#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DBOper</span> : <span class="keyword">public</span> Sington&lt;DBOper&gt;</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">friend</span> <span class="keyword">class</span> <span class="title class_">Sington</span>&lt;DBOper&gt;;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="boost-中的单例模式"><a href="#boost-中的单例模式" class="headerlink" title="boost 中的单例模式"></a>boost 中的单例模式</h1><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/333d4b37db56">boost 中的单例模式</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.chenxuefei.com/2016/boost-singleton-do_nothing/">关于Boost Singleton <code>do_nothing()</code> 的那点事</a></p>
+<h1 id="参考来源"><a href="#参考来源" class="headerlink" title="参考来源"></a>参考来源</h1><p>第二章多线程安全部分主要参考自 <a target="_blank" rel="noopener" href="http://www.zkt.name/dan-li-mo-shi-singleton-ji-c-shi-xian/">单例模式(Singleton)及其C++实现</a>；第三章实例销毁参考自 <a target="_blank" rel="noopener" href="http://www.jellythink.com/archives/82">C++设计模式——单例模式</a>。当然，最主要的参考还是 GoF 的经典著作《设计模式：可复用面向对象软件的基础》。</p>
+<p>这里再重复一次，在书中提到了“单件注册表方法”，此方法与上述所有实现最大的一个区别在于：Singleton 类不再负责创建单件实例，而上述实现无论返回单件指针还是引用都是在 Singleton 类中创建。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/GoF/" rel="tag"># GoF</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/09/18/Makefile1st/" rel="prev" title="Makefile 入门">
+                  <i class="fa fa-angle-left"></i> Makefile 入门
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/10/27/writing/" rel="next" title="码字，第一篇博客">
+                  码字，第一篇博客 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

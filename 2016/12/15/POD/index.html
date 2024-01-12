@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="POD 类型是一个神神道道的概念，有点反人类。好在大多时候我们并不需要涉及这个概念，即便在一些场景中用到了，C++11 新增的 3 个与之有关的判断也足够了。 概念关于这个概念，在 C++11 之前使用了很多的限定来概括出它（貌似源于《imperfect c++》）。C++11 则给出了新的定义。关于其限定，我整理了 维基百科 - pod 得到下图：   这个其实是用思维导图软件 Mindjet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="POD 类型">
+<meta property="og:url" content="https://tnie.github.io/2016/12/15/POD/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="POD 类型是一个神神道道的概念，有点反人类。好在大多时候我们并不需要涉及这个概念，即便在一些场景中用到了，C++11 新增的 3 个与之有关的判断也足够了。 概念关于这个概念，在 C++11 之前使用了很多的限定来概括出它（貌似源于《imperfect c++》）。C++11 则给出了新的定义。关于其限定，我整理了 维基百科 - pod 得到下图：   这个其实是用思维导图软件 Mindjet">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/POD%20%E7%B1%BB%E5%9E%8B.jpeg">
+<meta property="article:published_time" content="2016-12-15T09:36:36.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.586Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/POD%20%E7%B1%BB%E5%9E%8B.jpeg">
+
+
+<link rel="canonical" href="https://tnie.github.io/2016/12/15/POD/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2016/12/15/POD/","path":"2016/12/15/POD/","title":"POD 类型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>POD 类型 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84"><span class="nav-number">1.1.</span> <span class="nav-text">数组</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-11"><span class="nav-number">2.</span> <span class="nav-text">C++11</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E9%80%94"><span class="nav-number">3.</span> <span class="nav-text">用途</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/15/POD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="POD 类型 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          POD 类型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-12-15 17:36:36" itemprop="dateCreated datePublished" datetime="2016-12-15T17:36:36+08:00">2016-12-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>POD 类型是一个神神道道的概念，有点反人类。好在大多时候我们并不需要涉及这个概念，即便在一些场景中用到了，C++11 新增的 3 个与之有关的判断也足够了。</p>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>关于这个概念，在 C++11 之前使用了很多的限定来概括出它（貌似源于《imperfect c++》）。C++11 则给出了新的定义。关于其限定，我整理了 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/POD_(%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1)">维基百科 - pod</a> 得到下图：</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/POD%20%E7%B1%BB%E5%9E%8B.jpeg" alt="POD 类型"> </p>
+<p>这个其实是用思维导图软件 Mindjet 做的，<a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/raw/master/mmap/POD%20%E7%B1%BB%E5%9E%8B.mmap">原稿下载</a>。用思维导图来整理 pod 的概念比 markdown 更合适。</p>
+<span id="more"></span>
+
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>POD类型T</th>
+<th>non-POD类型T</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>new T</td>
+<td>不初始化</td>
+<td>缺省初始化</td>
+</tr>
+<tr>
+<td>new T()</td>
+<td>缺省初始化</td>
+<td>缺省初始化</td>
+</tr>
+<tr>
+<td>new T(x)</td>
+<td>调用构造函数初始化</td>
+<td>调用构造函数初始化</td>
+</tr>
+</tbody></table>
+<p>我们以最简单的 POD 类型（使用内置类型 int）进行举例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i;    <span class="comment">// 分配内存，但不进行初始化，其内存块存储为“垃圾值”</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">i</span><span class="params">()</span></span>;  <span class="comment">// 如果这种形式存在/正确的话，其执行默认初始化，赋值 someone</span></span><br><span class="line">           <span class="comment">// 但事实上，语法上更倾向于将其解释成返回 int 的函数声明</span></span><br></pre></td></tr></table></figure>
+
+<p>如果我们看到某个类型符合 POD 要求，进而通过二进制拷贝的方式简洁地实现其拷贝构造函数——这是不可行，是矛盾的。因为 POD 的概念要求之一是：没有用户定义的复制构造函数。</p>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>数组不允许拷贝和赋值，这是常识。</p>
+<p>合成拷贝构造函数</p>
+<blockquote>
+<p>虽然我们不能直接拷贝一个数组，但合成拷贝构造函数会 <strong>逐元素地拷贝</strong> 一个数组类型的成员。如果数组元素是类类型，则使用元素的拷贝构造函数来进行拷贝。P441</p>
+</blockquote>
+<p>合成拷贝赋值运算符</p>
+<blockquote>
+<p>对于数组类型的成员，<strong>逐个赋值</strong> 数组元素。P444</p>
+</blockquote>
+<p><strong>结论</strong>：只使用了内置数值类型、<code>char[]</code> 的数据交换类，合成的拷贝构造函数、拷贝赋值运算符满足使用要求。无需显式定义拷贝控制函数。</p>
+<h1 id="C-11"><a href="#C-11" class="headerlink" title="C++11"></a>C++11</h1><p>关于 C++11 对 pod 的重新定义及相关函数，可以参考 <a target="_blank" rel="noopener" href="http://blog.csdn.net/aqtata/article/details/35618709">C++11：POD数据类型 - csdn</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 是否满足平凡的定义</span></span><br><span class="line">std::is_trivial&lt;A&gt;::value</span><br><span class="line"><span class="comment">// 是否是标准布局</span></span><br><span class="line">std::is_standard_layout&lt;A&gt;::value</span><br><span class="line"><span class="comment">// 是否是 pod 类型</span></span><br><span class="line">std::is_pod&lt;A&gt;::value</span><br></pre></td></tr></table></figure>
+
+<h1 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h1><p>从实用性的角度来说，我们更应该关注 pod 类型的用途，而非强调其概念。一方面区分其概念很耗费心力；另一方面，我们已经看到 C++11 提供了函数，我们只需要调用就可以得到结果。我们将繁复的工作交给机器，从而解放头脑和双手。</p>
+<blockquote>
+<p>POD通常被用在系统的边界处，即指不同系统之间只能以底层数据的形式进行交互，系统的高层逻辑不能互相兼容。</p>
+<p>POD类型在源代码兼容于ANSI C时非常重要。POD对象与C语言的对应对象具有共同的一些特性，包括初始化、复制、内存布局、寻址。</p>
+<p>POD类型是可以进行二进制拷贝的</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/12/15/messOfMarkdown/" rel="prev" title="Markdown 标准及其语法">
+                  <i class="fa fa-angle-left"></i> Markdown 标准及其语法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/12/20/initialization2nd/" rel="next" title="再谈初始化">
+                  再谈初始化 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

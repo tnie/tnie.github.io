@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="2015年12月31日 17:10:54 linux distribution 是 Linux 发行版。其实 Linux 是指的系统的内核，不能认为是一个系统。有人在内核的基础上增加一些软件，就成了一个操作系统了。这个系统因为以 Linux 为内核，所有就叫 Linux 发行版。大部分人为了简单，所以把发行版省掉了，实际上没有 Linux 这个操作系统，因为它只是个内核。现在出现 Linux 这一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux 安装应用">
+<meta property="og:url" content="https://tnie.github.io/2017/03/17/how-to-install-applications/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="2015年12月31日 17:10:54 linux distribution 是 Linux 发行版。其实 Linux 是指的系统的内核，不能认为是一个系统。有人在内核的基础上增加一些软件，就成了一个操作系统了。这个系统因为以 Linux 为内核，所有就叫 Linux 发行版。大部分人为了简单，所以把发行版省掉了，实际上没有 Linux 这个操作系统，因为它只是个内核。现在出现 Linux 这一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/LinuxDistributions.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/ustc-stable.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/ustc-jessie.png">
+<meta property="article:published_time" content="2017-03-17T06:40:26.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.633Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/LinuxDistributions.png">
+
+
+<link rel="canonical" href="https://tnie.github.io/2017/03/17/how-to-install-applications/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2017/03/17/how-to-install-applications/","path":"2017/03/17/how-to-install-applications/","title":"linux 安装应用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>linux 安装应用 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux-%E5%8F%91%E8%A1%8C%E7%89%88"><span class="nav-number">1.</span> <span class="nav-text">Linux 发行版</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Debian"><span class="nav-number">2.</span> <span class="nav-text">Debian</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%BA%94%E7%94%A8%EF%BC%88apt-get%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">安装应用（apt-get）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%BA%90"><span class="nav-number">2.1.1.</span> <span class="nav-text">配置源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.2.</span> <span class="nav-text">安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.2.</span> <span class="nav-text">使用系统</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SUSE"><span class="nav-number">3.</span> <span class="nav-text">SUSE</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%BA%94%E7%94%A8"><span class="nav-number">3.1.</span> <span class="nav-text">安装应用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux-%E5%8F%91%E8%A1%8C%E7%89%88%E5%85%B1%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">Linux 发行版共性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%BA%94%E7%94%A8%EF%BC%88-rpm-src-rpm%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">安装应用（.rpm &amp; .src.rpm）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%BA%94%E7%94%A8%EF%BC%88%E6%BA%90%E7%A0%81%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">安装应用（源码）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0root%E6%9D%83%E9%99%90"><span class="nav-number">4.3.</span> <span class="nav-text">无root权限</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/17/how-to-install-applications/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="linux 安装应用 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux 安装应用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-03-17 14:40:26" itemprop="dateCreated datePublished" datetime="2017-03-17T14:40:26+08:00">2017-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>2015年12月31日 17:10:54</p>
+<p>linux distribution 是 Linux 发行版。其实 Linux 是指的系统的内核，不能认为是一个系统。有人在内核的基础上增加一些软件，就成了一个操作系统了。这个系统因为以 Linux 为内核，所有就叫 Linux 发行版。大部分人为了简单，所以把发行版省掉了，实际上没有 Linux 这个操作系统，因为它只是个内核。现在出现 Linux 这一称呼，实际上是 Linux 发行版。这是正规的说法。</p>
+<p><a target="_blank" rel="noopener" href="http://blog.csdn.net/sftxlin/article/details/45722229">学linux，不用必须使用linux的图形界面</a>，这个也是我接触 Debian、SUSE 一两个月之后的想法。为什么在 linux 上必须使用图形界面呢？X-Window 对资源的消耗不比 windows 小，贪图界面为什么不用windows 呢，装 B 吗</p>
+<span id="more"></span>
+
+<h1 id="Linux-发行版"><a href="#Linux-发行版" class="headerlink" title="Linux 发行版"></a>Linux 发行版</h1><p>了解 <a target="_blank" rel="noopener" href="http://bbs.csdn.net/topics/390138640">各发行版的定位</a>，按照发行版的定位去使用 Linux 和安装软件。Linux 下应用软件的几种 <a href="https://tnie.github.io/2017/03/17/how-to-install-applications-1/">常见安装方式</a>，可以通过 rpm、dpkg 等包管理器安装，也可以通过 tar 包、bin 包等源码或者可执行程序安装。</p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F">软件包管理器</a> 既可以连接互联网在线安装，也可以使用包管理器线下安装 rpm 软件包、deb 软件包等。使用软件包管理系统将大大简化在 Linux 发行版中安装软件的过程。在线安装时，配置安全可靠的源很重要。</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/LinuxDistributions.png" alt="来源：Linux发行版.mmap"></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/raw/master/mmap/Linux%20%E5%8F%91%E8%A1%8C%E7%89%88.mmap">附件下载：Linux发行版.mmap</a></p>
+<h1 id="Debian"><a href="#Debian" class="headerlink" title="Debian"></a><a target="_blank" rel="noopener" href="https://www.debian.org/">Debian</a></h1><p>初次正式了解 Linux 时（Now）我选择了 Debian，不细究当初种种了。在所知无几的情况下，重要的是赶紧行动，进入 Linux 的世界，而不是强迫性地反复思考，无穷地分析，然后去做选择。</p>
+<p>最初是在 X240 上安装有 win10 的前提下安装了 Debian8.1 双系统（最初磁盘分区时就留有空间），后来新入职有办公笔记本 E431 之后，就很少使用 X240 进行专业方面的操作了，基本上是一个娱乐的玩意。在 E431 安装双系统是不现实的，所以就在虚拟机中安装了 Debian。备注，工作使用的是 SLES10，太老的版本了。</p>
+<p>结论：对于新入门的上班族，建议还是使用虚拟机；如果是学生，估计可以死磕 Linux。整体来讲，建议通过虚拟机对 Linux 安装、常用命令、安装卸载应用熟悉到一定程度之后再行用物理机操作。</p>
+<p>截至 2016&#x2F;3&#x2F;14 16:01:03 ，Debian 最新的稳定版 （stable release） 版本是 8.3。</p>
+<h2 id="安装应用（apt-get）"><a href="#安装应用（apt-get）" class="headerlink" title="安装应用（apt-get）"></a>安装应用（apt-get）</h2><p>2019&#x2F;5&#x2F;5 14:40:43 更新：新时代的 <code>apt</code> 命令，<a target="_blank" rel="noopener" href="https://www.sysgeek.cn/apt-vs-apt-get/">Linux 中 apt 与 apt-get 命令的区别与解释</a></p>
+<p>刚做好系统之后，怎么安装应用？好慌啊，不知道怎么办。</p>
+<p>好折腾了大半天，因为需要配置安全可靠的源。安全！可靠！在大陆上网什么最蛋疼？墙啊，是墙啊。当年开发 Android，搭建环境折腾两三天，发现是墙；如今想用谷歌，用 Kindle 插件，用 Chrome 浏览器，用插件，得找梯子；到了要装 Linux 了，发现在 Debian 官方的源也被禁了。妥妥的局域网啊，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%98%B2%E7%81%AB%E9%95%BF%E5%9F%8E">防火长城</a> 你就不怕墙里先烧起来啊，话说墙外想进来貌似也得翻，无语。</p>
+<p>ps：如果是在国外的（比如 Bandwagon）服务器上，就不需要人工修改配置源，使用默认的（即官方的）即可。</p>
+<h3 id="配置源"><a href="#配置源" class="headerlink" title="配置源"></a>配置源</h3><p>所谓配置软件源，其实就是修改 &#x2F;etc&#x2F;apt&#x2F;source.list 文件，按照规定格式指定和系统版本相匹配的用来安装、更新应用的远程软件仓库。刚做好系统之后，是有一个默认的官方源的。</p>
+<p>即便不懂 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/beanmoon/p/3387652.html">source.list 的文件格式</a>，影响也不是很大，你完全可以从网上下载完整的文件替换（替换之前做好备份），或者直接拷贝覆盖原有的文件内容。但链接的帖子还是值得一看的，比如高版本 Debian 使用低版本 source.list，就会遇到很多软件依赖问题无法解决。所以看到这个问题，就需要考虑更换&#x2F;更新 souce 源了。</p>
+<p>在 <a target="_blank" rel="noopener" href="http://forum.ubuntu.org.cn/viewtopic.php?t=366506">Debian、Ubuntu 源列表说明</a> 这篇帖子中提到的源我依次试用，都会报安全证书之类的错误，列在这里作为参考。</p>
+<p><a target="_blank" rel="noopener" href="http://guanglin.blog.51cto.com/3038587/1689670">国内</a> 用着还凑合的源有 <a target="_blank" rel="noopener" href="http://mirrors.163.com/.help/debian.html">网易</a> 的、<a target="_blank" rel="noopener" href="https://lug.ustc.edu.cn/wiki/mirrors/help/debian">中科大</a> 的，配置时首先要注意的就是版本，像是中科大 debian 首页给出的示例中，</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/ustc-stable.png" alt="ustc-stable"></p>
+<p>使用“stable”作为版本标识是很不建议的，因为今年 stable 版是 Jessie，前两年就不是，过两年也不是了呢。建议使用其软件源配置生成器：</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/ustc-jessie.png" alt="ustc-jessie"></p>
+<p>备注：</p>
+<ol>
+<li>网上好多帖子中提到 apt-spy 工具，用来测试源的连接状况。但是我试过的源都没有此应用。</li>
+<li>Jessie 和 stable 在 2016&#x2F;3&#x2F;14 17:43:09 现实阶段理论上是一致的，但如果使用 stable，<code>apt-get update</code> 之后报错，就使用 Jessie。工具而已，使用时哪个能用用哪个，不必细究。有闲散时间时再做讨论。</li>
+</ol>
+<p>Q1：<code>apt-get</code> 安装软件时出现：“无法下载…大小不符” 问题</p>
+<blockquote>
+<p>A1：一般来讲是运营商缓存问题。换源，挂代理或等几小时再试。——事实是我从公司内网（网线，也能连接互联网）切换到外网之后，真的就顺利安装了，太坑爹。运营商缓存，无语！</p>
+</blockquote>
+<p>Q2：报错“<a target="_blank" rel="noopener" href="http://www.cnblogs.com/LeoGodfrey/p/3316834.html">软件包有未满足的依赖关系</a>”问题</p>
+<blockquote>
+<p>A2：这个也是配置源的问题，换源，清理有问题的源。见前文，多是高版本 Debian 配置了低版本 source.list。</p>
+</blockquote>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>在 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F">软件包管理器</a> 词条中，我们知道 Debian 安装应用前端用到的是 apt 命令，事实上对于纯 24K 金的新兵蛋子，推荐使用新立得包管理器（图形界面）。</p>
+<p>用 <code>apt-get</code> 可能不知道安装时要输什么，synaptic 也会自动解决依赖问题。ubuntu 等还有个软件管理中心，也不错。要是源里没有的那就更麻烦了。总之，新手：软件管理中心—&gt;<a target="_blank" rel="noopener" href="http://www.2cto.com/os/201310/248925.html">synaptic—&gt;aptitude—&gt;apt-get</a>（yum）—&gt;sources。</p>
+<p>另外，在 debian 下，用 apt 方式安装软件除了可以以网络上的资源为源之外，还可以 <a target="_blank" rel="noopener" href="http://blog.csdn.net/yang_dk/article/details/1705319">使用本地的资源</a>。比如光盘。</p>
+<p>说一下最关心的，如果在 Debian 上进行 C++ 的开发，都需要安装什么工具呢？</p>
+<ul>
+<li><p>如果是快速搭建的话，</p>
+<p>  用 <code>apt-get</code> 下载并安装下面的 package：make、gcc、g++、manpages-dev。至此, 一个可以 build c&#x2F;c++ 工程的环境搭建好了。<br>  当然也可以用 <code>apt-get install build-essential</code></p>
+</li>
+<li><p>如果要完整构建的话，用如下命令：利用 <code>apt-get build-dep</code></p>
+<p>  安装 Gnome 开发环境（包括了 C，Gtk，Gnome 等）：<code>apt-get build-dep gedit</code><br>  安装 KDE 开发环境（包括了 C++，Qt，KDE）：<code>apt-get build-dep kate</code></p>
+</li>
+</ul>
+<h2 id="使用系统"><a href="#使用系统" class="headerlink" title="使用系统"></a>使用系统</h2><p>我们自己搭建 Linux 环境时一般就是在笔记本、台式机上直接物理机安装，或者虚拟机安装，使用时开机，主机前操作。</p>
+<p>但在实际的工程应用、业务运行中，主机前操作是很少的，除非是硬件损坏、升级的情况下，才可能接触到主机，否则，多数情况下都是远程操作。</p>
+<p>Windows 下有系统自带的远程桌面连接，连接微软自己的服务器时还是蛮方便的，怎么控制权限就不懂了。</p>
+<p>Linux 的远程连接及操作，我是来到新公司之后才接触到的，工作中使用的是 Xshell 和 Xftp，挺好用的，也就没有再了解别的工具。</p>
+<p><a target="_blank" rel="noopener" href="http://hatech.blog.51cto.com/8360868/1558366">使用 Xshell</a> 时，服务器（远程主机）只要安装有 SSH 服务器即可，终端（我们的笔记本）需要安装 Xshell 客户端。</p>
+<h1 id="SUSE"><a href="#SUSE" class="headerlink" title="SUSE"></a>SUSE</h1><p>分为两支：SUSE Linux Enterprise 和 openSUSE。两者之间的纠葛请自行 google，我弄不清。</p>
+<p>SUSE Linux Enterprise 11 包括下列解决方案：</p>
+<ul>
+<li>SUSE Linux Enterprise Server（企业级服务器系统）— 数据中心关键任务负载使用的最佳平台；</li>
+<li>SUSE Linux Enterprise Desktop（企业级桌面系统）— 业通用桌面系统；</li>
+<li>Novell Customer Center（客户中心）— 此获取技术支持、更新及续订 SUSE Linux Enterprise 产品；</li>
+</ul>
+<p>SUSE Linux Enterprise Desktop 桌面系统：<a target="_blank" rel="noopener" href="http://server.zol.com.cn/128/1289010.html">比 Win7 还炫！SUSE Linux11 系统全面体验</a></p>
+<p>2015年11月4日，openSUSE 项目发布了其最新的 <a target="_blank" rel="noopener" href="http://www.linuxstory.org/opensuse-leap-42-1-released/">openSUSE Leap 42.1 系统</a>，openSUSE 的上一个版本是 openSUSE 13.2，现在整这么个版本号，要么就是真牛，要么…感觉挺矫情的。</p>
+<h2 id="安装应用"><a href="#安装应用" class="headerlink" title="安装应用"></a>安装应用</h2><p>正如笔记第一章中给出的 Linux 发行版列表中提到的，redhat 安装应用的前端命令是 yum；debian 安装应用的前端命令是 apt；在 suse 中与之对应的安装应用的前端命令是 zypper。</p>
+<p>各自也都有相应的图形界面用来安装应用：debian 上的新立得；suse 上的 yast。</p>
+<p>虽然工作中接触的是 suse，但我并没有 <a target="_blank" rel="noopener" href="http://lengxuezhixuan.blog.chinaunix.net/uid-20639775-id-3433023.html">使用 zypper 安装软件</a> 的任何经验，也不曾 <a target="_blank" rel="noopener" href="https://www.suse.com/zh-cn/documentation/sles10/book_sle_reference/data/sec.yast2.sw.html">使用 YaST 安装软件</a>，网上直接搜索 linux 安装应用的搜索结果中，大多帖子、教程都默认使用 root 权限执行，而公司的服务器是不可能下放 root 的权限给我用的。所以在自己虚拟机环境中试验 debian 安装应用顺利很多，无论是使用新立得直接图形界面安装（也需要更新 source 源），还是在 root 权限下编辑 source 源使用 <code>apt-get</code> 命令，按照网上搜到的教程按部就班，大都得心应手。而在 suse 上，有限的经验只局限与安装 .src.rpm 源包、安装 tar 源包到当前用户 home 目录下（&#x2F;usr 下的系统目录果断是没有权限的），前者还从来没安装成功过。</p>
+<p>而使用源码安装应用是就有很大的通用性的，通过 .src.rpm 源包在 redhat 系的 linux 发行版中都可以使用，通过 tar 源包更是在所有 linux 发行版中可用。</p>
+<h1 id="Linux-发行版共性"><a href="#Linux-发行版共性" class="headerlink" title="Linux 发行版共性"></a>Linux 发行版共性</h1><h2 id="安装应用（-rpm-src-rpm）"><a href="#安装应用（-rpm-src-rpm）" class="headerlink" title="安装应用（.rpm &amp; .src.rpm）"></a>安装应用（.rpm &amp; .src.rpm）</h2><p>对于 redhat 系的 linux 发行版目前接触有限，<a target="_blank" rel="noopener" href="http://www.linuxidc.com/Linux/2015-05/117967.htm">rpm 包有的是可以指定安装路径的</a>，也就意味着可以使用普通权限安装应用。但是对于大多数的 rpm 包（我一连查了 10 个，阿西吧）其 Relocations: （not relocatable）属性表示不能更改安装目录，基本上所有无 root 权限安装应用时都要更改默认安装路径的，所以使用 .rpm 包安装在 90%~100% 上意味着必须拥有 root 权限。</p>
+<p>那么 .src.rpm 源包呢，是不是就可以普通权限安装了？理论上是的，<a target="_blank" rel="noopener" href="http://ontheroad-luckhouge.iteye.com/blog/1124215">rpm 和 .src.rpm 两者之间的区别</a> 从字面就可以理解，需要熟悉的其实还是不同的操作命令，对于 .src.rpm 源包主要用到 <a target="_blank" rel="noopener" href="http://sunflowers.iteye.com/blog/470264">rpmbuild 命令</a>，好多参数啊。</p>
+<p>事实上，在 SUSE10 上安装 thrift 时，我按照以上帖子安装 .src.rpm 源包时，使用 -bb 或者 -bp 参考执行 rpmbuild 都没成功，递归层次超标。估计是系统版本太老了。</p>
+<h2 id="安装应用（源码）"><a href="#安装应用（源码）" class="headerlink" title="安装应用（源码）"></a>安装应用（源码）</h2><p>直接看下一节。</p>
+<h2 id="无root权限"><a href="#无root权限" class="headerlink" title="无root权限"></a>无root权限</h2><p>如果你可以指定安装路径（包括依赖包的安装路径），那么也就表示你可以使用普通权限安装。安装之后，需要更新PATH路径和动态库路径 LD_LIBRARY_PATH。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://bioyang.me/2015/08/25/w-htm/">Linux中没有root权限安装常用软件和packages</a></li>
+<li><a target="_blank" rel="noopener" href="https://tlanyan.me/work-with-linux-without-root-permission/">linux下非root用户安装软件入门</a>，我爱死这篇帖子的排版了，使用 wiz 的 chrome 插件剪下来还是这么简洁美观。其他的网站、博客我忍了又忍，没办法，知识重要啊。</li>
+</ul>
+<p>以上两篇帖子，推荐先看后一个了解原理，具体的操作步骤参考前者。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/03/17/shell-programming/" rel="prev" title="shell 编程初步">
+                  <i class="fa fa-angle-left"></i> shell 编程初步
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/03/17/how-to-install-applications-1/" rel="next" title="linux 常见的应用安装方式">
+                  linux 常见的应用安装方式 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

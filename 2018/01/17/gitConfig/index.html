@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在使用 git 版本仓库时，难免会出现默认配置不符合我们需要的地方。尤其是在 windows 上使用 git 时，不如意的地方就会更频繁的出现。这时需要我们自己手动微调 git 的默认配置，汇总如下： 别名经常输入 git status 查看库当前状态，如果终端环境不支持 tab 自动补全，频繁输入 status 完整单词就会变得很繁琐，考验耐心；即便支持自动补全，git status 和 git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git 常用配置">
+<meta property="og:url" content="https://tnie.github.io/2018/01/17/gitConfig/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="在使用 git 版本仓库时，难免会出现默认配置不符合我们需要的地方。尤其是在 windows 上使用 git 时，不如意的地方就会更频繁的出现。这时需要我们自己手动微调 git 的默认配置，汇总如下： 别名经常输入 git status 查看库当前状态，如果终端环境不支持 tab 自动补全，频繁输入 status 完整单词就会变得很繁琐，考验耐心；即便支持自动补全，git status 和 git">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-01-17T07:08:43.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.633Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2018/01/17/gitConfig/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2018/01/17/gitConfig/","path":"2018/01/17/gitConfig/","title":"git 常用配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>git 常用配置 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%AB%E5%90%8D"><span class="nav-number">1.</span> <span class="nav-text">别名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8-%E8%89%B2%E5%BD%A9"><span class="nav-number">2.</span> <span class="nav-text">自动补全 &amp; 色彩</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8D%A2%E8%A1%8C%E7%AC%A6"><span class="nav-number">3.</span> <span class="nav-text">换行符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%BC%96%E7%A0%81"><span class="nav-number">3.1.</span> <span class="nav-text">文件编码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E6%98%BE%E7%A4%BA"><span class="nav-number">4.</span> <span class="nav-text">中文显示</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/01/17/gitConfig/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="git 常用配置 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          git 常用配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-01-17 15:08:43" itemprop="dateCreated datePublished" datetime="2018-01-17T15:08:43+08:00">2018-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在使用 git 版本仓库时，难免会出现默认配置不符合我们需要的地方。尤其是在 windows 上使用 git 时，不如意的地方就会更频繁的出现。这时需要我们自己手动微调 git 的默认配置，汇总如下：</p>
+<h1 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h1><p>经常输入 <code>git status</code> 查看库当前状态，如果终端环境不支持 tab 自动补全，频繁输入 <code>status</code> 完整单词就会变得很繁琐，考验耐心；即便支持自动补全，<code>git status</code> 和 <code>git stash</code> 也是前缀相同。这时我们可以考虑 <a target="_blank" rel="noopener" href="https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases">使用别名</a>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git config --global alias.co checkout</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git config --global alias.br branch</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git config --global alias.ci commit</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git config --global alias.st status</span></span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="自动补全-色彩"><a href="#自动补全-色彩" class="headerlink" title="自动补全 &amp; 色彩"></a>自动补全 &amp; 色彩</h1><p>较新版本的 git，较新版本的终端，没有遇到过无法自动补全的情况。在旧版本系统上，无法使用源码安装新版本 git 的前提下，使用老版本 git 可能遇到无法自动补全 and 黑底白字没有足够色彩提示的情况：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">待补充</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="换行符"><a href="#换行符" class="headerlink" title="换行符"></a>换行符</h1><p>换行符在跨平台时是一个老生常谈的问题了，在此不再介绍其背景知识。直接用结果就行 <a target="_blank" rel="noopener" href="https://github.com/alexkaratarakis/gitattributes">collection of ready to use .gitattributes files</a></p>
+<p>相关的两个配置：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 提交时转换为 LF，检出时转换为 CRLF</span></span><br><span class="line">git config --global core.autocrlf <span class="literal">true</span> </span><br><span class="line"><span class="comment"># 提交时转换为LF，检出时不转换</span></span><br><span class="line">git config --global core.autocrlf input </span><br><span class="line"><span class="comment"># 提交检出均不转换</span></span><br><span class="line">git config --global core.autocrlf <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 拒绝提交包含混合换行符的文件</span></span><br><span class="line">git config --global core.safecrlf <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>关于 <code>autocrlf</code> 的三个选项，都太绝对化了。毕竟 bash 脚本是要 <code>LF</code> 而 bat 脚本是要 <code>CRLF</code>，我们需要区分文件。</p>
+<p>如果我们非常自律，可以选择 <code>autocrlf = false</code>，但跨平台会有隐患：比如源文件在 windows 下最好是 <code>CRLF</code> 而在 Linux 下最好是 <code>LF</code></p>
+<p>通过 <a target="_blank" rel="noopener" href="https://git-scm.com/docs/gitattributes">.gitattributes 文件</a> 更好地处理换行符问题：<a target="_blank" rel="noopener" href="https://docs.github.com/en/github/getting-started-with-github/getting-started-with-git/configuring-git-to-handle-line-endings">Configuring Git to handle line endings</a>。</p>
+<p>Git 还是倾向于更少的字符，倾向于 <code>LF</code> 而非 <code>CRLF</code>。</p>
+<p><code>text</code> 属性 enables and controls end-of-line normalization 规范化. When a text file is normalized, its line endings are converted to <code>LF</code> <strong>in the repository</strong>. 仓库内部使用 LF，但工作区的换行符可以自定义 To control what line ending style is used <strong>in the working directory</strong>, use the <code>eol</code> attribute for a single file and the <code>core.eol</code> configuration variable for all text files. Note that setting <code>core.autocrlf</code> to <code>true</code> or <code>input</code> overrides <code>core.eol</code></p>
+<p>When <code>text</code> is set to “auto”, the path is marked for <strong>automatic</strong> end-of-line conversion. If Git <strong>decides</strong> 推断 that the content is text, its line endings are converted to <code>LF</code> on checkin. When the file has been committed with <code>CRLF</code>, no conversion is done. 文本文件签入时换行符统一转成 <code>LF</code>，但已经提交的 <code>CRLF</code> 除外。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Auto detect text files and perform LF normalization</span></span><br><span class="line">*               text=auto</span><br><span class="line">*.txt		text</span><br><span class="line"><span class="comment"># ensure that .vcproj files have CRLF </span></span><br><span class="line">*.vcproj	text eol=crlf</span><br><span class="line">*.bat   	text eol=crlf</span><br><span class="line">*.ps1   	text eol=crlf</span><br><span class="line"><span class="comment"># and .sh files have LF in the working directory, </span></span><br><span class="line">*.sh		text eol=lf</span><br><span class="line"><span class="comment"># and prevent .jpg files from being normalized </span></span><br><span class="line">*.jpg		-text</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新仓库和旧仓库，引入这些属性后表现一致吗？</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>属性 <code>text</code> 影响文件在仓库内的存储，可选的区分文件是否是文本文件；</li>
+<li>属性 <code>eof</code> 影响文件在工作区的换行符；</li>
+</ul>
+<p>更多参考</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/170961/whats-the-best-crlf-carriage-return-line-feed-handling-strategy-with-git">What’s the best CRLF (carriage return, line feed) handling strategy with Git?</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.miniasp.com/post/2014/02/20/Visual-Studio-Tools-for-Git-Line-Ending-Conversion-Notes.aspx">Visual Studio Tools for Git 处理断行字元(CRLF) 的注意事项</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/46590142/what-is-the-differrence-between-text-auto-and-text-eol-lf-in-gitattribu">What is the differrence between <code>* text=auto</code> and <code>* text eol=lf</code> in .gitattributes?</a></li>
+</ul>
+<h2 id="文件编码"><a href="#文件编码" class="headerlink" title="文件编码"></a>文件编码</h2><p><code>core.autocrlf=true</code> 碰到 utf-8 编码的包含汉字的文本时是否会出问题？——以前可能会，现在不会！</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cssmagic/blog/issues/22">GitHub 第一坑：换行符自动转换</a>，在<strong>缺陷</strong>一节提到内容，经实际测试不存在。测试环境：</p>
+<blockquote>
+<p>GitHub Desktop Version 1.0.11<br>git version 2.15.1.windows.2</p>
+</blockquote>
+<h1 id="中文显示"><a href="#中文显示" class="headerlink" title="中文显示"></a>中文显示</h1><p>在 linux 终端中，中文显示异常不一定是 git 的锅，可能是终端自身的问题。这里的解决方案针对的是 windows 下中文显示问题：</p>
+<p><code>git log</code> 内容已可正常使用并显示中文，但 <code>git status</code> 和 <code>git push/pull</code> 时，中文文件名仍然乱码。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不对 0x80 以上的字符进行 quote，解决 git status/commit 时中文文件名乱码</span></span><br><span class="line">git config --global core.quotepath <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>更多中文显示问题请移步 <a target="_blank" rel="noopener" href="http://xstarcd.github.io/wiki/shell/git_chinese.html">Git中文显示问题解决</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"># git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/08/24/automake4th/" rel="prev" title="Makefile 自动生成 - 渣滓">
+                  <i class="fa fa-angle-left"></i> Makefile 自动生成 - 渣滓
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/04/02/git_submodule/" rel="next" title="Git Submoudle使用完整教程">
+                  Git Submoudle使用完整教程 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

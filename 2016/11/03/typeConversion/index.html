@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在《Effective C++》条款 27 强调尽量少做转型动作，参考此条款中的内容整理笔记。  在 C++ 中转型是一个你会想带着极大尊重去亲近的一个特性。  我们先回顾转型的语法，然后回过头再看怎么赋予类型转型的能力。 隐式转型我们经常接触的隐式转换发生于内置类型中的数值类型之间。但往往因为过于自然，反而忽略了转型动作的存在。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="类型转换">
+<meta property="og:url" content="https://tnie.github.io/2016/11/03/typeConversion/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="在《Effective C++》条款 27 强调尽量少做转型动作，参考此条款中的内容整理笔记。  在 C++ 中转型是一个你会想带着极大尊重去亲近的一个特性。  我们先回顾转型的语法，然后回过头再看怎么赋予类型转型的能力。 隐式转型我们经常接触的隐式转换发生于内置类型中的数值类型之间。但往往因为过于自然，反而忽略了转型动作的存在。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-11-03T08:08:24.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.664Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2016/11/03/typeConversion/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2016/11/03/typeConversion/","path":"2016/11/03/typeConversion/","title":"类型转换"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>类型转换 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E8%BD%AC%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">隐式转型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E8%BD%AC%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">显式转型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#old-style-casts"><span class="nav-number">2.1.</span> <span class="nav-text">old-style casts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new-style-casts"><span class="nav-number">2.2.</span> <span class="nav-text">new-style casts</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#const-cast"><span class="nav-number">2.2.1.</span> <span class="nav-text">const_cast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reinterpret-cast"><span class="nav-number">2.2.2.</span> <span class="nav-text">reinterpret_cast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dynamic-cast"><span class="nav-number">2.2.3.</span> <span class="nav-text">dynamic_cast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static-cast"><span class="nav-number">2.2.4.</span> <span class="nav-text">static_cast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.2.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E8%BD%AC%E5%9E%8B%E7%9A%84%E8%83%BD%E5%8A%9B%E6%80%8E%E4%B9%88%E6%9D%A5%E7%9A%84"><span class="nav-number">3.</span> <span class="nav-text">变量转型的能力怎么来的</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.1.</span> <span class="nav-text">内置类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%E4%BD%93%E7%B3%BB"><span class="nav-number">3.2.</span> <span class="nav-text">继承体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">转换构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#explicit"><span class="nav-number">3.3.1.</span> <span class="nav-text">explicit</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.4.</span> <span class="nav-text">类型转换运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#explicit-1"><span class="nav-number">3.4.1.</span> <span class="nav-text">explicit</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/typeConversion/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="类型转换 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          类型转换
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-11-03 16:08:24" itemprop="dateCreated datePublished" datetime="2016-11-03T16:08:24+08:00">2016-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在《Effective C++》条款 27 强调<strong>尽量少做转型动作</strong>，参考此条款中的内容整理笔记。</p>
+<blockquote>
+<p>在 C++ 中转型是一个你会想带着极大尊重去亲近的一个特性。</p>
+</blockquote>
+<p>我们先回顾转型的语法，然后回过头再看怎么赋予类型转型的能力。</p>
+<h1 id="隐式转型"><a href="#隐式转型" class="headerlink" title="隐式转型"></a>隐式转型</h1><p>我们经常接触的隐式转换发生于内置类型中的数值类型之间。但往往因为过于自然，反而忽略了转型动作的存在。</p>
+<span id="more"></span>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> num = <span class="number">3</span>;</span><br><span class="line"><span class="type">double</span> dou = <span class="number">3.14</span>;</span><br><span class="line"><span class="comment">// conversation happenning...</span></span><br><span class="line"><span class="type">double</span> sum1 = num + dou;</span><br><span class="line"><span class="type">int</span> sum2 = num + dou;</span><br></pre></td></tr></table></figure>
+
+<p>隐式转换不涉及书写形式（语法），是编译器完成的自动转换。期间发生的转换大概和下面的代码等价：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> sum1 = (<span class="type">double</span>)num + dou;</span><br><span class="line"><span class="type">int</span> sum2 = (<span class="type">int</span>)((<span class="type">double</span>)num + dou);</span><br></pre></td></tr></table></figure>
+
+<p>对于内置的数值类型来说，隐式转换使得大部分数值之间的运算符合日常习惯，但也不全是。比如，<code>doubel</code> 向 <code>int</code> 转型时发生的截断，比如除法</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> num = <span class="number">7</span>;</span><br><span class="line"><span class="type">int</span> num1 = <span class="number">3</span>;</span><br><span class="line"><span class="type">double</span> dou = num / num1;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%lf\n&quot;</span>, dou);</span><br></pre></td></tr></table></figure>
+
+<p>输出 2.00000，此时隐式转换不能满足我们的需求。</p>
+<p>ps：后文中会提到对于涉及类类型的隐式转换只能够进行一步。我想对于内置类型同样适用，不过话说回来，内置类型之间的转换往往都是一步到位，似乎不存在 A 转 B 再转 C 的情况。</p>
+<p>关于隐式转换，更多请参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/solidblog/p/3381628.html">C++ 隐式类型转换</a>，其中提到隐式转换的必要性和隐式转换发生的条件，也讲到了其中的风险。<code>static_cast</code> 的存在就是为了把隐式转换显现出来。 </p>
+<h1 id="显式转型"><a href="#显式转型" class="headerlink" title="显式转型"></a>显式转型</h1><h2 id="old-style-casts"><a href="#old-style-casts" class="headerlink" title="old-style casts"></a>old-style casts</h2><p>C 风格的转型动作看起来像这样：<code>TYPE b = (TYPE)ａ;</code>。</p>
+<p>在《EC++》中还提到了函数风格的转型动作 <code>Type(a);</code>，但这限于 C++ 的语法（g++ 可以正常编译），此种形式使用 gcc 编译无法通过。</p>
+<h2 id="new-style-casts"><a href="#new-style-casts" class="headerlink" title="new-style casts"></a>new-style casts</h2><p>C++ 提供了四种新式转型：<code>const_cast</code>、<code>reinterpret_cast</code>、<code>dynamic_cast</code> 以及 <code>static_cast</code>。</p>
+<h3 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h3><p><code>const_cast&lt;T&gt;(expression)</code> 可去除对象的常量性（const），它还可以去除对象的易变性（volatile）。<code>const_cast</code> 的唯一职责就在于此，若将 <code>const_cast</code> 用于其他转型将会报错。</p>
+<p>例子一</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="type">void</span> <span class="title">print</span> <span class="params">(<span class="type">char</span> * str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   cout &lt;&lt; str &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="type">const</span> <span class="type">char</span> * c = <span class="string">&quot; http://www.cppblog.com/kesalin/&quot;</span>;</span><br><span class="line">   <span class="built_in">print</span> ( <span class="built_in">const_cast</span>&lt;<span class="type">char</span> *&gt; (c) );</span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例子二</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">SA</span> &#123;</span><br><span class="line"><span class="type">int</span> i;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="type">const</span> SA ra;</span><br><span class="line"><span class="comment">//ra.i = 10; //直接修改const类型，编译错误</span></span><br><span class="line">SA &amp;rb = <span class="built_in">const_cast</span>&lt;SA&amp;&gt;(ra);   <span class="comment">// 将 const 转为 non-const</span></span><br><span class="line">rb.i =<span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p>ps：这篇笔记不再针对 <code>const_cast</code> 做更进一步的讲解，需要认识到：</p>
+<blockquote>
+<p><code>const_cast</code> 转换符不该用在对象数据上，而应该用在其指针（或引用）上。</p>
+<p>修改 <code>const</code> 变量的数据不是 C++ 去 <code>const</code> 的目的！即，使用 <code>const_cast</code> 去 <code>const</code> 属性不是为了修改 const 变量的数据。</p>
+</blockquote>
+<p>更多内容请移步：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/ider/archive/2011/08/05/cpp_cast_operator_part2.html">C++标准转换运算符const_cast</a></p>
+<h3 id="reinterpret-cast"><a href="#reinterpret-cast" class="headerlink" title="reinterpret_cast"></a>reinterpret_cast</h3><p><code>reinterpret_cast&lt;T&gt;(expression)</code> 只用于底层代码，一般我们都用不到它，如果你的代码中使用到这种转型，务必明白自己在干什么。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="type">int</span> *pI = <span class="keyword">new</span> <span class="built_in">int</span>(<span class="number">5</span>);</span><br><span class="line">  <span class="type">void</span> *pV = pI;</span><br><span class="line"></span><br><span class="line">  <span class="type">int</span> *pD = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">int</span>*&gt;(pV);  <span class="comment">// 将 void* 指针转为 typed 指针</span></span><br><span class="line"></span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;pI is: &quot;</span> &lt;&lt; pI &lt;&lt;</span><br><span class="line">   <span class="string">&quot; And pV is: &quot;</span> &lt;&lt; pV &lt;&lt;</span><br><span class="line">   <span class="string">&quot; And pD is: &quot;</span> &lt;&lt; pD &lt;&lt; endl; </span><br><span class="line"></span><br><span class="line">  cout &lt;&lt; (*pD) &lt;&lt; endl;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="dynamic-cast"><a href="#dynamic-cast" class="headerlink" title="dynamic_cast"></a>dynamic_cast</h3><p><code>dynamic_cast&lt;T&gt;(expression)</code> 主要用来在继承体系中的安全向下转型。它能安全地将指向基类的指针转型为指向子类的指针或引用，并获知转型动作成功是否。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Print</span><span class="params">()</span></span>&#123;&#125;  <span class="comment">//基类必须有虚函数。保持多态特性才能使用 dynamic_cast</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Derived</span>():<span class="built_in">Base</span>(), <span class="built_in">m_str</span>(<span class="string">&quot;Derived&quot;</span>) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;foo() &quot;</span> &lt;&lt; m_str &lt;&lt; endl; &#125;  <span class="comment">// 派生类独有</span></span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    string m_str;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Print_dynamic</span><span class="params">(Base* pb)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;Before cast, address is: &quot;</span> &lt;&lt; pb &lt;&lt; endl;</span><br><span class="line">  Derived *pd = <span class="built_in">dynamic_cast</span>&lt;Derived*&gt;(pb);   <span class="comment">// 将 pointer-to-base 转为 pointer-to-derived</span></span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;After dynamic_cast, address is: &quot;</span> &lt;&lt; pd &lt;&lt; endl;</span><br><span class="line">  <span class="keyword">if</span> (pd)</span><br><span class="line">    pd-&gt;<span class="built_in">foo</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Print_static</span><span class="params">(Base* pb)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;Before cast, address is: &quot;</span> &lt;&lt; pb &lt;&lt; endl;</span><br><span class="line">  Derived *pd = <span class="built_in">static_cast</span>&lt;Derived*&gt;(pb);</span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;After static_cast, address is: &quot;</span> &lt;&lt; pd &lt;&lt; endl;</span><br><span class="line">  <span class="keyword">if</span>(pd)</span><br><span class="line">    pd-&gt;<span class="built_in">foo</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Base *pb1 = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line">    Base *pb2 = <span class="keyword">new</span> <span class="built_in">Base</span>();</span><br><span class="line">    <span class="built_in">Print_dynamic</span>(pb1);  </span><br><span class="line">    <span class="built_in">Print_dynamic</span>(pb2);  <span class="comment">// 安全的，转型结果为 NULL</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; endl &lt;&lt; <span class="string">&quot;---------&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Print_static</span>(pb1);   <span class="comment">// 能够运行下去。只是钻了个空子</span></span><br><span class="line">    <span class="built_in">Print_static</span>(pb2);   <span class="comment">// 转型结果不为空，但也算不得有效值！访问子类成员崩溃</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>强调几点：</p>
+<ul>
+<li>基类必须有虚函数。保持多态特性才能使用 <code>dynamic_cast</code></li>
+<li>基类指针转子类，使用 <code>dynamic_cast</code> 是正确且安全的，在基类指针指向基类对象（或其它子类对象）时转型失败，结果为空，做出及时终止，未使得程序带错运行下去。</li>
+<li>基类指针转子类，使用 <code>static_cast</code> 可能会出现严重问题，尤其是基类指针实际指向基类对象时，<code>static_cast</code> 并不能做出识别，采取有效措施，使程序带错运行。</li>
+</ul>
+<p>上述代码执行结果如下：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/type-conversation$ g++ dynamic.cpp &amp;&amp; ./a.out </span><br><span class="line">Before cast, address is: 0x2439010</span><br><span class="line">After dynamic_cast, address is: 0x2439010</span><br><span class="line">foo() Derived</span><br><span class="line">Before cast, address is: 0x2439060</span><br><span class="line">After dynamic_cast, address is: 0</span><br><span class="line"></span><br><span class="line">---------</span><br><span class="line">Before cast, address is: 0x2439010</span><br><span class="line">After static_cast, address is: 0x2439010</span><br><span class="line">foo() Derived</span><br><span class="line">Before cast, address is: 0x2439060</span><br><span class="line">After static_cast, address is: 0x2439060</span><br><span class="line">段错误</span><br><span class="line">vimer@debian8light:~/see-the-world/code/type-conversation$ </span><br></pre></td></tr></table></figure>
+
+<p>《EC++》中强调：（详情请翻书）</p>
+<blockquote>
+<p>它是唯一无法由旧式语法执行的动作，也是唯一可能耗费重大运行成本的转型动作。</p>
+</blockquote>
+<h3 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h3><p><code>static_cast&lt;T&gt;(expression)</code> 很像 C 语言中旧式的强制转换。《EC++》中提到：</p>
+<blockquote>
+<p><code>static_cast</code> 用来强迫<strong>隐式转换</strong>（implicit conversions），例如将 non-cast 对象转为 const 对象，或将 <code>int</code> 转为 <code>double</code> 等等。</p>
+</blockquote>
+<p>在此特别陈述一下，<code>static_cast</code> 可以用来执行上述多种转换的反向转换。这些反向转换如果不使用 <code>static_cast</code>，都是可以隐式转换的。</p>
+<table>
+<thead>
+<tr>
+<th>转型操作符</th>
+<th>使用场景</th>
+<th>反向转换</th>
+<th>隐式转换举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>const_cast</code></td>
+<td>可以将 const 转为 non-const</td>
+<td>将 non-const 转为 const</td>
+<td><code>string str; const string cstr = str;</code></td>
+</tr>
+<tr>
+<td><code>reinterpret_cast</code></td>
+<td>可以将 <code>void*</code> 指针转为 typed 指针</td>
+<td>将 typed 指针转为 <code>void*</code> 指针</td>
+<td><code>int *pI = new int(5); void *pV = pI;</code></td>
+</tr>
+<tr>
+<td><code>dynamic_cast</code></td>
+<td>可以将 pointer-to-base 转为 pointer-to-derived</td>
+<td>将 pointer-to-derived 转为 pointer-to-base</td>
+<td><code>Derived *pD = new Derived(); Base *pB = pD;</code></td>
+</tr>
+</tbody></table>
+<p>注意：<code>static_cast</code> 转换时并不进行运行时安全检查，所以是非安全的，很容易出问题。因此 C++ 引入 <code>dynamic_cast</code> 来处理安全转型。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于类型转换，想要在代码中正确地使用还是比较简单的（想要完完全全掌握来龙去脉，掌握原理及所有使用场景还是很难的）。重点理解 <code>static_cast</code> 和 <code>dynamic_cast</code> 的应用场景及两者之间的区别</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/goodhacker/archive/2011/07/20/2111996.html">C++类型转换总结</a>，讲解恰到好处</li>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/TenosDoIt/p/3175217.html">下行转换 &amp; 上行转换</a>，区分下行、上行</li>
+<li><a target="_blank" rel="noopener" href="http://www.cppblog.com/kesalin/archive/2012/10/28/type_cast.html">类型转换（Type Casting）</a>，事儿不大，啰嗦的废话挺多</li>
+</ul>
+<p><strong>思考一</strong>：<code>reinterpret_cast</code> 和 <code>dynamic_cast</code> 的某些使用场景很相似，可以类比一下。参考前文的代码，前者用于内置类型从 <code>void*</code> 向各种数值类型 <code>int*</code> <code>double*</code> <code>char*</code> 的转换，后者用于自定义类类型从基类类型 <code>Base*</code> 向其子类类型 <code>DerivedA*</code> <code>DerivedB*</code> <code>DerivedC*</code> 的转换。</p>
+<p><strong>思考二</strong>：我们在谈及自定义类类型继承体系中的转型时，都是在用指针。但是否可以像 <code>int</code> 转 <code>double</code> 那样，从 <code>Derived</code> 转 <code>Base</code>（不是 <code>Derived*</code> 转 <code>Base*</code>），从 <code>Base</code> 转 <code>Derived</code> ？</p>
+<p><strong>总结 &amp;&amp; 推荐</strong>：在整理笔记的时候肯定会从网上查找资料，每个知识点肯定都会碰到一篇帖子让自己感慨“哇，总结得好好，娓娓道来，该讲的都讲到了，却也不多一句废话”，每每到此刻都觉得自己整理的笔记就是一坨垃圾，用词不当，表述不清晰，上下文转接不流畅，有的重点落下没讲，废话说太多……可这就是<strong>成长必经的过程</strong>，如果不是整理这个知识点，就不会一板一眼、较真地去查阅好多资料，线上的博客、线下的书，随手 google 来的终究只是编码过程中的 code demo，而非知识，只有当你读了很多篇笔记，看过了很多风景，才能有足够的理解，才能通过已经掌握的，通过对比，认识到某一篇是够精彩的。 </p>
+<blockquote>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/ider/archive/2011/08/05/cpp_cast_operator_part6.html">C++类型转换方式总结</a></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/ider/archive/2011/08/05/cpp_cast_operator_part1.html">C++用户自定义转换（User-Defined Conversion）</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/ider/archive/2011/08/05/cpp_cast_operator_part2.html">C++标准转换运算符const_cast</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/ider/archive/2011/08/05/cpp_cast_operator_part3.html">C++标准转换运算符reinterpret_cast</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/ider/archive/2011/08/05/cpp_cast_operator_part4.html">C++标准转换运算符static_cast</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/ider/archive/2011/08/05/cpp_cast_operator_part5.html">C++标准转换运算符dynamic_cast</a></li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>如果因为总结的笔记太烂而气馁，放弃整理，那么就不会查阅足够的资料，就不会见到那篇“哇，精彩”的帖子！整理出来的笔记是结果，整理过程中见到的风景也是结果！</p>
+<h1 id="变量转型的能力怎么来的"><a href="#变量转型的能力怎么来的" class="headerlink" title="变量转型的能力怎么来的"></a>变量转型的能力怎么来的</h1><p>上文提到的都是转型的语法，即如果从 A 类型到 B 类型可以转型，那么针对不同的转型情形应该怎么书写以达到转型的目的。但如果两者根本不存在任何的转型可能，比如，无关类型之间的转换（从 <code>ClassA</code> 到 <code>ClassB</code>），无关类型指针之间的转换（从 <code>int*</code> 到 <code>double*</code>，从 <code>ClassA*</code> 到 <code>ClassB*</code>），那么……</p>
+<p>“两者根本不存在任何的转型可能”分为两种：转型是无任何意义、无价值的；有转型的意义，但未实现转型的定义。如果坚持使用转型操作（无论是隐式的还是显式），后者肯定会报错；显式转型之 new-style casts 的意义就体现在意义界定上，通过对转型分门别类，对转型的意义做了进一步的限定，相比 old-style casts 可以发现更多的错误情况。</p>
+<p>无意义主要针对内置类型、指针；无定义主要针对自定义类型。</p>
+<p>如果某种转型是无意义的，比如 <code>int*</code> 到 <code>double*</code>，旧式强制转型是可以编译通过的？新式转型编译无法通过？</p>
+<p><strong>思考</strong>：新式转型为什么比旧式强制转型好？通过明确的声明“我要进行 XX 转型”，让编译器帮我做进一步检查，防止出现实际代码和编码意图相悖的情况，类似 override 关键词的作用？</p>
+<h2 id="内置类型"><a href="#内置类型" class="headerlink" title="内置类型"></a>内置类型</h2><p>这个就是“天生授予”的，随着编程语言标准（standard）的更迭换代，哪些类型能够转换是有调整的。</p>
+<ul>
+<li>数值类型之间的转型（！数值类型指针之间不存在转型）</li>
+<li>内置类型的指针与空指针之间的转型</li>
+</ul>
+<h2 id="继承体系"><a href="#继承体系" class="headerlink" title="继承体系"></a>继承体系</h2><p>了解多态，我们都知道从基类指针可以指向派生类对象，即可以将派生类指针赋值给基类指针。可以隐式转型，也可以使用 static_cast。</p>
+<p>反向的，如果要将基类指针赋给派生类指针，需要判断 pB 指向的对象到底是 D1、D2、D3 哪种类型，这种时候需要使用 dynamic_cast。</p>
+<p>如果不是指针（或引用）呢？</p>
+<h2 id="转换构造函数"><a href="#转换构造函数" class="headerlink" title="转换构造函数"></a>转换构造函数</h2><p>《C++ Primer》P263 提到</p>
+<blockquote>
+<p>如果构造函数只接受一个实参，则它实际上定义了转换为此类类型的隐式转换机制，有时我们把这种构造函数称为转换构造函数。</p>
+<p>能通过一个实参调用的构造函数定义了一条从构造函数的参数类型向类类型隐式转换的规则。</p>
+</blockquote>
+<p>需要强调的是，这种隐式转换只允许一步类类型转换。我们知晓 <code>string (const char* s);</code> 构造函数</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyString</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>：</span><br><span class="line">  <span class="built_in">MyString</span>(string str, <span class="type">int</span> num = <span class="number">23</span>) &#123;&#125;;</span><br><span class="line">  <span class="comment">//...other mems</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">func</span><span class="params">(MyString ms)</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 完整的</span></span><br><span class="line"><span class="built_in">func</span>(<span class="built_in">MyString</span>(<span class="built_in">string</span>(<span class="string">&quot;abc&quot;</span>));</span><br><span class="line"><span class="comment">// 省略一步</span></span><br><span class="line"><span class="built_in">func</span>(<span class="built_in">string</span>(<span class="string">&quot;abc&quot;</span>));    <span class="comment">// 显式转换成（构造） string，隐式转换成 MyString</span></span><br><span class="line"><span class="built_in">func</span>(<span class="built_in">MyString</span>(<span class="string">&quot;abc&quot;</span>));  <span class="comment">// 隐式转换成 string，显式转换成（构造） MyString</span></span><br><span class="line"><span class="comment">// 省略两步——这是错误的</span></span><br><span class="line"><span class="built_in">func</span>(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造</span></span><br><span class="line">MyString <span class="built_in">ms</span>(<span class="built_in">string</span>(<span class="string">&quot;abc&quot;</span>));  <span class="comment">// 直接初始化</span></span><br><span class="line">MyString ms = <span class="built_in">MyString</span>(<span class="built_in">string</span>(<span class="string">&quot;abc&quot;</span>));  <span class="comment">// 与上述等价</span></span><br><span class="line">MyString ms = <span class="built_in">string</span>(<span class="string">&quot;abc&quot;</span>);  <span class="comment">// it&#x27;s ok  隐式转换，然后执行拷贝构造函数</span></span><br><span class="line"></span><br><span class="line">MyString <span class="built_in">ms</span>(<span class="string">&quot;abc&quot;</span>);          <span class="comment">// 隐式转换成 string，然后直接初始化</span></span><br><span class="line">MyString ms = <span class="built_in">MyString</span>(<span class="string">&quot;abc&quot;</span>);   <span class="comment">// 与上述等价</span></span><br><span class="line">MyString ms = <span class="string">&quot;abc&quot;</span>;  <span class="comment">// sorry, it&#x27;s wrong ???????????  无法进行两步隐式转换</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="explicit"><a href="#explicit" class="headerlink" title="explicit"></a>explicit</h3><p>我们可以通过将构造函数声明为 <code>explicit</code> 以阻止这种隐式转换。（这种隐式转换存在什么风险呢？ 参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/bastard/archive/2012/02/09/2344425.html">Explicit——谨慎定义隐式类型转换函数</a>，感觉有些乱）</p>
+<p>显式转型中旧式转型形式 <code>MyString(str);</code> 直接理解为构造更直观、合适；<code>(MyString)str;</code> 形式更容易理解为转型。显式转型中新式转型不存在异议 <code>static_cast&lt;MyString&gt;(str);</code>。</p>
+<blockquote>
+<p>发生隐式转换的一种情况是当我们执行拷贝形式的初始化时（使用 &#x3D;）。进行拷贝形式的初始化时（使用 &#x3D;）我们不能使用 explicit 构造函数。</p>
+<p>当我们使用 explicit 关键字声明构造函数时，它将只能以直接初始化的形式使用。编译器将不会在自动转换过程中使用该构造函数。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyString</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>：</span><br><span class="line">  <span class="function"><span class="keyword">explicit</span> <span class="title">MyString</span><span class="params">(string str, <span class="type">int</span> num = <span class="number">23</span>)</span> </span>&#123;&#125;;</span><br><span class="line">  <span class="comment">//...other mems</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">func</span><span class="params">(MyString ms)</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 完整的 </span></span><br><span class="line"><span class="built_in">func</span>(<span class="built_in">MyString</span>(<span class="built_in">string</span>(<span class="string">&quot;abc&quot;</span>));</span><br><span class="line"><span class="comment">// 省略构造 MyString 的一步——这是错误的</span></span><br><span class="line"><span class="built_in">func</span>(<span class="built_in">string</span>(<span class="string">&quot;abc&quot;</span>));    <span class="comment">// 显式转换成（构造） string，无法隐式转换成 MyString</span></span><br><span class="line"><span class="comment">// 省略构造string 的一步—— it&#x27;s ok</span></span><br><span class="line"><span class="built_in">func</span>(<span class="built_in">MyString</span>(<span class="string">&quot;abc&quot;</span>));  <span class="comment">// 隐式转换成 string，显式转换成（构造） MyString</span></span><br><span class="line"><span class="built_in">func</span>(<span class="built_in">static_cast</span>&lt;MyString&gt;(<span class="string">&quot;abc&quot;</span>));  <span class="comment">// 隐式转换成 string，显式转换成 MyString</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造</span></span><br><span class="line">MyString <span class="built_in">ms</span>(<span class="built_in">string</span>(<span class="string">&quot;abc&quot;</span>));  <span class="comment">// 直接初始化</span></span><br><span class="line">MyString ms = <span class="built_in">MyString</span>(<span class="built_in">string</span>(<span class="string">&quot;abc&quot;</span>));  <span class="comment">// 与上述等价</span></span><br><span class="line">MyString ms = <span class="built_in">string</span>(<span class="string">&quot;abc&quot;</span>);  <span class="comment">// it&#x27;s wrong!!!!!!  无法进行隐式转换</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>此种情形下的转型（包括隐式转型、显式之旧式转型、显式之新式转型）都是调用的转换构造函数。其中显式之旧式转型，直接理解为构造更自然、直观。</p>
+<h2 id="类型转换运算符"><a href="#类型转换运算符" class="headerlink" title="类型转换运算符"></a>类型转换运算符</h2><p>《C++ Primer》P514</p>
+<p>类型转换运算符（conversion operator）是类的一种特殊成员函数，它负责将一个类类型的值转换为其他类型。类型转换函数的一般形式如下所示：<code>operator type() const;</code></p>
+<p>类型转换运算符既没有显式的返回类型，而没有形参，而且必须定义成类的成员函数。通常不应该改变待转换对象的内容，因此，一般被定义成 const 成员。</p>
+<p>避免过度使用类型转换函数！如果在类类型和转换类型之间不存在明显的映射关系，则这样的类型转换可能具有误导性。此时不定义该类型转换运算符也许会更好。作为替代的手段，类可以定义一个或多个普通的成员函数以从各种不同形式中提取所需的信息。</p>
+<h3 id="explicit-1"><a href="#explicit-1" class="headerlink" title="explicit"></a>explicit</h3><p>《C++ Primer》P516</p>
+<p>C++11 新标准引入了显式的类型转换运算符（explicit conversion operator）。和显式的构造函数一样，编译器（通常）也不会将一个显式的类型转换运算符用于隐式类型转换。</p>
+<p>该规定各有一个例外，即如果表达式被用作条件，则编译器会将显式的类型转换自动应用于它。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/11/03/synchronization-mutex/" rel="prev" title="同步与互斥">
+                  <i class="fa fa-angle-left"></i> 同步与互斥
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/11/03/container-in-cpp/" rel="next" title="cpp 容器避坑指南">
+                  cpp 容器避坑指南 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

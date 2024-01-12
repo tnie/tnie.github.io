@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="2015年11月6日 16:57:34 最全的学习材料当然是 GCC 的官方文档。如果有耐心但是英语不好的话，可以参看一下 这个网站。先说 gcc&#x2F;g++ 执行的四个过程： gcc -E 仅作预处理，即只激活预处理，不进行编译、汇编和链接                       {通常以什么为后缀？}  $gcc -E main.c -o main.i  gcc -s 编译到汇编语言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux 指令之 g++">
+<meta property="og:url" content="https://tnie.github.io/2017/04/26/gxx/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="2015年11月6日 16:57:34 最全的学习材料当然是 GCC 的官方文档。如果有耐心但是英语不好的话，可以参看一下 这个网站。先说 gcc&#x2F;g++ 执行的四个过程： gcc -E 仅作预处理，即只激活预处理，不进行编译、汇编和链接                       {通常以什么为后缀？}  $gcc -E main.c -o main.i  gcc -s 编译到汇编语言">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-04-26T06:35:11.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.633Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="develop">
+<meta property="article:tag" content="g++">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2017/04/26/gxx/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2017/04/26/gxx/","path":"2017/04/26/gxx/","title":"linux 指令之 g++"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>linux 指令之 g++ | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#gcc-g-%E6%89%A7%E8%A1%8C%E7%9A%84%E5%9B%9B%E4%B8%AA%E8%BF%87%E7%A8%8B%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">gcc&#x2F;g++ 执行的四个过程：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#g-%E5%92%8C-gcc-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.</span> <span class="nav-text">g++ 和 gcc 的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#I%EF%BC%88%E5%A4%A7%E5%86%99%E7%9A%84-i%EF%BC%89%E3%80%81-L-%E8%BF%99%E4%B8%A4%E4%B8%AA%E5%8F%82%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">-I（大写的 i）、-L 这两个参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#l-%EF%BC%88%E5%B0%8F%E5%86%99%E7%9A%84-L%EF%BC%89%E5%8F%82%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">-l （小写的 L）参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#l-crul-%E6%80%8E%E4%B9%88%E5%AF%B9%E5%BA%94%E7%9A%84-libcurl-so%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">-l crul 怎么对应的 libcurl.so？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%BA%E8%B0%83%E4%B8%A4%E7%82%B9%EF%BC%9A"><span class="nav-number">6.</span> <span class="nav-text">强调两点：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9Agcc-g-%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8F%82%E6%95%B0"><span class="nav-number">7.</span> <span class="nav-text">附录：gcc&#x2F;g++常用的参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GCC%E9%AB%98%E7%BA%A7%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E5%8F%82%E6%95%B0"><span class="nav-number">8.</span> <span class="nav-text">GCC高级编译链接参数</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/26/gxx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="linux 指令之 g++ | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux 指令之 g++
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-04-26 14:35:11" itemprop="dateCreated datePublished" datetime="2017-04-26T14:35:11+08:00">2017-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>2015年11月6日 16:57:34</p>
+<p>最全的学习材料当然是 GCC 的官方文档。如果有耐心但是英语不好的话，可以参看一下 <a target="_blank" rel="noopener" href="http://www.shanghai.ws/gnu/gcc_1.htm">这个网站</a>。先说</p>
+<h1 id="gcc-g-执行的四个过程："><a href="#gcc-g-执行的四个过程：" class="headerlink" title="gcc&#x2F;g++ 执行的四个过程："></a>gcc&#x2F;g++ 执行的四个过程：</h1><ol>
+<li><p><code>gcc -E</code> 仅作预处理，即只激活预处理，不进行编译、汇编和链接                       <strong>{通常以什么为后缀？}</strong></p>
+<p> <code>$gcc -E main.c -o main.i</code></p>
+</li>
+<li><p><code>gcc -s</code> 编译到汇编语言，不进行汇编和链接，即只激活预处理和编译，生成汇编语言</p>
+<p> <code>$gcc -S main.i -o main.s  #参数-S，大写</code></p>
+</li>
+<li><p><code>gcc -c</code> 编译、汇编到目标代码，不进行链接，即只激活预处理、编译和汇编功能，生成目标文件（.o）</p>
+<p> <code>$gcc -c main.s -o main.o</code></p>
+</li>
+<li><p>生成，到执行文件 （根据依赖关系链接各目标文件，生成最终的执行程序）</p>
+<p> <code>$gcc main.o printf1.o printf2.o -o main</code></p>
+</li>
+</ol>
+<span id="more"></span>
+
+<p>更详细的描述参考：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/ggjucheng/archive/2011/12/14/2287738.html">Linux GCC常用命令</a>、<a target="_blank" rel="noopener" href="http://blog.csdn.net/geniusluzh/article/details/8272913">gcc&#x2F;g++执行的步骤及参数简介</a></p>
+<p>了解 g++ 的编译流程之后，我们说一下</p>
+<h1 id="g-和-gcc-的区别"><a href="#g-和-gcc-的区别" class="headerlink" title="g++ 和 gcc 的区别"></a>g++ 和 gcc 的区别</h1><ol>
+<li>后缀为 .c 的，gcc 把它当作是 C 程序，而 g++ 当作是 c++ 程序；后缀为 .cpp 的，两者都会认为是 c++ 程序。</li>
+<li><strong>编译阶段</strong>，g++ 会调用 gcc，对于 c++ 代码，两者是等价的；（<strong>生成阶段</strong>）但是因为 gcc 命令不能自动和 C++ 程序使用的库联接，所以通常用 g++ 来完成链接，为了统一起见，干脆编译&#x2F;链接统统用 g++ 了。其实 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/iloveyoucc/archive/2012/08/29/2661851.html">gcc 编译 C++ 程序</a> 也可以。</li>
+</ol>
+<p>进一步的区别参考：<a target="_blank" rel="noopener" href="http://www.52pojie.cn/thread-58109-1-1.html">gcc和g++的区别</a></p>
+<p>然后说一下 </p>
+<h1 id="I（大写的-i）、-L-这两个参数"><a href="#I（大写的-i）、-L-这两个参数" class="headerlink" title="-I（大写的 i）、-L 这两个参数"></a>-I（大写的 i）、-L 这两个参数</h1><ul>
+<li><code>-I</code> 后跟路径名，指定 gcc 编译时的头文件搜索路径；（+系统默认的路径（<strong>具体呢？</strong>）下查找）</li>
+<li><code>-L</code> 后跟路径名，指定 gcc 链接时查找库的搜索路径。（+系统默认的路径下查找）</li>
+</ul>
+<p>进一步延伸一下，<code>-L</code> 指定了库的路径，但具体是哪一个 .so 文件是怎么确定呢？</p>
+<h1 id="l-（小写的-L）参数"><a href="#l-（小写的-L）参数" class="headerlink" title="-l （小写的 L）参数"></a>-l （小写的 L）参数</h1><p>下面通过记录具体的调试过程，逐步介绍。</p>
+<ol>
+<li><p><code>&gt; g++ main.cpp -o main</code></p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nl@linux-zds2:~/nielong/curlTest/1getAndpost&gt; g++ main.cpp -o main</span><br><span class="line">main.cpp:2:23: fatal error: curl/curl.h: 没有那个文件或目录</span><br><span class="line"><span class="meta prompt_"> #</span><span class="language-bash">include &lt;curl/curl.h&gt;</span></span><br><span class="line">                       ^</span><br><span class="line">compilation terminated.</span><br></pre></td></tr></table></figure>
+<p> 因为 <code>#include &lt;curl/curl.h&gt;</code>，而且在系统指定目录中找不到此文件。所以报以上错误。</p>
+<p> 使用 <code>-I</code> 参数指定到上一级目录中查找头文件。（将 curl 文件夹拷贝到了上一级目录）</p>
+</li>
+<li><p><code>&gt; g++ main.cpp -o main -I ../</code></p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">nl@linux-zds2:~/nielong/curlTest/1getAndpost&gt; g++ main.cpp -o main -I ../</span><br><span class="line">main.cpp: In function ‘int main()’:</span><br><span class="line">main.cpp:53:28: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]</span><br><span class="line">     getUrl(&quot;/tmp/get0.html&quot;);</span><br><span class="line">                            ^</span><br><span class="line">main.cpp:54:30: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]</span><br><span class="line">     postUrl(&quot;/tmp/post0.html&quot;);</span><br><span class="line">                              ^</span><br><span class="line">/tmp/cc3fVgxs.o：在函数‘getUrl(char*)’中：</span><br><span class="line">main.cpp:(.text+0x4c)：对‘curl_slist_append’未定义的引用</span><br><span class="line">main.cpp:(.text+0x55)：对‘curl_easy_init’未定义的引用</span><br><span class="line">main.cpp:(.text+0x7e)：对‘curl_easy_setopt’未定义的引用</span><br><span class="line">main.cpp:(.text+0x99)：对‘curl_easy_setopt’未定义的引用</span><br><span class="line">main.cpp:(.text+0xb3)：对‘curl_easy_setopt’未定义的引用</span><br><span class="line">main.cpp:(.text+0xcd)：对‘curl_easy_setopt’未定义的引用</span><br><span class="line">main.cpp:(.text+0xd9)：对‘curl_easy_perform’未定义的引用</span><br><span class="line">main.cpp:(.text+0xee)：对‘curl_slist_free_all’未定义的引用</span><br><span class="line">main.cpp:(.text+0xfa)：对‘curl_easy_cleanup’未定义的引用</span><br><span class="line">/tmp/cc3fVgxs.o：在函数‘postUrl(char*)’中：</span><br><span class="line">main.cpp:(.text+0x14b)：对‘curl_easy_init’未定义的引用</span><br><span class="line">main.cpp:(.text+0x175)：对‘curl_easy_setopt’未定义的引用</span><br><span class="line">main.cpp:(.text+0x190)：对‘curl_easy_setopt’未定义的引用</span><br><span class="line">main.cpp:(.text+0x1ab)：对‘curl_easy_setopt’未定义的引用</span><br><span class="line">main.cpp:(.text+0x1c5)：对‘curl_easy_setopt’未定义的引用</span><br><span class="line">main.cpp:(.text+0x1d1)：对‘curl_easy_perform’未定义的引用</span><br><span class="line">main.cpp:(.text+0x1e0)：对‘curl_easy_cleanup’未定义的引用</span><br><span class="line">collect2: error: ld returned 1 exit status</span><br></pre></td></tr></table></figure>
+<p> 报以上错误是因为动态链接库未指定，所以相关方法未定义。使用 <code>-l</code>（小写 L）指定 libcurl.so</p>
+<p> 使用 <code>-l curl</code> 参数链接 .so 文件。（<code>-l curl</code> 会相对应的使用 libcurl.so 链接库，具体因果在后面详述）</p>
+</li>
+<li><p><code>&gt; g++ main.cpp -o main -I ../ -lcurl</code></p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">nl@linux-zds2:~/nielong/curlTest/1getAndpost&gt; g++ main.cpp -o main -I ../ -lcurl</span><br><span class="line">main.cpp: In function ‘int main()’:                                                                                                   </span><br><span class="line">main.cpp:53:28: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]                                      </span><br><span class="line">     getUrl(&quot;/tmp/get0.html&quot;);                                                                                                        </span><br><span class="line">                            ^                                                                                                         </span><br><span class="line">main.cpp:54:30: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]                                      </span><br><span class="line">     postUrl(&quot;/tmp/post0.html&quot;);                                                                                                      </span><br><span class="line">                              ^                                                                                                       </span><br><span class="line">/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../x86_64-suse-linux/bin/ld: cannot find -lcurl                                         </span><br><span class="line">collect2: error: ld returned 1 exit status</span><br></pre></td></tr></table></figure>
+<p> 报错找不打 <code>-lcurl</code> 指定的 .so 文件，此为搜索路径问题。关于 <a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-354915-id-3573647.html">解决&#x2F;usr&#x2F;bin&#x2F;ld: cannot find -lxxx 问题</a></p>
+<p> 使用 <code>-L</code> 参数指定到上一级目录中查找 .so 文件。（在上一级目录创建了 usr&#x2F;lib&#x2F;libcurl.so.4.* 的软链接，<a href="/2017/03/20/ln-command/">软连接 &amp; 硬链接</a> 在后面详述）</p>
+<p> 另外，使用 <code>-l xxx</code> 命令有一个细节，此命令需要放在 main.cpp 的后面。具体参照：<a target="_blank" rel="noopener" href="http://bbs.chinaunix.net/thread-4096875-1-1.html">A</a> 、<a target="_blank" rel="noopener" href="http://www.cnblogs.com/flyingchen/archive/2011/10/26/2225339.html">B</a></p>
+</li>
+<li><p><code>&gt; g++ main.cpp -o main -I ../ -lcurl -L ../ </code></p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">nl@linux-zds2:~/nielong/curlTest/1getAndpost&gt; g++ main.cpp -o main -I ../ -lcurl -L ../                                               </span><br><span class="line">main.cpp: In function ‘int main()’:                                                                                                   </span><br><span class="line">main.cpp:53:28: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]</span><br><span class="line">     getUrl(&quot;/tmp/get0.html&quot;);</span><br><span class="line">                            ^</span><br><span class="line">main.cpp:54:30: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]</span><br><span class="line">     postUrl(&quot;/tmp/post0.html&quot;);</span><br><span class="line">                              ^</span><br><span class="line">nl@linux-zds2:~/nielong/curlTest/1getAndpost&gt; </span><br></pre></td></tr></table></figure>
+<p> 搞定。</p>
+</li>
+</ol>
+<h1 id="l-crul-怎么对应的-libcurl-so？"><a href="#l-crul-怎么对应的-libcurl-so？" class="headerlink" title="-l crul 怎么对应的 libcurl.so？"></a>-l crul 怎么对应的 libcurl.so？</h1><p>参考 <a href="/2016/12/09/library-static-dynamic/">链接库</a>。经过上面的介绍，再</p>
+<h1 id="强调两点："><a href="#强调两点：" class="headerlink" title="强调两点："></a>强调两点：</h1><ol>
+<li>预处理阶段处理头文件。所以，使用 <code>-I</code> 指定头文件路径时，仅仅作用在预处理阶段，在其后的编译、汇编、链接阶段不再需要 <code>-I</code> 指定头文件路径，因为经过预处理操作，预处理的结果中已包含各头文件。</li>
+<li>链接阶段链接库。即，使用 <code>-L</code> 指定库路径时，作用于链接阶段，在预处理、编译、汇编阶段尚不需要 -L 指定库路径。</li>
+</ol>
+<h1 id="附录：gcc-g-常用的参数"><a href="#附录：gcc-g-常用的参数" class="headerlink" title="附录：gcc&#x2F;g++常用的参数"></a>附录：gcc&#x2F;g++常用的参数</h1><p>-IDir<br>指定额外的头文件搜索目录，编译器首先在Dir中寻找，然后按照常规的顺序搜索头文件。<br>-include file<br>相当于在源程序中添加头文件，相当于#include “file”。<br>-LDir<br>指定编译的时候编译器搜索的库路径。<br>-lLIBRARY<br>指定编译的时候使用的库。</p>
+<hr>
+<p>-E<br>只激活预处理功能。<br>-S<br>只激活预编译和编译功能。<br>-c<br>只激活预处理、编译和汇编功能。</p>
+<hr>
+<p>-shared<br>生成共享目标文件，通常用于建立共享库时使用。<br>-static<br>禁止使用共享库。</p>
+<hr>
+<p><strong>-w</strong><br>不生成任何警告信息。<br><strong>-Wall</strong><br>生成所有警告信息。使用它能够使GCC产生尽可能多的警告信息。并非全部。参考 <a target="_blank" rel="noopener" href="http://blog.csdn.net/max__payne/article/details/2058898">GCC常用选项&amp;使用详解</a><br><strong>-Werror</strong><br>在发生警报时取消编译操作，即把报警当作是错误。<br>-C<br>在预处理的时候不删除注释信息，一般和-E联合使用，用于分析程序。<br>-M<br>生成文件的关联信息，包含目标文件生成所依赖的所有源代码。<br>-MM<br>和上面的一样，但是忽略头文件造成的依赖关系。<br>-MD、-MMD<br>对应和-M、-MM相同，只不过将输出输入到.d文件中去。</p>
+<p>-D<br>一般Makefie里的 －DHAVE_CONFIG_H是作为CFLAGS参数传给gcc的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc [-c|-S|-E] [-std=standard]</span><br><span class="line">    [-Dmacro[=defn]...] [-Umacro]</span><br></pre></td></tr></table></figure>
+<p>查man手册知，就是通过 gcc -DHAVE_CONFIG ， 定义了 HAVE_CONFIG_H 这个宏。<br>随手找了个bash的源码，截一段： .&#x2F;lib&#x2F;tilde&#x2F;tilde.c bash源码中的源文件~~</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#if defined (HAVE_CONFIG_H)</span><br><span class="line">#  include &lt;config.h&gt;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<p>而这里的 config.h 文件，是通过 configure 生成的，里面关于编译环境的一些宏。</p>
+<p>通过 configure 检查出来的这些宏，在做跨平台时使用非常方便。</p>
+<h1 id="GCC高级编译链接参数"><a href="#GCC高级编译链接参数" class="headerlink" title="GCC高级编译链接参数"></a><a target="_blank" rel="noopener" href="http://blog.zheezes.com/senior-gcc-compiler-link-parameters.html">GCC高级编译链接参数</a></h1><ol>
+<li>部分动态链接部分静态链接</li>
+<li>设置动态链接 PATH</li>
+</ol>
+<p>两者都涉及到 <code>-wl</code> 参数，关于其使用的 <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/6562403/i-dont-understand-wl-rpath-wl">注意事项</a>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/develop/" rel="tag"># develop</a>
+              <a href="/tags/g/" rel="tag"># g++</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/04/26/Makefile3rd/" rel="prev" title="Makefile 执行过程 & include 调用方式">
+                  <i class="fa fa-angle-left"></i> Makefile 执行过程 & include 调用方式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/04/27/automake1st/" rel="next" title="Makefile 自动生成 - 三种目录结构">
+                  Makefile 自动生成 - 三种目录结构 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

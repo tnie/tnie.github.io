@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="原来的笔记写于 2015年11月23日，当时使用的是为知笔记默认编辑器。十个月过去了，对于 make &amp; Makefile 也有了更多的认识。今天重新整理一下，不过仍然定位在入门的帖子，所以不会添加新的内容，只是修改表述不当的地方，对原有内容作出删减，并用 markdown 格式重写。 这篇本来是打算写成阅读笔记的。但是所知不多，刚开始学习应该博览，求入门，求上手使用。再加上看的东西越来愈">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Makefile 入门">
+<meta property="og:url" content="https://tnie.github.io/2016/09/18/Makefile1st/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="原来的笔记写于 2015年11月23日，当时使用的是为知笔记默认编辑器。十个月过去了，对于 make &amp; Makefile 也有了更多的认识。今天重新整理一下，不过仍然定位在入门的帖子，所以不会添加新的内容，只是修改表述不当的地方，对原有内容作出删减，并用 markdown 格式重写。 这篇本来是打算写成阅读笔记的。但是所知不多，刚开始学习应该博览，求入门，求上手使用。再加上看的东西越来愈">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-09-18T08:08:08.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.586Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="make">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2016/09/18/Makefile1st/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2016/09/18/Makefile1st/","path":"2016/09/18/Makefile1st/","title":"Makefile 入门"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Makefile 入门 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%9A%84%E6%89%8B%E5%86%99-Makefile"><span class="nav-number">1.</span> <span class="nav-text">完整的手写 Makefile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9A%90%E5%90%AB%E8%A7%84%E5%88%99%E5%92%8C%E8%87%AA%E5%8A%A8%E6%8E%A8%E5%AF%BC"><span class="nav-number">2.</span> <span class="nav-text">隐含规则和自动推导</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%90%E5%90%AB%E8%A7%84%E5%88%99%E4%BD%BF%E7%94%A8%E7%9A%84%E5%8F%98%E9%87%8F"><span class="nav-number">2.1.</span> <span class="nav-text">隐含规则使用的变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB"><span class="nav-number">3.</span> <span class="nav-text">自动生成依赖关系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">另一种方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">更多的特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PHONY-%E4%BC%AA%E7%9B%AE%E6%A0%87"><span class="nav-number">4.1.</span> <span class="nav-text">.PHONY 伪目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#include-%E5%92%8C-sinclude"><span class="nav-number">4.2.</span> <span class="nav-text">include 和 sinclude</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">4.3.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">5.</span> <span class="nav-text">结语</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/09/18/Makefile1st/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Makefile 入门 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Makefile 入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-09-18 16:08:08" itemprop="dateCreated datePublished" datetime="2016-09-18T16:08:08+08:00">2016-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>原来的笔记写于 2015年11月23日，当时使用的是为知笔记默认编辑器。十个月过去了，对于 make &amp; Makefile 也有了更多的认识。今天重新整理一下，不过仍然定位在<strong>入门的帖子</strong>，所以不会添加新的内容，只是修改表述不当的地方，对原有内容作出删减，并用 markdown 格式重写。</p>
+<p><strong>这篇本来是打算写成阅读笔记的。但是所知不多，刚开始学习应该博览，求入门，求上手使用。再加上看的东西越来愈多，单纯的记录一篇帖子中的重点、难点，较真于一处在实践中基本不会碰到的细节，格局太小，意义也不大。</strong></p>
+<span id="more"></span>
+
+<p>在正式讲解之前，我们先介绍一下使用的文件：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn/example$ tree</span><br><span class="line">.</span><br><span class="line">└── prj</span><br><span class="line">    ├── abc.c</span><br><span class="line">    ├── abc.h</span><br><span class="line">    ├── main.c</span><br><span class="line">    ├── xyz.c</span><br><span class="line">    └── xyz.h</span><br><span class="line"></span><br><span class="line">1 directory, 5 files</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn/example$ </span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>main.c</code> 包含头文件 <code>abc.h</code> 和 <code>xyz.h</code>，<code>abc.c</code> 包含头文件 <code>abc.h</code>，<code>xyz.c</code> 包含头文件 <code>xyz.h</code>。</p>
+<h1 id="完整的手写-Makefile"><a href="#完整的手写-Makefile" class="headerlink" title="完整的手写 Makefile"></a>完整的手写 Makefile</h1><p>明明白白、完完整整地写 Makefile 文件，是这个样子的：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main: main.o abc.o xyz.o</span></span><br><span class="line">        gcc main.o abc.o xyz.o -o main</span><br><span class="line">        </span><br><span class="line"><span class="section">main.o: main.c abc.h xyz.h</span></span><br><span class="line">        gcc -c -o main.o main.c</span><br><span class="line">        </span><br><span class="line"><span class="section">abc.o: abc.c abc.h</span></span><br><span class="line">        gcc -c -o abc.o abc.c</span><br><span class="line">        </span><br><span class="line"><span class="section">xyz.o: xyz.c xyz.h</span></span><br><span class="line">        gcc -c -o xyz.o xyz.c</span><br></pre></td></tr></table></figure>
+
+<p>但事实上，我们在实际项目中并不这样写。从例子可以看到其中有相似的重复的操作，而当代码文件增加几倍后，管理这些重复的命令将会是“费力不讨好”的事情。好在 Makefile 提供了隐含规则和自动推导帮我们“省力”。</p>
+<h1 id="隐含规则和自动推导"><a href="#隐含规则和自动推导" class="headerlink" title="隐含规则和自动推导"></a>隐含规则和自动推导</h1><p>我们可以将以上的 Makefile 文件写得更简单，但功能相同：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line"></span><br><span class="line"><span class="section">main:   abc.o xyz.o</span></span><br><span class="line"><span class="section">main.o: abc.h xyz.h</span></span><br><span class="line"><span class="section">abc.o:  abc.h</span></span><br><span class="line"><span class="section">xyz.o:  xyz.h</span></span><br></pre></td></tr></table></figure>
+
+<p><code>CC</code> 是 Makefile 的预定义变量之一，用于指定编译 C 项目时所用编译器。如果我们不指定 <code>CC</code> 变量，则调用其默认值 cc 编译器。这在Linux上没有问题，因为 cc 常常会链接到 gcc 程序。</p>
+<p>Makefile 预定义变量用于隐含规则生成的每条编译命令中，所以只要为这些预定义变量指定新的值，就可以改变隐含规则的默认动作。除了 <code>CC</code> 之外，常用的还有 <code>CFLAGS</code> <code>CPPFLAGS</code> <code>LDLIBS</code> <code>LDFLAGS</code> 等等。</p>
+<p>这个 Makefile 文件只描述了<em>部分</em>依赖关系，源文件的编译命令和目标文件的链接命令也都被省略了。这正是 Makefile 的<strong>自动推导</strong>功能：它可以将目标文件自动依赖于同名的源文件（可执行文件自动依赖于同名的目标文件或源文件），根据扩展后的依赖关系使用<strong>隐含规则</strong>生成目标文件。所以其功能完全等价于第一节中我们完整手写的 Makefile 文件。</p>
+<h2 id="隐含规则使用的变量"><a href="#隐含规则使用的变量" class="headerlink" title="隐含规则使用的变量"></a>隐含规则使用的变量</h2><p>在隐含规则中的命令中，基本上都是使用了一些预先设置的变量。你可以:</p>
+<ol>
+<li>在你的 makefile 中改变这些变量的值，</li>
+<li>或是在 make 的命令行中传入这些值，</li>
+<li>或是在你的环境变量中设置这些值，</li>
+</ol>
+<p>无论怎么样，只要设置了这些特定的变量，那么其就会对隐含规则起作用。当然，你也可以利用 make 的“-R”或“–no–builtin-variables”参数来取消你所定义的变量对隐含规则的作用。</p>
+<p>例如，编译 C 程序的隐含规则的命令是“$(CC) –c $(CFLAGS) $(CPPFLAGS)”。Make默认的编译命令是“cc”，如果你把变量“$(CC)”重定义成“gcc”，把变量“$(CFLAGS)”重定义成“-g”，那么，隐含规则中的命令全部会以 “gcc –c -g $(CPPFLAGS)”的样子来执行了。</p>
+<p>我们可以把隐含规则中使用的变量分成两种：一种是命令相关的，如“CC”；一种是参数相关的，如“CFLAGS”。在此只描述最常用的几个变量，更多的请移步 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html">Variables Used by Implicit Rules</a>。</p>
+<ol>
+<li><p>关于命令的变量。</p>
+<ul>
+<li><code>AR</code>  函数库打包程序。默认命令是“ar”。</li>
+<li><code>CC</code>  C 语言编译程序。默认命令是“cc”。</li>
+<li><code>CXX</code> C++ 语言编译程序。默认命令是“g++”。</li>
+<li><strong>CPP</strong>（the C preprocessor，C P re P rocessor） C程序的预处理器（输出是标准输出设备）。默认命令是“$(CC) –E”。</li>
+<li><code>RM</code>  删除文件命令。默认命令是“rm –f”。</li>
+</ul>
+</li>
+<li><p>关于命令参数的变量：如果没有指明其默认值，那么其默认值都是空。 </p>
+<ul>
+<li><p><code>ARFLAGS</code>  函数库打包程序 AR 命令的参数。默认值是“rv”。</p>
+</li>
+<li><p><code>CFLAGS</code>  C 语言编译器参数。</p>
+</li>
+<li><p><code>CXXFLAGS</code>  C++ 语言编译器参数。</p>
+</li>
+<li><p><code>CPPFLAGS</code>  C 预处理器参数。（ C 和 Fortran 编译器也会用到）。</p>
+<blockquote>
+<p>CPPFLAGS<br>Extra flags to give to the C preprocessor and programs that use it (the C and Fortran compilers).</p>
+</blockquote>
+</li>
+<li><p><code>LDFLAGS</code>  链接器参数。（如：“ld”）</p>
+<blockquote>
+<p>LDFLAGS<br>Extra flags to give to compilers when they are supposed to invoke the linker, ‘ld’, such as -L. Libraries (-lfoo) should be added to the LDLIBS variable instead.</p>
+</blockquote>
+</li>
+<li><p><code>LDLIBS</code></p>
+<blockquote>
+<p>Library flags or names given to compilers when they are supposed to invoke the linker, ‘ld’. LOADLIBES is a deprecated (but still supported) alternative to LDLIBS. Non-library linker flags, such as -L, should go in the LDFLAGS variable.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<p>有几组容易混淆的变量，需要重点区分：</p>
+<ol>
+<li><p>区分 <code>CFLAGS</code> <code>CXXFLAGS</code> <code>CPPFLAGS</code>：</p>
+<p> 首先 CPPFLAGS 作用于预处理器 CPP，所以能够同时用于 c代码和c++代码，eg <code>-I./</code>；CFLAGS CXXFLAGS 作用于编译器，分别针对C 编译器器、C++编译器，eg <code>-g --std=c++11</code>。编译器参数并不会传给链接器使用。</p>
+</li>
+<li><p>区分 <code>LDFLAGS</code> 和 <code>LDLIBS</code>：</p>
+<p> LDFLAGS 告诉链接器从哪里寻找库文件，LIBS 告诉链接器要链接哪些库文件，eg <code>-L ../ -lpthread</code>。</p>
+</li>
+</ol>
+<h1 id="自动生成依赖关系"><a href="#自动生成依赖关系" class="headerlink" title="自动生成依赖关系"></a>自动生成依赖关系</h1><p>此节参考自：<a target="_blank" rel="noopener" href="http://docs.linuxtone.org/ebooks/C&CPP/c/ch22s04.html">自动处理头文件的依赖关系</a></p>
+<p>上一节中如果不添加目标文件对头文件的依赖关系，如下：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line"></span><br><span class="line"><span class="section">main:abc.o xyz.o</span></span><br></pre></td></tr></table></figure>
+
+<p>导致的直接问题就是：修改项目的头文件之后，执行 <code>make</code> 命令不会自动更新可执行文件。（在这半年多时间里，我写的 Makefile 大多都缺少针对头文件的依赖关系）</p>
+<p>可是在写 main.o、abc.o 和 xyz.o 这三个目标的规则时要查看源代码，找出它们依赖于哪些头文件，这很容易出错，一是因为有的头文件包含在另一个头文件中，在写规则时很容易遗漏，二是如果以后修改源代码改变了依赖关系，很可能忘记修改 Makefile 的规则。</p>
+<p>能不能让 make &amp; Makefile 帮我们做了这个工作？很不幸，不能。Makefile 的自动推导依赖<strong>同名</strong>，从源文件到目标文件到可执行文件。而且一个源文件往往依赖很多个头文件，所以 Makefile 无法帮我们做自动依赖。必须由我们来告诉 Makefile 详细的依赖关系。好在我们可以用 gcc 的 <code>-M</code> 选项自动生成目标文件和源文件的依赖关系，然后把这些规则包含到 Makefile 中。</p>
+<p><code>-M</code> 选项把 stdio.h 以及它所包含的系统头文件也找出来了，如果我们不需要输出系统头文件的依赖关系，可以用 <code>-MM</code> 选项：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn/example/prj$ gcc -MM main.c </span><br><span class="line">main.o: main.c abc.h xyz.h</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn/example/prj$ gcc -MM *.c</span><br><span class="line">abc.o: abc.c abc.h</span><br><span class="line">main.o: main.c abc.h xyz.h</span><br><span class="line">xyz.o: xyz.c xyz.h</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn/example/prj$ </span><br></pre></td></tr></table></figure>
+
+<p>把 <code>gcc -MM</code> 自动生成的规则包含到 Makefile 中，<a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html">GNU make的官方手册 - Generating Prerequisites Automatically</a> 建议这样写：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line"></span><br><span class="line">TARGET=main</span><br><span class="line">SRCS=main.c abc.c xyz.c</span><br><span class="line"><span class="comment">#SRCS=$(wildcard *.c)</span></span><br><span class="line">OBJS=$&#123;SRCS:.c=.o&#125;</span><br><span class="line">DEPS=$&#123;SRCS:.c=.d&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>:all clean</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:$&#123;TARGET&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="section">$&#123;TARGET&#125;:$&#123;OBJS&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        $&#123;RM&#125; $&#123;TARGET&#125; $&#123;OBJS&#125; $&#123;DEPS&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自动生成依赖关系</span></span><br><span class="line"><span class="keyword">include</span> $&#123;DEPS&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">%.d: %.c </span></span><br><span class="line">        set -e; rm -f <span class="variable">$@</span>; \</span><br><span class="line">        <span class="variable">$(CC)</span> -MM <span class="variable">$(CPPFLAGS)</span> <span class="variable">$&lt;</span> &gt; <span class="variable">$@</span>.$$$$; \</span><br><span class="line">        sed &#x27;s,\(<span class="variable">$*</span>\)\.o[ : ]*,\1.o <span class="variable">$@</span> : ,g&#x27; &lt; <span class="variable">$@</span>.$$$$ &gt; <span class="variable">$@</span>; \</span><br><span class="line">        rm -f <span class="variable">$@</span>.$$$$</span><br></pre></td></tr></table></figure>
+
+<p><code>$&#123;SRCS:.c=.d&#125;</code> 表示将 SRC 中的以 <code>*.c</code> 结尾的源文件名替换为 <code>*.d</code> 的形式，比如 main.c 对应着文件 main.d，这就是 main.c 的依赖关系文件。<del>也可以替换成 <code>.*.d</code> 的形式用来隐藏文件。</del></p>
+<p><code>.PHONY</code> 伪目标的概念请移步下一节了解。</p>
+<p>为了生成每个源文件的依赖文件，建立了目标依赖关系 <code>%.d: %.c</code>，该关系表示，对于目标集合，通过 <code>$@</code> 可以访问一个依赖文件，通过 <code>$&lt;</code> 则访问对应的同名源文件。其他更多的语法特性请自行 google 学习。</p>
+<p>将该文件应用于任何单目录的 C&#x2F;C++ 工程（C++ 需要修改部分细节，不作赘述）都能正常工作。</p>
+<h2 id="另一种方式"><a href="#另一种方式" class="headerlink" title="另一种方式"></a>另一种方式</h2><p>前者针对每个源文件单独生成对应的依赖文件，而下面是将所有的依赖规则放到了一个文件中：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">EXE=main</span><br><span class="line">CC=gcc</span><br><span class="line">SRCS=<span class="variable">$(<span class="built_in">wildcard</span> *.c)</span> <span class="comment">#如果看不懂，自行google</span></span><br><span class="line">OBJS=$(SRCS:.c=.o)</span><br><span class="line">CFLAGS=-g</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: all </span></span><br><span class="line"><span class="section">all: <span class="variable">$(EXE)</span></span></span><br><span class="line"><span class="comment">#all: $(EXE) .depend #这种写法没有意义。详见“include调用方式&amp;Makefile执行过程”</span></span><br><span class="line"></span><br><span class="line"><span class="section">.depend: <span class="variable">$(SRCS)</span> </span></span><br><span class="line">        @<span class="variable">$(CC)</span> -MM <span class="variable">$(SRCS)</span> &gt; .depend</span><br><span class="line">        </span><br><span class="line"><span class="keyword">-include</span> .depend <span class="comment">#和其它版本 make 兼容的相关命令是 sinclude</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(EXE)</span>: <span class="variable">$(OBJS)</span></span><br><span class="line">        <span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: clean   </span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        rm <span class="variable">$(EXE)</span> <span class="variable">$(OBJS)</span> .depend -f</span><br></pre></td></tr></table></figure>
+
+<p>网上有 <a target="_blank" rel="noopener" href="http://blog.csdn.net/duanbeibei/article/details/2910845">一种模棱两可的说法</a>，认为此种方式是过时的，被淘汰的。原因是在 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html">Generating Prerequisites Automatically</a> 中有如下描述：</p>
+<blockquote>
+<p>With old make programs, it was traditional practice to use this compiler feature to generate prerequisites on demand with a command like ‘make depend’. That command would create a file depend containing all the automatically-generated prerequisites; then the makefile could use include to read them in.</p>
+<p>In GNU make, the feature of remaking makefiles makes this practice obsolete（废弃的；过时的）—you need never tell make explicitly to regenerate the prerequisites, because it always regenerates any makefile that is out of date.</p>
+</blockquote>
+<p>我一开始被误导，先入为主也认为此种方法不合适。然而始终未明白此方法哪里不好。</p>
+<ol>
+<li><p>官方手册 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/Remaking-Makefiles.html">How Makefiles Are Remade</a>；</p>
+<blockquote>
+<p>after reading in all makefiles, make will consider each as a goal target and attempt to update it. If a makefile has a rule which says how to update it (found either in that very makefile or in another one) or if an implicit rule applies to it (see Using Implicit Rules), it will be updated if necessary. After all makefiles have been checked, if any have actually been changed, make starts with a clean slate and reads all the makefiles over again. (It will also attempt to update each of them over again, but normally this will not change them again, since they are already up to date.)
+ </p>
+</blockquote>
+</li>
+<li><p>另外，<a target="_blank" rel="noopener" href="http://docs.linuxtone.org/ebooks/C&CPP/c/ch22s04.html">自动处理头文件的依赖关系</a> 中描述：</p>
+<blockquote>
+<p>不管是Makefile本身还是被它包含的文件，只要有一个文件在make过程中被更新了，make就会重新读取整个Makefile以及被它包含的所有文件</p>
+</blockquote>
+</li>
+<li><p>我自己也另有笔记 <a href="/2017/04/26/Makefile3rd/">《Makefile 执行过程 &amp; include 调用方式》</a></p>
+</li>
+</ol>
+<p>仔细阅读上述3个链接之后，我认为：两种方式并无本质区别，是一样的。官方手册中提及的“obsolete”是针对以前的非 GNU make 的 make 版本，“old make programs” 和 GNU make 的一个显著区别是不会 “remaking makefiles”。即 include 操作只会单纯的包含目标文件进来，而不关心其内容是否是待更新的（即，在 include 之后其目标更新了），所以“old make programs” 总是要先手动执行 <code>make depend</code> 保证依赖文件是最新的，然后再执行 <code>make</code> 命令。区别是由 “old make programs” 和 GNU make 带来的，而不是上述两种书写方式带来的。</p>
+<h1 id="更多的特性"><a href="#更多的特性" class="headerlink" title="更多的特性"></a>更多的特性</h1><p>Makefile 文件最核心的内容就是上面这些。但是为了使用上方便，扩展更多的功能，比如 <code>make clean</code> <code>make install</code>，Makefile 文件的包含引用 <code>include</code> 等等，延伸出来了好些东西。有些特性作为惯例、最佳实践被开发者普遍使用。</p>
+<h2 id="PHONY-伪目标"><a href="#PHONY-伪目标" class="headerlink" title=".PHONY 伪目标"></a>.PHONY 伪目标</h2><p>开发过程中肯定有清理目标文件、可执行文件的需求，但是频频使用 <code>rm abc.o xyz.o main.o main</code> 命令手工删除不是我们风格。所以就有</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm abc.o xyz.o main.o main</span><br></pre></td></tr></table></figure>
+
+<p>我们直接执行 <code>make clean</code> 就可以达到清理目录的目的。但这么写有两个问题：</p>
+<ol>
+<li>当某个删除目标不存在时 <code>rm</code> 就会执行失败，进而 <code>make</code> 报错执行 <code>clean</code> 目标失败。为了规避此问题，我们使用 <code>rm -f</code>，与此等价的 Makefile 预定义变量是 <code>$&#123;RM&#125;</code>。</li>
+<li>如果目录下存在 clean 同名文件，因为 clean 不存在依赖目标，所以 clean 就是最新的，就不会再执行 <code>rm -f</code> 命令。此问题的解决方法是：将 clean 声明为 <code>.PHONY</code> 伪目标。</li>
+</ol>
+<p>为了偷懒，不用在多个地方重复修改，我们引入 <code>$&#123;TARGET&#125;</code> <code>$&#123;OBJS&#125;</code>变量。按照惯例，用 <code>all</code> 做缺省目标。Makefile 文件变成下面这个样子：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line"></span><br><span class="line">TARGET=main</span><br><span class="line">OBJS=main.o abc.o xyz.o</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>:all clean</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:$&#123;TARGET&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="section">$&#123;TARGET&#125;:$&#123;OBJS&#125;</span></span><br><span class="line"><span class="section">main.o:abc.h xyz.h</span></span><br><span class="line"><span class="section">abc.o: abc.h</span></span><br><span class="line"><span class="section">xyz.o: xyz.h</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        $&#123;RM&#125; $&#123;TARGET&#125; $&#123;OBJS&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="include-和-sinclude"><a href="#include-和-sinclude" class="headerlink" title="include 和 sinclude"></a>include 和 sinclude</h2><p>Makefile 中 <code>include</code> 的调用方式：（详见 <a href="/2017/04/26/Makefile3rd/">《Makefile 执行过程 &amp; include 调用方式》</a>）</p>
+<ol>
+<li>首先在指定的目录下搜索被调用文件（如果没有路径，则为当前目录）</li>
+<li>如果没有找到，则从 <code>-I</code> 所指定的 include 目录查找，如果还没找到，则从 <code>/usr/gnu/include</code> <code>/usr/local/include</code> 等目录查找</li>
+<li>最终结果还是没找到，则 Makefile 输出异常信息 <code>No such file or directory</code>。<strong>但此时不会立刻退出</strong>，而是继续处理 Makefile 的后续内容</li>
+<li>当完成读取整个 Makefile 后，make 将试图使用规则来创建通过指示符 <code>include</code> 指定的但未找到的文件</li>
+<li>如果没有对应规则，输出错误信息 <code>make: *** No rule to make target &#39;non-exit-file&#39;.  Stop.</code>。Makefile终止执行</li>
+</ol>
+<p>通常我们在 Makefile 中可使用 <code>-include    </code> 来代替 <code>include</code>，来忽略由于包含文件不存在或者无法创建时的错误提示。<code>-</code> 的意思是告诉 make，忽略此操作的错误，继续执行。</p>
+<p><code>include</code> 会报错导致 make 终止执行；<code>-include</code> 不会终止 make 的执行；而为了进一步和其它的 make 程序进行兼容，也可以使用 <code>sinclude</code> 来代替 <code>-include</code>。综合以上，优先使用 <code>sinlude</code>。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>用 make 命令加 <code>-p</code> 选项后，可以打印出系统缺省定义的内部规则。它们包括系统预定义的宏、以及产生某些种类后缀的文件的内部相关行。内部规则涉及的文件种类很多，它不仅包括 C 源程序文件及其目标文件，还包括 SCCS 文件、yacc 文件和 lex 文件，甚至还包括 Shell 文件。</p>
+<p>注意 gmake 和 make 的区别：</p>
+<blockquote>
+<p>gmake 是GNU Make的缩写。 Linux系统环境下的 make 就是 GNU Make，之所以有 gmake，是因为在别的平台上，make 一般被占用，GNU make 只好叫 gmake 了。 <a target="_blank" rel="noopener" href="http://blog.csdn.net/chenglian_999/article/details/4655117">引用来源</a></p>
+</blockquote>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>通过前边的讨论，我们得到一个能在<strong>单目录工程</strong>下工作的通用 Makefile，至于是实现为单独一个依赖文件的形式，还是每个源文件产生一个独立的依赖文件，要根据程序作者自己的喜恶来选择。虽然每种方法都有一些细微的瑕疵，但是不影响这个通用的 Makefile 的实用性，试想一下在工程目录下拷贝一份当前的 Makefile，稍加修改便可以正确的编译开发，一定会令人心情大好。</p>
+<p>网上关于 make &amp; Makefile 的入门有很多不错的文章，单篇和系列的都有。整理此篇笔记时也多有参考、摘抄。列举如下：</p>
+<ol>
+<li>如果之前一点也不了解 make，想快速上手写 makefile 编译小程序。推荐 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/luchen927/archive/2012/02/05/2339002.html">《如何自己编写Makefile》</a> 这一篇。★★★</li>
+<li>如果想更进一步的学习，则推荐 <a target="_blank" rel="noopener" href="http://blog.csdn.net/haoel/article/details/2886/">《 跟我一起写 Makefile》</a> 系列，总共十四篇。具体目录可以下载附件查看，另有此系列汇总的pdf版本，也一并上传在附件中。★★★★★</li>
+<li>如果较真于语法，可以查看 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/wang_yb/p/3990952.html">Makefile 使用总结</a>，目录也在附件中。可以用来检索，综合来说意义不大。★★</li>
+<li>发现一篇很好的帖子，不吐不快。<a target="_blank" rel="noopener" href="http://www.cnblogs.com/yyangblog/p/4159778.html">《说说Makefile那些事儿》</a>，重点是看完1、2之后，读这篇帖子还能学到新的东西。★★★★★</li>
+</ol>
+<p>实际项目中肯定会涉及到复杂的目录结构以及对链接库的使用，在姊妹篇 <a href="https://tnie.github.io/2016/12/09/Makefile2nd/">《不同场景下的 Makefile》</a> （也是入门篇）略有提及。关于链接库更详细的知识请移步 <a href="https://tnie.github.io/2016/12/09/library-static-dynamic/">《共享库 &amp; 静态库》</a>，在大型的项目中手工编写 Makefile 都是一场挑战，Makefile 自动化生成请移步 [《》][&#x2F;(ㄒoㄒ)&#x2F;~~ 我还没整理呢]。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/make/" rel="tag"># make</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/08/26/PKM%20&%20GTD/" rel="prev" title="PKM & GTD">
+                  <i class="fa fa-angle-left"></i> PKM & GTD
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/10/17/singleton1/" rel="next" title="设计模式之单例模式">
+                  设计模式之单例模式 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

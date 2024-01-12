@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="完全没想到安装 mysql 会消耗掉将近一天的时间。从上午十一点，没吃饭没睡觉一直折腾到下午四点半，网上已经有了很详细的安装指导，却依旧卡在某个问题上两三个小时。文中会详细叙述。 我们可以在不同的平台以“不同的姿势”搭建 mysql 环境。 Debian 安装 MySQL通过 官方指导手册 的章节标题我们就能感受到“姿势”的多种多样了。因为我使用的 Debian8，其官方软件库中 mysql-se">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安装 MySQL">
+<meta property="og:url" content="https://tnie.github.io/2017/03/07/installMySQL/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="完全没想到安装 mysql 会消耗掉将近一天的时间。从上午十一点，没吃饭没睡觉一直折腾到下午四点半，网上已经有了很详细的安装指导，却依旧卡在某个问题上两三个小时。文中会详细叙述。 我们可以在不同的平台以“不同的姿势”搭建 mysql 环境。 Debian 安装 MySQL通过 官方指导手册 的章节标题我们就能感受到“姿势”的多种多样了。因为我使用的 Debian8，其官方软件库中 mysql-se">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/mysql_custom.png">
+<meta property="article:published_time" content="2017-03-07T03:38:13.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.633Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/mysql_custom.png">
+
+
+<link rel="canonical" href="https://tnie.github.io/2017/03/07/installMySQL/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2017/03/07/installMySQL/","path":"2017/03/07/installMySQL/","title":"安装 MySQL"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>安装 MySQL | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Debian-%E5%AE%89%E8%A3%85-MySQL"><span class="nav-number">1.</span> <span class="nav-text">Debian 安装 MySQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Windows7-%E5%AE%89%E8%A3%85-MySQL"><span class="nav-number">2.</span> <span class="nav-text">Windows7 安装 MySQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">权限管理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81"><span class="nav-number">5.</span> <span class="nav-text">编写代码</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/07/installMySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="安装 MySQL | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          安装 MySQL
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-03-07 11:38:13" itemprop="dateCreated datePublished" datetime="2017-03-07T11:38:13+08:00">2017-03-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>完全没想到安装 mysql 会消耗掉将近一天的时间。从上午十一点，没吃饭没睡觉一直折腾到下午四点半，网上已经有了很详细的安装指导，却依旧卡在某个问题上两三个小时。文中会详细叙述。</p>
+<p>我们可以在不同的平台以“不同的姿势”搭建 mysql 环境。</p>
+<h1 id="Debian-安装-MySQL"><a href="#Debian-安装-MySQL" class="headerlink" title="Debian 安装 MySQL"></a>Debian 安装 MySQL</h1><p>通过 <a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/5.5/en/linux-installation-native.html">官方指导手册</a> 的章节标题我们就能感受到“姿势”的多种多样了。因为我使用的 Debian8，其官方软件库中 mysql-server-5.5，所以在此贴的链接也是 5.5 版本的。</p>
+<blockquote>
+<ul>
+<li><p>Installing MySQL on Unix&#x2F;Linux Using Generic Binaries</p>
+</li>
+<li><p>Installing MySQL on Linux</p>
+<ul>
+<li>Installing MySQL on Linux Using Debian Packages</li>
+<li><a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/5.5/en/linux-installation-native.html">Installing MySQL on Linux Using Native Package Managers</a></li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Installing MySQL from Source</li>
+</ul>
+</blockquote>
+<p>如果你有管理员权限，很明显使用 Debian 原生的 apt-get 包管理器进行安装是最方便的。我也是敲入以下命令直接装的：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install mysql-client-5.5 mysql-server-5.5</span><br></pre></td></tr></table></figure>
+<p>关于 mysql-server 和 mysql-client 的区别：</p>
+<blockquote>
+<p>来一段引用或者 链接</p>
+</blockquote>
+<p>打算使用 windows 上的 Navicat 访问、管理数据库的。但是在虚拟机使用 NAT 模式前提下，windows 主机无法访问安装在 Debian 虚拟机中的 mysql 数据库。从网上查找资料了解到，修改为“Bridge”模式可以让宿主机、虚拟机彼此访问，但是涉及笔记本双网卡、气象局网络环境等，还要了解虚拟机三种网络模式，不想背离初衷（上午十点我只是打算写段访问数据库的 C++11 代码）太远，所以选择放弃！以后碰到了，再回来接续这些技能。</p>
+<p>在 Debian8Light 上卸载 mysql-server-5.5，保留了 mysql-client-5.5。</p>
+<h1 id="Windows7-安装-MySQL"><a href="#Windows7-安装-MySQL" class="headerlink" title="Windows7 安装 MySQL"></a>Windows7 安装 MySQL</h1><p>windows 下是“姿势”多多。既然是在 windos 上安装，就使用最新的 5.7 版本了。</p>
+<blockquote>
+<ul>
+<li>Installing MySQL on Microsoft Windows Using MySQL Installer</li>
+<li><a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/5.7/en/windows-install-archive.html">Installing MySQL on Microsoft Windows Using a noinstall Zip Archive</a></li>
+</ul>
+</blockquote>
+<p>使用 <a target="_blank" rel="noopener" href="http://dev.mysql.com/downloads/windows/installer/5.7.html">MySQL Installer</a> 安装包安装很简单，需要花费精力的是“尽可能的安装最小集，只安装那些你需要的”。对于这次的使用场景来说，我是练习写 C++ 代码用，而且已经有了 Navicat 工具。所以，我只需要安装 MySQL Server 和开发时所用的 Connector，其他的任何 GUI 工具和 Java、Python 连接器我都不需要。</p>
+<p><img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/mysql_custom.png" alt="MySQL 自定义安装"></p>
+<p>剔除那些根本就不会用到的功能花费了一些时间，除此之外，整个安装过程很顺利，装完之后连接成功直接使用。</p>
+<p>在好奇心和心理洁癖的驱使下，我尝试搭建了 <a target="_blank" rel="noopener" href="http://dev.mysql.com/downloads/mysql/">解压版 MySQL</a>。就是在这个过程中遇到了意外，花费了两个小时才解决。</p>
+<p>解压版本重点在于配置，根据网上的示范（5.5版本、5.6版本）搭建完毕，可是启动服务时老是失败，报错“本地计算机上的mysql服务启动后停止，……”。我当时脑袋也是不清醒，下意识地以为是配置文件的问题，或者是一台电脑安装两个实例带来的冲突。配置文件，我是把安装版的 my.ini 稍作修改直接拿过来用的，担心漏掉了某条配置没有改，造成冲突。可是校对之后仍没能解决问题；然后将安装版本卸载之后，还是出现这个错误，才反应过来直接 Google 这句错误信息。网上搜到的信息不多，但很有效。</p>
+<p>这是一个在 5.7.7 版本之后才有的现象，新的版本需要 <a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/5.7/en/windows-initialize-data-directory.html">Initializing the Data Directory</a>。如果英文水平不高，可以直接参考 <a target="_blank" rel="noopener" href="http://jingyan.baidu.com/article/0f5fb0991636376d8234ea7a.html">MySQL 5.7.9 ZIP 免安装版本配置过程</a>。</p>
+<p>而现在 2016&#x2F;7&#x2F;16 18:56:44 ，我要开始码代码了。</p>
+<h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><p>在 windows 上安装 msi 版本后，查看在其 &#x2F;Data&#x2F; 目录下的 my.ini 配置文件。</p>
+<p>整个配置文件分为两部分： Client Section 和 Server Section。强调 mysql 和 mysqld 是不同的两个功能，尤其是用 mysql、mysqladmin等<strong>客户端工具</strong>连接数据库时（默认）使用 Client Section 区域的 port，mysqld 启动<strong>数据库服务</strong>时监听 Server Section 区域的 port 指定的端口。仔细阅读配置文件中的注释！</p>
+<h1 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h1><p>很很重要的一部分！但目前没有深入了解的必要，参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/goodhacker/p/3373213.html">MySQL 数据库赋予用户权限操作表</a> 只学习以下几点：</p>
+<ul>
+<li><p>查看权限：查看自己的权限，查看其他用户的权限</p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> grants <span class="keyword">for</span> dba;</span><br><span class="line"><span class="number">1141</span> <span class="operator">-</span> There <span class="keyword">is</span> <span class="keyword">no</span> such <span class="keyword">grant</span> defined <span class="keyword">for</span> <span class="keyword">user</span> <span class="string">&#x27;dba&#x27;</span> <span class="keyword">on</span> host <span class="string">&#x27;%&#x27;</span></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> grants <span class="keyword">for</span> dba<span class="variable">@localhost</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">---------------------------------------------------------------------------+</span></span><br><span class="line"><span class="operator">|</span> Grants <span class="keyword">for</span> dba<span class="variable">@localhost</span>                                                  <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">---------------------------------------------------------------------------+</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">GRANT</span> USAGE <span class="keyword">ON</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;dba&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>                                   <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">GRANT</span> <span class="keyword">ALL</span> PRIVILEGES <span class="keyword">ON</span> `testdb`.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;dba&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> <span class="keyword">WITH</span> <span class="keyword">GRANT</span> OPTION <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">---------------------------------------------------------------------------+</span></span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span></span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> grants <span class="keyword">for</span> developer;</span><br><span class="line"><span class="number">1141</span> <span class="operator">-</span> There <span class="keyword">is</span> <span class="keyword">no</span> such <span class="keyword">grant</span> defined <span class="keyword">for</span> <span class="keyword">user</span> <span class="string">&#x27;developer&#x27;</span> <span class="keyword">on</span> host <span class="string">&#x27;%&#x27;</span></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> grants <span class="keyword">for</span> developer@<span class="string">&#x27;192.168.195.%&#x27;</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------------------------------------------------------------------------------------------------------------------------------------+</span></span><br><span class="line"><span class="operator">|</span> Grants <span class="keyword">for</span> developer<span class="variable">@192</span><span class="number">.168</span><span class="number">.195</span>.<span class="operator">%</span>                                                                                                                        <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------------------------------------------------------------------------------------------------------------------------------------+</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">GRANT</span> USAGE <span class="keyword">ON</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;developer&#x27;</span>@<span class="string">&#x27;192.168.195.%&#x27;</span>                                                                                                         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">GRANT</span> <span class="keyword">CREATE</span>, <span class="keyword">DROP</span>, <span class="keyword">REFERENCES</span>, INDEX, <span class="keyword">ALTER</span>, <span class="keyword">EXECUTE</span>, <span class="keyword">CREATE</span> <span class="keyword">VIEW</span>, <span class="keyword">SHOW</span> <span class="keyword">VIEW</span>, <span class="keyword">CREATE</span> ROUTINE, <span class="keyword">ALTER</span> ROUTINE <span class="keyword">ON</span> `testdb`.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;developer&#x27;</span>@<span class="string">&#x27;192.168.195.%&#x27;</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------------------------------------------------------------------------------------------------------------------------------------+</span></span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span></span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> grants <span class="keyword">for</span> common_user;</span><br><span class="line"><span class="operator">+</span><span class="comment">-------------------------------------------------------------------------+</span></span><br><span class="line"><span class="operator">|</span> Grants <span class="keyword">for</span> common_user@<span class="operator">%</span>                                                <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-------------------------------------------------------------------------+</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">GRANT</span> USAGE <span class="keyword">ON</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;common_user&#x27;</span>@<span class="string">&#x27;%&#x27;</span>                                 <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">GRANT</span> <span class="keyword">SELECT</span>, <span class="keyword">INSERT</span>, <span class="keyword">UPDATE</span>, <span class="keyword">DELETE</span> <span class="keyword">ON</span> `testdb`.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;common_user&#x27;</span>@<span class="string">&#x27;%&#x27;</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-------------------------------------------------------------------------+</span></span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span></span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>GRANT语句的主要用途是来给帐户授权的，但也可用来建立新帐户并同时授权。</p>
+<p>  创建 testdb 数据库，在其基础上创建 common_user developer dba 用户并授权</p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">SELECT</span>, <span class="keyword">INSERT</span>, <span class="keyword">UPDATE</span>, <span class="keyword">DELETE</span> <span class="keyword">ON</span> `testdb`.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;common_user&#x27;</span>@<span class="string">&#x27;%&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;common_user&#x27;</span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/Richardzhu/p/3318595.html">MySQL之权限管理</a> 了解更多的，记得去官网哦。</p>
+<blockquote>
+<p> jack@’localhost’ 表示jack用户，@后面接限制的主机，可以是IP、IP段、域名以及%，%表示任何地方。<strong>注意：</strong>这里%有的版本不包括本地，以前碰到过给某个用户设置了%允许任何地方登录，但是在本地登录不了，这个和版本有关系，遇到这个问题再加一个localhost的用户就可以了。</p>
+<p>WITH GRANT OPTION 这个选项表示该用户可以将自己拥有的权限授权给别人。<strong>注意：</strong>经常有人在创建操作用户的时候不指定WITH GRANT OPTION选项导致后来该用户不能使用GRANT命令创建用户或者给其它用户授权。</p>
+</blockquote>
+<h1 id="编写代码"><a href="#编写代码" class="headerlink" title="编写代码"></a>编写代码</h1><p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/connector-cpp/en/">MySQL Connector&#x2F;C++ Developer Guide</a></p>
+<p>在 C++ 中使用 MySQL 数据库，包含上述方法在内一共有 3 种：</p>
+<ol>
+<li>使用 Connector&#x2F;C++，库文件命名 (lib)mysqlcppconn.xx</li>
+<li>使用 Connector&#x2F;ODBC</li>
+<li>使用 Connector&#x2F;C，库文件命名 libmysql.xx</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">文件夹 PATH 列表</span><br><span class="line">卷序列号为 CC94-9350</span><br><span class="line">C:.</span><br><span class="line">├─Connector.C++ 1.1</span><br><span class="line">│  ├─include</span><br><span class="line">│  │  └─cppconn</span><br><span class="line">│  └─lib</span><br><span class="line">│      └─opt</span><br><span class="line">├─Connector.ODBC 5.3</span><br><span class="line">└─MySQL Connector.C 6.1</span><br><span class="line">    ├─bin</span><br><span class="line">    ├─include</span><br><span class="line">    │  └─mysql</span><br><span class="line">    │      └─psi</span><br><span class="line">    └─lib</span><br><span class="line">        ├─vs10</span><br><span class="line">        ├─vs11</span><br><span class="line">        └─vs12</span><br></pre></td></tr></table></figure>
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/mysql/" rel="tag"># mysql</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/03/07/BooleanInCoding/" rel="prev" title="BOOL 和 bool（C++ 的） 和 _Bool（C 的）">
+                  <i class="fa fa-angle-left"></i> BOOL 和 bool（C++ 的） 和 _Bool（C 的）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/03/07/current-working-directory/" rel="next" title="当前工作目录是可以变化的">
+                  当前工作目录是可以变化的 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

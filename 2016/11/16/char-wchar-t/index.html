@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="字符串之间的转换分为两类：  底层字符集之间的转换，表现为 char wchar_t 之间的转换，string wstring 之间的转换； 在此之上牵扯到 Windows 平台下的各种字符串之间的转换；去伪存真，归根到底还是第一种转换。  为了“知其然，也要知其所以然”，我们在描述相互转换之前，先介绍一些相关的类型。上层所有的字符串类型归根到底都是对底层 char 或者 wchar_t 类型的封">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符（串）之间的转换">
+<meta property="og:url" content="https://tnie.github.io/2016/11/16/char-wchar-t/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="字符串之间的转换分为两类：  底层字符集之间的转换，表现为 char wchar_t 之间的转换，string wstring 之间的转换； 在此之上牵扯到 Windows 平台下的各种字符串之间的转换；去伪存真，归根到底还是第一种转换。  为了“知其然，也要知其所以然”，我们在描述相互转换之前，先介绍一些相关的类型。上层所有的字符串类型归根到底都是对底层 char 或者 wchar_t 类型的封">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-11-16T05:04:04.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.601Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2016/11/16/char-wchar-t/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2016/11/16/char-wchar-t/","path":"2016/11/16/char-wchar-t/","title":"字符（串）之间的转换"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>字符（串）之间的转换 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#wchar-t"><span class="nav-number">1.</span> <span class="nav-text">wchar_t</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">字符集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mbs-%E5%92%8C-wcs"><span class="nav-number">3.</span> <span class="nav-text">mbs 和 wcs</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89%E6%9C%AC%E5%9C%B0%E7%AD%96%E7%95%A5%E9%9B%86%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">为什么要有本地策略集？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LP-C-W-T-STR"><span class="nav-number">4.</span> <span class="nav-text">LP[,C][,W,T]STR</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CString-%E5%92%8C-string"><span class="nav-number">5.</span> <span class="nav-text">CString 和 string</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CString-%E8%BD%AC-string"><span class="nav-number">5.1.</span> <span class="nav-text">CString 转 string</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string-%E8%BD%AC-CString"><span class="nav-number">5.2.</span> <span class="nav-text">string 转 CString</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CString-%E8%BD%AC-wstring"><span class="nav-number">5.3.</span> <span class="nav-text">CString 转 wstring</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/16/char-wchar-t/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="字符（串）之间的转换 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          字符（串）之间的转换
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-11-16 13:04:04" itemprop="dateCreated datePublished" datetime="2016-11-16T13:04:04+08:00">2016-11-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>字符串之间的转换分为两类：</p>
+<ol>
+<li>底层字符集之间的转换，表现为 <code>char</code> <code>wchar_t</code> 之间的转换，<code>string</code> <code>wstring</code> 之间的转换；</li>
+<li>在此之上牵扯到 Windows 平台下的各种字符串之间的转换；去伪存真，归根到底还是第一种转换。</li>
+</ol>
+<p>为了“知其然，也要知其所以然”，我们在描述相互转换之前，先介绍一些相关的类型。上层所有的字符串类型归根到底都是对底层 <code>char</code> 或者 <code>wchar_t</code> 类型的封装，如果真有刨根问底的兴趣，就需要了解 <code>char</code> <code>wchar_t</code> 的关联和区别。我们比较熟悉 <code>char</code>，接下来看一下 <code>wchar_t</code>。</p>
+<span id="more"></span>
+
+<h1 id="wchar-t"><a href="#wchar-t" class="headerlink" title="wchar_t"></a>wchar_t</h1><p>虽然我们大多是在 windows 下开发时接触过 <code>wchar_t</code>，但它其实是 C 标准（但不是内置类型）。类 Unix 环境下使用 <code>wchar_t</code> 并不广泛。</p>
+<p>我们看一下 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%AF%AC%E5%AD%97%E5%85%83">维基百科中对“宽字符”的解释</a>：</p>
+<blockquote>
+<p>宽字符（Wide character） 是程序设计的术语。它是一个抽象的术语（<strong>没有规定具体实现细节</strong>），用以表示比8位字符还宽的数据类型。它<strong>不同于 Unicode</strong>。</p>
+</blockquote>
+<p>尴尬的是标准并未规定具体的实现细节，而 Windows 下的 <code>wchar_t</code> 是破坏（不符合）了ANSI&#x2F;ISO C标准的。</p>
+<blockquote>
+<p><code>wchar_t</code> 的宽度属于编译器的特性，且可以小到8位。所以程序若需要跨过所有 C 和 C++ 编译器的可携性，就不应使用 <code>wchar_t</code> 存储 Unicode 文字。<code>wchar_t</code> 类型是为存储编译器定义的宽字符，在部分编译器中，其可以是 Unicode 字符。</p>
+<p>在Windows API中，<code>wchar_t</code> 是16位宽。Windows API因<strong>不使 <code>wchar_t</code> 字符类型在单一 <code>wchar_t</code> 单元中支持所有系统可表示的字符</strong>，而破坏了 ANSI&#x2F;ISO C 标准。<code>wchar_t</code> 在Windows下，反而表示一个 UTF-16 小尾字符（或 UTF-16 的一部分）。</p>
+<p>在类Unix系统中，<code>wchar_t</code> 是32位宽。</p>
+</blockquote>
+<p>如果对 Unicode 字符集有足够的认识，我们就能知道 16 位无法满足“表示所有 Unicode 字符”。一般来说，UTF-x，x表示这套编码一个单位至少占用x位，因为Unicode最长达到32位，所以UTF-x通常是变长的（除了UTF-32）。</p>
+<blockquote>
+<p>需要指出的是，C++标准中对 <code>wchar_t</code> 的要求是要能表示所有系统能识别的字符。Windows 自称支持 Unicode，但是其 <code>wchar_t</code> 却不能表示所有的 Unicode，由此违背了 C++ 标准。 引用自 <a target="_blank" rel="noopener" href="http://www.cppblog.com/lf426/archive/2010/06/25/118739.html">彻底解密C++宽字符：2、Unicode和UTF</a></p>
+</blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/4588302/why-isnt-wchar-t-widely-used-in-code-for-linux-related-platforms">Why isn’t wchar_t widely used in code for Linux &#x2F; related platforms?</a></li>
+</ul>
+<p><strong>结论：</strong>宽字符的宽度依赖于平台，局限性太高。不推荐使用。Windows 虽然广泛使用宽字符，但其有一个愚蠢的（错误的）假设：所有字符只使用两位字节就能表示。微软也有替人背锅的嫌疑，也可能是历史包袱的原因。</p>
+<h1 id="字符集"><a href="#字符集" class="headerlink" title="字符集"></a>字符集</h1><p>学习过程中难免又涉及到更底层的字符集（character set）、字符编码（character encoding）知识，可以参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/skynet/archive/2011/05/03/2035105.html">字符集和字符编码（Charset &amp; Encoding） - cnblogs 吴秦</a>。</p>
+<p>这里需要强调的是：</p>
+<blockquote>
+<p>术语字符编码（character encoding），字符映射（character map），字符集（character set）或者代码页，在历史上往往是同义概念。 引用自 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81">维基百科</a></p>
+</blockquote>
+<p>这句话适用于 ANSI 体系。后来随着 Unicode 的流行，随着其 UTF-32、UTF-16 和 UTF-8 的使用，为了更清楚的理解其中的关联</p>
+<blockquote>
+<p>可以这样理解：Unicode是字符集，UTF-32&#x2F; UTF-16&#x2F; UTF-8是三种字符编码方案。</p>
+</blockquote>
+<h1 id="mbs-和-wcs"><a href="#mbs-和-wcs" class="headerlink" title="mbs 和 wcs"></a>mbs 和 wcs</h1><blockquote>
+<p>mbs：multi byte string，用char作为存储类型，一个字符可能对应1个或者多个char，不能直接确定字符边界。charset不确定。过去的程序都是采用mbs的。</p>
+</blockquote>
+<blockquote>
+<p>wcs：wide character string，用wchar_t作为存储类型，一个字符对于一个wchar_t。使用unicode编码，charset与OS相关，在windows平台中为UTF16(UCS-2)，在大多数unix平台中为UTF32(UCS-4)。</p>
+</blockquote>
+<p>mbs 的具体表现形式有 C 中 <code>char*</code>&#x2F;<code>char[]</code>，C++ 中的 <code>std::string</code>；wcs 的具体表现形式有 C 中的 <code>wchar_t*</code>&#x2F;<code>wchar_t[]</code>，C++ 中的 <code>std::wstring</code>。</p>
+<p>要“知其所以然”，参考 <a target="_blank" rel="noopener" href="http://www.cppblog.com/lf426/archive/2010/06/25/118707.html">彻底解密C++宽字符：1、从char到wchar_t</a>，讲解的很透彻。</p>
+<p>要“知其然”，C 代码怎么写，可以参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/MichaelOwen/articles/2128771.html">wchar和char之间的相互转换</a>；C++ 代码怎么写，可以参考 <a target="_blank" rel="noopener" href="http://www.cppblog.com/lf426/archive/2010/06/26/118762.html">彻底解密C++宽字符：3、利用C运行时库函数转换</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;locale.h&gt;</span></span></span><br><span class="line"><span class="built_in">setlocale</span>(LC_ALL, <span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">wcstombs</span>(<span class="type">char</span> * to,<span class="type">wchar_t</span> * from,<span class="type">size_t</span> _maxCount);</span><br><span class="line"><span class="built_in">mbstowcs</span>(<span class="type">wchar_t</span> * to,<span class="type">char</span> * from,<span class="type">size_t</span> _maxCount);</span><br></pre></td></tr></table></figure>
+
+<p>char 和 wchar_t 之间的转换可以使用上述两个函数，使用的关键在于 <code>setlocale()</code> 和第三个参数，难点也在第三个参数：</p>
+<ol>
+<li>设置本地策略集，使得编译器知晓多字节字符集使用的具体是哪一种；</li>
+<li><del>第三个参数表示目标指针的<strong>字节长度</strong>，尤其是转为宽字符时需仔细辨识，一个宽字符占用的字节和平台有严格的关联。</del></li>
+<li><a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/c_standard_library/c_function_mbstowcs.htm">mbstowcs()</a> 第三个参数 This is the maximum number of wchar_t characters to be interpreted.</li>
+<li><a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/c_standard_library/c_function_wcstombs.htm">wcstombs()</a> 第三个参数 This is the maximum number of bytes to be written to str.</li>
+</ol>
+<p>第三个参数的赋值很容易弄错，而且在不同平台下还有出入。在网上找到 <a target="_blank" rel="noopener" href="http://blog.csdn.net/xiaobai1593/article/details/7063535">一篇说明</a>，在第一个参数赋值 <code>NULL</code>（此时第三个参数也无意义，随便赋值） 的情况下，返回目标缓存所需的大小（不含终结符）：</p>
+<ol>
+<li><code>size_t req = mbstowcs(NULL, str, 0);</code> 返回 str 转宽字符串时 wchar_t 字符个数；</li>
+<li><code>size_t req = wcstombs(NULL, wstr, 0);</code> 返回 wstr 转多字节字符串时字节数（同时也是 char 类型个数）；</li>
+</ol>
+<p>所以我们综合有关讲解，给出一份跨平台，省时省力搬来搬去可以直接用的 C++ 代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">const</span> std::wstring <span class="title">s2ws</span><span class="params">(<span class="type">const</span> std::string&amp; s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::locale old_loc =</span><br><span class="line">        std::locale::<span class="built_in">global</span>(std::<span class="built_in">locale</span>(<span class="string">&quot;&quot;</span>));</span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* src_str = s.<span class="built_in">c_str</span>();</span><br><span class="line">    <span class="type">const</span> <span class="type">size_t</span> buffer_size = std::<span class="built_in">mbstowcs</span>(<span class="literal">NULL</span>, src_str, <span class="number">0</span>); </span><br><span class="line">    <span class="type">wchar_t</span>* dst_wstr = <span class="keyword">new</span> <span class="type">wchar_t</span>[buffer_size];</span><br><span class="line">    <span class="built_in">wmemset</span>(dst_wstr, <span class="number">0</span>, buffer_size);</span><br><span class="line">    std::<span class="built_in">mbstowcs</span>(dst_wstr, src_str, buffer_size);</span><br><span class="line">    std::wstring result = dst_wstr;</span><br><span class="line">    <span class="keyword">delete</span> []dst_wstr;</span><br><span class="line"></span><br><span class="line">    std::locale::<span class="built_in">global</span>(old_loc);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">const</span> std::string <span class="title">ws2s</span><span class="params">(<span class="type">const</span> std::wstring&amp; ws)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::locale old_loc =</span><br><span class="line">        std::locale::<span class="built_in">global</span>(std::<span class="built_in">locale</span>(<span class="string">&quot;&quot;</span>));</span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> <span class="type">wchar_t</span>* src_wstr = ws.<span class="built_in">c_str</span>();</span><br><span class="line">    <span class="type">size_t</span> buffer_size = std::<span class="built_in">wcstombs</span>(<span class="literal">NULL</span> ,src_wstr, <span class="number">0</span>);;</span><br><span class="line">    <span class="type">char</span>* dst_str = <span class="keyword">new</span> <span class="type">char</span>[buffer_size];</span><br><span class="line">    <span class="built_in">memset</span>(dst_str, <span class="number">0</span>, buffer_size);</span><br><span class="line">    std::<span class="built_in">wcstombs</span>(dst_str ,src_wstr, buffer_size);</span><br><span class="line">    std::string result = dst_str;</span><br><span class="line">    <span class="keyword">delete</span> []dst_str;</span><br><span class="line"></span><br><span class="line">    std::locale::<span class="built_in">global</span>(old_loc);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ps 这里主要是为了演示 <code>mbstowcs()</code> 和 <code>wcstombs()</code> 的使用。如果是转换 <code>string</code> 和 <code>wstring</code>，可以参考 <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/4804298/how-to-convert-wstring-into-string">How to convert wstring into string?</a></p>
+<p>不清楚为什么网上好多资源给出的代码都是手动给定第三个参数，&#x2F;(ㄒoㄒ)&#x2F;~~</p>
+<h2 id="为什么要有本地策略集？"><a href="#为什么要有本地策略集？" class="headerlink" title="为什么要有本地策略集？"></a>为什么要有本地策略集？</h2><p>在不同平台，编译器编译源代码时根据字符串前是否有 L 前缀，将其 <a target="_blank" rel="noopener" href="http://www.cppblog.com/lf426/archive/2010/06/25/118707.html">硬编码</a> 为不同的字节码：</p>
+<table>
+<thead>
+<tr>
+<th>os&#x2F;</th>
+<th>L</th>
+<th><del>L</del></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Linux</td>
+<td>UTF-32</td>
+<td>UTF-8</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>USC-2</td>
+<td>ASCII&#x2F;gb2312&#x2F;big5</td>
+</tr>
+</tbody></table>
+<ul>
+<li>如果字符串有前缀 L，那么在编译器确定的前提下，使用的字符编码是确定的，硬编码的内容也是确定的；</li>
+<li>如果字符串无前缀 L，那么编译器 <a target="_blank" rel="noopener" href="http://www.cppblog.com/lf426/archive/2010/06/25/118707.html">直接读取字符（串）在源文件中的编码数值</a>，因为源文件编码不同，其硬编码的内容是不确定的；</li>
+</ul>
+<p>基于上述描述可以推断，char 和 wchar_t 互转，在编译项目时（编译器确定）宽字符的硬编码映射单一，但多字节字符的硬编码（主要针对 ANSI 系的非 ASCII 部分）应该以哪种字符集编码方式解析（通俗地理解就是某几个字节究竟是翻译成简体中文、繁体中文还是日文之类的）是不确定的。所以需要本地策略集（locale）。</p>
+<p>ps 如果要做国际化的东西，需要深入了解 locale 策略，可以学习 <a target="_blank" rel="noopener" href="http://www.cppblog.com/lf426/archive/2010/06/25/118707.html">彻底解密C++宽字符</a> 的系列文章作为切入点。中间两三篇涉及代码的具体实现可能略微复杂，可以暂时忽略，但推荐一定要读前三篇和 <a target="_blank" rel="noopener" href="http://www.cppblog.com/lf426/archive/2010/06/26/118788.html">彻底解密C++宽字符：6、国际化策略（完）</a>，通过了解“硬编码的硬伤”进一步理解“硬编码”，理解编译、字符集等偏底层的知识。</p>
+<h1 id="LP-C-W-T-STR"><a href="#LP-C-W-T-STR" class="headerlink" title="LP[,C][,W,T]STR"></a>LP[,C][,W,T]STR</h1><p>这几个是 Windows 平台对 char wchar_t 类型的封装。如标题，我们可以组合出 6 种情况：</p>
+<table>
+<thead>
+<tr>
+<th>xx</th>
+<th>x</th>
+<th>W</th>
+<th>T</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>x</td>
+<td>LPSTR</td>
+<td>LPWSTR</td>
+<td>LPTSTR</td>
+</tr>
+<tr>
+<td>C</td>
+<td>LPCSTR</td>
+<td>LPCWSTR</td>
+<td>LPCTSTR</td>
+</tr>
+<tr>
+<td>基于</td>
+<td>char</td>
+<td>wchar_t</td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li>L表示 <code>long</code> 指针，这是为了兼容 Windows 3.1 等 16 位操作系统遗留下来的，在 win32 中以及其他的 32位操作系统中， <code>long</code> 指针和 <code>near</code> 指针及 <code>far</code> 修饰符都是为了兼容的作用，没有实际意义。即 win32 中，<code>long</code> <code>near</code> <code>far</code> 指针与普通指针没有区别，LP 与P是等效的。</li>
+<li>P表示这是一个指针。</li>
+<li>STR表示这个变量是一个字符串。</li>
+<li>C表示是一个常量，<code>const</code>。</li>
+<li>W 来源于 <code>wchar_t</code>（宽字符）</li>
+<li>T表示**_T宏**,这个宏用来表示你的字符是否使用 UNICODE, 如果你的程序定义了 UNICODE或者其他相关的宏，那么这个字符或者字符串将被作为 UNICODE字符串，否则就是标准的 ANSI字符串。</li>
+</ul>
+<p>LPTSTR：如果定义了 UNICODE宏则 LPTSTR被定义为 LPWSTR，<code>typedef LPTSTR LPWSTR</code>;否则LPTSTR被定义为LPSTR，<code>typedef LPTSTR LPSTR</code>。</p>
+<p>更系统、更精彩的介绍参考 <a target="_blank" rel="noopener" href="http://www.codeproject.com/Articles/76252/What-are-TCHAR-WCHAR-LPSTR-LPWSTR-LPCTSTR-etc">What are TCHAR, WCHAR, LPSTR, LPWSTR, LPCTSTR (etc.)?</a></p>
+<p>关于这些类型彼此之间转换以及和 CString 之间的转换，可以参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/goed/archive/2011/11/11/2245702.html">懒得起名…</a>。这里只罗列几个特殊的转换：</p>
+<p>W2A W2CA CW2A <del>CW2CA</del><br>A2W A2CW CA2W <del>CA2CW</del></p>
+<p>有上述这些也可以推测出 W2T A2T T2W T2A 等等的存在，这里特别提一下 [CT,CW,CA]2[CT,CW,CA] 是存在的。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CString和LPCTSTR不需要转化，两者是等价的;</span></span><br><span class="line"><span class="comment">// 但去掉常量属性呢？即 CString 向 LPTSTR</span></span><br><span class="line"><span class="function">CString <span class="title">str</span><span class="params">(<span class="string">&quot;string&quot;</span>)</span></span>;</span><br><span class="line">LPTSTR pStr = str.<span class="built_in">GetBuffer</span>();</span><br><span class="line">str.<span class="built_in">ReleaseBuffer</span>();</span><br><span class="line"><span class="comment">//注意：GetBuffer()和ReleaseBuffer()之间不可以调用任何的CString函数，比如GetLength()函数，因为无法预测对内存的操作，所以任何CString函数得到的结果都是不确定的。</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="CString-和-string"><a href="#CString-和-string" class="headerlink" title="CString 和 string"></a>CString 和 string</h1><p><code>CString</code> 是动态的 <code>TCHAR</code> 数组。<code>TCHAR</code> 是一个宏，是对 <code>char</code> 和 <code>wchar_t</code> 的选择：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> ATL::CStringT&lt; <span class="type">wchar_t</span>, StrTraitMFC_DLL&lt; <span class="type">wchar_t</span> &gt; &gt; CStringW;</span><br><span class="line"><span class="keyword">typedef</span> ATL::CStringT&lt; <span class="type">char</span>, StrTraitMFC_DLL&lt; <span class="type">char</span> &gt; &gt; CStringA;</span><br><span class="line"><span class="keyword">typedef</span> ATL::CStringT&lt; TCHAR, StrTraitMFC_DLL&lt; TCHAR &gt; &gt; CString;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifdef</span> UNICODE</span></span><br><span class="line">	<span class="keyword">typedef</span> <span class="type">wchar_t</span> TCHAR;</span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">	<span class="keyword">typedef</span> <span class="type">char</span> TCHAR;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>再次强调，Windows 的 <code>wchar_t</code> 对 Unicode 的支持是不完善的。</p>
+<p><code>string</code> 是动态的 <code>char</code> 数组；<code>wstring</code> 是动态的 <code>wchar_t</code> 数组。所以 CString 转 string 存在潜在的 <code>wchar_t</code> 转换为 <code>char</code> 类型的可能，反之亦然。</p>
+<h2 id="CString-转-string"><a href="#CString-转-string" class="headerlink" title="CString 转 string"></a>CString 转 string</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CString cstr;</span><br><span class="line"><span class="function">CT2CA <span class="title">psz</span><span class="params">(cstr)</span></span>;</span><br><span class="line"><span class="function">std::string <span class="title">str</span><span class="params">(psz)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="string-转-CString"><a href="#string-转-CString" class="headerlink" title="string 转 CString"></a>string 转 CString</h2><p>下意识就会使用 CA2CT 宏做逆向操作，但其实我们用 char* 构造 CString 时无论是否 UNICODE 工程还是 MBCS 工程都是可以顺利编译的:-D</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">string <span class="title">str</span><span class="params">(<span class="string">&quot;hah&quot;</span>)</span></span>;</span><br><span class="line"><span class="function">CString <span class="title">cstr</span><span class="params">(str.c_str())</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>在 <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/19616828/how-to-convert-stdstring-to-cstring-in-unicode-project">代码片段三</a> 中提到一种特殊情况，即 string 字符串中存在 <code>\0</code> 字符时，可以如下构造 CString</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::string <span class="title">stdstr</span><span class="params">(<span class="string">&quot;foo&quot;</span>)</span></span>;</span><br><span class="line">stdstr += <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">stdstr += <span class="string">&quot;bar&quot;</span>;</span><br><span class="line"><span class="function">CString <span class="title">cstr</span><span class="params">(stdstr.c_str(), stdstr.length())</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="CString-转-wstring"><a href="#CString-转-wstring" class="headerlink" title="CString 转 wstring"></a>CString 转 wstring</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/258050/how-to-convert-cstring-and-stdstring-stdwstring-to-each-other">代码片段四</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/11/08/char-string-CString/" rel="prev" title="C、C++ 和 VC++ 中的字符串">
+                  <i class="fa fa-angle-left"></i> C、C++ 和 VC++ 中的字符串
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/11/30/statically-bound-And-dynamically-bound/" rel="next" title="静态绑定 & 动态绑定">
+                  静态绑定 & 动态绑定 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

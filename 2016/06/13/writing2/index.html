@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="分为语法和工具两个部分，备忘录。 语法写在前面在使用 JotterPad（CommonMark）阅读 markdown 格式的文本时，发现的细节：  标题 # 后需要有空格，才能解析成标题，不然就是文本；【重要】  进一步修正：任意级别的标题行前后添加空行，至少标题行之前要有空行，# 之后添加空格；   使用参考式链接时，链接网址只能放在文件最末尾，不然识别不出来；【重要】  引用内使用编号问题：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Markdown 注意事项">
+<meta property="og:url" content="https://tnie.github.io/2016/06/13/writing2/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="分为语法和工具两个部分，备忘录。 语法写在前面在使用 JotterPad（CommonMark）阅读 markdown 格式的文本时，发现的细节：  标题 # 后需要有空格，才能解析成标题，不然就是文本；【重要】  进一步修正：任意级别的标题行前后添加空行，至少标题行之前要有空行，# 之后添加空格；   使用参考式链接时，链接网址只能放在文件最末尾，不然识别不出来；【重要】  引用内使用编号问题：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-06-13T05:15:05.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.679Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="memo">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2016/06/13/writing2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2016/06/13/writing2/","path":"2016/06/13/writing2/","title":"使用 Markdown 注意事项"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 Markdown 注意事项 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="nav-number">1.1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9D%97%E5%85%83%E7%B4%A0"><span class="nav-number">1.2.</span> <span class="nav-text">块元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA%EF%BC%88%E9%92%88%E5%AF%B9-GFM%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">结论（针对 GFM）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7"><span class="nav-number">2.</span> <span class="nav-text">工具</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/06/13/writing2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 Markdown 注意事项 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 Markdown 注意事项
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-06-13 13:15:05" itemprop="dateCreated datePublished" datetime="2016-06-13T13:15:05+08:00">2016-06-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>分为语法和工具两个部分，备忘录。</p>
+<h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>在使用 JotterPad（CommonMark）阅读 markdown 格式的文本时，发现的细节：</p>
+<ol>
+<li><p>标题 <code>#</code> 后需要有空格，才能解析成标题，不然就是文本；【重要】</p>
+<ul>
+<li>进一步修正：任意级别的标题行前后添加空行，至少标题行之前要有空行，<code>#</code> 之后添加空格；</li>
+</ul>
+</li>
+<li><p>使用参考式链接时，链接网址只能放在文件最末尾，不然识别不出来；【重要】</p>
+</li>
+<li><p>引用内使用编号问题：</p>
+<blockquote>
+<p>引用文字</p>
+<ol>
+<li>item1</li>
+<li>item</li>
+</ol>
+<p>编号结束，结尾的引用文字</p>
+</blockquote>
+</li>
+<li><p>怎么写代码块？——是解析的，只不过呈现方式只体现在字体上，排版效果并不明显。</p>
+</li>
+<li><p><del>尽量不要嵌套使用。在 GitHub 上项目的 README.md 都不复杂。占一屏幕，不需要滚屏。</del> 建议很值得采纳，但实在是不实用。</p>
+</li>
+<li><p>可以做图片链接的哦，惊喜</p>
+</li>
+<li><p><del>嵌套时无需有空行（分段需求除外，比如引用时），当两个模块是平行关系时需要有空行（列表除外，列表项之间添加空行会引入 &lt;p&gt;）。参考 1.1 节</del></p>
+</li>
+<li><p>中英文混合排版加不加空格问题，持保留态度，无论加或者不加，都保持原状。</p>
+<ol>
+<li>强调语义，不加；强调呈现，添加。</li>
+<li>书写笔记不考虑纯手工补充空格，为了表现效果美观<strong>吹毛求疵</strong>，时间成本太高，没有意义。【重要】</li>
+</ol>
+<p> 扩展阅读：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.geekpark.net/topics/198213">不仅仅是空格的问题——再谈中西文混排</a></li>
+</ul>
+</li>
+<li><p>测试 item</p>
+</li>
+</ol>
+<h2 id="块元素"><a href="#块元素" class="headerlink" title="块元素"></a>块元素</h2><p>模块之间的嵌套使用，怎么书写是规范的一直是一件比较困惑的事情。但在我写下这篇文字的时候，我已经感觉到胜利在朝我招手了。</p>
+<p>首先一定要有意识区分“块元素（Block Element）”和“Span Element”，对于熟悉 html 的程序员来说可能是很 easy 的一件事情，但是虽然我用 Markdown 两三个月，相关的操作手册、语法说明也看了很多，但我是自动过滤这两个单词的，讲解标题（用不同数目的 # 区分标题级别）和强调（用 * 斜体，** 加粗）时肯定是分别放在 Block Element 和 Span Element 中介绍，但我脑子里是没有这两个概念的，我并未意识到它们意味着什么，甚至并未意识到它们的存在。我真的是个前端白痴，原谅我。</p>
+<ol>
+<li><p>块元素（Block Element）包括：</p>
+<ul>
+<li>标题</li>
+<li>引用</li>
+<li>列表，注意是整个列表，而不是列表的 item</li>
+<li>代码块</li>
+<li>分割线</li>
+</ul>
+</li>
+<li><p>Span Element 包括：</p>
+<ul>
+<li>链接</li>
+<li>强调</li>
+<li>代码</li>
+<li>图片</li>
+</ul>
+</li>
+</ol>
+<p>块元素是涉及嵌套的主体！Span Element 不是。所以嵌套问题是块元素的嵌套问题，额，如果我了解 html 多好。</p>
+<h2 id="结论（针对-GFM）"><a href="#结论（针对-GFM）" class="headerlink" title="结论（针对 GFM）"></a>结论（针对 GFM）</h2><p><strong>秘籍：</strong>（在严格坚持第一点的基础上，除却以下情况不会用到第二点：如果问题出现在章节末尾（见本文末尾）、列表末尾，使用第二点）</p>
+<ol>
+<li><p>每个独立的块元素（包括分段）之后留有空行，标题、分割线可以除外；</p>
+</li>
+<li><p>哪个块元素解析有问题，就在哪个块元素之前加空行；</p>
+<ol>
+<li>为了保证一致性（特殊情形，即当前嵌套情形（列表主体除末尾空行无其他空行，且在末尾嵌套有子列表）），要求嵌套子列表时，子模块前添加空行（即本行之前的空行，否则解释时不完美）；</li>
+</ol>
+</li>
+<li><p>综合上述两点，在每个块元素（包括分段）的前后添加空行可以保证所有情形下解释正确。唯一的不足在于阅读源文本时可能稍显松散。</p>
+</li>
+<li><p>其实，在每个块元素（包括分段、标题、分割线）之前留有空行是不是就万事大吉了呢？【重要】</p>
+</li>
+</ol>
+<p><strong>详细描述：</strong></p>
+<ol>
+<li><p>分段用空行，这句是废话；</p>
+</li>
+<li><p>标题之前加空行，保证所有情况下语法正常解释；【重要】</p>
+<ul>
+<li>如果前置标题、分割线或者普通段落，则没有空行语法也能正常解释；</li>
+<li>如果前置列表、引用等，没有空行，语法解释后呈现有问题；</li>
+</ul>
+</li>
+<li><p>空行意味着引用、列表的结束；标题、分割线是单行的；GFM 中代码块是 &#96;&#96;&#96; 结束的。多个空行合并成一个。</p>
+<ul>
+<li>分段时，空行意味着段落的结束；</li>
+<li>非分段情况下，段落之后不用跟空行。接标题、引用、<del>列表、</del>代码块都意味着段落结束。</li>
+<li>非分段情况下，段落之后无空行直接跟有序列表，是有问题的；直接跟无序列表没问题；</li>
+<li>综合上述三条，建议每个独立的块元素之后留有空行，标题、分割线除外【重要】</li>
+</ul>
+</li>
+<li><p>列表内容拥有缩进概念；</p>
+<ul>
+<li>列表 item 中缩进内容（针对引用、代码块）前（或者后）加空行；否则语法无法正常解释</li>
+<li>缩进内容为列表（即嵌套子列表）时，按照规则建议添加空行。即使无空行，语法也能正常解释，看着还顺眼一点</li>
+<li>综合上述两条，建议在嵌套子模块的结尾留有空行【重要】</li>
+</ul>
+</li>
+</ol>
+<p>补充说明：</p>
+<ol>
+<li><p>列表的 item 之间一般不需要空行（分段除外），如果</p>
+<blockquote>
+<p>如果列表项之间有空行，markdown会给每一个生成的li元素创建一个p:</p>
+</blockquote>
+</li>
+</ol>
+<h1 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h1><p>前两年一直使用的 MarkdownPad2，后来随着系统更新（而软件并未跟进）出现了几项功能性问题，虽然也能通过某些手段结局，但无疑是影响体验的。</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/40eb4f8207d1" title="MarkdownPad 2 使用问题">MarkdownPad 2 使用问题</a></p>
+<p>在此基础上，由于对 Visual Studio Code 好奇心（喜新厌旧嘛），放弃了使用 MarkdownPad2，但回头再看（2020&#x2F;12&#x2F;25 17:38:28 ）前者也只那些 vimer 的狂欢，经过各种调教之后可能好用，但调教本身也是成本。</p>
+<blockquote>
+<p>快捷键支持并不完全。还是算了。<a target="_blank" rel="noopener" href="https://lanlan2017.github.io/blog/11f888fa/">来源</a></p>
+</blockquote>
+<p>深有感触，不胜其烦。所以又回归了 MarkdownPad2</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/memo/" rel="tag"># memo</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/05/31/regex/" rel="prev" title="正则表达式">
+                  <i class="fa fa-angle-left"></i> 正则表达式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/07/15/Flume%20&%20Redis/" rel="next" title="Flume & Redis 学习笔记V0.1">
+                  Flume & Redis 学习笔记V0.1 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

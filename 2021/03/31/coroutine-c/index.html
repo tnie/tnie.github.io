@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="来源：https:&#x2F;&#x2F;lewissbaker.github.io&#x2F;2018&#x2F;09&#x2F;05&#x2F;understanding-the-promise-type Coroutine ConceptsThe compiler applies some fairly mechanical transformations to the code that you write to turn it into a st">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ Coroutines Understanding the promise type">
+<meta property="og:url" content="https://tnie.github.io/2021/03/31/coroutine-c/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="来源：https:&#x2F;&#x2F;lewissbaker.github.io&#x2F;2018&#x2F;09&#x2F;05&#x2F;understanding-the-promise-type Coroutine ConceptsThe compiler applies some fairly mechanical transformations to the code that you write to turn it into a st">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-31T07:31:00.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.617Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="coroutine">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2021/03/31/coroutine-c/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2021/03/31/coroutine-c/","path":"2021/03/31/coroutine-c/","title":"C++ Coroutines Understanding the promise type"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>C++ Coroutines Understanding the promise type | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Coroutine-Concepts"><span class="nav-number">1.</span> <span class="nav-text">Coroutine Concepts</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Promise-objects"><span class="nav-number">2.</span> <span class="nav-text">Promise objects</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#How-the-compiler-chooses-the-promise-type"><span class="nav-number">2.1.</span> <span class="nav-text">How the compiler chooses the promise type</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Identifying-a-specific-coroutine-activation-frame"><span class="nav-number">2.2.</span> <span class="nav-text">Identifying a specific coroutine activation frame</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/31/coroutine-c/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="C++ Coroutines Understanding the promise type | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ Coroutines Understanding the promise type
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-03-31 15:31:00" itemprop="dateCreated datePublished" datetime="2021-03-31T15:31:00+08:00">2021-03-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>来源：<a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type">https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type</a></p>
+<h1 id="Coroutine-Concepts"><a href="#Coroutine-Concepts" class="headerlink" title="Coroutine Concepts"></a>Coroutine Concepts</h1><p>The compiler applies some fairly mechanical transformations to the code that you write to turn it into a state-machine that allows it to suspend execution at particular points within the function and then later resume execution.</p>
+<p>编译器会对您编写的代码进行一些相当机械的转换，以将其转换为状态机，使状态机可以在函数内的特定点挂起执行，然后再恢复执行。</p>
+<h1 id="Promise-objects"><a href="#Promise-objects" class="headerlink" title="Promise objects"></a>Promise objects</h1><p>The Promise object defines and controls the behaviour of the coroutine itself by implementing methods that are called at specific points during execution of the coroutine.</p>
+<span id="more"></span>
+
+<blockquote>
+<p>Before we go on, I want you to try and rid yourself of any preconceived notions of what a “promise” is. While, in some use-cases, the coroutine promise object does indeed act in a similar role to the <code>std::promise</code> part of a <code>std::future</code> pair, for other use-cases the analogy is somewhat stretched. It may be easier to think about the coroutine’s promise object as being a “coroutine state controller” object that controls the behaviour of the coroutine and can be used to track its state.</p>
+<p>在继续之前，我希望您尝试摆脱对“promise”的任何先入为主的观念。虽然在某些用例中，协程的 promise 对象确实起到了与 <code>std::future</code> 的 <code>std::promise</code> 部分相似的作用，但在其他用例中，类推却有些捉襟见肘。将协程的 promise 对象视为控制协程行为并可以用来跟踪其状态的“<strong>协程状态控制器</strong>”对象可能更容易些。</p>
+</blockquote>
+<p>When you write a coroutine function that has a body, <code>&lt;body-statements&gt;</code>, which contains one of the coroutine keywords (<code>co_return</code>, <code>co_await</code>, <code>co_yield</code>) then the body of the coroutine is transformed to something (roughly) like the following:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">co_await</span> promise.<span class="built_in">initial_suspend</span>();</span><br><span class="line">  <span class="keyword">try</span></span><br><span class="line">  &#123;</span><br><span class="line">    &lt;body-statements&gt;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">catch</span> (...)</span><br><span class="line">  &#123;</span><br><span class="line">    promise.<span class="built_in">unhandled_exception</span>();</span><br><span class="line">  &#125;</span><br><span class="line">FinalSuspend:</span><br><span class="line">  <span class="keyword">co_await</span> promise.<span class="built_in">final_suspend</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>When a coroutine function is called there are a number of steps that are performed prior to executing the code in the source of the coroutine body that are a little different to regular functions.</p>
+<p>Here is a summary of the steps (I’ll go into more detail on each of the steps below).</p>
+<ol>
+<li>Allocate a coroutine frame using <code>operator new</code> (optional).</li>
+<li>Copy any function parameters to the coroutine frame.</li>
+<li>Call the constructor for the promise object of type, <code>P</code>.</li>
+<li>Call the <code>promise.get_return_object()</code> method to obtain the result to return to the caller when the coroutine first suspends. Save the result as a local variable.</li>
+<li>Call the <code>promise.initial_suspend()</code> method and <code>co_await</code> the result.</li>
+<li>When the <code>co_await promise.initial_suspend()</code> expression resumes (either immediately or asynchronously), then the coroutine starts executing the coroutine body statements that you wrote.</li>
+</ol>
+<p>Some additional steps are executed when execution reaches a <code>co_return</code> statement:</p>
+<ol>
+<li>Call <code>promise.return_void()</code> or <code>promise.return_value(&lt;expr&gt;)</code></li>
+<li>Destroy all variables with automatic storage duration in reverse order they were created.</li>
+<li>Call <code>promise.final_suspend()</code> and <code>co_await</code> the result.</li>
+</ol>
+<p>If instead, execution leaves <code>&lt;body-statements&gt;</code> due to an unhandled exception then:</p>
+<ol>
+<li>Catch the exception and call <code>promise.unhandled_exception()</code> from within the catch-block.</li>
+<li>Call <code>promise.final_suspend()</code> and <code>co_await</code> the result.</li>
+</ol>
+<p>Once execution propagates outside of the coroutine body then the coroutine frame is destroyed. Destroying the coroutine frame involves a number of steps:</p>
+<ol>
+<li>Call the destructor of the promise object.</li>
+<li>Call the destructors of the function parameter copies.</li>
+<li>Call <code>operator delete</code> to free the memory used by the coroutine frame (optional)</li>
+<li>Transfer execution back to the caller&#x2F;resumer.</li>
+</ol>
+<p>When execution first reaches a <code>&lt;return-to-caller-or-resumer&gt;</code> point inside a <code>co_await</code> expression, or if the coroutine runs to completion without hitting a <code>&lt;return-to-caller-or-resumer&gt;</code> point, then the coroutine is either suspended or destroyed and the return-object previously returned from the call to <code>promise.get_return_object()</code> is then returned to the caller of the coroutine.</p>
+<p>之后，作者就上述步骤进行了详细的介绍。</p>
+<h2 id="How-the-compiler-chooses-the-promise-type"><a href="#How-the-compiler-chooses-the-promise-type" class="headerlink" title="How the compiler chooses the promise type"></a>How the compiler chooses the promise type</h2><p>The type of the promise object is determined from the signature of the coroutine by using the <code>std::experimental::coroutine_traits</code> class.</p>
+<p>模板类的参数，就是协程函数签名中的返回类型+入参类型。</p>
+<p>模板类 <code>coroutine_traits</code> 的默认实现，是使用返回类型的嵌套类型或类型别名：</p>
+<p><code>using promise_type = typename RET::promise_type;</code></p>
+<p>如果有权限，则在返回值类型中定义嵌套类即可；否则新增 <code>coroutine_traits</code> 特例化。</p>
+<h2 id="Identifying-a-specific-coroutine-activation-frame"><a href="#Identifying-a-specific-coroutine-activation-frame" class="headerlink" title="Identifying a specific coroutine activation frame"></a>Identifying a specific coroutine activation frame</h2><p>When you call a coroutine function, a coroutine frame is created. In order to resume the associated coroutine or destroy the coroutine frame you need some way to identify or refer to that particular coroutine frame.</p>
+<p>The mechanism the Coroutines TS provides for this is the <code>coroutine_handle</code> type.</p>
+<p>You can obtain a coroutine_handle for a coroutine in two ways:</p>
+<ol>
+<li>It is passed to the <code>await_suspend()</code> method during a <code>co_await</code> expression.</li>
+<li>If you have a reference to the coroutine’s promise object, you can reconstruct its coroutine_handle using <code>coroutine_handle&lt;Promise&gt;::from_promise()</code>.</li>
+</ol>
+<p>Note that the coroutine_handle is <strong>NOT</strong> and RAII object. You must manually call <code>.destroy()</code> to destroy the coroutine frame and free its resources.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/coroutine/" rel="tag"># coroutine</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/31/coroutine-b/" rel="prev" title="C++ Coroutines Understanding operator co_await">
+                  <i class="fa fa-angle-left"></i> C++ Coroutines Understanding operator co_await
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/04/02/coroutine/" rel="next" title="Coroutine 学习总结">
+                  Coroutine 学习总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

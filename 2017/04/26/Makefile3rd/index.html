@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="2015年12月8日 16:48:31 此中测试代码见笔记 《Makefile入门》 Makefile 之执行过程 依次读取变量“MAKEFILES”定义的 makefile 文件列表  读取工作目录下的 makefile 文件（根据命名的查找顺序“GNUmakefile”，“makefile”，“Makefile”，首先找到那个就读取那个）  依次读取工作目录 makefile 文件中使用指示符">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Makefile 执行过程 &amp; include 调用方式">
+<meta property="og:url" content="https://tnie.github.io/2017/04/26/Makefile3rd/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="2015年12月8日 16:48:31 此中测试代码见笔记 《Makefile入门》 Makefile 之执行过程 依次读取变量“MAKEFILES”定义的 makefile 文件列表  读取工作目录下的 makefile 文件（根据命名的查找顺序“GNUmakefile”，“makefile”，“Makefile”，首先找到那个就读取那个）  依次读取工作目录 makefile 文件中使用指示符">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/6.png">
+<meta property="article:published_time" content="2017-04-26T03:38:05.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.586Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="make">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/1.png">
+
+
+<link rel="canonical" href="https://tnie.github.io/2017/04/26/Makefile3rd/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2017/04/26/Makefile3rd/","path":"2017/04/26/Makefile3rd/","title":"Makefile 执行过程 & include 调用方式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Makefile 执行过程 & include 调用方式 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Makefile-%E4%B9%8B%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">Makefile 之执行过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#include-%E8%B0%83%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">include 调用方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8"><span class="nav-number">3.</span> <span class="nav-text">延伸</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/26/Makefile3rd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Makefile 执行过程 & include 调用方式 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Makefile 执行过程 & include 调用方式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-04-26 11:38:05" itemprop="dateCreated datePublished" datetime="2017-04-26T11:38:05+08:00">2017-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>2015年12月8日 16:48:31</p>
+<p>此中测试代码见笔记 <a href="/2016/09/18/Makefile1st/">《Makefile入门》</a></p>
+<h1 id="Makefile-之执行过程"><a href="#Makefile-之执行过程" class="headerlink" title="Makefile 之执行过程"></a>Makefile 之执行过程</h1><ol>
+<li>依次读取变量“MAKEFILES”定义的 makefile 文件列表 </li>
+<li>读取工作目录下的 makefile 文件（根据命名的查找顺序“GNUmakefile”，“makefile”，“Makefile”，首先找到那个就读取那个） </li>
+<li>依次读取工作目录 makefile 文件中使用指示符“include”包含的文件 </li>
+<li><em>查找重建所有已读取的 makefile 文件的规则（如果存在一个目标是当前读取的某一个 makefile 文件，则<strong>执行此规则重建此 makefile 文件</strong>，完成以后从第一步开始重新执行）</em> </li>
+<li>初始化变量值并展开那些需要立即展开的变量和函数并根据预设条件确定执行分支 </li>
+<li>根据“终极目标”以及其他目标的依赖关系建立依赖关系链表 </li>
+<li>执行除“终极目标”以外的所有的目标的规则（规则中如果依赖文件中任一个文件的时间戳比目标文件新，则使用规则所定义的命令重建目标文件） </li>
+<li>执行“终极目标”所在的规则</li>
+</ol>
+<span id="more"></span>
+
+<h1 id="include-调用方式"><a href="#include-调用方式" class="headerlink" title="include 调用方式"></a>include 调用方式</h1><p>Makefile 中 include 的调用方式：（针对 include，不考虑 -include、sinclude）</p>
+<ol>
+<li><p>首先在指定的目录下搜索被调用文件（如果没有路径，则为当前目录）</p>
+</li>
+<li><p>如果没有找到，则从 <code>-I</code> 所指定的 include 目录查找，如果还没找到，则从“&#x2F;usr&#x2F;gnu&#x2F;include”“&#x2F;usr&#x2F;local&#x2F;include”等目录查找</p>
+</li>
+<li><p>最终结果还是没找到，则 Makefile 输出异常信息 “No such file or directory”。</p>
+<p> <img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/1.png" alt="测试"></p>
+<p> ps：橙色标注部分，追求细节的话依赖目标不应该空着。</p>
+<p> 以上操作对应 Makefile 执行过程中第 3 步，然后执行第 4 步：</p>
+</li>
+<li><p>Makefile 中<strong>存在一个目标是当前读取的某一个 makefile 文件，执行此</strong>规则来生成对应文件，例如本例中的规则为：</p>
+<p> <img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/2.png" alt="测试"></p>
+<p> 则根据该规则生成 .depend 文件。（此步骤亦可理解为：Makefile 会试图寻找匹配规则来生成对应文件）</p>
+<p> Makefile 继续执行，此例成功执行完毕。</p>
+</li>
+<li><p>如果没有对应规则，输出错误信息 “make: *** No rule to make target &#96;non-exit-file’.  Stop.”。Makefile 终止执行。</p>
+<p> <img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/3.png" alt="测试"></p>
+</li>
+</ol>
+<h1 id="延伸"><a href="#延伸" class="headerlink" title="延伸"></a>延伸</h1><p>如果弄懂了以上内容，那么应该很轻易能够明白下图中 “all: .depend…” 的写法没有意义。</p>
+<p>——因为 “include .depend” 会先于 根据“终极目标”展开依赖关系 执行，且如有必要 include 操作会自主生成 .depend 文件，然后将 .depend 文件中的依赖关系在主 Makefile 中展开。</p>
+<p>此后若再重新生成 .depend 文件（？），已经没有操作需要此文件了（clean 可能会）。只有等到下一次执行 Makefile 时用到，却可能造成某种不确定性的干扰。</p>
+<p>？：如果 .depend 的依赖目标为空，如以上截图所示，则会重新生成；如果 .depend 的依赖目标如下图所示，为源文件，则不会重新生成。</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/4.png" alt="测试"></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>参考：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/yyangblog/p/4159778.html">说说Makefile那些事儿</a>、<a target="_blank" rel="noopener" href="http://blog.csdn.net/duanbeibei/article/details/2910845">Makefile自动依赖</a>（ps：这篇帖子中提到的“Makefile中include的调用方式：”与我实际验证有出入，已在笔记中说明。）</p>
+<p>其中“程序首次编译时肯定不存在.depend文件，但这时makefile也不需要该文件，因为首次编译肯定连接的都是最新文件。也就是说首次编译时生成的.depend文件其实没用上，而是留作以后有了改动，比如更改了.h文件中的宏变量，则此时可根据.depend中的依赖关系只生成对应的.o文件了” 完全是错误的。</p>
+<p>makefile需要 .depend文件，在执行gcc 指令之前就已生成了 .depend文件。展开说一下“以后有了改动…”，头文件改动：a. 改动文件名，则 $(SRCS) 中的文件肯定相应改动（不改动生成.o目标文件时报错），则 .depend <strong>和</strong>其中描述的目标文件，即 $(OBJS) 重新生成；b. 改动文件内容，则 .depend 中描述的目标文件，即 $(OBJS) 重新生成。</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/5.png" alt="测试"></p>
+<p>看一下 .depend文件内容：</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/makefile3rd/6.png" alt="测试"></p>
+<p>以上足以说明<strong>首次编译时生成的 .depend 文件妥妥的用上了！！</strong></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/make/" rel="tag"># make</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/04/25/shell-sub1/" rel="prev" title="shell 及环境变量 -1.4 其他">
+                  <i class="fa fa-angle-left"></i> shell 及环境变量 -1.4 其他
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/04/26/gxx/" rel="next" title="linux 指令之 g++">
+                  linux 指令之 g++ <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="从理解静态绑定 &amp; 动态绑定开始，没想到又扯出静态类型 &amp; 动态类型，编译期多态 &amp; 运行期多态。但这些本来就是一体的。 静态绑定 &amp; 动态绑定刚开始只是看完网上的几篇帖子啰嗦几句心得，落笔时什么都没参考。重新整理笔记时硬是把以前保存在 chrome 书签中帖子给塞进来，也是够难受的。C++中的静态绑定和动态绑定  静态绑定（statically bound），又名">
+<meta property="og:type" content="article">
+<meta property="og:title" content="静态绑定 &amp; 动态绑定">
+<meta property="og:url" content="https://tnie.github.io/2016/11/30/statically-bound-And-dynamically-bound/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="从理解静态绑定 &amp; 动态绑定开始，没想到又扯出静态类型 &amp; 动态类型，编译期多态 &amp; 运行期多态。但这些本来就是一体的。 静态绑定 &amp; 动态绑定刚开始只是看完网上的几篇帖子啰嗦几句心得，落笔时什么都没参考。重新整理笔记时硬是把以前保存在 chrome 书签中帖子给塞进来，也是够难受的。C++中的静态绑定和动态绑定  静态绑定（statically bound），又名">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-11-30T01:27:38.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.664Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2016/11/30/statically-bound-And-dynamically-bound/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2016/11/30/statically-bound-And-dynamically-bound/","path":"2016/11/30/statically-bound-And-dynamically-bound/","title":"静态绑定 & 动态绑定"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>静态绑定 & 动态绑定 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E7%BB%91%E5%AE%9A-%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A"><span class="nav-number">1.</span> <span class="nav-text">静态绑定 &amp; 动态绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E7%BB%91%E5%AE%9A"><span class="nav-number">1.1.</span> <span class="nav-text">静态绑定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A"><span class="nav-number">1.2.</span> <span class="nav-text">动态绑定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%B4%E7%B4%A0%E8%A7%82%E7%82%B9"><span class="nav-number">1.3.</span> <span class="nav-text">朴素观点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E7%B1%BB%E5%9E%8B-%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">静态类型 &amp; 动态类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E5%A4%9A%E6%80%81-%E8%BF%90%E8%A1%8C%E6%9C%9F%E5%A4%9A%E6%80%81"><span class="nav-number">3.</span> <span class="nav-text">编译器多态 &amp; 运行期多态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8-%E8%BF%90%E8%A1%8C%E6%9C%9F"><span class="nav-number">4.</span> <span class="nav-text">编译器 &amp; 运行期</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B4%E8%A7%82%E6%84%9F%E5%8F%97%E5%92%8C%E7%90%86%E6%80%A7%E5%88%86%E6%9E%90"><span class="nav-number">4.1.</span> <span class="nav-text">直观感受和理性分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%AE%E9%80%9A-const-%E5%B8%B8%E9%87%8F%E5%88%86%E4%B8%8D%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98%EF%BC%9F"><span class="nav-number">4.2.</span> <span class="nav-text">普通 const 常量分不分配内存？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%99%E4%BB%A3%E7%A0%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">5.</span> <span class="nav-text">写代码注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%EF%BC%88%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%E7%9A%84%EF%BC%89%E9%87%8D%E8%BD%BD%E3%80%81%E8%A6%86%E7%9B%96%E4%B8%8E%E9%9A%90%E8%97%8F"><span class="nav-number">5.1.</span> <span class="nav-text">（成员函数的）重载、覆盖与隐藏</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/30/statically-bound-And-dynamically-bound/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="静态绑定 & 动态绑定 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          静态绑定 & 动态绑定
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-11-30 09:27:38" itemprop="dateCreated datePublished" datetime="2016-11-30T09:27:38+08:00">2016-11-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>从理解静态绑定 &amp; 动态绑定开始，没想到又扯出静态类型 &amp; 动态类型，编译期多态 &amp; 运行期多态。但这些本来就是一体的。</p>
+<h1 id="静态绑定-动态绑定"><a href="#静态绑定-动态绑定" class="headerlink" title="静态绑定 &amp; 动态绑定"></a>静态绑定 &amp; 动态绑定</h1><p>刚开始只是看完网上的几篇帖子啰嗦几句心得，落笔时什么都没参考。重新整理笔记时硬是把以前保存在 chrome 书签中帖子给塞进来，也是够难受的。<a target="_blank" rel="noopener" href="http://www.cnblogs.com/lizhenghn/p/3657717.html">C++中的静态绑定和动态绑定</a></p>
+<ul>
+<li>静态绑定（statically bound），又名前期绑定（early binding）；</li>
+<li>动态绑定（dynamically bound），又名延期绑定（late binding）。</li>
+</ul>
+<p><em>ps 英文名称摘自《Effective C++》 条款37。此条款中有关于“静态类型、动态类型”的描述。</em></p>
+<p>在 C 语言中并没有“静态绑定”、“动态绑定”的概念（至少我没有查到）。</p>
+<span id="more"></span>
+
+<p>我理解的 C++ 类的内存模型其实就是 C 语言中的 struct 结构体。但成员函数又是归属于类所有的，所以就存在函数到类的绑定。</p>
+<ul>
+<li>静态绑定指的就是这种绑定关系（映射关系）是在编译期间确定的；</li>
+<li>动态绑定指的就是这种绑定关系（映射关系）在编译期间确定不了，得等到程序运行、执行期间才能最终确定。</li>
+</ul>
+<h2 id="静态绑定"><a href="#静态绑定" class="headerlink" title="静态绑定"></a>静态绑定</h2><p>有这样一个现象：空指针调用【无需解引用 *this 指针的】非虚函数，是可以正确执行的。<a target="_blank" rel="noopener" href="http://blog.5ibc.net/p/60929.html">参考</a></p>
+<p>对于初学者来说，可以以这个为契机去掌握“静态绑定”。参见 <a target="_blank" rel="noopener" href="http://blog.csdn.net/yusiguyuan/article/details/38555435">为什么通过空指针（NULL）可以正确调用类的部分成员函数 - csdn - 鱼思故渊的专栏</a>，作者在文章开头言简意赅的介绍了这种现象为什么会出现，后面通过“将对象指针作为参数，以 non-member 函数的形式使用成员函数 + 汇编代码”进行了更深入的讲解，值得好好学习。</p>
+<p><strong>课外阅读：</strong>如果看完上一篇帖子意犹未尽，可以继续看 <a target="_blank" rel="noopener" href="http://kelvinh.github.io/blog/2014/03/27/cpp-tutorial-pointer-to-member-function/">C++教程：指向成员函数的指针</a>，在项目开发中基本不会用到成员函数指针，但了解这些有助于我们理解 C++ 的底层机制。阅读过程会比较吃力（关于虚函数的部分可以放到掌握继承、多态之后再学习），进度可能缓慢，但没有难点。如果寸步难行，那说明你对于 C、C++ 的底层毫无概念，真的还是个新手——很新的新手。</p>
+<h2 id="动态绑定"><a href="#动态绑定" class="headerlink" title="动态绑定"></a>动态绑定</h2><p>虚函数是动态绑定的基础；动态绑定是实现<strong>运行时多态</strong>的基础。<a target="_blank" rel="noopener" href="http://blog.csdn.net/iicy266/article/details/11906509">五星-请阅读原文</a></p>
+<p>要触发动态绑定，需满足两个条件：</p>
+<ol>
+<li>只有虚函数才能进行动态绑定，非虚函数不进行动态绑定。</li>
+<li>必须通过基类类型的引用或指针进行函数调用。</li>
+</ol>
+<p>虚函数动态绑定发生在运行时，源于其设计理念、其出发点就是为了让一指针变量（或引用）根据指向的对象的实际类型（动态类型）来选择函数以实现多态性。这种选择（即动态绑定）肯定只能发生在指针变量指向某块内存（初始化）之后，同时继承体系的存在允许我们切换基类指针指向基类对象或派生类对象（赋值）。因为初始化（或者赋值）发生于运行期间，所以动态绑定也只能发生在运行期间。</p>
+<p>反过来，如果不需要进行这种选择，使用哪个函数根据变量声明时的类型（静态类型）就能确定的话，那我们就可以把这个绑定往前放，因为静态类型在编译时是已知的了。</p>
+<h2 id="朴素观点"><a href="#朴素观点" class="headerlink" title="朴素观点"></a>朴素观点</h2><p>我们朴素地分析一下静态绑定、动态绑定。函数都有其地址，函数调用翻译成汇编代码其实就是直接用地址，很明显在汇编代码这个层次（甚至不用这么底层，C语言层次就行）不同的函数实现有不同的地址（使用C 语言的话，就有不同的函数名），但在 C++、Java 高级语言这个层次，不同的实现可能有相同的函数名（有很多种情况：重载、不同类里面相同名称、模板、继承体系中的重写），在 C++ 代码中出现一个函数调用（函数名），怎么正确地找到对应的实现（地址）呢？</p>
+<ol>
+<li>重载：因为参数类型或者个数不同其实是有区分的，直接在高级语言下一个层次（比如C语言层面）使用不同的命名重新包装就可以了。调用时根据传参的情况，再映射就可以了。</li>
+<li>不同的 class 里面相同名称：编译器实现这个完全可以和重载情形使用同样的方案。维护一个映射表就可以。</li>
+<li>模板：暂时不了解</li>
+<li>继承体系的重写：</li>
+</ol>
+<p>我们都知道 override 函数时，两个函数的声明式肯定是一模一样的，如果不考虑 override 的概念（具体到代码中就是不使用 <code>virtual</code> 关键字），那么其场景和上述第 2 中就是一样的——如果是 base 类型（即便是指针）就调用 base class 的函数，如果是 derived 类型就调用 derived class 的函数。事实上都是编译期间根据维护的映射表“偷梁换柱”（映射是在声明的类型（函数声明式、类类型）-具体的函数实现之间），直接把对应的地址拿过来，ok，汇编代码完成了。</p>
+<p>继承体系中允许 base 指针是可以指向 derived 对象，但编译器依旧是根据声明指针时的类型去映射具体的函数实现的，所以会出现一些变态的现象：</p>
+<ul>
+<li>class Base 无 void func()，class Derived 有 void func()，我们执行 <code>Base *p=new Derived(); p-&gt;func();</code> 会报错找不到</li>
+<li>class Base 的 void func() 打印 base，class Derived 的 void func() 打印 derived，我们执行 <code>Base *p=new Derived(); p-&gt;func();</code> 会打印出 base 纳尼</li>
+<li>class myclass 有函数 simple()，函数实现中没有对 this 解引用的操作（不管是显式的还是隐在的），我们执行 <code>myclass *p=NULL； p-&gt;simple()；</code> 能够正确执行</li>
+</ul>
+<p>so，正如我们看到的，这就是静态绑定。</p>
+<p>随着 OO 越来与流行，为了获得多态性，我们想要打破这种规则——继承体系中允许基类指针指向派生类对象，在此基础上我们想让基类指针可以调用派生类的函数，我们要让例二 <code>p-&gt;func()</code> 打印 derive 怎么办？</p>
+<p>好吧，增添新的语言特性，使用关键词 <code>virtual</code>，用来表明碰到这个类的指针（或引用）调用此函数时不要根据静态类型（声明指针的类型）映射具体实现，你们要根据这个指针指向的对象的实际类型来映射具体实现（即动态绑定）。编译器说，纳尼，我靠，我哪知道啊？我只解析 declaration，只分析了变量声明的类型，内存的初始化、赋值在运行期才发生呢……好吧，编译器感觉为难做不了这个事情，只能把这个找到（绑定）函数具体实现的步骤放到运行期间了，可是效率会低一些呢。如果你要多态性，只能接受了。</p>
+<p>具体实现中通过 <code>virtual</code> 关键词标记延迟绑定，然后在运行过程中，根据对象内存中的虚函数表指针获得函数地址。</p>
+<p>如果不是通过指针或引用调用虚函数，也是在编译期间就绑定的【作业一？】；而没有 <code>virtual</code> 修饰的函数根据调用者的静态类型在编译期间直接绑定。</p>
+<h1 id="静态类型-动态类型"><a href="#静态类型-动态类型" class="headerlink" title="静态类型 &amp; 动态类型"></a>静态类型 &amp; 动态类型</h1><ul>
+<li>静态类型（static type）：静态类型在编译时总是已知的，它是变量声明时的类型或表达式生成的类型。</li>
+<li>动态类型（dynamic type）：动态类型则是变量或表达式表示的内存中的对象的类型，动态类型直到运行时才可知。</li>
+</ul>
+<p>以上概念可以去翻书《C++ Primer》第 534 页，也可以查阅《Effective C++》的条款37。</p>
+<blockquote>
+<p>如果表达式既不是引用也不是指针，则它的动态类型永远与静态类型一致。</p>
+</blockquote>
+<blockquote>
+<p>动态类型一如其名称所示，可在程序执行过程中改变（通常是经由赋值动作）。</p>
+</blockquote>
+<p>动态绑定和动态类型一体两面，息息相关。在继承体系使用引用和指针，就会涉及动态类型；进一步如果继承体系中涉及虚函数（事实上必然会涉及，考虑虚析构函数），就会发生动态绑定。</p>
+<h1 id="编译器多态-运行期多态"><a href="#编译器多态-运行期多态" class="headerlink" title="编译器多态 &amp; 运行期多态"></a>编译器多态 &amp; 运行期多态</h1><p>在 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/QG-whz/p/5132745.html">C++编译期多态与运行期多态</a> 开篇写到：</p>
+<blockquote>
+<p>在面向对象C++编程中，多态是OO三大特性之一，这种多态称为运行期多态，也称为动态多态；在泛型编程中，多态基于template(模板)的具现化与函数的重载解析，这种多态在编译期进行，因此称为编译期多态或静态多态。</p>
+</blockquote>
+<p>进入正文作者总结到：</p>
+<blockquote>
+<p>运行期多态的设计思想要归结到类继承体系的设计上去。运行期多态的实现依赖于虚函数机制。</p>
+<p>对模板参数而言，多态是通过模板具现化和函数重载解析实现的。以不同的模板参数具现化导致调用不同的函数，这就是所谓的编译期多态。</p>
+</blockquote>
+<p>在 <a target="_blank" rel="noopener" href="http://blog.csdn.net/dan15188387481/article/details/49667389">多态性之编译期多态和运行期多态(C++版)</a> 则重点强调了</p>
+<blockquote>
+<p>需要注意的是函数重载和多态无关，很多地方把函数重载也误认为是编译期多态，这是错误的。</p>
+<p>当说到多态性的时候一般都默认指运行期多态。</p>
+</blockquote>
+<p>作为小人物，真心不想扯“函数重载到底算不算编译器多态？”这种问题。</p>
+<h1 id="编译器-运行期"><a href="#编译器-运行期" class="headerlink" title="编译器 &amp; 运行期"></a>编译器 &amp; 运行期</h1><p>为什么变量的初始化（或者赋值）只能发生在运行时，而不能在编译时呢？因为分配内存发生在运行时，包括 const 常量（下文详细描述）。</p>
+<p>此处有一个容易混淆的概念，我们经常区分“编译器分配内存”和“动态分配内存”，但“编译器分配内存”<strong>不是</strong>“编译期分配内存”。编译器分配内存，是说内存的分配和回收的<strong>指令（命令、函数或操作符等）</strong>不用我们这些 coder 去手工写明，当数据类型（非容器）确定时，编译器能够为我们做这些繁琐、重复且容易出错的内存分配工作，它会在汇编代码中生成内存分配和回收的<strong>命令</strong>。但编译器也只能做“确定性”的工作，不确定的或者会动态改变的情形还是需要我们 coder 使用高级语言“下指令”（动态分配内存），<del>好在可以封装</del>，比如 STL 的容器类，shared_pointer 智能指针等等。</p>
+<p>内存的管理工作编译器承担了大部分，我们得以从“埋头和机器交流”中解放出来，有更多的时间关注业务。但无论是否需要我们手工“下指令”，程序向系统要内存（获取&#x2F;分配），用完了把内存还给系统（释放&#x2F;回收）都是发生在运行期间。</p>
+<blockquote>
+<p>编译期分配内存并不是说在编译期就把程序所需要的空间在内存里面分配好，而是说在程序生成的代码里面产生一些指令，由这些指令控制程序在运行的时候把内存分配好。不过分配的大小在编译的时候就是知道的，并且这些存贮单元的位置也是知道的。</p>
+<p>而运行期分配内存则是说在运行期确定分配的大小，存放的位置也是在运行期才知道的。<a target="_blank" rel="noopener" href="http://bbs.csdn.net/topics/60053885">引用来源</a></p>
+</blockquote>
+<h2 id="直观感受和理性分析"><a href="#直观感受和理性分析" class="headerlink" title="直观感受和理性分析"></a>直观感受和理性分析</h2><p>logical，就是因为变量需要内存，分配内存发生于运行时。</p>
+<p>如果我们把普通 <code>const</code> 常量认为和宏一样（事实上只限于 C++编译器，且要求是直接定义的 <code>const</code> 常量），那么其编译过程我们可以这样理解：<code>const</code> 属性的变量在编译时就确定，即编译器会将这个变量出现的所有位置直接替换成值，在编译器生成的汇编代码中不会出现这个变量名称。</p>
+<p>很显然 non-const 变量不可以这么做，因为它在后面的逻辑中会有更改，甚至于其初始化（或者赋值）完全依赖运行过程中的用户输入 <code>int j = atoi(argv[1]) </code>。所以在编译器生成的汇编代码中必须保留有这个变量。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Base 类有虚函数 func()</span></span><br><span class="line"><span class="comment">// Derived 继承自 Base，且 override 了 func()</span></span><br><span class="line">Base *p=<span class="keyword">new</span> <span class="built_in">Derived</span>(); </span><br><span class="line">p-&gt;<span class="built_in">func</span>();</span><br></pre></td></tr></table></figure>
+
+<p>再来回顾一下上述代码，我们觉得一目了然的事情，比如编译器汇编时直接把 <code>p-&gt;func()</code> 调用换成 <code>derived::func(p)</code> 不就好了吗，实现起来很难吗？事实上编译器是卡在它只知道 p 是 <code>base *</code> 类型，它并不知晓 p 被初始化（赋值）了什么，它只生成“得到一个地址，把这个地址赋给 base 指针 p；根据 p 指明的地址调用 func()” 的指令，至于前一条“分配内存，初始化 derived 对象”的指令，现在是前后相邻紧挨着，其他场景可能这两条指令相差十万八千里呢。事实上我们只会在测试时写 <code>Base *p=new Derived(); p-&gt;func();</code> 这样的例子，在真实的业务场景中为了效率至少应该写成 <code>Derived derived; derived.func();</code>，在能够确定类型的时候使用静态绑定效率更高。实际上真实的业务场景多是</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">func</span>(base *p)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// some codes</span></span><br><span class="line">  p-&gt;<span class="built_in">func</span>();</span><br><span class="line">  <span class="comment">// other codes</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">base *p = onePointer;</span><br><span class="line"><span class="built_in">func</span>(p);</span><br></pre></td></tr></table></figure>
+
+<p>正如这段代码，<strong>跨越</strong>上下文的事情，我们能轻易理解是发生在运行期，是动态绑定。我们只会困惑于上下文紧邻的情形，比如例二，比如 <code>const int i=1; const int j = i+1;</code> 后者编译器可以（但不是必须的，术语称为“优化”）帮忙处理，但例二就不行。编译器会优化吗？或许应该做个测试。</p>
+<h2 id="普通-const-常量分不分配内存？"><a href="#普通-const-常量分不分配内存？" class="headerlink" title="普通 const 常量分不分配内存？"></a>普通 const 常量分不分配内存？</h2><p>帖子 <a target="_blank" rel="noopener" href="http://blog.csdn.net/eric_jo/article/details/4138548">关于C++ const 的全面总结</a> 正如其标题一样，总结得非常全。其中提到一句：</p>
+<blockquote>
+<p> const定义常量从汇编的角度来看，只是给出了对应的内存地址，而不是象#define一样给出的是立即数，所以，const定义的常量在程序运行过程中只有一份拷贝，而#define定义的常量在内存中有若干个拷贝。</p>
+<p> 编译器<strong>通常</strong>不为普通const常量分配存储空间，而是将它们保存在符号表中，这使得它成为一个编译期间的常量，没有了存储与读内存的操作，使得它的效率也很高。</p>
+</blockquote>
+<p>刨根问底，那什么时候会分配内存呢？在 <a target="_blank" rel="noopener" href="http://blog.csdn.net/eric_jo/article/details/4537694">关于Const常量内存使用</a> 一文中可以找到答案。</p>
+<blockquote>
+<p>C++编译器对除了直接定义的Const常量外，都是分配内存的。</p>
+</blockquote>
+<p>也就是声明和定义（初始化分配内存）分开的 const 常量，这种情况下编译器无法获知常量的值。关于“const 修饰类内成员变量”，除了遵循这个原则外，还有更复杂的使用限制，详情请翻书《Effective C++》条款2、条款3 和条款4。</p>
+<blockquote>
+<p>如果成员变量是 const 或 reference，它们就一定需要初值，不能被赋值。</p>
+</blockquote>
+<h1 id="写代码注意事项"><a href="#写代码注意事项" class="headerlink" title="写代码注意事项"></a>写代码注意事项</h1><ol>
+<li><p>不要重新定义继承而来的非虚函数。参考《Effective C++》条款36</p>
+<p> 如果基类中某个函数没有被声明为虚函数，派生类中也定义了同原型的函数的话，通过基类指针访问派生类定义的对象，调用的函数是基类中的定义，而不是派生类中的定义。</p>
+<p> 这也是增加一个 virtual 关键字的意义。</p>
+<blockquote>
+<p>一个对象、引用或指针的静态类型决定了该对象的哪些成员是可见的。摘抄自《C++ Primer》第547页。</p>
+</blockquote>
+</li>
+<li><p>不要重新定义继承而来的虚函数的缺省参数值，缺省参数值是静态绑定的。参考《Effective C++》条款37</p>
+</li>
+</ol>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.oschina.net/question/54100_20313">a</a>、<a target="_blank" rel="noopener" href="http://notes.maxwi.com/2016/08/19/static-dynamic-binding/">b</a>、</p>
+<h2 id="（成员函数的）重载、覆盖与隐藏"><a href="#（成员函数的）重载、覆盖与隐藏" class="headerlink" title="（成员函数的）重载、覆盖与隐藏"></a>（成员函数的）重载、覆盖与隐藏</h2><p>覆盖，和隐藏是很不一样的两个概念，要重点区分。<a target="_blank" rel="noopener" href="http://blog.csdn.net/sendy888/article/details/1739113">五星-请阅读原文</a></p>
+<p>重载（overload）：同名函数变量，但属于不同的函数类型。发生在同一个作用域内，即在同一个类中。如果跨类，在父类、子类当中存在同名的函数变量（即便是不同的函数类型），如果是 virtual 性质的，就是重载（也叫继承，函数层面的继承），如果是 non-virtual 性质的，（只要子类中有一个同名函数变量没有用 virtual 修饰）就会发生隐藏——这个坑应该绕道走。</p>
+<p>覆盖（override）：派生类函数覆盖基类函数，必须有 virtual 关键字修饰，且函数类型相同，函数变量命名相同。</p>
+<p>隐藏（hide）：有些笔记中会写作“overwrite”，但这个词不是 C++ 中的术语，是<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/4738315/c-overriding-overwriting">不规范的写法</a>。在代码层面上，隐藏很容易让人困扰，但其本质上只是嵌套作用域中命名隐藏问题。和以下代码同理。</p>
+<p>ps 即便函数变量的类型不同，但编译器只关注变量的命名。如果还是似懂非懂，感到困惑，可以去翻书《C++ Primer》第 547 页。</p>
+<blockquote>
+<p>一如往常，名字查找先于类型检查。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Print</span><span class="params">(<span class="type">int</span> var)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  cout &lt;&lt; var &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="type">int</span> var = <span class="number">10</span>;   <span class="comment">// 调用 Print() 时，外层作用域的同名变量已经被隐藏</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="type">float</span> var = <span class="number">11.1</span>;</span><br><span class="line">    <span class="built_in">Print</span>(var);   <span class="comment">// float 隐式转换成 int，打印 11</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在《Effective C++》一书条款 36 提到“绝不重新定义继承而来的 non-virtual 函数”，就是为了避免隐藏带来的问题。</p>
+<p>参考书籍：<a target="_blank" rel="noopener" href="https://book.douban.com/subject/25708312/">《C++ Primer》</a>、<a target="_blank" rel="noopener" href="https://book.douban.com/subject/5387403/">《Effective C++》</a></p>
+<p>—–以下暂时弃用<br>[08]:<a target="_blank" rel="noopener" href="http://blog.csdn.net/ygzhong000/article/details/42034279">http://blog.csdn.net/ygzhong000/article/details/42034279</a><br>[09]:<a target="_blank" rel="noopener" href="http://blog.csdn.net/dongpy/article/details/1118658">http://blog.csdn.net/dongpy/article/details/1118658</a><br>[07]:<a target="_blank" rel="noopener" href="http://www.cnblogs.com/ztteng/p/3419843.html">http://www.cnblogs.com/ztteng/p/3419843.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/11/16/char-wchar-t/" rel="prev" title="字符（串）之间的转换">
+                  <i class="fa fa-angle-left"></i> 字符（串）之间的转换
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/11/30/do-not-read/" rel="next" title="不值得读">
+                  不值得读 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

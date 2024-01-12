@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="automake 系列工具友好性的确不咋地，而且只限于 *inux 平台。跨平台还是 cmake 为佳，也有越来越多的项目在使用 cmake，比如 google 的 gRPC，比如 zlib 也支持 cmake。 如果只是说要编译三方库为自己所用，一般来说不需要掌握怎么编写 CMakeLists.txt；只有当自己的项目需要用 cmake 管理、组织编译时才需要弄懂 CMakeLists.txt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cmake 备忘">
+<meta property="og:url" content="https://tnie.github.io/2018/12/03/cmake/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="automake 系列工具友好性的确不咋地，而且只限于 *inux 平台。跨平台还是 cmake 为佳，也有越来越多的项目在使用 cmake，比如 google 的 gRPC，比如 zlib 也支持 cmake。 如果只是说要编译三方库为自己所用，一般来说不需要掌握怎么编写 CMakeLists.txt；只有当自己的项目需要用 cmake 管理、组织编译时才需要弄懂 CMakeLists.txt">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-12-03T01:59:20.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.601Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="make">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2018/12/03/cmake/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2018/12/03/cmake/","path":"2018/12/03/cmake/","title":"cmake 备忘"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>cmake 备忘 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-cmake"><span class="nav-number">1.</span> <span class="nav-text">使用 cmake</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E7%BC%96%E8%AF%91"><span class="nav-number">1.1.</span> <span class="nav-text">外部编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%99%A8-generator-G"><span class="nav-number">1.2.</span> <span class="nav-text">生成器 generator -G</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Command-Line-Build-Tool-Generators"><span class="nav-number">1.2.1.</span> <span class="nav-text">Command-Line Build Tool Generators</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IDE-Build-Tool-Generators"><span class="nav-number">1.2.2.</span> <span class="nav-text">IDE Build Tool Generators</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Visual-Studio-Generators"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">Visual Studio Generators</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Platform-Selection-A"><span class="nav-number">1.2.2.1.1.</span> <span class="nav-text">Platform Selection -A</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Toolset-Selection-T"><span class="nav-number">1.2.2.1.2.</span> <span class="nav-text">Toolset Selection -T</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Extra-Generators"><span class="nav-number">1.2.3.</span> <span class="nav-text">Extra Generators</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A2%9E%E5%88%A0%E5%8F%98%E9%87%8F-D"><span class="nav-number">1.3.</span> <span class="nav-text">增删变量 -D</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.3.1.</span> <span class="nav-text">编译模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E7%89%88%E6%9C%AC%E5%90%8E%E7%BC%80"><span class="nav-number">1.3.2.</span> <span class="nav-text">调试版本后缀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MT-%E5%92%8C-MD"><span class="nav-number">1.3.3.</span> <span class="nav-text">MT 和 MD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E8%B7%AF%E5%BE%84"><span class="nav-number">1.3.4.</span> <span class="nav-text">安装路径</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8F%82%E6%95%B0"><span class="nav-number">1.4.</span> <span class="nav-text">其他参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%85%E7%90%86%E4%B9%8B%E5%90%8E%E9%87%8D%E6%96%B0%E6%9E%84%E5%BB%BA%E3%80%81%E7%BC%96%E8%AF%91"><span class="nav-number">1.5.</span> <span class="nav-text">清理之后重新构建、编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cmake-gui"><span class="nav-number">1.6.</span> <span class="nav-text">cmake-gui</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E5%86%99-CMakeLists-txt"><span class="nav-number">2.</span> <span class="nav-text">编写 CMakeLists.txt</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/12/03/cmake/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="cmake 备忘 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          cmake 备忘
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-12-03 09:59:20" itemprop="dateCreated datePublished" datetime="2018-12-03T09:59:20+08:00">2018-12-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>automake 系列工具友好性的确不咋地，而且只限于 *inux 平台。跨平台还是 cmake 为佳，也有越来越多的项目在使用 cmake，比如 google 的 gRPC，比如 zlib 也支持 cmake。</p>
+<p>如果只是说要编译三方库为自己所用，一般来说不需要掌握怎么编写 <code>CMakeLists.txt</code>；只有当自己的项目需要用 cmake 管理、组织编译时才需要弄懂 <code>CMakeLists.txt</code> 中的“语言”怎么编写。</p>
+<h1 id="使用-cmake"><a href="#使用-cmake" class="headerlink" title="使用 cmake"></a>使用 cmake</h1><pre><code>mkdir build &amp;&amp; cd build &amp;&amp; cmake .. &amp;&amp; cmake --build . --target install
+</code></pre>
+<p><code>cmake --build .</code> 在 linux 下等价于 <code>make</code>，在 windows 下等同于 msvc 生成解决方案 </p>
+<span id="more"></span>
+
+<h2 id="外部编译"><a href="#外部编译" class="headerlink" title="外部编译"></a>外部编译</h2><pre><code>mkdir build &amp;&amp; cd build &amp;&amp; cmake ..
+</code></pre>
+<blockquote>
+<p>就是让源码文件和 cmake 生成的工程文件分开，将 cmake 生成的工程文件放在一个单独的目录下面。</p>
+</blockquote>
+<p>坚持使用 build 目录，进行外部编译。以避免在源码目录中混杂垃圾文件。</p>
+<h2 id="生成器-generator-G"><a href="#生成器-generator-G" class="headerlink" title="生成器 generator -G"></a>生成器 generator <code>-G</code></h2><pre><code>cmake -G &quot;&lt;generator&gt;&quot; -DCMAKE_INSTALL_PREFIX=stage ..
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/v3.13/manual/cmake-generators.7.html">cmake-generators 文档</a> 描述</p>
+<h3 id="Command-Line-Build-Tool-Generators"><a href="#Command-Line-Build-Tool-Generators" class="headerlink" title="Command-Line Build Tool Generators"></a>Command-Line Build Tool Generators</h3><p>……</p>
+<h3 id="IDE-Build-Tool-Generators"><a href="#IDE-Build-Tool-Generators" class="headerlink" title="IDE Build Tool Generators"></a>IDE Build Tool Generators</h3><p>These generators support Integrated Development Environment (IDE) project files. Since <strong>the IDEs configure their own environment</strong> one may launch CMake from any environment.</p>
+<h4 id="Visual-Studio-Generators"><a href="#Visual-Studio-Generators" class="headerlink" title="Visual Studio Generators"></a>Visual Studio Generators</h4><ul>
+<li>……</li>
+<li>Visual Studio 12 2013</li>
+<li><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/v3.13/generator/Visual%20Studio%2014%202015.html">Visual Studio 14 2015</a></li>
+<li><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/v3.13/generator/Visual%20Studio%2015%202017.html">Visual Studio 15 2017</a></li>
+</ul>
+<blockquote>
+<p>VS 2017 supports <strong>multiple installations</strong> on the same machine. The <code>CMAKE_GENERATOR_INSTANCE</code> variable may be set as a cache entry containing the absolute path to a Visual Studio instance. If the value is not specified explicitly by the user or a toolchain file, CMake queries the Visual Studio Installer to locate VS instances, chooses one, and sets the variable as a cache entry to hold the value persistently.</p>
+</blockquote>
+<h5 id="Platform-Selection-A"><a href="#Platform-Selection-A" class="headerlink" title="Platform Selection -A"></a>Platform Selection <code>-A</code></h5><p>The <code>CMAKE_GENERATOR_PLATFORM</code> variable may be set, perhaps via the cmake(1) <code>-A</code> option, to specify a target platform name (architecture)<sup>1</sup>. For example:</p>
+<ul>
+<li><code>cmake -G &quot;Visual Studio 14 2015&quot; -A Win32</code> &#x2F; <code>cmake -G &quot;Visual Studio 15 2017&quot; -A Win32</code></li>
+<li><code>cmake -G &quot;Visual Studio 14 2015&quot; -A x64</code> &#x2F; <code>cmake -G &quot;Visual Studio 15 2017&quot; -A x64</code></li>
+<li><code>cmake -G &quot;Visual Studio 14 2015&quot; -A ARM</code> &#x2F; <code>cmake -G &quot;Visual Studio 15 2017&quot; -A ARM</code></li>
+<li><code>cmake -G &quot;Visual Studio 15 2017&quot; -A ARM64</code></li>
+</ul>
+<p>For compatibility with CMake versions prior to 3.1, one may specify a target platform name optionally at the end of the generator name. This is supported only for:</p>
+<ul>
+<li><code>Visual Studio 14 2015 Win64</code> &#x2F; <code>Visual Studio 15 2017 Win64</code>, Specify target platform <code>x64</code>.</li>
+<li><code>Visual Studio 14 2015 ARM</code> &#x2F; <code>Visual Studio 15 2017 ARM</code>, Specify target platform <code>ARM</code>.</li>
+</ul>
+<p><em>sup 1</em>：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/cpp/supported-platforms-visual-cpp?view=vs-2017">Supported Platforms (Visual C++)</a></p>
+<h5 id="Toolset-Selection-T"><a href="#Toolset-Selection-T" class="headerlink" title="Toolset Selection -T"></a>Toolset Selection <code>-T</code></h5><p>The <code>v140</code> toolset that comes with <strong>Visual Studio 14 2015</strong> is selected by default. The <code>CMAKE_GENERATOR_TOOLSET</code> option may be set, perhaps via the cmake(1) <code>-T</code> option, to specify another toolset.</p>
+<blockquote>
+<p>The <code>v141</code> toolset that comes with <strong>Visual Studio 15 2017</strong> is selected by default.</p>
+</blockquote>
+<p>For each toolset that comes with this version of Visual Studio, there are variants that are themselves compiled for 32-bit (x86) and 64-bit (x64) hosts (independent of the architecture they target). By default Visual Studio chooses the 32-bit variant even on a 64-bit host. One may request use of the 64-bit host tools by adding a <code>host=x64</code> option to the toolset specification. See the <code>CMAKE_GENERATOR_TOOLSET</code> variable for details.</p>
+<p><strong>针对 MSVC 总结</strong>：三种或四种平台，桌面开发主要针对 win32 和 x64；工具集基本对应 MSVC 版本，高版本 MSVC 可选择低版本的工具集；另外，还有个平台版本（即 SDK version），似乎在 cmake 中并不重要。</p>
+<blockquote>
+<p>安装各版本的平台工具集：VS2010 之后版本的 VS 都有这个功能, 可以通过切换平台工具集, 在使用最新的 IDE 的同时, 用旧版本来进行编译, 彻底杜绝兼容问题<sup>2</sup>。<a target="_blank" rel="noopener" href="https://junkboy.gitee.io/posts/2018/06/05/MSVC-VER.html">摘自</a></p>
+</blockquote>
+<p><em>sup 2</em>: MSVC 各版本之间的兼容问题是个老梗了，ε&#x3D;(´ο｀*)))唉，不过 <a target="_blank" rel="noopener" href="https://blogs.msdn.microsoft.com/vcblog/2017/03/07/binary-compatibility-and-pain-free-upgrade-why-moving-to-visual-studio-2017-is-almost-too-easy/"> v141 is binary compatible with v140</a></p>
+<h3 id="Extra-Generators"><a href="#Extra-Generators" class="headerlink" title="Extra Generators"></a>Extra Generators</h3><p>……</p>
+<h2 id="增删变量-D"><a href="#增删变量-D" class="headerlink" title="增删变量 -D"></a>增删变量 <code>-D</code></h2><p><code>-D&lt;var&gt;:&lt;type&gt;=&lt;value&gt;</code> 添加变量及值到 CMakeCache.txt 中。注意 <code>-D</code> 后面不能有空格，type 为 string 时可省略。例如：<code>cmake -DCMAKE_BUILD_TYPE:STRING=Debug</code>。MinGW Generator 默认生成 <code>CMAKE_BUILD_TYPE</code> 为空，即 release；NMake Generator默认生成 <code>CMAKE_BUILD_TYPE</code> 为 Debug。</p>
+<p><code>-U&lt;globbing_expr&gt;</code> 删除 CMakeCache.txt 中的变量。注意 <code>-U</code> 后面不能有空格,支持 globbing 表达式，比如 <code>*,?</code> 等。例如：<code>cmake -UCMAKE_BUILD_TYPE</code>。</p>
+<h3 id="编译模式"><a href="#编译模式" class="headerlink" title="编译模式"></a>编译模式</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmake .. <span class="literal">-G</span> <span class="string">&quot;Visual Studio 14 2015&quot;</span> <span class="literal">-DCMAKE_INSTALL_PREFIX</span>=<span class="string">&quot;install_root&quot;</span> <span class="comment"># -DCMAKE_BUILD_TYPE=&quot;Release&quot;</span></span><br><span class="line">cmake <span class="literal">--build</span> . <span class="literal">--target</span> install <span class="literal">--config</span> Release</span><br></pre></td></tr></table></figure>
+
+<p>如果前一条命令不指定 <code>-DCMAKE_BUILD_TYPE=&quot;Release&quot;</code>，只是单独在第二条命令中 <code>--config=Release</code>，会造成什么后果？无任何后果。当使用 MSVC 时，<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/24460486/cmake-build-type-not-being-used-in-cmakelists-txt"><code>CMAKE_BUILD_TYPE</code> 选项被忽略</a>。</p>
+<blockquote>
+<p>Specifies the build type on <strong>single</strong>-configuration generators. <a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html"><code>CMAKE_BUILD_TYPE</code> 的意义</a></p>
+<p>This variable is only meaningful to single-configuration generators <del>(such as Makefile Generators and Ninja) i.e. those which choose a single configuration when CMake runs to generate a build tree</del> as opposed to multi-configuration generators <del>which offer selection of the build configuration within the generated build environment</del>.</p>
+</blockquote>
+<h3 id="调试版本后缀"><a href="#调试版本后缀" class="headerlink" title="调试版本后缀"></a>调试版本后缀</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-DCMAKE_DEBUG_POSTFIX=<span class="string">&quot;d&quot;</span></span><br><span class="line"><span class="comment"># -DCMAKE_RELEASE_POSTFIX=xx</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="MT-和-MD"><a href="#MT-和-MD" class="headerlink" title="MT 和 MD"></a>MT 和 MD</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 1. 追加 `CMAKE_CXX_FLAGS_Build Type`</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS_RELEASE <span class="string">&quot;$&#123;CMAKE_CXX_FLAGS_RELEASE&#125; /MT&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS_DEBUG <span class="string">&quot;$&#123;CMAKE_CXX_FLAGS_DEBUG&#125; /MTd&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 替换 `CMAKE_CXX_FLAGS_Build`</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS_RELEASE <span class="string">&quot;/MT&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS_DEBUG <span class="string">&quot;/MTd&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 或者将已经存在的 `/MD、/MDd` 替换为 `/MT、/MTd`</span></span><br><span class="line"><span class="keyword">if</span> (MSVC)</span><br><span class="line">    <span class="keyword">set</span>(CompilerFlags</span><br><span class="line">        CMAKE_CXX_FLAGS</span><br><span class="line">        CMAKE_CXX_FLAGS_DEBUG</span><br><span class="line">        CMAKE_CXX_FLAGS_RELEASE</span><br><span class="line">        CMAKE_C_FLAGS</span><br><span class="line">        CMAKE_C_FLAGS_DEBUG</span><br><span class="line">        CMAKE_C_FLAGS_RELEASE</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">foreach</span>(CompilerFlag <span class="variable">$&#123;CompilerFlags&#125;</span>)</span><br><span class="line">        <span class="keyword">string</span>(REPLACE <span class="string">&quot;/MD&quot;</span> <span class="string">&quot;/MT&quot;</span> <span class="variable">$&#123;CompilerFlag&#125;</span> <span class="string">&quot;$&#123;$&#123;CompilerFlag&#125;&#125;&quot;</span>)</span><br><span class="line">    <span class="keyword">endforeach</span>()</span><br><span class="line"><span class="keyword">endif</span>(MSVC)</span><br></pre></td></tr></table></figure>
+
+<p>摘自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/frank_liuxing/article/details/74010939">https://blog.csdn.net/frank_liuxing&#x2F;article&#x2F;details&#x2F;74010939</a> </p>
+<p>原文描述提到“<del>如果CMAKE Flags已经设置了<code>/MD</code>，可以不能发挥作用。可以采用方法2</del>” 但很可能是错误的，后者覆盖前者：</p>
+<blockquote>
+<p>If your CMake flags already contain <code>/MD</code>, you can ensure that the above commands are executed after the point at which <code>/MD</code> is inserted (the later addition of <code>/MT</code> <strong>overrides</strong> the conflicting existing option) <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/14172856/cmake-compile-with-mt-instead-of-md">来自 stackoverflow</a></p>
+</blockquote>
+<h3 id="安装路径"><a href="#安装路径" class="headerlink" title="安装路径"></a>安装路径</h3><pre><code>-DCMAKE_INSTALL_PREFIX
+</code></pre>
+<h2 id="其他参数"><a href="#其他参数" class="headerlink" title="其他参数"></a>其他参数</h2><h2 id="清理之后重新构建、编译"><a href="#清理之后重新构建、编译" class="headerlink" title="清理之后重新构建、编译"></a>清理之后重新构建、编译</h2><p>当出现 xx 等无法理解的问题时（尤其是在同一目录下同时编译 Debug 和 Release 版本时出现依赖库异常时），尝试删除 cmake 临时文件（<code>CMakeCache.txt</code> <code>CMakeFiles\</code> 等）所在目录，再次执行试试</p>
+<h2 id="cmake-gui"><a href="#cmake-gui" class="headerlink" title="cmake-gui"></a>cmake-gui</h2><h1 id="编写-CMakeLists-txt"><a href="#编写-CMakeLists-txt" class="headerlink" title="编写 CMakeLists.txt"></a>编写 CMakeLists.txt</h1>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/make/" rel="tag"># make</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/09/06/singleton3/" rel="prev" title="单例很糟糕？">
+                  <i class="fa fa-angle-left"></i> 单例很糟糕？
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/12/03/streambuf/" rel="next" title="streambuf">
+                  streambuf <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

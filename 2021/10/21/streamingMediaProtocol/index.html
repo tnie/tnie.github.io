@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="音视频领域、流媒体领域涉及的协议，逐步了解。 GB&#x2F;T 28181-202n 笔记9.1.1 注册和注销 f) 提到了 NAT 穿透的细节 9.2.2.1 中三方呼叫的概念？ MESSAGE 消息头 Content-type 头域为 Content-type: Application&#x2F;MANSCDP+xml；  9.8 历史音视频的回放，提到 媒体回放控制命令引用 MANSRT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="流媒体协议">
+<meta property="og:url" content="https://tnie.github.io/2021/10/21/streamingMediaProtocol/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="音视频领域、流媒体领域涉及的协议，逐步了解。 GB&#x2F;T 28181-202n 笔记9.1.1 注册和注销 f) 提到了 NAT 穿透的细节 9.2.2.1 中三方呼叫的概念？ MESSAGE 消息头 Content-type 头域为 Content-type: Application&#x2F;MANSCDP+xml；  9.8 历史音视频的回放，提到 媒体回放控制命令引用 MANSRT">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-21T02:04:22.000Z">
+<meta property="article:modified_time" content="2023-12-01T02:45:35.343Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2021/10/21/streamingMediaProtocol/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2021/10/21/streamingMediaProtocol/","path":"2021/10/21/streamingMediaProtocol/","title":"流媒体协议"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>流媒体协议 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GB-T-28181-202n-%E7%AC%94%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">GB&#x2F;T 28181-202n 笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SIP-%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.1.</span> <span class="nav-text">SIP 协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SDP-%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.2.</span> <span class="nav-text">SDP 协议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%8E%AF%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">网络环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ONVIF"><span class="nav-number">3.</span> <span class="nav-text">ONVIF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E6%92%AD%E3%80%81%E7%BB%84%E6%92%AD%E5%92%8C%E5%B9%BF%E6%92%AD"><span class="nav-number">3.1.</span> <span class="nav-text">单播、组播和广播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Discovery-Proxy"><span class="nav-number">3.2.</span> <span class="nav-text">Discovery Proxy</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NAT-%E7%A9%BF%E9%80%8F"><span class="nav-number">4.</span> <span class="nav-text">NAT 穿透</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A"><span class="nav-number">5.</span> <span class="nav-text">名词解释</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%9A%84"><span class="nav-number">5.1.</span> <span class="nav-text">其他的</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE%E5%BA%94%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">协议应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%B7%E5%BA%B7-sdk-%E6%89%8B%E5%86%8C%E7%AC%94%E8%AE%B0"><span class="nav-number">6.1.</span> <span class="nav-text">海康 sdk 手册笔记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B3%E5%8F%B0%E5%8D%8F%E8%AE%AE"><span class="nav-number">6.2.</span> <span class="nav-text">平台协议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7"><span class="nav-number">7.</span> <span class="nav-text">工具</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/10/21/streamingMediaProtocol/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="流媒体协议 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          流媒体协议
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-10-21 10:04:22" itemprop="dateCreated datePublished" datetime="2021-10-21T10:04:22+08:00">2021-10-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-12-01 10:45:35" itemprop="dateModified" datetime="2023-12-01T10:45:35+08:00">2023-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/media/" itemprop="url" rel="index"><span itemprop="name">media</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>音视频领域、流媒体领域涉及的协议，逐步了解。</p>
+<h1 id="GB-T-28181-202n-笔记"><a href="#GB-T-28181-202n-笔记" class="headerlink" title="GB&#x2F;T 28181-202n 笔记"></a>GB&#x2F;T 28181-202n 笔记</h1><p>9.1.1 注册和注销 f) 提到了 NAT 穿透的细节</p>
+<p>9.2.2.1 中三方呼叫的概念？</p>
+<p>MESSAGE 消息头 Content-type 头域为 Content-type: Application&#x2F;MANSCDP+xml； </p>
+<p>9.8 历史音视频的回放，提到 媒体回放控制命令引用 MANSRTSP 协议</p>
+<p>实时音视频点播 &amp; 历史音视频回放，是将所有的历史音视频都存下来了吗？</p>
+<h2 id="SIP-协议"><a href="#SIP-协议" class="headerlink" title="SIP 协议"></a>SIP 协议</h2><p>SIP 会话发起协议（Session Initiation Protocol，缩写SIP），GB28181-2016 中称为“会话初始协议”</p>
+<p>SIP 与许多其它的协议协同工作，仅仅涉及通信会话的信令部分（control message）。SIP 报文内容发送会话描述协议（SDP），SDP 协议描述了会话所使用流媒体细节，如：使用哪个 IP 端口，采用哪种编解码器等等。SIP 的一个典型用途是：SIP “会话”传输一些简单的经过报文的实时传输协议流。RTP 本身才是语音或视频的载体。</p>
+<span id="more"></span>
+
+<blockquote>
+<p>SIP 同 HTTP 相似并采用了后者的一些设计原则：SIP 报文是人类可读的，并且也是采取请求-应答的流程。</p>
+</blockquote>
+<p>SIP 独立于底层传输协议：使用 UDP 或者 TCP 都可以</p>
+<blockquote>
+<p>SIP is designed to be independent of the underlying transport layer protocol and can be used with UDP, TCP, and SCTP. </p>
+</blockquote>
+<p>不像 HTTP 协议中固定客户端、服务端的角色，SIP 协议要求通信的两端都要实现客户端、服务端的功能。在 SIP 通信中，客户端或服务端的角色仅在 SIP 交易期间持续。</p>
+<blockquote>
+<p>Unlike other network protocols that fix the roles of client and server, e.g., in HTTP, SIP requires both peers to implement both roles. The roles of UAC and UAS only last for the duration of a SIP transaction.</p>
+</blockquote>
+<p>SIP 网络单元：</p>
+<ul>
+<li>用户代理（User Agent）<ul>
+<li>用户代理客户端 UAC（User Agent Client），创建并发送 SIP 请求</li>
+<li>用户代理服务端 UAS（User Agent Server），接收处理 SIP 请求，发送 SIP 响应</li>
+<li>背靠背用户代理 B2BUA</li>
+</ul>
+</li>
+<li>代理服务器（Proxy)</li>
+<li>注册服务器（Register）</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaxveliang/p/12434170.html">SIP 协议详解</a> ，SIP 会话中 ACK 的作用是什么？如果很重要，为什么不是所有 200OK 之后都有 ACK 确认呢？</p>
+<p>SIP 基本注册即采用基于数字摘要的挑战应答式安全技术进行注册， <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43116910/article/details/88564290">用户验证机制之挑战应答方式</a></p>
+<p>B2BUA 背靠背 Agent  和 proxy server 代理服务器，在功能上有什么区别？</p>
+<h2 id="SDP-协议"><a href="#SDP-协议" class="headerlink" title="SDP 协议"></a>SDP 协议</h2><p>SDP 同样基于文本，它的格式异常简单，由多个&lt;类型&gt;&#x3D;&lt;值&gt;的字符串组成，用于描述会话信息，也用于描述音视频的类型和格式，所需要的带宽、时间范围甚至邮件地址、编码参数等。</p>
+<p>&lt;类型&gt;是一个字母，&lt;值&gt;是结构化的文本串，其格式以&lt;类型&gt;而定。</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2ca09bf99280">SDP 协议</a> ，v,o,s,t,m 为必须的,其他项为可选。</p>
+<ul>
+<li><p>v&#x3D; （协议版本）</p>
+</li>
+<li><p>o&#x3D; （所有者&#x2F;创建者和会话标识符）</p>
+</li>
+<li><p>s&#x3D; （会话名称）</p>
+</li>
+<li><p>t&#x3D; （会话活动时间）</p>
+</li>
+<li><p>m&#x3D; （媒体名称和传输地址）</p>
+</li>
+<li><p>y&#x3D; （描述 SSRC 值）国标 28181 之 9.2.2.1 客户端主动发起，小节自定义</p>
+</li>
+<li><p>f&#x3D;（描述媒体参数）国标 28181 之 9.2.2.1 客户端主动发起，小节自定义</p>
+</li>
+</ul>
+<h1 id="网络环境"><a href="#网络环境" class="headerlink" title="网络环境"></a>网络环境</h1><p>国内的大环境，以大型局域网为主，终端一般都在 NAT 之后：</p>
+<ul>
+<li>居民楼、办公楼里的笔记本、台式机等</li>
+<li>和宽带运营商索要动态公网地址</li>
+<li>移动设备，三家运营商分配给手机卡的都是 10.x.x.x 这类私有地址</li>
+<li>不知道手机卡能否索要动态公网地址</li>
+</ul>
+<p>摄像头如果要用固定公网地址，肯定要增加成本的。设备的数量上去之后，组网方式带来的成本增加还是很恐怖的。</p>
+<p>4g 手机卡网络的 NAT 类型？5g 手机卡网络的 NAT 类型？网上没找到开放的测试地址，难道要自己搭建吗？</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/30269820">请问目前可否实现手机上的NAT穿透，建立P2P链接？</a></p>
+<p>同一运营商的两个手机（卡）之间能够 ping 通吗？p2p 呢？</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Crystalyh22/article/details/106050524">WebRTC：stun&#x2F;turn服务器搭建</a></p>
+<p>能否利用 ipv6 地址呢</p>
+<h1 id="ONVIF"><a href="#ONVIF" class="headerlink" title="ONVIF"></a>ONVIF</h1><p>onvif 由设备作为服务端，或使用发现代理服务（设备和用户都是客户端）。</p>
+<p>从 ONVIF 的官方文档中可以了解到，客户端在 UDP 协议下，向网段内的组播地址 <code>239.255.255.250</code>，端口 <code>3702</code>，不断地向四周发送 <code>Probe</code> 消息探针，而网段内的服务器在接收到 <code>Probe</code> 这个探测消息后，通过回复 <code>ProbeMatch</code> 消息让客户端接收，从而让客户端识别到服务器。</p>
+<blockquote>
+<p>Messages are sent over UDP to a standardized multicast address and UDP port number.</p>
+</blockquote>
+<blockquote>
+<p>WS-Discovery is normally limited by the network segmentation at a site since the multicast  packages typically do not traverse routers. Using a Discovery Proxy could solve that problem, but  details about this topic are beyond the scope of this document. For more information, see  [ONVIF&#x2F;Discovery] and [WS-Discovery]. </p>
+</blockquote>
+<h2 id="单播、组播和广播"><a href="#单播、组播和广播" class="headerlink" title="单播、组播和广播"></a>单播、组播和广播</h2><p><a target="_blank" rel="noopener" href="https://info.support.huawei.com/info-finder/encyclopedia/zh/%E7%BB%84%E6%92%AD.html">什么是组播</a></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/WS-Discovery">Web Services Dynamic Discovery (WS-Discovery)</a> </p>
+<h2 id="Discovery-Proxy"><a href="#Discovery-Proxy" class="headerlink" title="Discovery Proxy"></a>Discovery Proxy</h2><p>Managed 模式：即代理模式。Ad hoc 模式有个局限性，只能局限于一个较小的网络。Managed 模式就是为了解决这个问题的，在 Managed 模式下，一个维护所有可用目标服务的中心发现代理（Discovery Proxy）被建立起来，客户端只需要将探测消息发送到该发现代理就可以得到相应的目标服务信息。<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhizhengguan/article/details/109288107">摘抄来源</a></p>
+<p>发现代理，解决的不仅仅是规模增大的问题，也会降低风险吧。</p>
+<h1 id="NAT-穿透"><a href="#NAT-穿透" class="headerlink" title="NAT 穿透"></a>NAT 穿透</h1><p>名词解释：</p>
+<ul>
+<li>NAT 是 Network Address Translation 的缩写。为了完成 NAT 设备的完美穿透，让所有组网方式下合法的数据交换都能进行，STUN 技术、UPNP 技术、SBC 技术、TURN 技术等应运而生，通过判断 NAT 类型，采取不同方法甚或需要设置单独的公网服务器完成流媒体数据的分发。</li>
+<li>STUN 技术（Session Traversal Utilities for NAT，NAT 的会话穿越应用程序）</li>
+<li>UPNP 技术（Universal Plug and Play，即插即用）</li>
+<li>SBC 技术（Session Border Controller，会话边界控制器）</li>
+<li>TURN 技术（Traversal Using Relay aroundNAT，NAT 的中继穿越）</li>
+<li>ICE 的全称 Interactive Connectivity Establishment（互动式连接建立）。它跟 STUN 和 TURN 不一样，ICE 不是一种协议，而是一个框架，它整合了 STUN 和 TURN。参考 WebRTC 架构。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.beikejiedeliulangmao.top/webrtc/nat-traversal/">不同类型的 NAT</a>：</p>
+<ul>
+<li>完全圆锥形 NAT</li>
+<li>受限圆锥形 NAT</li>
+<li>端口受限圆锥形 NAT</li>
+<li>对称 NAT，无法打洞，只能使用代理服务器转发。</li>
+</ul>
+<p>所以基于 WebRTC 的产品需要 TURN 服务器：有很多开源的 TURN 服务器，或者使用 TURN 平台即服务（PaaS）提供商的。</p>
+<h1 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h1><p>流媒体技术通常首先以协议的形式展现，对于音视频编码好的文件，经过提取和再封装，被放在协议规定的包格式中，逐次发送到支持该协议的客户端进行播放。</p>
+<ul>
+<li>RTP 是 Real-time Transport Protocol  的简称，实时传输协议。RTP 协议和 RTP 控制协议 RTCP 一起使用，而且它是创建在 <strong>UDP 协议</strong> 上的。 </li>
+<li>实时传输控制协议（Real-time Transport Control Protocol或RTP Control Protocol或简写RTCP）是实时传输协议（RTP）的一个姐妹协议。协议本身并不传输数据，而是收集相关媒体连接的统计信息，网络应用程序即可利用 RTCP 的统计信息来控制传输的品质。</li>
+<li>RTCP 本身不提供数据加密或身份认证。SRTCP可以用于此类用途。 </li>
+<li>WebRTC，名称源自网页即时通信（英语：Web Real-Time Communication）的缩写，WebRTC 利用 RTP 和 RTCP 传输音视频数据。</li>
+<li>会话描述协议（Session Description Protocol或简写SDP）描述的是流媒体的初始化参数。</li>
+<li><a target="_blank" rel="noopener" href="https://zyun.360.cn/blog/?p=56">国标(GB28181) 和 ONVIF</a></li>
+<li>开放型网络视频接口论坛（英语：Open Network Video Interface Forum，简称ONVIF），ONVIF 所有的 <strong>媒体流传输</strong> 都是借助于 RTP&#x2F;RTSP 实现。</li>
+<li>GB28181，公共安全视频监控联网系统信息传输、交换、控制技术要求，目前有两个版本：GB&#x2F;T 28181-2016 和 GB&#x2F;T 28181-2011（已废止）。GB28181 的媒体流传输借助于 RTP&#x2F;RTSP 实现。</li>
+</ul>
+<h2 id="其他的"><a href="#其他的" class="headerlink" title="其他的"></a>其他的</h2><ul>
+<li><p>实时流协议（Real Time Streaming Protocol，RTSP），流数据本身的传输不是 RTSP 的任务。RTSP 通过不同的命令构建完整的控制会话，同时依赖 RTP 和 RTCP 或其他协议传输音视频本身的数据。</p>
+</li>
+<li><p>推流为将直播内容推送至服务器的过程；拉流为服务器已有直播内容，用指定地址进行拉取的过程。</p>
+</li>
+<li><p>实时消息协议（英语：Real-Time Messaging Protocol，缩写RTMP），是 Adobe 公司的专有协议，属于 Flash 的一部分。RTMP 协议支持 Push 和 Pull 两种模式。推流为将直播内容推送至服务器的过程；拉流为服务器已有直播内容，用指定地址进行拉取的过程。</p>
+<blockquote>
+<p>除去 RTSP、RTMP 等基于会话的流媒体协议外，许多公司还设计了基于 HTTP 的协议。</p>
+</blockquote>
+</li>
+<li><p>HTTP Live Streaming，缩写为 HLS，是由苹果公司提出基于 HTTP 的流媒体网络传输协议。</p>
+<blockquote>
+<p>HLS 协议的一大特点在于，将以往 RTSP、RTMP 等协议中实现复杂的多码率、多音轨的音视频流变得容易，并可以明晰地表达、理解和优化。</p>
+</blockquote>
+<blockquote>
+<p>与 HLS 同一时期制定的，具备相似特性（基于 HTTP、支持多码率、音视频文件切片）的流媒体协议另有 Adobe 推出的 HDS 和微软推出的 Smooth Streaming，它们与 MPEG-DASH 一道，被称作 Adaptive Bitrate Streaming 技术（码率自适应的流媒体技术）。</p>
+</blockquote>
+</li>
+<li><p>Flash Video（简称FLV），是一种网络视频格式，用作流媒体格式。</p>
+</li>
+<li><p>MPEG-DASH 在 2011 年形成国际标准。微软、高通、谷歌等公司出力甚多，并获得 YouTube、Netflix 等在线视频巨头的倾力支持，在短短几年间已经俨然取代 RTMP，成为应用最广的流媒体协议。苹果还在坚持 HLS 协议，且 DASH 和 HLS 互不兼容。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%B0%8D%E7%AD%89%E7%B6%B2%E8%B7%AF">对等式网络</a>（英语：peer-to-peer， 简称P2P），又称点对点技术</p>
+</li>
+<li><p>网络摄像机又叫 IP CAMERA （简称IPC）和 NVR(Network Video Recorder) 网络视频录像机。</p>
+</li>
+<li><p>DTLS 通信协议（Datagram Transport Layer Security，资料包传输层安全），提供 UDP 协议在传输层的发送安全。它能够提供与 TLS 类似的安全保护。DTLS 常用于流媒体。</p>
+</li>
+<li><p>CDN 是 Content Distribution Network 的缩写</p>
+</li>
+<li><p>SSRC 同步信源</p>
+</li>
+<li><p>MANSCDP 协议（监控报警联网系统控制描述协议，Monitoringand Alarming Network System Control Description Protocol），在 GB&#x2F;T 28181-2016 的附录 A 描述</p>
+</li>
+<li><p>MANSRTSP 协议（监控报警联网系统实时流协议，Monitoring and Alarming Network System Real-Time Streaming Protocol），在 GB&#x2F;T 28181-2016 的附录 B 描述</p>
+</li>
+</ul>
+<h1 id="协议应用"><a href="#协议应用" class="headerlink" title="协议应用"></a>协议应用</h1><p>关于协议的应用，在《在线视频技术精要》中 4.6.2 协议应用的章节做了描述，可参考。</p>
+<p>现代浏览器，将以往由插件提供的功能 <strong>收归</strong> 浏览器。</p>
+<h2 id="海康-sdk-手册笔记"><a href="#海康-sdk-手册笔记" class="headerlink" title="海康 sdk 手册笔记"></a>海康 sdk 手册笔记</h2><p>参考《设备网络SDK编程指南（IPC）.pdf》，<strong>语音对讲</strong> 功能只支持 win32 平台：</p>
+<blockquote>
+<p>Windows64 位或者 Linux 系统下无语音对 讲功能。</p>
+</blockquote>
+<p>IPServer 域名解析服务器软件，是收费的吗</p>
+<p>用户注册设备：怎么理解以下描述？用户 ID 和用户名不是同一属性吧？</p>
+<blockquote>
+<p>实现用户的注册功能，注册成功后，返回的用户 ID 作为其他功能操作的唯一标识，SDK 允许最大注册用户数为 512 个。网络摄像机和网络球机允许有 16 个注册用户名，而且同时最多允许 128 个用户注册。</p>
+</blockquote>
+<p>软解码和解码卡解码</p>
+<p>报警模块：处理设备上传的各种报警信号。报警分为“布防”和“监听”两种方式</p>
+<p>实时码流数据 <code>NET_DVR_SetRealDataCallBack</code> 和 实时码流数据（标准码流） <code>NET_DVR_SetStandardDataCallBack</code> 区别是什么？</p>
+<h2 id="平台协议"><a href="#平台协议" class="headerlink" title="平台协议"></a>平台协议</h2><p>三家运营商都有自己的视频平台：由平台侧提供 sdk 打到设备的固件里，同一套代码通过调整编译参数提供给不同的厂商、不同型号的设备来使用。</p>
+<p>大体分为三部分：</p>
+<ul>
+<li>AI 部分 GA1400</li>
+<li>视频流部分 GB&#x2F;T 28181</li>
+<li>自定义的扩展部分，使用 http 或 websocket</li>
+</ul>
+<p>阿里、百度等也有视频领域的公共 api</p>
+<ul>
+<li><p>阿里 <a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/109423.html">视频监控</a> ， <a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/108923.html">什么是视图计算 (aliyun.com)</a></p>
+<blockquote>
+<p>摄像头、平台、智能设备采集监控流，通过 RTMP 协议推流或者 GB&#x2F;T28181 国标协议拉流。</p>
+</blockquote>
+</li>
+</ul>
+<p>网络重放攻击？</p>
+<h1 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h1><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Open_Broadcaster_Software">OBS Studio 百科</a> </p>
+<blockquote>
+<p>OBS 是一个用于录制和进行网络直播的自由开源软件包。OBS 使用 C 和 C++ 语言编写，提供实时源和设备捕获、场景组成、编码、录制和广播。数据传输主要通过实时消息协议（RTMP）完成，可以发送到任何支持 RTMP 的软件，包括 YouTube、Twitch.tv、Instagram 和 Facebook 等流媒体网站。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/FFmpeg">FFmpeg 百科</a></p>
+<blockquote>
+<p>FFmpeg 是一个开放源代码的自由软件，可以执行音频和视频多种格式的录影、转换、串流功能，包含了 libavcodec——这是一个用于多个项目中音频和视频的解码器库，以及 libavformat——一个音频与视频格式转换库。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/VLC%E5%A4%9A%E5%AA%92%E9%AB%94%E6%92%AD%E6%94%BE%E5%99%A8">VLC 百科</a></p>
+<blockquote>
+<p>VLC 多媒体播放器（英语：VLC media player），最初名为 VideoLAN Client，是 VideoLAN 计划的开放源代码多媒体播放器。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/11/WebRTC/" rel="prev" title="WebRTC 学习">
+                  <i class="fa fa-angle-left"></i> WebRTC 学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/12/06/gb28181/" rel="next" title="国标阅读笔记">
+                  国标阅读笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

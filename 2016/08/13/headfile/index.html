@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="由内部链接、外部链接引出怎么写头文件。 我看了一下，这篇笔记最早是在六月二号创建的，可是现在 2016&#x2F;8&#x2F;13 16:12:05 ，呵呵。一方面是自己懒，另一方面，对于“内部链接、外部链接”的概念，不多了解一些，不敢随便整理啊。 我们先看看 维基百科- 头文件 中说了什么：  当一个子程序在定义的位置以外的地方被使用时，就需要进行前置声明，声明函数原型等。  假设一个程序员不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="怎么写头文件：内部链接、外部链接">
+<meta property="og:url" content="https://tnie.github.io/2016/08/13/headfile/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="由内部链接、外部链接引出怎么写头文件。 我看了一下，这篇笔记最早是在六月二号创建的，可是现在 2016&#x2F;8&#x2F;13 16:12:05 ，呵呵。一方面是自己懒，另一方面，对于“内部链接、外部链接”的概念，不多了解一些，不敢随便整理啊。 我们先看看 维基百科- 头文件 中说了什么：  当一个子程序在定义的位置以外的地方被使用时，就需要进行前置声明，声明函数原型等。  假设一个程序员不">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-08-13T11:16:39.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.633Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2016/08/13/headfile/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2016/08/13/headfile/","path":"2016/08/13/headfile/","title":"怎么写头文件：内部链接、外部链接"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>怎么写头文件：内部链接、外部链接 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E5%92%8C%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">声明和定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E9%93%BE%E6%8E%A5%E5%92%8C%E5%A4%96%E9%83%A8%E9%93%BE%E6%8E%A5"><span class="nav-number">2.</span> <span class="nav-text">内部链接和外部链接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E9%93%BE%E6%8E%A5"><span class="nav-number">2.1.</span> <span class="nav-text">内部链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E9%93%BE%E6%8E%A5"><span class="nav-number">2.2.</span> <span class="nav-text">外部链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0"><span class="nav-number">2.3.</span> <span class="nav-text">学习</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">3.</span> <span class="nav-text">结论</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%AF%E4%BE%8B"><span class="nav-number">3.1.</span> <span class="nav-text">惯例</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/08/13/headfile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="怎么写头文件：内部链接、外部链接 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          怎么写头文件：内部链接、外部链接
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-08-13 19:16:39" itemprop="dateCreated datePublished" datetime="2016-08-13T19:16:39+08:00">2016-08-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>由内部链接、外部链接引出怎么写头文件。</p>
+<p>我看了一下，这篇笔记最早是在六月二号创建的，可是现在 2016&#x2F;8&#x2F;13 16:12:05 ，呵呵。一方面是自己懒，另一方面，对于“内部链接、外部链接”的概念，不多了解一些，不敢随便整理啊。</p>
+<p>我们先看看 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%A4%B4%E6%96%87%E4%BB%B6">维基百科- 头文件</a> 中说了什么：</p>
+<blockquote>
+<p>当一个子程序在定义的位置以外的地方被使用时，就需要进行<strong>前置声明</strong>，声明函数原型等。</p>
+</blockquote>
+<p>假设一个程序员不用“头文件”，那么他至少需要在两个地方维护函数的声明：一个是包含函数实现的的文件，以及使用该函数的文件。如果使用该函数的文件有很多个，那么对函数的定义进行更改时就是灾难。</p>
+<p>从某个方面来说，头文件降低了这种场景中程序员手工操作的复杂度（解放双手，繁琐的工作交给机器&#x2F;编译器）。更重要的是保证了编写大型项目的易用性，难以想象如果没有头文件，几十万行的代码全都在一个源文件中。</p>
+<p>将函数原型移到 XXX 头文件中之后，我们可以在需要的地方通过 <code>#include &lt;XXX&gt;</code> <em>预处理器指令</em> 将其包含进来，这样每次编译时预处理阶段就会将 XXX 文件中的内容替换掉 <code>#include &lt;XXX&gt;</code> ，我们的函数原型也就被“前置声明”了。</p>
+<p>阅读 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Include_directive">wikipedia - include derective</a>，我们可以从更高的层次考虑 Include 行为，想想 Makefile 中的 include，shell 脚本中的 include，表示类似甚至同样意义的关键字还有 import、copy。</p>
+<p>在 C 语言中，什么内容需要放在头文件中，什么内容可以放在头文件中相对来说是比较容易区分的。接下来我们看看在 C++ 中，什么东西可以放在 .h 文件中，什么不能，什么东西又可以放在 .cpp 文件中。</p>
+<h1 id="声明和定义"><a href="#声明和定义" class="headerlink" title="声明和定义"></a>声明和定义</h1><p>首先需要区分开这两个概念，只是理解所有关键问题的前提。在笔记中暂时不展开说了，如果分不清楚，自行 Google。这里只备注几个容易混淆的条目：</p>
+<ul>
+<li><p>声明</p>
+<ol>
+<li>仅仅提供函数原型。类外面的，类里面的</li>
+<li>class A；</li>
+<li>typedef声明</li>
+<li>在类中定义的静态数据成员的声明</li>
+</ol>
+  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> a;  <span class="comment">// 声明</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义</p>
+<ol>
+<li>在类定义之外，定义并初始化一个静态数据成员。如 A::a&#x3D;0;</li>
+</ol>
+  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> a;  <span class="comment">// 声明</span></span><br><span class="line">&#125;;</span><br><span class="line">A::a=<span class="number">0</span>；  <span class="comment">// 定义</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在类外定义非内联成员函数</li>
+</ol>
+</li>
+</ul>
+<h1 id="内部链接和外部链接"><a href="#内部链接和外部链接" class="headerlink" title="内部链接和外部链接"></a>内部链接和外部链接</h1><p>参考自：<a target="_blank" rel="noopener" href="http://blog.csdn.net/ithzhang/article/details/8119286">参考链接1</a>、<a target="_blank" rel="noopener" href="http://developer.51cto.com/art/201107/277364.htm">解析C++中的内部连接与外部连接</a></p>
+<p>链接把不同编译单元产生的符号联系起来。有两种链接方式：内部链接和外部链接。</p>
+<h2 id="内部链接"><a href="#内部链接" class="headerlink" title="内部链接"></a>内部链接</h2><p>如果一个符号名对于它的编译单元来说是局部的，并且在链接时不可能与其他编译单元中的同样的名称相冲突，那个这个符号就是内部链接。内部链接意味着对此符号的访问仅限于当前的编译单元中，对其他编译单元都是不可见的。</p>
+<p>具有内部链接的符号无法作用于当前文件外部，要让其影响程序的其他部分，可以将其放在.h文件中。此时在所有包含此.h文件的源文件都有自己的定义且互不影响。</p>
+<ol start="0">
+<li><p>所有的声明，包括类的声明，比如：<code>class A;</code>；(有时也将声明看作是无连接的，这里我们统一看成是内部连接的)。</p>
+<p> 由于声明只对当前编译单元有用，因此声明并不将任何东西写入.o文件。</p>
+<p> 这些声明<strong>本身</strong>不会影响到.o文件的内容。在编译阶段（狭义的，从高级语言到汇编语言到二进制，从 main.i 到 main.o，预处理已过，尚未链接），编译器只检测程序语法和函数、变量是否被声明。如果函数未被声明，编译器会报错。链接阶段，声明已经没有用了。</p>
+<p> 而函数调用会导致一个未定义的符号被写入到.o文件，此后此.o文件与定义此符号的.o文件被连接在一起，前面未定义的符号被解析。</p>
+</li>
+<li><p>局部变量肯定是内部链接性质的，更应该被看作无连接的；</p>
+</li>
+<li><p>全局变量，如果使用了 static、const 关键词修饰，其作用域仅仅在当前文件作用域内，其他文件中即使使用extern声明也是无法使用的。因此，带有 static、const 关键字的全局变量也是内部链接性质的；</p>
+<p> static 和 const 还是有区别的。static 和 extern不能对同一个变量同时声明；但 const 和 extern 不是同一存储类别，可以同时用在同一个变量的声明。所以，我们可以用使用extern关键字修改const的连接属性。<a target="_blank" rel="noopener" href="http://www.cnblogs.com/wangpei0522/p/4459624.html">更多详情</a>、<a target="_blank" rel="noopener" href="http://blog.csdn.net/xiexievv/article/details/8491494">特别说明</a></p>
+</li>
+<li><p>枚举 enum、联合 union 类型是内部链接性质的；</p>
+</li>
+<li><p><strong>类的定义</strong>是内部链接性质的：</p>
+<ul>
+<li><p>定义，意味着在同一编译单元中不能重复出现；</p>
+</li>
+<li><p>内部链接性质，意味着如果需要在其他编译单元使用，类必须被定义在头文件且被其他文件包含。</p>
+<p>  仅仅在其他文件中使用class a;声明是不行的，原因就是类的定义是内部链接，不会在目标文件导出符号。也就不会被其他单元解析它们的未定义符号。</p>
+</li>
+</ul>
+</li>
+<li><p>内联函数定义（包括自由函数和非自由函数）。</p>
+<p> 内联函数之所有具有内部链接，因为编译器在可能的时候，会将所有 对函数的调用替换为函数体，不将任何符号写入.o文件。</p>
+</li>
+<li><p>名字空间(包括全局名字空间)中的静态自由函数、静态友元函数、静态变量的定义。<a target="_blank" rel="noopener" href="http://developer.51cto.com/art/201107/277364.htm">补充条目来源</a></p>
+</li>
+</ol>
+<h2 id="外部链接"><a href="#外部链接" class="headerlink" title="外部链接"></a>外部链接</h2><p>在一个多文件的程序中，如果一个符号在链接时可以和其他编译单元交互，那么这个名称就有外部链接。外部链接意味着该定义不仅仅局限在单个编译单元中。它可以在.o文件中产生外部符号。可以被其他编译单元访问用来解析它们未定义的符号。因此它们在整个程序中必须是唯一的，否则将会导致重复定义。</p>
+<p><strong>区分：</strong>判断一个符号是内部链接还是外部链接的一个很好的方法就是看该符号是否被写入.o文件。</p>
+<ol>
+<li><p>类非内联成员函数，包括类成员函数和类静态成员函数</p>
+</li>
+<li><p>类的静态数据成员的定义具有外部链接性质</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> a;  <span class="comment">// 内部链接</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">A::a = <span class="number">0</span>;  <span class="comment">// 外部链接</span></span><br></pre></td></tr></table></figure></li>
+<li><p>非内联函数</p>
+</li>
+<li><p>名字空间(包括全局名字空间)中非静态自由函数、非静态友元函数及非静态变量。<a target="_blank" rel="noopener" href="http://developer.51cto.com/art/201107/277364.htm">补充条目来源</a></p>
+<p> 前提是认为，类之外一般不存在使用 inline 修饰的函数。</p>
+</li>
+</ol>
+<h2 id="学习"><a href="#学习" class="headerlink" title="学习"></a>学习</h2><p><a target="_blank" rel="noopener" href="http://www.52rd.com/Blog/Detail_RD.Blog_imjacob_5682.html">摘抄来源</a></p>
+<p>Linkage</p>
+<p>To understand the behavior of C and C++ programs, you need to know about linkage. In an executing program, an identifier is represented by storage in memory that holds a variable or a compiled function body. Linkage describes this storage as it is seen by the linker. There are two types of linkage: internal linkage and external linkage.</p>
+<p>Internal linkage means that storage is created to represent the identifier only for the file being compiled. Other files may use the same identifier name with internal linkage, or for a global variable, and no conflicts will be found by the linker – separate storage is created for each identifier. Internal linkage is specified by the keyword static in C and C++.</p>
+<p>External linkage means that a single piece of storage is created to represent the identifier for all files being compiled. The storage is created once, and the linker must resolve all other references to that storage. Global variables and function names have external linkage. These are accessed from other files by declaring them with the keyword extern. Variables defined outside all functions (with the exception of const in C++) and function definitions default to external linkage. You can specifically force them to have internal linkage using the static keyword. You can explicitly state that an identifier has external linkage by defining it with the extern keyword. Defining a variable or function with extern is not necessary in C, but it is sometimes necessary for const in C++.</p>
+<p>Automatic (local) variables exist only temporarily, on the stack, while a function is being called. The linker doesn’t know about automatic variables, and so these have no linkage.</p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>综上，我们可以知道：将具有外部链接的定义放在头文件中几乎都是编程错误。因为如果该头文件中被多个源文件包含，那么就会存在多个定义，链接时就会出错。</p>
+<p>在头文件中放置内部链接的定义却是合法的，但不推荐使用的。</p>
+<p>链接，本质上都是具有<strong>外部链接性质的符号们</strong>的事情！</p>
+<h2 id="惯例"><a href="#惯例" class="headerlink" title="惯例"></a>惯例</h2><p>头文件为相关声明提供了一个集中存放的位置。头文件一般包含类的定义、枚举的定义、extern变量的声明、函数的声明、const int的定义、inline函数的定义。使用或者定义这些实体的文件要包含适当的头文件。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/07/30/learnSche_cpp/" rel="prev" title="学习 C++">
+                  <i class="fa fa-angle-left"></i> 学习 C++
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/08/13/build/" rel="next" title="构建 build">
+                  构建 build <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

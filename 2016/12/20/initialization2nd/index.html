@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="以前整理过一篇笔记 《初始化》，前两天又翻出来浏览了一下，写得很烂。限于当时的水平，并未像现在这样透彻的理解“默认构造函数”、“拷贝构造函数”、“拷贝赋值运算符”等概念，读书《C++ Primer》时看到好多种“初始化”，整理出那一篇可能只是想罗列名字、定义，让自己知道哪个是哪个罢了，却并不深刻理解中间的关联与区别。我们从头再来。 讲 C++ 的初始化，我们有好几种切入的方式：  可以从日常使用的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="再谈初始化">
+<meta property="og:url" content="https://tnie.github.io/2016/12/20/initialization2nd/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="以前整理过一篇笔记 《初始化》，前两天又翻出来浏览了一下，写得很烂。限于当时的水平，并未像现在这样透彻的理解“默认构造函数”、“拷贝构造函数”、“拷贝赋值运算符”等概念，读书《C++ Primer》时看到好多种“初始化”，整理出那一篇可能只是想罗列名字、定义，让自己知道哪个是哪个罢了，却并不深刻理解中间的关联与区别。我们从头再来。 讲 C++ 的初始化，我们有好几种切入的方式：  可以从日常使用的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-12-20T09:12:17.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.633Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2016/12/20/initialization2nd/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2016/12/20/initialization2nd/","path":"2016/12/20/initialization2nd/","title":"再谈初始化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>再谈初始化 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">内置类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E5%80%BC%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">默认值是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E5%A0%86%E4%B8%8A%E5%88%9B%E5%BB%BA%E5%8F%98%E9%87%8F"><span class="nav-number">1.2.</span> <span class="nav-text">在堆上创建变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%8B%AC%E5%8F%B7%E8%B0%83%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">使用括号调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%AD%89%E5%8F%B7%E8%B0%83%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">使用等号调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%8A%B1%E6%8B%AC%E5%8F%B7%E8%B0%83%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">使用花括号调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BE%8E%E4%B8%AD%E4%B8%8D%E8%B6%B3"><span class="nav-number">2.3.1.</span> <span class="nav-text">美中不足</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new-%E8%B0%83%E7%94%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">2.4.</span> <span class="nav-text">new 调用构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E5%AE%83"><span class="nav-number">2.5.</span> <span class="nav-text">其它</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%80%BC%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">值初始化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/20/initialization2nd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="再谈初始化 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          再谈初始化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-12-20 17:12:17" itemprop="dateCreated datePublished" datetime="2016-12-20T17:12:17+08:00">2016-12-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>以前整理过一篇笔记 <a href="https://tnie.github.io/2016/11/03/initialization/">《初始化》</a>，前两天又翻出来浏览了一下，写得很烂。限于当时的水平，并未像现在这样透彻的理解“默认构造函数”、“拷贝构造函数”、“拷贝赋值运算符”等概念，读书《C++ Primer》时看到好多种“初始化”，整理出那一篇可能只是想罗列名字、定义，让自己知道哪个是哪个罢了，却并不深刻理解中间的关联与区别。我们从头再来。</p>
+<p>讲 C++ 的初始化，我们有好几种切入的方式：</p>
+<ul>
+<li>可以从日常使用的形式，从我们惯用的代码讲起，引出相关的术语；</li>
+<li>可以直接讲构造函数，构造函数是本质，初始化是呈现，理解了构造函数，也就理解了初始化；</li>
+<li>可以罗列各种初始化的表现形式，然后归纳，总结出结论。</li>
+</ul>
+<p>前一篇笔记带有第三种切入方式的味道，罗列了很多“XX初始化”，却没有归纳总结，意义不大。这一篇笔记我想以前两种方式来写。</p>
+<span id="more"></span>
+
+<h1 id="内置类型"><a href="#内置类型" class="headerlink" title="内置类型"></a>内置类型</h1><p>内置类型和用户自定义类型有些区别，比如内置类型很可能（原谅我，我并不百分百确定）没有构造函数，而对于类类型即便我们不定义构造函数，编译器一般也会默认给我们生成。总的来说，内置类型使用上比类类型简单，但同时也是类类型的基础。对于内置类型，比如 <code>int</code>，哪怕是新手也是很熟悉的。我们都会对 <code>int</code> 变量进行什么操作呢？我们会怎么写代码呢？</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> var1;</span><br><span class="line"><span class="comment">// some codes</span></span><br><span class="line">var1 = <span class="number">11</span>；</span><br></pre></td></tr></table></figure>
+
+<p>这应该是最普遍的代码书写形式了。我们定义了一个 <code>int</code> 变量，没有明确地给出其初始值，在稍后使用时给它赋值。像 <code>T t;</code> 这种形式我们称为“默认初始化”，或者“缺省初始化”。都是从“default initialization” 翻译过来的。</p>
+<blockquote>
+<p>This is the initialization performed when a variable is constructed with no initializer. <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/default_initialization">引用来源-default initialization</a></p>
+</blockquote>
+<p>有些人烦恼上述代码执行效果的“不确定性”（后文详述），更喜欢在定义变量时明确地给出一个初始值。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> var2 = <span class="number">12</span>;</span><br><span class="line"><span class="comment">// other codes</span></span><br><span class="line">var2 = <span class="number">13</span>;</span><br></pre></td></tr></table></figure>
+
+<p>像 <code>T t = x;</code> 这种形式我们称为“拷贝初始化”，即术语“copy initialization”。</p>
+<blockquote>
+<p>Initializes an object from another object <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/copy_initialization">引用来源-copy initialization</a></p>
+</blockquote>
+<p>我们使用内置类型书写的形式一般就是上述两种，有时候我们写在函数里面，有时候写在函数外面（全局的）。至此，我们了解了两个术语：default initialization 和 copy initialization。</p>
+<p>tip1：有时候潜意识会让我们写出这样的代码 <code>int var();</code>，类类型的话更形象 <code>MyClass obj();</code>，我们本意是想默认初始化一个变量 var 或 obj，但编译器的规则更倾向于将这行代码解析成函数声明。</p>
+<p>tip2：<code>T t = x;</code>的形式有时会让菜鸟误以为是赋值操作。拷贝初始化还有一种不具迷惑性的书写形式：<code>T t(x);</code></p>
+<p>tip3：内置类型的初始化和赋值成本一样。</p>
+<h2 id="默认值是什么"><a href="#默认值是什么" class="headerlink" title="默认值是什么"></a>默认值是什么</h2><p>如果定义变量时没有指定初值，则变量被默认初始化，此时变量被赋予了“默认值”。默认值到底是什么由变量类型决定，如果是内置类型，<strong>定义变量的位置也会对此有影响</strong>。内置类型的变量未被显式初始化时：</p>
+<ul>
+<li>定义于任何函数体之外的变量被初始化为 <code>0</code>；</li>
+<li>定义在函数体内部的内置类型变量将<strong>不被初始化</strong>。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> global_var1;</span><br><span class="line"><span class="type">int</span> global_var2 = <span class="number">100</span>;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="type">int</span> inner_var1;</span><br><span class="line">  <span class="type">int</span> inner_var2 = <span class="number">12</span>;</span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;global_var1: &quot;</span> &lt;&lt; global_var1 &lt;&lt; endl;</span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;global_var2: &quot;</span> &lt;&lt; global_var2 &lt;&lt; endl;</span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;inner_var1: &quot;</span> &lt;&lt; inner_var1 &lt;&lt; endl;</span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;inner_var2: &quot;</span> &lt;&lt; inner_var2 &lt;&lt; endl;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果如下：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/initializer_learn$ ./a.out </span><br><span class="line">global_var1: 0</span><br><span class="line">global_var2: 100</span><br><span class="line">inner_var1: 4196240</span><br><span class="line">inner_var2: 12</span><br></pre></td></tr></table></figure>
+
+<p>这个现象源于，最初 C 语言诞生时机器硬件性能有限，对于节省资源做到了令人发指的地步。定义变量默认只分配内存块，但不对这块内存进行擦除（复位）操作，这种复位操作一般来说都是多余的。假设根据默认初始值 0 进行擦除操作，除非作者后续就是使用初值 0，否则赋值还会再次擦除内存块赋予别的值，初始化时的擦除是没有意义的。</p>
+<p>C++ 最初由 C 扩展而来，为了向其兼容保留了这些特征。在性能不再是瓶颈的今天，反而由于程序员粗心使用了无初值且未赋值的变量而产生很多错误。</p>
+<h2 id="在堆上创建变量"><a href="#在堆上创建变量" class="headerlink" title="在堆上创建变量"></a>在堆上创建变量</h2><p>除了在栈上定义变量，我们还会在堆上动态分配内存。这种情况下怎么初始化呢？</p>
+<p>default initialization</p>
+<ul>
+<li><code>int i;</code> 可以对应 <code>int *p = new int;</code></li>
+<li>还存在一种形式：<code>int *p = new int();</code>，虽然我们不能 <code>int i();</code> 来定义变量。这个其实是<strong>值初始化</strong>，后文会提到。</li>
+</ul>
+<p>copy initialization</p>
+<ul>
+<li><code>int i = 12;</code> 无法严格对应，但好在拷贝初始化还有更正统的写法</li>
+<li><code>int i(12);</code> 可以对应 <code>int *p = new int(12);</code></li>
+</ul>
+<h1 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h1><p>要讲构造函数，我们就得进入类类型（class type），我们无法使用内置类型来讲解构造函数。</p>
+<p>从类类型的角度来说，所有的初始化都是匹配参数，找到与之对应的构造函数并执行。参考 <a target="_blank" rel="noopener" href="http://www.cplusplus.com/reference/string/string/string/"><code>std::string</code> 类的构造</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// default (1)	</span></span><br><span class="line"><span class="built_in">string</span>();</span><br><span class="line"><span class="comment">// copy (2)	</span></span><br><span class="line"><span class="built_in">string</span> (<span class="type">const</span> string&amp; str);</span><br><span class="line"><span class="comment">// substring (3)	</span></span><br><span class="line"><span class="built_in">string</span> (<span class="type">const</span> string&amp; str, <span class="type">size_t</span> pos, <span class="type">size_t</span> len = npos);</span><br><span class="line"><span class="comment">// from c-string (4)	</span></span><br><span class="line"><span class="built_in">string</span> (<span class="type">const</span> <span class="type">char</span>* s);</span><br><span class="line"><span class="comment">// from buffer (5)	</span></span><br><span class="line"><span class="built_in">string</span> (<span class="type">const</span> <span class="type">char</span>* s, <span class="type">size_t</span> n);</span><br><span class="line"><span class="comment">// fill (6)	</span></span><br><span class="line"><span class="built_in">string</span> (<span class="type">size_t</span> n, <span class="type">char</span> c);</span><br><span class="line"><span class="comment">// range (7)	</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">InputIterator</span>&gt;</span><br><span class="line">  <span class="built_in">string</span>  (InputIterator first, InputIterator last);</span><br><span class="line"><span class="comment">// initializer list (8)	</span></span><br><span class="line"><span class="built_in">string</span> (initializer_list&lt;<span class="type">char</span>&gt; il);</span><br><span class="line"><span class="comment">// move (9)	</span></span><br><span class="line"><span class="built_in">string</span> (string&amp;&amp; str) <span class="keyword">noexcept</span>;</span><br></pre></td></tr></table></figure>
+<p>与之对应的构造实例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// string constructor</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="function">std::string <span class="title">s0</span> <span class="params">(<span class="string">&quot;Initial string&quot;</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// constructors used in the same order as described above:</span></span><br><span class="line">  std::string s1;</span><br><span class="line">  <span class="function">std::string <span class="title">s2</span> <span class="params">(s0)</span></span>;</span><br><span class="line">  <span class="function">std::string <span class="title">s3</span> <span class="params">(s0, <span class="number">8</span>, <span class="number">3</span>)</span></span>;</span><br><span class="line">  <span class="function">std::string <span class="title">s4</span> <span class="params">(<span class="string">&quot;A character sequence&quot;</span>)</span></span>;</span><br><span class="line">  <span class="function">std::string <span class="title">s5</span> <span class="params">(<span class="string">&quot;Another character sequence&quot;</span>, <span class="number">12</span>)</span></span>;</span><br><span class="line">  <span class="function">std::string <span class="title">s6a</span> <span class="params">(<span class="number">10</span>, <span class="string">&#x27;x&#x27;</span>)</span></span>;</span><br><span class="line">  <span class="function">std::string <span class="title">s6b</span> <span class="params">(<span class="number">10</span>, <span class="number">42</span>)</span></span>;      <span class="comment">// 42 is the ASCII code for &#x27;*&#x27;</span></span><br><span class="line">  <span class="function">std::string <span class="title">s7</span> <span class="params">(s0.begin(), s0.begin()+<span class="number">7</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;s1: &quot;</span> &lt;&lt; s1 &lt;&lt; <span class="string">&quot;\ns2: &quot;</span> &lt;&lt; s2 &lt;&lt; <span class="string">&quot;\ns3: &quot;</span> &lt;&lt; s3;</span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;\ns4: &quot;</span> &lt;&lt; s4 &lt;&lt; <span class="string">&quot;\ns5: &quot;</span> &lt;&lt; s5 &lt;&lt; <span class="string">&quot;\ns6a: &quot;</span> &lt;&lt; s6a;</span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;\ns6b: &quot;</span> &lt;&lt; s6b &lt;&lt; <span class="string">&quot;\ns7: &quot;</span> &lt;&lt; s7 &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们看到这么多构造函数每一个都有其特点。但其中 1、2、9是最具通用性的，是所有类的共性。因为其特殊性，所以也就值得拥有名字。</p>
+<ul>
+<li>1 默认构造函数，在默认初始化时执行；</li>
+<li>2 拷贝构造函数，在拷贝初始化时执行；</li>
+<li>9 移动拷贝构造函数，</li>
+<li>其余的我们可以统称为“直接初始化”</li>
+</ul>
+<blockquote>
+<p>Initializes an object from explicit set of constructor arguments. <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/direct_initialization">引用来源-direct initialization</a></p>
+</blockquote>
+<p>接下来“斤斤计较”一些，前文提到所有的初始化都是调用相应的构造函数而已（参数匹配），函数调用的形式就是使用括号 <code>()</code>，但除此之外，C++ 也提供了两种其他的形式调用构造函数：</p>
+<ul>
+<li>使用等号 <code>=</code></li>
+<li>使用花括号 <code>&#123;&#125;</code></li>
+</ul>
+<p>恶心的是是这三种书写形式都不具有“全局适用性”——我自己造的词，三种书写形式都有广泛适用性，但又各有不足，不能调用 XXX 形式的构造函数——即便是使用 <code>()</code> 来调用构造函数也有其不能用的情况。接下里我们详细叙述：</p>
+<h2 id="使用括号调用"><a href="#使用括号调用" class="headerlink" title="使用括号调用"></a>使用括号调用</h2><p>按道理来说，既然所有的函数调用都是使用 <code>()</code> 来完成，那么调用构造函数应该也没啥问题才对，囧。先说结论—— <code>()</code> 调用不能适用于默认构造函数。问题出现 C++ 的语法解析上，其优先解释成函数声明。如果我们这么写 <code> MyClass obj();</code> 表示调用 MyClass 的默认构造函数来初始化 obj 对象，那么我们怎么声明“返回 MyClass 类型的空参数函数”呢？或许可以这么写 <code>MyClass obj(void);</code>，我不确定是否是一种解决方案，即便可行，那么以前写的代码怎么办呢？解决方式就是我们这么多年一直写的 <code>MyClass obj;</code>，这样就调用默认构造函数了，囧。</p>
+<p>有一种略显丑陋的写法，<del>似乎是</del>满足了使用圆括号调用默认构造函数 <code>MyClass obj = MyClass();</code>。</p>
+<p>ps：它是“使用默认构造函数初始得到一临时变量，然后又使用这个临时变量调用拷贝构造函数初始化的 obj 对象”吗？no，使用 g++ 验证，只执行了默认构造函数，未执行拷贝构造函数，猜测是直接使用默认构造函数构建了 obj 对象。</p>
+<h2 id="使用等号调用"><a href="#使用等号调用" class="headerlink" title="使用等号调用"></a>使用等号调用</h2><p>前文说 <code>=</code> 用来调用拷贝构造函数，严格来说并不准确。在 C++11 标准之前，<code>=</code> 可以用来调用所有【只有单独一个参数的】构造函数：</p>
+<ol>
+<li>一个参数，其余参数都有默认值的可以吗？ ok </li>
+<li>怎么定义“copy initialization”这个概念，狭义的 or 广义的？ 我个人更倾向于限制性更强的定义，从相同类型的变量拷贝 </li>
+<li>隐式类型转换）；</li>
+</ol>
+<p>在 C++11 之后，<code>=</code> 更是可以和 <code>&#123;&#125;</code> 组合用来调用所有的构造函数，但此种情形其实只是 <code>&#123;&#125;</code> 调用的变形。所以，如果使用 <code>=</code>（且不使用 <code>&#123;&#125;</code>）就不能调用多参数（<del>两个及其以上？</del> 两个及其以上无默认值）的构造函数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Student</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">// other functions</span></span><br><span class="line">  <span class="built_in">Student</span>(<span class="type">const</span> string name, <span class="type">bool</span> gender = <span class="literal">true</span>, <span class="type">unsigned</span> age = <span class="number">20</span>);</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="comment">// some parameters</span></span><br><span class="line">  string m_name;</span><br><span class="line">  <span class="type">bool</span> m_gender;</span><br><span class="line">  <span class="type">unsigned</span> m_age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  Student niel = <span class="string">&quot;niel&quot;</span>; <span class="comment">// it is wrong</span></span><br><span class="line">  Student <span class="type">long</span> = <span class="built_in">string</span>(<span class="string">&quot;long&quot;</span>);  <span class="comment">// it is OK.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>《C++ Primer》第 263 页“隐式的类类型转化”中明确提到：只允许一步类类型转化。</p>
+<h2 id="使用花括号调用"><a href="#使用花括号调用" class="headerlink" title="使用花括号调用"></a>使用花括号调用</h2><p>在 C++11 之前，容器类无法使用一个序列初始化。直到在 C++11 中新添了 <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/utility/initializer_list"><code>initializer_list</code> 标准库类型</a>，其形式 <code>&#123;a,b,c&#125;;</code>，以此 <code>Container x = &#123;a,b,c&#125;;</code>。在此基础上，扩展 <code>&#123;&#125;</code> 的使用场景（依据？），不仅仅可以用在所有使用 <code>()</code> 的场景，还可以用来默认初始化 <code>MyClass obj&#123;&#125;;</code>，用来调用构造函数创建临时变量：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string str&#123;&#125;;</span><br><span class="line"><span class="comment">// str = (&quot;abc&quot;, 2);</span></span><br><span class="line">str = &#123;<span class="string">&quot;abc&quot;</span>, <span class="number">2</span>&#125;;  <span class="comment">// it is OK.</span></span><br></pre></td></tr></table></figure>
+
+<p>这种使用 <code>&#123;&#125;</code> 来初始化对象的形式被称为“列表初始化”，可以表现默认初始化、拷贝初始化、STL 容器的初始化等等。</p>
+<blockquote>
+<p>Initializes an object from braced-init-list <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/list_initialization">引用来源-list initialization</a></p>
+</blockquote>
+<h3 id="美中不足"><a href="#美中不足" class="headerlink" title="美中不足"></a>美中不足</h3><p>我原本以为 <code>&#123;&#125;</code> 是“全局适用”的，是可以用来调用所有构造函数的语法特性，囧，理论上应该是。问题是它有时候不会调用我们预期的构造函数，因为 <code>&#123;&#125;</code> 优先解析成 <code>initializer_list</code>。举例来说：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 42 is the ASCII code for &#x27;*&#x27;</span></span><br><span class="line"><span class="function">string <span class="title">str0</span> <span class="params">(<span class="number">42</span>, <span class="string">&#x27;x&#x27;</span>)</span></span>;  <span class="comment">// 42 个 ‘x’ 的字符串</span></span><br><span class="line">string str&#123;<span class="number">42</span>, <span class="string">&#x27;x&#x27;</span>&#125;;    <span class="comment">// WOW，str 的值是 “*x”，而非我们更直观理解的“42 个 x”</span></span><br><span class="line">str = &#123;<span class="number">42</span>, <span class="string">&#x27;a&#x27;</span>&#125;;        <span class="comment">// 将 str 的值改为了 “*a”</span></span><br></pre></td></tr></table></figure>
+
+<p>语法解析时更倾向于 <code>&#123;&#39;*&#39;, &#39;x&#39;&#125;</code> 的序列，而非等价于 <code>(42, &#39;x&#39;)</code>，使用 <code>&#123;&#125;</code> 应该怎么调用 <code>string(size_t n, char c);</code> 构造函数呢？ no idea。ps <code>string str(&#39;*&#39;, &#39;x&#39;)</code> 是 42 个 ‘x’ 的字符串。</p>
+<blockquote>
+<p>A <code>std::initializer_list</code> object is automatically constructed when:</p>
+<ul>
+<li>a braced-init-list is used in list-initialization, including function-call list initialization and assignment expressions</li>
+<li>a braced-init-list is bound to auto, including in a ranged for loop</li>
+</ul>
+</blockquote>
+<p>推荐 《Effective Modern C++》 Item 7: Distinguish between <code>()</code> and <code>&#123;&#125;</code> when creating objects.</p>
+<p><strong>备忘：</strong>实际测试代码，见 Debian8Light 虚拟机 &#x2F;home&#x2F;vimer&#x2F;see-the-world&#x2F;code&#x2F;initializer_learn&#x2F;MyString 目录。后续修改时将 Demo 嵌到合适的位置。</p>
+<h2 id="new-调用构造函数"><a href="#new-调用构造函数" class="headerlink" title="new 调用构造函数"></a>new 调用构造函数</h2><p>显然 <code>new</code> 操作不能通过 <code>=</code> 来匹配构造函数，它可以使用 <code>()</code> 和 <code>&#123;&#125;</code>，所受的限制和之前一致，唯一的不同之处是此时可以使用 <code>new MyClass();</code> 来调用默认构造函数。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ol>
+<li><p>拷贝构造函数和拷贝赋值运算符</p>
+<p> <code>=</code> 可以用来初始化，可以用来赋值。不同情况下调用的函数不同。强调一遍又一遍，有 <code>=</code> 不一定是赋值操作。</p>
+</li>
+<li><p><code>std::initializer_list</code> 和  <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/initializer_list">member initializer list</a></p>
+<p> 前者是标准库类型，后者是在构造函数中初始化成员变量的。</p>
+</li>
+<li><p>关于 <code>std::initializer_list</code> 类型，推荐一篇帖子：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/lysuns/p/4278589.html">C++11中新特性之：initializer_list详解</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/693788/is-it-better-to-use-c-void-arguments-void-foovoid-or-not-void-foo">Is it better to use C void arguments “void foo(void)” or not “void foo()”?</a></p>
+</li>
+</ol>
+<h1 id="值初始化"><a href="#值初始化" class="headerlink" title="值初始化"></a>值初始化</h1><p>值初始化到底是什么？对此一直都有困惑，和 <code>new Type；</code> <code>new Type();</code> 两者之间的区别有关系吗？和容器类初始化每个元素的“初始化器”有关系吗？</p>
+<blockquote>
+<p>This is the initialization performed when a variable is constructed with <strong>an empty initializer.</strong> <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/value_initialization">引用来源-value initialization</a></p>
+</blockquote>
+<p>我们来和“默认初始化”（或者叫做“缺省初始化”）的定义对比一下：</p>
+<blockquote>
+<p>This is the initialization performed when a variable is constructed with <strong>no initializer.</strong></p>
+</blockquote>
+<p>我们前面提到，以下形式都会调用默认构造函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MyClass obj;                   <span class="comment">// (1)</span></span><br><span class="line">MyClass obj2 = <span class="built_in">MyClass</span>();</span><br><span class="line">MyClass obj3&#123;&#125;;</span><br><span class="line"></span><br><span class="line">MyClass *p = <span class="keyword">new</span> MyClass;      <span class="comment">// (4)</span></span><br><span class="line">MyClass *p = <span class="keyword">new</span> <span class="built_in">MyClass</span>();</span><br><span class="line">MyClass *p = <span class="keyword">new</span> MyClass&#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这要学究式地较真起来，1 和 4 是“no initializer”，所以是缺省初始化；其它 4 个是“empty initializer”，所以是值初始化。</p>
+<p>这两者在初始化类类型的时候没有区别，都是调用默认构造函数。差别发生在初始化内置类型的时候，默认初始化是“向前看齐”（C 语言）妥协的结果，前面已经介绍过“默认值到底是什么”；值初始化是新时代的新态度，总是会有初值的。在 <a href="https://tnie.github.io/2016/12/15/POD/">《POD 类型》</a> 中有一个表格，执行 <code>new</code> 的结果表示了同样的结果。其参考来源于维基百科。</p>
+<p>关于值初始化的更详细结果请移步 <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/value_initialization">The effects of value initialization</a> 一节：</p>
+<ol>
+<li><p>大括号的“意外”</p>
+<blockquote>
+<p>In all cases, if the empty pair of braces {} is used and T is an aggregate type, <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/aggregate_initialization">aggregate-initialization</a> is performed instead of value-initialization.</p>
+<p>If T is a class type that has no default constructor but has a constructor taking <code>std::initializer_list</code>, list-initialization is performed.</p>
+</blockquote>
+</li>
+<li><p>数组类型</p>
+<blockquote>
+<p>if T is an array type, each element of the array is value-initialized;</p>
+</blockquote>
+</li>
+</ol>
+<p>何为 aggregate-initialization 呢？</p>
+<blockquote>
+<p>Initializes an aggregate from braced-init-list <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/aggregate_initialization">引用来源-aggregate initialization</a></p>
+<p>Aggregate initialization is a form of list-initialization, which initializes aggregates</p>
+</blockquote>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>C++ 中的初始化，经历了由少变多，由简入繁，让人不胜其烦；但从 C++11 开始，踏上了由繁入简的尝试。</p>
+<p>有哪些 xxx-initialization 呢？除了上面提到的，其实还有一些概念……</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/default_initialization">default initialization</a></li>
+<li><a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/copy_initialization">copy initialization</a></li>
+<li><a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/direct_initialization">direct initialization</a></li>
+<li><a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/aggregate_initialization">aggregate initialization</a></li>
+<li><a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/list_initialization">list initialization</a></li>
+<li>Dividing line</li>
+<li><a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/language/zero_initialization">zero initialization</a></li>
+</ul>
+<p>看完以上整理的内容，可以再看几篇问答：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/36735960/answer/68902926">C++值初始化，默认初始化，以及其他初始化类型的区别？</a></li>
+<li><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/29765961/default-value-and-zero-initialization-mess">Default, value and zero initialization mess</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/12/15/POD/" rel="prev" title="POD 类型">
+                  <i class="fa fa-angle-left"></i> POD 类型
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/02/08/git-clone/" rel="next" title="两个仓库之间的联系">
+                  两个仓库之间的联系 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

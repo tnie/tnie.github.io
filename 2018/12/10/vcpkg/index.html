@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="强调：安装 IDE 时不要变更默认路径！否则，使用 vcpkg 磨难重重，vcpkg issue#12488。我安装 Language English 就失败了，后面也就没尝试。 从 visual studio 2015 的“选项”跳转到的中文网站，选择英文语言包下载到的其实是中文语言包，需要更换到对应的英文网站下载才是正确的。仍旧需要使用默认安装路径！ 网速要好，偶尔也需要翻墙。如果使用系统自带">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vcpkg 包管理器">
+<meta property="og:url" content="https://tnie.github.io/2018/12/10/vcpkg/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="强调：安装 IDE 时不要变更默认路径！否则，使用 vcpkg 磨难重重，vcpkg issue#12488。我安装 Language English 就失败了，后面也就没尝试。 从 visual studio 2015 的“选项”跳转到的中文网站，选择英文语言包下载到的其实是中文语言包，需要更换到对应的英文网站下载才是正确的。仍旧需要使用默认安装路径！ 网速要好，偶尔也需要翻墙。如果使用系统自带">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-12-10T02:04:22.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.664Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="cpp">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2018/12/10/vcpkg/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2018/12/10/vcpkg/","path":"2018/12/10/vcpkg/","title":"vcpkg 包管理器"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vcpkg 包管理器 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">安装库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">使用库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9"><span class="nav-number">3.</span> <span class="nav-text">编译选项</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IDE"><span class="nav-number">3.1.</span> <span class="nav-text">IDE</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E8%B5%84%E6%BA%90"><span class="nav-number">4.</span> <span class="nav-text">其他资源</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/12/10/vcpkg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vcpkg 包管理器 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vcpkg 包管理器
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-12-10 10:04:22" itemprop="dateCreated datePublished" datetime="2018-12-10T10:04:22+08:00">2018-12-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><strong>强调</strong>：安装 IDE 时不要变更默认路径！否则，使用 vcpkg 磨难重重，<a target="_blank" rel="noopener" href="https://github.com/microsoft/vcpkg/issues/12488">vcpkg issue#12488</a>。<del>我安装 Language English 就失败了，后面也就没尝试</del>。</p>
+<p>从 visual studio 2015 的“选项”跳转到的中文网站，选择英文语言包下载到的其实是中文语言包，需要更换到对应的英文网站下载才是正确的。仍旧需要使用默认安装路径！</p>
+<p>网速要好，偶尔也需要翻墙。如果使用系统自带的 powershell 碰到下载失败、下载慢，且版本陈旧。建议下载 powershell core 试一试，可能会有惊喜。 <a target="_blank" rel="noopener" href="https://www.yixuju.cn/other/talking-about-proxy/">在 Windows 终端中设置代理</a> 解决问题：<code>$Env:https_proxy=&quot;http://127.0.0.1:10809&quot;</code></p>
+<p>使用 vcpkg 安装库后，如果较长时间未更新，再次更新时可能报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PS F:\vcpkg&gt; .\vcpkg.exe update</span><br><span class="line">Using local portfile versions. To update the local portfiles, use `git pull`.</span><br><span class="line">Error: while loading boost-signals:</span><br><span class="line">The port directory (F:\vcpkg\ports\boost-signals) does not exist</span><br><span class="line">Error: failed to load port from F:\vcpkg\ports\boost-signals</span><br><span class="line">Note: Updating vcpkg by rerunning bootstrap-vcpkg may resolve this failure.</span><br></pre></td></tr></table></figure>
+
+<p>此时按照提示重新执行多次 <code>bootstrap-vcpkg</code> 也是无效的，我们需要清理掉过时的库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PS F:\vcpkg&gt; .\vcpkg.exe list boost-signals</span><br><span class="line">boost-signals2:x86-windows-static-md               1.71.0           Boost signals2 module</span><br><span class="line">boost-signals:x86-windows                          1.68.0           Boost signals module</span><br><span class="line">PS F:\vcpkg&gt; .\vcpkg.exe remove boost-signals:x86-windows</span><br><span class="line">The following packages will be removed:</span><br><span class="line">    boost-signals:x86-windows</span><br><span class="line">Removing package boost-signals:x86-windows...</span><br><span class="line">Removing package boost-signals:x86-windows... done</span><br></pre></td></tr></table></figure>
+
+<p>之后就使用正常了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PS F:\vcpkg&gt; .\vcpkg.exe update</span><br><span class="line">Using local portfile versions. To update the local portfiles, use `git pull`.</span><br><span class="line">The following packages differ from their port versions:</span><br><span class="line">    abseil:x86-windows               2020-03-03-4 -&gt; 2020-09-23#3</span><br><span class="line">    abseil:x86-windows-static-md     2020-03-03-4 -&gt; 2020-09-23#3</span><br><span class="line">    asio:x86-windows                 1.12.2 -&gt; 1.18.0</span><br><span class="line">    asio:x86-windows-static-md       1.12.2-2 -&gt; 1.18.0</span><br><span class="line">    boost-accumulators:x86-windows-static-md 1.71.0 -&gt; 1.75.0</span><br></pre></td></tr></table></figure>
+
+<p>除特别备注，全部摘自 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/cpp/vcpkg?view=vs-2017">vcpkg: A C++ package manager for Windows, Linux and MacOS</a>。此章节类似读书（博客）笔记。</p>
+<span id="more"></span>
+
+<h1 id="安装库"><a href="#安装库" class="headerlink" title="安装库"></a>安装库</h1><ol>
+<li><p>同时支持动态链接库，以及 <a target="_blank" rel="noopener" href="https://blogs.msdn.microsoft.com/vcblog/2016/11/01/vcpkg-updates-static-linking-is-now-available/">静态链接</a>。Windows 下默认编译 32 位的动态库。从23年9月开始默认编译 64位的库。</p>
+<blockquote>
+<p> If no triplet is specified, vcpkg will install and compile for <strong>the default triplet</strong> for the target platform: <code>x86-windows</code>, <code>x64-linux.cmake</code>, or <code>x64-osx.cmake</code>.</p>
+<p>warning: Starting with the September 2023 release, the default triplet for vcpkg libraries will change from <code>x86-windows</code> to the detected host triplet (<code>x64-windows</code>). To resolve this message, add <code>--triplet x86-windows</code> to keep the same behavior</p>
+</blockquote>
+</li>
+<li><p>MT 和 MD：vcpkg 静态链接库默认 <code>/MT(d)</code>；动态链接库默认 <code>/MD(d)</code></p>
+<blockquote>
+<p>build static libraries against the static CRT (<code>/MT</code> in Visual Studio): <code>x86-windows-static</code>, <code>x64-windows-static</code>, etc.</p>
+</blockquote>
+<p> <a target="_blank" rel="noopener" href="https://github.com/Microsoft/vcpkg/issues/784">Change Compiler settings from MT to MD</a></p>
+<blockquote>
+<p>This should be as easy as copying <code>triplets\x86-windows-static.cmake</code> to a new file of your own name (<code>triplets\x86-windows-static-md.cmake</code>, for example). Then change the setting for <code>VCPKG_CRT_LINKAGE</code> to <code>dynamic</code> instead of <code>static</code>.</p>
+</blockquote>
+</li>
+<li><p>不改变环境变量，不依赖注册表 <del>或 Visual Studio</del> 在 Windows 平台还是和后者密切关联的</p>
+<p> 为什么总要下载 ninja ? 不会弃用自家 Visual Studio，全面拥抱 ninja 了吧？</p>
+</li>
+<li><p>在 Windows 环境使用时，编译源码需要依赖 MSVC2015 或 2017，优先使用后者</p>
+<p> 同时安装了 MSVC2015 和 2017 时，如何指定使用前者？<a target="_blank" rel="noopener" href="https://github.com/Microsoft/vcpkg/issues/766">Using VS2015 when VS2017 is available</a>，没门！</p>
+<blockquote>
+<p>We don’t currently have an easy, supported way to opt out of VS2017.</p>
+</blockquote>
+<p> 给出的 set <code>VCPKG_PLATFORM_TOOLSET </code> 的 workaround 也有大的缺陷：</p>
+<blockquote>
+<p>This will work for CMake-based ports that don’t use Ninja and possibly others. Notably, this will <em>not</em> change <code>boost</code>.</p>
+</blockquote>
+<p> 2019-10-17 打算不管不顾 <a target="_blank" rel="noopener" href="https://github.com/tnie/learn_future/blob/master/README.md#binary-compatibility">二进制兼容可能出现的例外</a>，安装时不再纠结 msvc 版本（2015&#x2F;17&#x2F;19），就直接安装 vc2019。在 vc2015&#x2F;17 中使用出错了再说。</p>
+</li>
+<li><p><strong>支持导出</strong>编译后的库和头文件</p>
+</li>
+<li><p>vcpkg 自包含，每个 vcpkg 文件夹就是一个实例。每台设备可以有多个实例。</p>
+</li>
+<li><p>支持更新、升级已经安装的库</p>
+<p> 和更新 vcpkg 自身是不同的概念。更新 vcpkg 自身：<code>git pull</code></p>
+</li>
+<li><p>支持删除已安装的库，并且级联删除其下游（依赖前者的其他库）</p>
+<p> 卸载 boost <code>.\vcpkg.exe remove boost-vcpkg-helpers --recurse</code></p>
+</li>
+<li><p>虽然理论上可能用不到 git、cmake，但好多库都是从 github 上获取，是 cmake 组织的。<del>自己安装并配到环境变量里吧，省得每个实例都下载</del>。</p>
+<p> vcpkg 针对 git、cmake 设有最低版本，如果系统中查找到版本较低，依旧会重新下载 git 和 cmake。有点坑的地方在于 vcpkg 基本都在追踪最新版本。所以，交给 vcpkg 自己操心吧。下载慢就多等会儿。</p>
+</li>
+</ol>
+<h1 id="使用库"><a href="#使用库" class="headerlink" title="使用库"></a>使用库</h1><ol>
+<li><p>可以集成到 Visual Studio。当存在多个 vcpkg 实例（目录）时，最后执行 <code>vcpkg integrate install</code> 的目录有效。</p>
+<p> 所以，改变目录后，重新执行上述命令即可！</p>
+</li>
+<li><p>从 Visual Studio 中解除 vcpkg，执行 <code>vcpkg.exe integrate remove</code> 即可。</p>
+<p> 虽然试验中，使用 <code>vcpkg integrate install/remove</code> 开关 vcpkg 能够及时生效，无需重启 MSVC。但总是心里毛毛的。</p>
+<p> 之前使用过笨方法，针对每个项目 xxx.vcxproj 手工增加 <code>&lt;VcpkgEnabled&gt;false&lt;/VcpkgEnabled&gt;</code> 配置项</p>
+</li>
+<li><p>可以撇开主要 Vcpkg 实例，使用库的特定版本 &#x2F; 将某个实例集成到特定项目中</p>
+<blockquote>
+<p>This will modify the project file, so we <strong>do NOT recommend</strong> this approach for open source projects.<a target="_blank" rel="noopener" href="https://github.com/Microsoft/vcpkg/blob/master/docs/users/integration.md#linking-nuget-file">引用来源：linking-nuget-file</a></p>
+</blockquote>
+</li>
+<li><p>Visual Studio 使用 Vcpkg <a target="_blank" rel="noopener" href="https://blogs.msdn.microsoft.com/vcblog/2016/11/01/vcpkg-updates-static-linking-is-now-available/">默认策略</a>是动态库。对静态库的支持很差，需要手工改一些内容。</p>
+<blockquote>
+<p>In Visual Studio, you can override <em>the auto-detected triplet</em> (which will default to DLLs) using the MSBuild properties “<code>VcpkgTriplet</code>” and “<code>VcpkgEnabled</code>”.</p>
+</blockquote>
+<p> 如何覆写 MSBuild 属性呢？——目前只发现，以文本形式手动修改 <code>.vxproj</code> 工程文件的方式。好蠢</p>
+<p> 试验 Property Sheets 总是莫名其妙无效，直接复制到 .vxproj 中又能生效。</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">PropertyGroup</span> <span class="attr">Label</span>=<span class="string">&quot;Globals&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">VcpkgTriplet</span> <span class="attr">Condition</span>=<span class="string">&quot;&#x27;$(Platform)&#x27;==&#x27;Win32&#x27;&quot;</span>&gt;</span>x86-windows-static<span class="tag">&lt;/<span class="name">VcpkgTriplet</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- &lt;VcpkgEnabled&gt;true&lt;/VcpkgEnabled&gt; --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- &lt;VcpkgTriplet Condition=&quot;&#x27;$(Platform)&#x27;==&#x27;x64&#x27;&quot;&gt;x64-windows-static&lt;/VcpkgTriplet&gt; --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">PropertyGroup</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Nothing</p>
+</li>
+</ol>
+<h1 id="编译选项"><a href="#编译选项" class="headerlink" title="编译选项"></a>编译选项</h1><p>截止到目前版本，</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PS E:\vcpkg&gt; .\vcpkg.exe version</span><br><span class="line">Vcpkg package management program version 2018.10.20-nohash</span><br><span class="line"></span><br><span class="line">See LICENSE.txt for license information.</span><br></pre></td></tr></table></figure>
+
+<p>Vcpkg 单个 triplet 文件能够同时生成 <code>Debug/Release</code> 调试版本和发布版本的库。通过自定义 triplet 能够支持 「(<code>x64/win32</code>) &amp;（<code>动态链接库</code>&#x2F;<code>静态链接库</code>）&amp;（<code>/MD(d)</code>运行时 &#x2F;<code>/MT(d)</code>运行时）」。</p>
+<ol>
+<li>其内嵌对 「(<code>x64/win32</code>) &amp;（使用 <code>/MT(d) </code>运行时的<strong>静态链接库</strong> | 使用 <code>/MD(D) </code>运行时的<strong>动态链接库</strong>）」 的支持，在 <code>triplets</code> 文件夹中查看；</li>
+<li>其对 「（<code>动态链接库</code>&#x2F;<code>静态链接库</code>）&amp;（<code>/MD(d)</code>运行时&#x2F;<code>/MT(d)</code>运行时）」其他组合的支持，需要用户自行编写 triplet 文件实现。</li>
+</ol>
+<h2 id="IDE"><a href="#IDE" class="headerlink" title="IDE"></a>IDE</h2><p>在上述前提下，要求 Visual Studio 自动化支持 （<code>动态链接库</code>&#x2F;<code>静态链接库</code>）&amp;（<code>/MD(d)</code>运行时&#x2F;<code>/MT(d)</code>运行时）的任意组合不现实，尤其是场景 2 全权交给用户自行操作的情况。</p>
+<p>另外，由于 Visual Studio 并没有「<code>动态链接/静态连接</code>」的开关选项。所以，IDE 仅支持 (<code>Debug/Release</code>) X (<code>x64/win32</code>) X（<code>动态链接库</code>&#x2F;<del><code>静态链接库</code></del>）X（<code>/MD(d)</code>运行时&#x2F;<del><code>/MT(d)</code>运行时</del>）。</p>
+<ul>
+<li>其他组合，需要手动修改 Visual Studio 工程的 property sheet 实现。</li>
+</ul>
+<p><strong>NOTICE</strong> 第三方库采用的运行时，和项目编译时采用的运行时，这是两个概念。应该一致，但不代表一定一致。</p>
+<p>使用 vc2019 时，平台工具集与 IDE 不一致时，<code>vcpkg integrate</code> 不生效。比如：</p>
+<ul>
+<li>使用 vc2019 + v140 不生效；只能使用 vc2019 + v142</li>
+</ul>
+<p>但使用 vc2015 时，+ v140&#x2F;v140_xp&#x2F;v120 都能够生效（后者不支持 <code>std::chrono</code> 等特性）。</p>
+<p>另外，vc2019 在以下方面和 vc2015 也不同：</p>
+<ul>
+<li>在项目属性 <code>C/C++ -常规-附加包含目录-继承的值</code> 看不到 <code>$(VcpkgRoot)include</code>；</li>
+<li>在 <code>链接器-输入-附加依赖项-继承的值</code> 中看不到 <code>$(VcpkgRoot)debug\lib\*.lib</code> 字样。vc2015 能够看到。</li>
+</ul>
+<h1 id="其他资源"><a href="#其他资源" class="headerlink" title="其他资源"></a>其他资源</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/cjmqas/article/details/79282847">Visual Studio开源库集成器Vcpkg全教程–利用Vcpkg轻松集成开源第三方库</a></p>
+<p>github 中的手册：<a target="_blank" rel="noopener" href="https://github.com/Microsoft/vcpkg/blob/master/docs/index.md">docs</a></p>
+<p>在 FAQ 中也提到了 Vcpkg 和 NuGet、Conan、Chocolatey 的区别</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cpp/" rel="tag"># cpp</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/12/03/streambuf/" rel="prev" title="streambuf">
+                  <i class="fa fa-angle-left"></i> streambuf
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/01/05/protobuf/" rel="next" title="protobuf 压缩">
+                  protobuf 压缩 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

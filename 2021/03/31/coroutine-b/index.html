@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="来源：https:&#x2F;&#x2F;lewissbaker.github.io&#x2F;2017&#x2F;11&#x2F;17&#x2F;understanding-operator-co-await What does the Coroutines TS give us?The facilities the C++ Coroutines TS provides in the language can be thought of as a low">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ Coroutines Understanding operator co_await">
+<meta property="og:url" content="https://tnie.github.io/2021/03/31/coroutine-b/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="来源：https:&#x2F;&#x2F;lewissbaker.github.io&#x2F;2017&#x2F;11&#x2F;17&#x2F;understanding-operator-co-await What does the Coroutines TS give us?The facilities the C++ Coroutines TS provides in the language can be thought of as a low">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-31T03:57:00.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.617Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="coroutine">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2021/03/31/coroutine-b/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2021/03/31/coroutine-b/","path":"2021/03/31/coroutine-b/","title":"C++ Coroutines Understanding operator co_await"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>C++ Coroutines Understanding operator co_await | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#What-does-the-Coroutines-TS-give-us"><span class="nav-number">1.</span> <span class="nav-text">What does the Coroutines TS give us?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Compiler-Library-interaction"><span class="nav-number">2.</span> <span class="nav-text">Compiler &lt;-&gt; Library interaction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Awaiters-and-Awaitables-Explaining-operator-co-await"><span class="nav-number">3.</span> <span class="nav-text">Awaiters and Awaitables: Explaining operator co_await</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Obtaining-the-Awaiter"><span class="nav-number">3.1.</span> <span class="nav-text">Obtaining the Awaiter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Awaiting-the-Awaiter"><span class="nav-number">3.2.</span> <span class="nav-text">Awaiting the Awaiter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Coroutine-Handles"><span class="nav-number">3.3.</span> <span class="nav-text">Coroutine Handles</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Synchronisation-free-async-code"><span class="nav-number">4.</span> <span class="nav-text">Synchronisation-free async code</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#An-example-Implementing-a-simple-thread-synchronisation-primitive"><span class="nav-number">5.</span> <span class="nav-text">An example: Implementing a simple thread-synchronisation primitive</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/31/coroutine-b/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="C++ Coroutines Understanding operator co_await | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ Coroutines Understanding operator co_await
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-03-31 11:57:00" itemprop="dateCreated datePublished" datetime="2021-03-31T11:57:00+08:00">2021-03-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>来源：<a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await">https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await</a></p>
+<h1 id="What-does-the-Coroutines-TS-give-us"><a href="#What-does-the-Coroutines-TS-give-us" class="headerlink" title="What does the Coroutines TS give us?"></a>What does the Coroutines TS give us?</h1><p>The facilities the C++ Coroutines TS provides in the language can be thought of as a low-level assembly-language for coroutines. These facilities can be difficult to use directly in a safe way and are mainly intended to be used by library-writers to build higher-level abstractions that application developers can work with safely.</p>
+<p>C ++ Coroutines TS 提供的功能可以被认为是协程的一种低级汇编语言。这些功能可能很难以安全的方式直接使用，并且主要旨在供库编写人员用来构建更高级的抽象，以便应用程序开发人员可以安全地使用它们。</p>
+<h1 id="Compiler-Library-interaction"><a href="#Compiler-Library-interaction" class="headerlink" title="Compiler &lt;-&gt; Library interaction"></a>Compiler &lt;-&gt; Library interaction</h1><p>Instead, it specifies a general mechanism for library code to customise the behaviour of the coroutine by implementing types that conform to a specific interface. The compiler then generates code that calls methods on instances of types provided by the library.</p>
+<p>它为库代码指定了一种通用机制，可通过 <em>实现符合特定接口的类型</em> 来自定义协程的行为。然后编译器调用 这些类型的方法 &#x3D; <em>库提供的类型的实例的方法</em>。</p>
+<p>There are two kinds of interfaces that are defined by the coroutines TS: The <strong>Promise</strong> interface and the <strong>Awaitable</strong> interface.</p>
+<span id="more"></span>
+
+<p>The <strong>Promise</strong> interface specifies methods for customising the behaviour of the coroutine itself. The library-writer is able to customise what happens when the coroutine is called, what happens when the coroutine returns (either by normal means or via an unhandled exception) and customise the behaviour of any <code>co_await</code> or <code>co_yield</code> expression within the coroutine.</p>
+<p>用于定义协程的行为。</p>
+<p>The <strong>Awaitable</strong> interface specifies methods that control the semantics of a <code>co_await</code> expression. When a value is <code>co_await</code>ed, the code is translated into a series of calls to methods on the awaitable object that allow it to specify: whether to suspend the current coroutine, execute some logic after it has suspended to schedule the coroutine for later resumption, and execute some logic after the coroutine resumes to produce the result of the <code>co_await</code> expression.</p>
+<p>控制 <code>co_await</code> 表达式的语义。</p>
+<h1 id="Awaiters-and-Awaitables-Explaining-operator-co-await"><a href="#Awaiters-and-Awaitables-Explaining-operator-co-await" class="headerlink" title="Awaiters and Awaitables: Explaining operator co_await"></a>Awaiters and Awaitables: Explaining operator co_await</h1><p>Awaitable has 2 kinds:</p>
+<ul>
+<li>Normal Awatable : 原生支持 <code>operator co_await()</code></li>
+<li>Contextually Awaitable : 原生不支持 <code>operator co_await()</code> , 但在特定的 Promise 上下文中，通过 <code>Promise::await_transform()</code> 转化后，返回值支持 <code>operator co_await()</code></li>
+</ul>
+<p>An Awaiter type is a type that implements the 3 special methods that are called as part of a <code>co_await</code> expression: </p>
+<ul>
+<li><code>await_ready()</code></li>
+<li><code>await_suspend()</code></li>
+<li><code>await_resume()</code></li>
+</ul>
+<p>Note that a type can be both an Awaitable type and an Awaiter type.</p>
+<p>具体到某个类型，是可以同时满足 Awaitable 的 Awaiter 要求的。</p>
+<h2 id="Obtaining-the-Awaiter"><a href="#Obtaining-the-Awaiter" class="headerlink" title="Obtaining the Awaiter"></a>Obtaining the Awaiter</h2><p>-&gt; Awaitable -&gt; Awaiter</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 没有转换就直接用</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> P, <span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">decltype</span>(<span class="keyword">auto</span>) <span class="title">get_awaitable</span><span class="params">(P&amp; promise, T&amp;&amp; expr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">if</span> <span class="title">constexpr</span> <span class="params">(has_any_await_transform_member_v&lt;P&gt;)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">return</span> promise.<span class="title">await_transform</span><span class="params">(<span class="keyword">static_cast</span>&lt;T&amp;&amp;&gt;(expr))</span></span>;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">static_cast</span>&lt;T&amp;&amp;&gt;(expr);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//没有操作符方法（成员或全局）就直接用</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Awaitable&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">decltype</span>(<span class="keyword">auto</span>) <span class="title">get_awaiter</span><span class="params">(Awaitable&amp;&amp; awaitable)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">if</span> <span class="title">constexpr</span> <span class="params">(has_member_operator_co_await_v&lt;Awaitable&gt;)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;Awaitable&amp;&amp;&gt;<span class="params">(awaitable)</span>.<span class="keyword">operator</span> <span class="title">co_await</span><span class="params">()</span></span>;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> <span class="built_in">constexpr</span> (has_non_member_operator_co_await_v&lt;Awaitable&amp;&amp;&gt;)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">operator</span> <span class="built_in">co_await</span>(<span class="built_in">static_cast</span>&lt;Awaitable&amp;&amp;&gt;(awaitable));</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">static_cast</span>&lt;Awaitable&amp;&amp;&gt;(awaitable);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Awaiting-the-Awaiter"><a href="#Awaiting-the-Awaiter" class="headerlink" title="Awaiting the Awaiter"></a>Awaiting the Awaiter</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">auto</span>&amp;&amp; value = &lt;expr&gt;;</span><br><span class="line">  <span class="keyword">auto</span>&amp;&amp; awaitable = <span class="built_in">get_awaitable</span>(promise, <span class="built_in">static_cast</span>&lt;<span class="keyword">decltype</span>(value)&gt;(value));</span><br><span class="line">  <span class="keyword">auto</span>&amp;&amp; awaiter = <span class="built_in">get_awaiter</span>(<span class="built_in">static_cast</span>&lt;<span class="keyword">decltype</span>(awaitable)&gt;(awaitable));</span><br><span class="line">  <span class="keyword">if</span> (!awaiter.<span class="built_in">await_ready</span>())</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="type">handle_t</span> = std::experimental::coroutine_handle&lt;P&gt;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">using</span> <span class="type">await_suspend_result_t</span> =</span><br><span class="line">      <span class="keyword">decltype</span>(awaiter.<span class="built_in">await_suspend</span>(<span class="type">handle_t</span>::<span class="built_in">from_promise</span>(p)));</span><br><span class="line"></span><br><span class="line">    &lt;suspend-coroutine&gt;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">if</span> <span class="title">constexpr</span> <span class="params">(std::is_void_v&lt;<span class="type">await_suspend_result_t</span>&gt;)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">      awaiter.<span class="built_in">await_suspend</span>(<span class="type">handle_t</span>::<span class="built_in">from_promise</span>(p));</span><br><span class="line">      &lt;<span class="keyword">return</span>-to-caller-<span class="keyword">or</span>-resumer&gt;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">static_assert</span>(</span><br><span class="line">         std::is_same_v&lt;<span class="type">await_suspend_result_t</span>, <span class="type">bool</span>&gt;,</span><br><span class="line">         <span class="string">&quot;await_suspend() must return &#x27;void&#x27; or &#x27;bool&#x27;.&quot;</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (awaiter.<span class="built_in">await_suspend</span>(<span class="type">handle_t</span>::<span class="built_in">from_promise</span>(p)))</span><br><span class="line">      &#123;</span><br><span class="line">        &lt;<span class="keyword">return</span>-to-caller-<span class="keyword">or</span>-resumer&gt;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &lt;resume-point&gt;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> awaiter.<span class="built_in">await_resume</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>It is the responsibility of the <code>await_suspend()</code> method to schedule the coroutine for resumption (or destruction) at some point in the future once the operation has completed. Note that returning <code>false</code> from <code>await_suspend()</code> counts as scheduling the coroutine for immediate resumption on the current thread.</p>
+<p>The return-value of the <code>await_resume()</code> method call becomes the result of the <code>co_await</code> expression.</p>
+<h2 id="Coroutine-Handles"><a href="#Coroutine-Handles" class="headerlink" title="Coroutine Handles"></a>Coroutine Handles</h2><p>其实现可以在 <code>&lt;experimental\resumable&gt;</code> 头文件中找到。</p>
+<p>此类型提供的接口中：</p>
+<ul>
+<li><code>resume()</code> 最常用</li>
+<li>避免使用 <code>destroy()</code> 和 <code>.promise()</code>，库作者除外</li>
+</ul>
+<p>You should generally not need to (and indeed should really avoid) calling <code>.destroy()</code> unless you are a library writer implementing the coroutine promise type. Normally, coroutine frames will be owned by some kind of RAII type returned from the call to the coroutine. So calling <code>.destroy()</code> without cooperation with the RAII object could lead to a double-destruction bug.</p>
+<p>The <code>.promise()</code> method returns a reference to the coroutine’s promise object. However, like <code>.destroy()</code>, it is generally only useful if you are authoring coroutine promise types. You should consider the coroutine’s promise object as an internal implementation detail of the coroutine. For most Normally Awaitable types you should use <code>coroutine_handle&lt;void&gt;</code> as the parameter type to the <code>await_suspend()</code> method instead of <code>coroutine_handle&lt;Promise&gt;</code>.</p>
+<p>此章节有很多针对库开发者、使用者的建议。</p>
+<h1 id="Synchronisation-free-async-code"><a href="#Synchronisation-free-async-code" class="headerlink" title="Synchronisation-free async code"></a>Synchronisation-free async code</h1><p>免同步的异步代码</p>
+<h1 id="An-example-Implementing-a-simple-thread-synchronisation-primitive"><a href="#An-example-Implementing-a-simple-thread-synchronisation-primitive" class="headerlink" title="An example: Implementing a simple thread-synchronisation primitive"></a>An example: Implementing a simple thread-synchronisation primitive</h1><p>TODO</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/coroutine/" rel="tag"># coroutine</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/31/coroutine-a/" rel="prev" title="Coroutine Theory">
+                  <i class="fa fa-angle-left"></i> Coroutine Theory
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/03/31/coroutine-c/" rel="next" title="C++ Coroutines Understanding the promise type">
+                  C++ Coroutines Understanding the promise type <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

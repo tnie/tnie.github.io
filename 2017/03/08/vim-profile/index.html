@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在 Linux 终端下用 Vim 编辑程序时，不能按 Ctrl + S！  对于大多数终端，可以用 Ctrl + S 禁用“回显”，然后用Ctrl + Q 启用“回显”。引用来源  打印了一份《Vim基本操作思维导图.pdf》，放在桌子上，用到的时候随时查看。其中有不足之处，例如，关于替换的操作让我困惑了好几次，后来在网上重新搜索 Vim查找替换及正则表达式的使用 之后，才明白过来 g 参数并非全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vim 操作及其配置">
+<meta property="og:url" content="https://tnie.github.io/2017/03/08/vim-profile/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="在 Linux 终端下用 Vim 编辑程序时，不能按 Ctrl + S！  对于大多数终端，可以用 Ctrl + S 禁用“回显”，然后用Ctrl + Q 启用“回显”。引用来源  打印了一份《Vim基本操作思维导图.pdf》，放在桌子上，用到的时候随时查看。其中有不足之处，例如，关于替换的操作让我困惑了好几次，后来在网上重新搜索 Vim查找替换及正则表达式的使用 之后，才明白过来 g 参数并非全">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-03-08T09:16:44.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.664Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="develop">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2017/03/08/vim-profile/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2017/03/08/vim-profile/","path":"2017/03/08/vim-profile/","title":"Vim 操作及其配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Vim 操作及其配置 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#windows-%E4%B9%8B-gVim"><span class="nav-number">1.</span> <span class="nav-text">windows 之 gVim</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Vim-%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">Vim 配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Debian8Light-%E7%B3%BB%E7%BB%9F-vimer-%E7%94%A8%E6%88%B7%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95"><span class="nav-number">3.</span> <span class="nav-text">Debian8Light 系统 vimer 用户操作记录</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/08/vim-profile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Vim 操作及其配置 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vim 操作及其配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-03-08 17:16:44" itemprop="dateCreated datePublished" datetime="2017-03-08T17:16:44+08:00">2017-03-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在 Linux 终端下用 Vim 编辑程序时，<a target="_blank" rel="noopener" href="http://blog.csdn.net/absurd/article/details/593881">不能按 Ctrl + S！</a></p>
+<blockquote>
+<p>对于大多数终端，可以用 <code>Ctrl + S</code> 禁用“回显”，然后用<code>Ctrl + Q</code> 启用“回显”。<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2019/11/POSIX-TUI-from-TTY-to-Shell-Programming.html">引用来源</a></p>
+</blockquote>
+<p>打印了一份《Vim基本操作思维导图.pdf》，放在桌子上，用到的时候随时查看。其中有不足之处，例如，关于替换的操作让我困惑了好几次，后来在网上重新搜索 <a target="_blank" rel="noopener" href="http://tanqisen.github.io/blog/2013/01/13/vim-search-replace-regex/">Vim查找替换及正则表达式的使用</a> 之后，才明白过来 <code>g</code> 参数并非全局，而是整行。</p>
+<p>所以，系统性的学习还是很有必要的。参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/softwaretesting/archive/2011/07/12/2104435.html">Vim命令合集</a>，其中也有瑕疵，多看评论。<strong>在实践中慢慢掌握才是王道</strong>，再如何花费时间去查阅，随手敲敲命令看看效果都是<strong>浪费时间</strong>，刻意地进行反复练习，效果有，但是意义呢？</p>
+<span id="more"></span>
+
+<h1 id="windows-之-gVim"><a href="#windows-之-gVim" class="headerlink" title="windows 之 gVim"></a>windows 之 gVim</h1><p>引用 <a target="_blank" rel="noopener" href="http://www.path8.net/tn/archives/2191">windows下gVim（Vi&#x2F;vim）基本使用</a> 中的描述：</p>
+<blockquote>
+<p>Vim 是一个 Linux 平台上功能非常强大的编辑器，他是早年的 Vi 编辑器的加强版。这个 gVim 是 windows 版的，并且有了标准的 windows 风格的图形界面，所以叫 g(graphical)Vim。我们可以将 gvim 理解为 vim（vi的加强版）图形化版本，其指令和用法都完全相同，所以可以參考 vim 的指令。</p>
+</blockquote>
+<p>安装之后，gVim, gVim Diff, gVim Easy, gVim Read-only 简单区别：</p>
+<ul>
+<li><p>通常我们常用的是 gVim.</p>
+</li>
+<li><p>Diff 是用来对比两个文件内容用的，直接打开挺没用的，不过直接拖 2 个文件到快捷方式上倒是可行；</p>
+</li>
+<li><p>Easy 启动的时候是 insert 模式，适合普通 windows 用户的习惯； </p>
+</li>
+<li><p>Read-Only 的用途：比如用 read-only 打开已经用 vim 打开过的文件，就不会提示让人烦躁的 .swp 文件存在的问题；</p>
+<p>  比如可以用它来看 TXT 的电子书不会存在误删误改（ctrl+b ctrl+f 很方便）.</p>
+</li>
+</ul>
+<h1 id="Vim-配置"><a href="#Vim-配置" class="headerlink" title="Vim 配置"></a>Vim 配置</h1><p>在网上直接找到了 <a target="_blank" rel="noopener" href="https://github.com/spf13/spf13-vim">spf13</a>，号称 vim 的终极配置。应该是很棒的样子。但是我只开发 C&#x2F;C++，感觉 spf13 整合的好多。一方面机器资源有限，能感觉到配置 spf13 之后打开 vim 变慢，另一方面，毕竟是 vim 新手，连复制粘贴都尚未熟练掌握的菜鸟，并不能领会到 spf13 有多强大。或许太容易得到的也就不珍惜吧。</p>
+<p>讨论帖-<a target="_blank" rel="noopener" href="https://www.v2ex.com/t/231839">用 vim 开发 c&#x2F;c++，求推荐 vim 配置</a> 中一句甚合我意，说得很是贴心。所以打算自己一点点来，学习 vim 配置的语法，磨合专属的 vim。</p>
+<blockquote>
+<p>vim 这玩意就是自己磨合出来的，别人的配置拿过来还用 vim 干嘛，直接上 ide 了</p>
+</blockquote>
+<p>以后就泡 Vimer 的程序世界-<a target="_blank" rel="noopener" href="http://www.vimer.cn/archives/91.html">把VIM打造成一个真正的IDE</a>，慢慢来。不要有投机取巧的心理，以为找到一款好的配置就可以熟练操作 vim，写起代码来虎虎生风。所有事情都是需要<strong>积累</strong>，付出<strong>辛苦</strong>，付出<strong>努力</strong>的！</p>
+<p>等磨合一段时间之后，回过头来再看别人的配置。</p>
+<h1 id="Debian8Light-系统-vimer-用户操作记录"><a href="#Debian8Light-系统-vimer-用户操作记录" class="headerlink" title="Debian8Light 系统 vimer 用户操作记录"></a>Debian8Light 系统 vimer 用户操作记录</h1><p><strong>2016&#x2F;7&#x2F;13 19:50:19 Vim 配置暂告一段落，先用用再说。重点在于 c++11 的编程能力！</strong>要懂得<strong>适可而止</strong>，互联网时代任何知识点进行深挖都是可以穷尽时间的。</p>
+<ol>
+<li><p>安装 <a target="_blank" rel="noopener" href="https://github.com/VundleVim/Vundle.Vim">vundle</a>。</p>
+</li>
+<li><p>安装 <a target="_blank" rel="noopener" href="https://github.com/Valloric/YouCompleteMe">YouCompleteMe</a></p>
+<p> 安装过程中碰到空间不足问题，其实是 &#x2F;tmp 分区时分配空间太小，只有几十M造成的。解决方案 <a target="_blank" rel="noopener" href="http://blog.csdn.net/feihongwang/article/details/17383833">linux下编译出现空间不足解决办法</a></p>
+</li>
+<li><p>插件控，主要参考 <a target="_blank" rel="noopener" href="http://blog.guorongfei.com/2015/10/06/vim-plugin/">编辑利器 Vim 之插件配置</a> 折腾。大多数插件都设置有快捷键，死记硬背是没用的</p>
+<p> 括号、引号的匹配输入，我要求的是在括号、引号中输入完毕后使用快捷键跳出，然后继续输入，而不是手工移到括号、引号外。验证 delimitMate、auto-pairs 相关功能</p>
+</li>
+<li><p>代码补全： YCM + (<a target="_blank" rel="noopener" href="https://github.com/SirVer/ultisnips#quick-start">ultisnips</a> &amp; vim-snippets)，两者在快捷键上存在冲突。。即便</p>
+<blockquote>
+<p>YouCompleteMe 的文档说它集成了 supertab 的功能</p>
+</blockquote>
+<p> 需要进一步配置，参考 <a target="_blank" rel="noopener" href="http://www.tuicool.com/articles/eU7BNf">How to Make YouCompleteMe Compatible with UltiSnips</a>。可能是 <a target="_blank" rel="noopener" href="https://github.com/Valloric/YouCompleteMe#ycm-conflicts-with-ultisnips-tab-key-usage">YCM 集成 supertab 有过调整</a>，如果采用上述中的配置并使之生效的话需要单独安装 supertab。实际操作中，并不理想，会出现莫名其妙的状况。</p>
+</li>
+<li><p>自动补齐括号、引号。使用 delimitMate 跳出自动补全的括号快捷键 <code>Shift+Tab</code>，一直无效，所以觉得不好用。直到发现：</p>
+<ol>
+<li>先是被 XShell 终端占用了，作为“转到最近对话”的快捷键；</li>
+<li>其次，<a target="_blank" rel="noopener" href="https://github.com/Valloric/YouCompleteMe#the-gycm_key_list_previous_completion-option">是被 YCM 占用了</a>；</li>
+<li>结果，还是无效……</li>
+<li>auto-pairs 的 <M-n> 也无效……</li>
+</ol>
+</li>
+<li><p>注释开关：<a target="_blank" rel="noopener" href="https://github.com/scrooloose/nerdcommenter#default-mappings"><code>[count]&lt;leader&gt;c&lt;space&gt;</code></a></p>
+</li>
+</ol>
+<p>截至 <del>2016&#x2F;7&#x2F;13 11:07:15</del> 2017&#x2F;5&#x2F;26 17:21:35  使用的 .vimrc 文件和 &#x2F;home&#x2F;vimer&#x2F;.vim&#x2F;ftplugin 目录下的 cpp.vim 文件。（ps：hexo 不支持 VimL 标签，无语法高亮）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line">set nocompatible              &quot; be iMproved, required</span><br><span class="line">filetype off                  &quot; required</span><br><span class="line"></span><br><span class="line">&quot; set the runtime path to include Vundle and initialize</span><br><span class="line">set rtp+=~/.vim/bundle/Vundle.vim</span><br><span class="line">call vundle#begin()</span><br><span class="line">&quot; alternatively, pass a path where Vundle should install plugins</span><br><span class="line">&quot;call vundle#begin(&#x27;~/some/path/here&#x27;)</span><br><span class="line"></span><br><span class="line">&quot; let Vundle manage Vundle, required</span><br><span class="line">Plugin &#x27;VundleVim/Vundle.vim&#x27;</span><br><span class="line"></span><br><span class="line">&quot; The following are examples of different formats supported.</span><br><span class="line">&quot; Keep Plugin commands between vundle#begin/end.</span><br><span class="line">&quot; plugin on GitHub repo</span><br><span class="line">Bundle &#x27;ervandew/supertab&#x27;</span><br><span class="line">&quot; YCM 已经集成了 syntastic</span><br><span class="line">Bundle &#x27;Valloric/YouCompleteMe&#x27;  </span><br><span class="line">&quot; 引擎 &amp; 代码块描述</span><br><span class="line">Bundle &#x27;SirVer/ultisnips&#x27;</span><br><span class="line">Bundle &#x27;honza/vim-snippets&#x27;</span><br><span class="line">&quot; delimitMate 不好用。使用 auto-pairs</span><br><span class="line">&quot;Bundle &#x27;Raimondi/delimitMate&#x27;</span><br><span class="line">Bundle &#x27;jiangmiao/auto-pairs&#x27;</span><br><span class="line">Bundle &#x27;tpope/vim-surround&#x27;</span><br><span class="line">&quot;Bundle &#x27;rdnetto/YCM-Generator&#x27;</span><br><span class="line">&quot;快速注释</span><br><span class="line">Bundle &#x27;scrooloose/nerdcommenter&#x27;</span><br><span class="line">&quot;文档化注释</span><br><span class="line">Bundle &#x27;vim-scripts/DoxygenToolkit.vim&#x27;</span><br><span class="line">&quot;目录树</span><br><span class="line">Bundle &#x27;scrooloose/nerdtree&#x27;</span><br><span class="line">&quot;函数列表</span><br><span class="line">Bundle &#x27;majutsushi/tagbar&#x27;</span><br><span class="line">&quot;快速查找</span><br><span class="line">Bundle &#x27;kien/ctrlp.vim&#x27;</span><br><span class="line">&quot;状态栏</span><br><span class="line">Bundle &#x27;vim-airline/vim-airline&#x27;</span><br><span class="line">&quot; Git 工具</span><br><span class="line">Bundle &#x27;tpope/vim-fugitive&#x27;</span><br><span class="line">&quot; cpp 语法高亮</span><br><span class="line">Bundle &#x27;octol/vim-cpp-enhanced-highlight&#x27;</span><br><span class="line">&quot;代码格式化工具</span><br><span class="line">Bundle &#x27;Chiel92/vim-autoformat&#x27;</span><br><span class="line">&quot; plugin from http://vim-scripts.org/vim/scripts.html</span><br><span class="line">Bundle &#x27;EasyGrep&#x27;</span><br><span class="line">&quot;头文件和源文件快速切换</span><br><span class="line">Bundle &#x27;a.vim&#x27;</span><br><span class="line">&quot; 自动插入 commets</span><br><span class="line">Bundle &#x27;c.vim&#x27;</span><br><span class="line">&quot; plugin from http://vim-scripts.org/vim/scripts.html</span><br><span class="line">&quot; Git plugin not hosted on GitHub</span><br><span class="line">&quot; git repos on your local machine (i.e. when working on your own plugin)</span><br><span class="line">&quot; The sparkup vim script is in a subdirectory of this repo called vim.</span><br><span class="line">&quot; Pass the path to set the runtimepath properly.</span><br><span class="line">&quot; Install L9 and avoid a Naming conflict if you&#x27;ve already installed a</span><br><span class="line">&quot; different version somewhere else.</span><br><span class="line"></span><br><span class="line">&quot; All of your Plugins must be added before the following line</span><br><span class="line">call vundle#end()            &quot; required</span><br><span class="line">filetype plugin indent on    &quot; required</span><br><span class="line">&quot; To ignore plugin indent changes, instead use:</span><br><span class="line">&quot;filetype plugin on</span><br><span class="line">&quot;</span><br><span class="line">&quot; Brief help</span><br><span class="line">&quot; :PluginList       - lists configured plugins</span><br><span class="line">&quot; :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate</span><br><span class="line">&quot; :PluginSearch foo - searches for foo; append `!` to refresh local cache</span><br><span class="line">&quot; :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal</span><br><span class="line">&quot;</span><br><span class="line">&quot; see :h vundle for more details or wiki for FAQ</span><br><span class="line">&quot; Put your non-Plugin stuff after this line</span><br><span class="line"></span><br><span class="line">let g:ycm_global_ycm_extra_conf = &#x27;/home/vimer/.ycm_extra_conf.py&#x27;</span><br><span class="line">&quot; 允许 vim 加载 .ycm_extra_conf.py 文件，不再提示</span><br><span class="line">let g:ycm_confirm_extra_conf=0</span><br><span class="line"></span><br><span class="line">set number</span><br><span class="line">syntax on</span><br><span class="line">&quot; 映射快捷键。&lt;leader&gt; 前缀键默认是 \</span><br><span class="line">nnoremap &lt;F8&gt; :TagbarToggle&lt;CR&gt;</span><br><span class="line">nnoremap &lt;leader&gt;jd :YcmCompleter GoToDefinitionElseDeclaration&lt;CR&gt;</span><br><span class="line">nnoremap &lt;Leader&gt;fl :NERDTreeToggle&lt;CR&gt;</span><br><span class="line">&quot;设置NERDTree子窗口宽度</span><br><span class="line">let NERDTreeWinSize=23&quot;</span><br><span class="line">&quot; Trigger configuration. Do not use &lt;tab&gt; if you use</span><br><span class="line">&quot; https://github.com/Valloric/YouCompleteMe.</span><br><span class="line">let g:UltiSnipsExpandTrigger=&quot;&lt;tab&gt;&quot;</span><br><span class="line">let g:UltiSnipsJumpForwardTrigger=&#x27;&lt;C-b&gt;&#x27;</span><br><span class="line">let g:UltiSnipsJumpBackwardTrigger=&#x27;&lt;C-z&gt;&#x27;</span><br><span class="line">&quot; 解决 Ultisnips 与 YCM 插件的冲突</span><br><span class="line">&quot; First, change the default key-binding of YCM</span><br><span class="line">let g:ycm_key_list_select_completion = [&#x27;&lt;C-n&gt;&#x27;, &#x27;&lt;Down&gt;&#x27;]</span><br><span class="line">let g:ycm_key_list_previous_completion = [&#x27;&lt;C-p&gt;&#x27;, &#x27;&lt;Up&gt;&#x27;]</span><br><span class="line">&quot; Then set the default action of SuperTab to triggering &lt;C-n&gt;</span><br><span class="line">let g:SuperTabDefaultCompletionType = &#x27;&lt;C-n&gt;&#x27;</span><br><span class="line"></span><br><span class="line">let g:DoxygenToolkit_authorName=&quot;nielong &lt;nielong2014@gmail.com&gt;&quot;</span><br><span class="line">let g:DoxygenToolkit_briefTag_funcName=&quot;yes&quot;</span><br><span class="line">let g:doxygen_enhanced_color=1</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">set shiftwidth=2</span><br><span class="line">&quot; 快捷键，编译运行</span><br><span class="line">nnoremap &lt;F5&gt;   &lt;Esc&gt;:w&lt;CR&gt;:!g++ -std=c++11 % -o /tmp/a.out &amp;&amp; /tmp/a.out&lt;CR&gt;</span><br><span class="line">nnoremap &lt;F7&gt;   &lt;Esc&gt;:w&lt;CR&gt;:!g++ -std=c++11 %&lt;CR&gt;</span><br><span class="line">nnoremap &lt;C-F5&gt; &lt;Esc&gt;:w&lt;CR&gt;:!g++ -std=c++11 -g % -o /tmp/a.out &amp;&amp; gdb /tmp/a.out&lt;CR&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>c.vim 插件支持作者信息、创建日期、文件描述等信息，但不包含更新日期；不支持头文件自动生成 <code>ifndf</code> 等宏。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/develop/" rel="tag"># develop</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/03/08/CStringOfVC/" rel="prev" title="CString 类">
+                  <i class="fa fa-angle-left"></i> CString 类
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/03/10/standardOfLanguage/" rel="next" title="-std= 语言标准">
+                  -std= 语言标准 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

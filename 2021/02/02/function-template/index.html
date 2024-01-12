@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="std::function&lt;&gt; 模板到底是什么？ 可以简单理解为对应 C 语言中的函数指针。入参或绑定的参数如果是原始指针或引用时，需要特别注意其生存周期。 关于函数类模板，学习《Effective.Modern.C++》P39  And maybe now you’re thinking “What’s a std::function object?” So let’s clear">
+<meta property="og:type" content="article">
+<meta property="og:title" content="函数模板">
+<meta property="og:url" content="https://tnie.github.io/2021/02/02/function-template/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="std::function&lt;&gt; 模板到底是什么？ 可以简单理解为对应 C 语言中的函数指针。入参或绑定的参数如果是原始指针或引用时，需要特别注意其生存周期。 关于函数类模板，学习《Effective.Modern.C++》P39  And maybe now you’re thinking “What’s a std::function object?” So let’s clear">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-02T08:22:31.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.617Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tnie.github.io/2021/02/02/function-template/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2021/02/02/function-template/","path":"2021/02/02/function-template/","title":"函数模板"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>函数模板 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#boost-empty-value-%E7%9A%84%E6%84%8F%E4%B9%89%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">boost::empty_value 的意义？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8E%B7%E5%BE%97-std-function-%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.</span> <span class="nav-text">获得 std::function 对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E5%8F%82%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">模板参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E8%B0%83%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">递归调用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E8%99%9A%E5%87%BD%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">对比虚函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A0%E6%B3%95%E5%88%A4%E6%96%AD%E7%9B%B8%E7%AD%89"><span class="nav-number">6.</span> <span class="nav-text">无法判断相等</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%A0%E5%80%BC%E8%BF%98%E6%98%AF%E5%BC%95%E7%94%A8"><span class="nav-number">7.</span> <span class="nav-text">传值还是引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E8%B0%83%E6%97%B6%E7%9A%84%E5%90%88%E6%B3%95%E6%80%A7"><span class="nav-number">8.</span> <span class="nav-text">回调时的合法性</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/02/02/function-template/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="函数模板 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          函数模板
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-02-02 16:22:31" itemprop="dateCreated datePublished" datetime="2021-02-02T16:22:31+08:00">2021-02-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><code>std::function&lt;&gt;</code> 模板到底是什么？ 可以简单理解为对应 C 语言中的函数指针。入参或绑定的参数如果是原始指针或引用时，需要特别注意其生存周期。</p>
+<p>关于函数类模板，学习《Effective.Modern.C++》P39</p>
+<blockquote>
+<p>And maybe now you’re thinking “What’s a <code>std::function</code> object?” So let’s clear that up</p>
+</blockquote>
+<h1 id="boost-empty-value-的意义？"><a href="#boost-empty-value-的意义？" class="headerlink" title="boost::empty_value 的意义？"></a><code>boost::empty_value</code> 的意义？</h1><p>待补充</p>
+<h1 id="获得-std-function-对象"><a href="#获得-std-function-对象" class="headerlink" title="获得 std::function 对象"></a>获得 <code>std::function</code> 对象</h1><p>Lambda expressions </p>
+<blockquote>
+<p>Constructs a closure: an unnamed function object capable of capturing variables in scope. <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/lambda">摘自 lambda</a></p>
+</blockquote>
+<p>Function objects</p>
+<blockquote>
+<p>A function object is any object for which <strong>the function call operator</strong> is defined. <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/utility/functional">摘自 functional</a></p>
+</blockquote>
+<p><code>std::function</code>，推荐查看其 Example</p>
+<blockquote>
+<p>Class template <code>std::function</code> is a general-purpose polymorphic function wrapper. Instances of <code>std::function</code> can store, copy, and invoke any CopyConstructible Callable target – functions, lambda expressions, bind expressions, or other function objects, as well as pointers to member functions and pointers to data members. <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/utility/functional/function">摘自 function</a></p>
+</blockquote>
+<p>需要强调的是 C++ 标准未对 <code>std::bind</code> 表达式的返回类型做出定义，其返回值并不对应我们熟悉的任何类型，但可以直接赋值给 <code>std::function&lt;&gt;</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">std::function&lt;<span class="type">int</span>(<span class="type">int</span>)&gt; func = std::tolower;</span><br><span class="line">std::function&lt;<span class="type">int</span>(<span class="type">int</span>)&gt; lamb = [](<span class="type">int</span> a) &#123; <span class="keyword">return</span> a; &#125;;</span><br><span class="line"><span class="function">std::string <span class="title">str</span><span class="params">(<span class="string">&quot;niel&quot;</span>)</span></span>;</span><br><span class="line">std::function&lt;<span class="type">size_t</span>(<span class="type">void</span>)&gt; bind = std::<span class="built_in">bind</span>(&amp;std::string::size, &amp;str);</span><br><span class="line">std::function&lt;<span class="type">int</span>(<span class="type">int</span>, <span class="type">int</span>)&gt; object = std::<span class="built_in">plus</span>&lt;<span class="type">int</span>&gt;();</span><br><span class="line">std::function&lt;<span class="type">size_t</span>(<span class="type">const</span> std::string&amp;)&gt; p2mf = &amp;std::string::size;</span><br><span class="line"></span><br><span class="line"><span class="comment">//std::function&lt;size_t(void)&gt; bind = std::bind(&amp;std::string::size, std::ref(str));</span></span><br><span class="line"><span class="comment">//// 拷贝传参，请务必明白在做什么。also works, but str is copied</span></span><br><span class="line"><span class="comment">//std::function&lt;size_t(void)&gt; bind = std::bind(&amp;std::string::size, str);</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="模板参数"><a href="#模板参数" class="headerlink" title="模板参数"></a>模板参数</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ERR，末尾多余的 const 造成报错内容在千里之外</span></span><br><span class="line"><span class="keyword">using</span> SENDFUNC = std::function&lt;<span class="built_in">void</span>(CBD , <span class="type">void</span> <span class="type">const</span> * <span class="type">const</span> , <span class="type">size_t</span> ) <span class="type">const</span>&gt;;</span><br><span class="line"><span class="keyword">using</span> SENDFUNC = std::function&lt;<span class="built_in">void</span>(CBD , <span class="type">void</span> <span class="type">const</span> * <span class="type">const</span> , <span class="type">size_t</span> ) <span class="comment">/*const*/</span>&gt;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="递归调用"><a href="#递归调用" class="headerlink" title="递归调用"></a>递归调用</h1><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/2067988/recursive-lambda-functions-in-c11">为什么 <code>function&lt;&gt;</code> 对象递归调用自身不能使用 <code>auto</code>?</a></p>
+<p>vc2015 IntelliSence 提示</p>
+<blockquote>
+<p>使用 <code>auto</code> 类型说明符声明的变量不能出现在其自身的初始值设定项中</p>
+</blockquote>
+<span id="more"></span>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// auto sum2 = [sum2](int a) &#123;  // 编译错误 why?</span></span><br><span class="line"><span class="comment">// std::function&lt;int(int)&gt; sum2 = [sum2](int a) &#123;  // 执行错误 why? 参考拷贝构造函数的参数为什么要使用引用类型。</span></span><br><span class="line">std::function&lt;<span class="type">int</span>(<span class="type">int</span>)&gt; sum2 = [&amp;sum2](<span class="type">int</span> a) &#123;</span><br><span class="line">    <span class="keyword">if</span> (a&gt;<span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">return</span> (a + <span class="built_in">sum2</span>(a - <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">spdlog::<span class="built_in">info</span>(<span class="string">&quot;T(&#123;&#125;)=&#123;&#125;&quot;</span>, <span class="number">30</span>, <span class="built_in">sum2</span>(<span class="number">30</span>));</span><br></pre></td></tr></table></figure>
+
+<p>虽然 <code>&amp;sum2</code> 引用能够调用成功，但我们必须时刻关注 sum2 对象的生存周期。比如以下代码就会崩溃</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">std::function&lt;<span class="type">int</span>(<span class="type">int</span>)&gt; sum2Copy;</span><br><span class="line">&#123;</span><br><span class="line">    sum2 = ...</span><br><span class="line">    sum2Copy = sum2;</span><br><span class="line">&#125;</span><br><span class="line">spdlog::<span class="built_in">info</span>(<span class="string">&quot;T(&#123;&#125;)=&#123;&#125;&quot;</span>, <span class="number">30</span>, <span class="built_in">sum2Copy</span>(<span class="number">30</span>));</span><br></pre></td></tr></table></figure>
+
+<h1 id="对比虚函数"><a href="#对比虚函数" class="headerlink" title="对比虚函数"></a>对比虚函数</h1><p>存在神话面向对象，过度使用继承的一个时代，一批人。他们使用基础类型指针，通过虚函数约定回调格式。</p>
+<p>上述做法的限制：</p>
+<ul>
+<li>局限于继承回调类，重写<strong>唯一</strong>的虚函数，当类中存在多种请求（大多情形如此）时，在同一回调函数中做分支处理（缺点），分支处理依赖 <code>CBD </code>枚举类型，以此判断应该使用哪种数据交换类解析 <code>void*</code> 指针</li>
+</ul>
+<p>改用 <code>std::function</code> 类模板带来的好处：</p>
+<ol>
+<li>将上述混在一起的分支抽离到不同函数中处理，取消通过 <code>CBD </code>类型选择解析类型的过程；</li>
+<li>丢弃 <code>void*</code> 指针，在「调用签名」中使用强类型 <del>指针</del> 可以避免 <code>void* </code>指针向具体数据交换类性指针的转换；</li>
+<li><del>强类型指针，通过使用智能指针避免手动管理内存，丢弃原生指针；</del>（<del>智能指针</del> 的常量引用，不要拷贝）实际业务分析，事实上应该使用顺序容器，<code>vector</code> 即可</li>
+<li>很大程度上减少 <code>CBD </code>枚举类型的存在感，甚至丢弃；</li>
+<li>数据交换类（<code>Dyna</code>&#x2F;<code>Tick</code>&#x2F;<code>stNews </code>等）取消 <del>强类型</del> 成员变量，对外只提供接口。进一步降低文件之间的依赖关系。</li>
+</ol>
+<p>上述优点的核心就是：编码的时候，展现层<strong>最低程度</strong>地依赖网络层，尤其是「约定」什么的最烂了。</p>
+<h1 id="无法判断相等"><a href="#无法判断相等" class="headerlink" title="无法判断相等"></a>无法判断相等</h1><p>两个 <code>std::function</code> 无法做比较：大于、小于和相等。</p>
+<p>只能判断某个 <code>std::function</code> 是否包含目标，和 <code>nullptr</code> 的相等比较已经在 C++20 中移除。</p>
+<h1 id="传值还是引用"><a href="#传值还是引用" class="headerlink" title="传值还是引用"></a>传值还是引用</h1><p>传引用潜在威胁严重：参考 <a href="url">https://github.com/tnie/YD-function/tree/check_ref </a>分支</p>
+<blockquote>
+<p>As with any other type, it’s safe to store a reference only if you have some other way to guarantee that the referred object is still valid whenever that reference is used. <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/8711391/should-i-copy-an-stdfunction-or-can-i-always-take-a-reference-to-it">摘抄来源</a></p>
+</blockquote>
+<p>“重载了函数运算符的类”的对象，调用由此赋值产生的 <code>function&lt;&gt;</code> 对象时，操作的是前者的拷贝，而非本身。——此问题源于<strong>构造</strong> <code>function&lt;&gt;</code> 对象，而非 <code>function&lt;&gt;</code> 对象传参。正确做法是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> multt3 = <span class="built_in">Multt3</span>();</span><br><span class="line"><span class="comment">//f_multiN f3 = multt3;   // 复制</span></span><br><span class="line"><span class="comment">//f_multiN&amp; f3 = multt3;   // err</span></span><br><span class="line">f_multiN f3 = std::<span class="built_in">ref</span>(multt3);   <span class="comment">// 还真的可以</span></span><br></pre></td></tr></table></figure>
+
+<p>结合 stackoverflow 网站多个提问，发现还是以传值为主，基本没有传引用的场景。但我还是用了引用，而且是常量引用！</p>
+<p>仔细查看 std::function 的手册，会发现 <a target="_blank" rel="noopener" href="http://zh.cppreference.com/w/cpp/utility/functional/function/operator()"><code>std::function::operator()</code></a> 函数是带 <code>const</code> 修饰的，这也意味着使用 <code>const std::function&lt;int(int)&gt;&amp;</code> <strong>传常量引用是完全可以的，无需担心修改源对象非法</strong>（指通过 std::bind 绑定的对象或者重载了函数调用运算符的对象），置于 <a target="_blank" rel="noopener" href="https://www.reddit.com/r/cpp/comments/742ol8/why_is_the_stdfunction_operator_const/">Why is the std::function () operator const?</a> 抽空了解一下，对此感到困惑还是源于一直未弄懂 <code>function </code>类模板 到底是对象呢，还是指针？</p>
+<h1 id="回调时的合法性"><a href="#回调时的合法性" class="headerlink" title="回调时的合法性"></a>回调时的合法性</h1><p>使用“重载了函数调用符号”的类、<code>std::bind(&amp;Class::Function, ObjectPointer, std::placeholder::_1)</code> 等涉及类的可调用类型时，因为跨内存模块（动态库）、跨线程，当对象析构后执行回调如何处理？</p>
+<p>通俗地讲，在调用类的普通成员函数时如何判断所属对象已经析构，不然当成员函数使用成员变量时直接造成程序崩溃。</p>
+<ol>
+<li>析构函数遇上多线程怎么办？<a target="_blank" rel="noopener" href="https://blog.csdn.net/Solstice/article/details/5238671">好难，┭┮﹏┭┮</a>，请尽量阅读 <a target="_blank" rel="noopener" href="http://files.cppblog.com/Solstice/dtor_meets_mt.pdf">本文 PDF 版</a></li>
+<li>由上述核心引起的 <code>std::function</code> 遇上多线程</li>
+</ol>
+<p>网络层是否<strong>不应该负责</strong>（<strong>主要是做不到</strong>）对展现层传入的类模板 <code>std::function&lt;&gt;</code> 对象做深度的有效性判断？毕竟展现层传入的 raw 究竟是函数指针、<code>lambda</code> 表达式还是 <code>std::bind() </code>返回值，数据层都一无所知</p>
+<p>网络层也就只能检查 <code>std::function&lt;&gt;</code> 对象</p>
+<blockquote>
+<p>是否存储可调用函数对象 <code>c</code> </p>
+</blockquote>
+<p>至于对象 <code>c</code> 的有效性——比如通过 <code>std::bind</code> 绑定对象 <code>t</code> 时，<code>t</code> 是否析构——网络层是无法检查的</p>
+<p>所以，展现层应该自检。可能的一种实现方式是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*网络层接口*****************************/</span></span><br><span class="line"><span class="keyword">using</span> YDDATA2CALLBACK1 = std::function&lt;<span class="built_in">void</span> (QID qid, CBD cbd, <span class="type">int</span> period, <span class="type">const</span> shared_ptr&lt;Dyna&gt; data)&gt;;</span><br><span class="line"></span><br><span class="line"><span class="function">QID <span class="title">YDdata_subscribeDynaWithOrder</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *code, YDDATA2CALLBACK1 cb, <span class="type">const</span> <span class="type">char</span>* order <span class="comment">/*= nullptr*/</span>, <span class="type">bool</span> desc <span class="comment">/*= false*/</span>)</span> </span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*展现层可能的实现方式*************************************/</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">EXAMPLE</span> : <span class="keyword">public</span> std::enable_shared_from_this&lt;EXAMPLE&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">std::shared_ptr&lt;EXAMPLE&gt; <span class="title">getptr</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">shared_from_this</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">callback1</span><span class="params">(QID qid, CBD cbd, <span class="type">int</span> period, <span class="type">const</span> std::shared_ptr&lt;Dyna&gt; data, std::weak_ptr&lt;EXAMPLE&gt; ptr)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (ptr.<span class="built_in">lock</span>() == <span class="literal">nullptr</span>)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">// code</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">QID <span class="title">subscribeDyna</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::weak_ptr&lt;EXAMPLE&gt; wptr = <span class="built_in">shared_from_this</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">YDdata_subscribeDynaWithOrder</span>(<span class="string">&quot;SH000001&quot;</span>, std::<span class="built_in">bind</span>(&amp;EXAMPLE::callback1, <span class="keyword">this</span>, _1, _2, _3, _4, wptr));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> Good = EXAMPLE;</span><br><span class="line"><span class="comment">// 只允许在先前已被std::shared_ptr 管理的对象上调用 shared_from_this 。否则调用行为未定义</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 正确的示例</span></span><br><span class="line">    std::shared_ptr&lt;Good&gt; gp1 = std::<span class="built_in">make_shared</span>&lt;Good&gt;();</span><br><span class="line">    std::shared_ptr&lt;Good&gt; gp2 = gp1-&gt;<span class="built_in">getptr</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 错误的使用示例：调用 shared_from_this 但其没有被 std::shared_ptr 占有</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Good not_so_good;</span><br><span class="line">        std::shared_ptr&lt;Good&gt; gp1 = not_so_good.<span class="built_in">getptr</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">catch</span> (std::bad_weak_ptr&amp; e) &#123;</span><br><span class="line">        <span class="comment">// C++17 前为未定义行为； C++17 起抛出 std::bad_weak_ptr 异常</span></span><br><span class="line">        std::cout &lt;&lt; e.<span class="built_in">what</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述 <code>EXAMPLE </code>类，因为回调时对象可能已经析构，所以回调函数 <code>callback1()</code> 使用类的成员并不合适（虽然使用 <code>wptr </code>判断了），且 <code>bind()</code> 时 <code>this</code>, <code>wptr </code>也有重复（ <code>wptr </code>主要是为了判断对象是否还活着， <code>this </code>无现实意义）。改进 <code>EXAMPLE  </code>类：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*展现层可能的实现方式*************************************/</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">EXAMPLE</span> : <span class="keyword">public</span> std::enable_shared_from_this&lt;EXAMPLE&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">callback1</span><span class="params">(QID qid, CBD cbd, <span class="type">int</span> period, <span class="type">const</span> std::shared_ptr&lt;Dyna&gt; data, std::weak_ptr&lt;EXAMPLE&gt; wptr)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">auto</span> ptr = wptr.<span class="built_in">lock</span>();</span><br><span class="line">        <span class="keyword">if</span> (ptr == <span class="literal">nullptr</span>)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        ptr-&gt;_callback1(qid, cbd, period, data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">QID <span class="title">subscribeDyna</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::weak_ptr&lt;EXAMPLE&gt; wptr = <span class="built_in">shared_from_this</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">YDdata_subscribeDynaWithOrder</span>(<span class="string">&quot;SH000001&quot;</span>, std::<span class="built_in">bind</span>(&amp;EXAMPLE::callback1, _1, _2, _3, _4, wptr));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">void</span> _callback1(QID qid, CBD cbd, <span class="type">int</span> period, <span class="type">const</span> std::shared_ptr&lt;Dyna&gt; data)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// code</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/02/ppp-notes/" rel="prev" title="《ppp》读书笔记">
+                  <i class="fa fa-angle-left"></i> 《ppp》读书笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/18/openwrt/" rel="next" title="软路由 OpenWRT">
+                  软路由 OpenWRT <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

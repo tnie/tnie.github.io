@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tnie.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="2016年1月4日 17:23:45，和git有关的链接保存了很多，统一在这篇笔记里整理一下。 Git 廖雪峰的官方网站之 Git教程  git@osc 官方推荐的 ProGit（中文版）  首先推荐！其中对于 Git 的工作原理、工作特性的讲解是很到位的，恰到好处，既不深入以免让读者陷入原理的泥潭，毕竟大多只是把 Git 当做一种工具在用，但对于掌握 Git 的操作又非常有价值。如果熟悉一些 G">
+<meta property="og:type" content="article">
+<meta property="og:title" content="版本控制">
+<meta property="og:url" content="https://tnie.github.io/2017/03/27/VersionControl/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="2016年1月4日 17:23:45，和git有关的链接保存了很多，统一在这篇笔记里整理一下。 Git 廖雪峰的官方网站之 Git教程  git@osc 官方推荐的 ProGit（中文版）  首先推荐！其中对于 Git 的工作原理、工作特性的讲解是很到位的，恰到好处，既不深入以免让读者陷入原理的泥潭，毕竟大多只是把 Git 当做一种工具在用，但对于掌握 Git 的操作又非常有价值。如果熟悉一些 G">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Staging-Area.png">
+<meta property="article:published_time" content="2017-03-27T01:23:18.000Z">
+<meta property="article:modified_time" content="2023-11-28T01:27:29.586Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Staging-Area.png">
+
+
+<link rel="canonical" href="https://tnie.github.io/2017/03/27/VersionControl/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tnie.github.io/2017/03/27/VersionControl/","path":"2017/03/27/VersionControl/","title":"版本控制"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>版本控制 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">不积小流，无以成江海</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Git"><span class="nav-number">1.</span> <span class="nav-text">Git</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0"><span class="nav-number">1.1.</span> <span class="nav-text">Git 学习笔记</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GitHub"><span class="nav-number">2.</span> <span class="nav-text">GitHub</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-OSC"><span class="nav-number">3.</span> <span class="nav-text">Git@OSC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-%E5%AF%B9%E6%AF%94-SVN"><span class="nav-number">4.</span> <span class="nav-text">Git 对比 SVN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D"><span class="nav-number">4.1.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E4%BD%BF%E7%94%A8%E9%80%89%E6%8B%A9-git%EF%BC%8C%E8%BF%98%E6%98%AF-svn%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">4.2.</span> <span class="nav-text">个人使用选择 git，还是 svn？为什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AC%E5%8F%B8%E9%80%89%E6%8B%A9git%EF%BC%8C%E8%BF%98%E6%98%AFsvn%EF%BC%9F%E5%8F%88%E6%98%AF%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">4.3.</span> <span class="nav-text">公司选择git，还是svn？又是为什么？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GitSVN"><span class="nav-number">5.</span> <span class="nav-text">GitSVN</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/27/VersionControl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="版本控制 | 不积小流，无以成江海">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          版本控制
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-03-27 09:23:18" itemprop="dateCreated datePublished" datetime="2017-03-27T09:23:18+08:00">2017-03-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-28 09:27:29" itemprop="dateModified" datetime="2023-11-28T09:27:29+08:00">2023-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>2016年1月4日 17:23:45，和git有关的链接保存了很多，统一在这篇笔记里整理一下。</p>
+<h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a><a target="_blank" rel="noopener" href="https://git-scm.com/">Git</a></h1><ol>
+<li><p>廖雪峰的官方网站之 <a target="_blank" rel="noopener" href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000">Git教程</a></p>
+</li>
+<li><p>git@osc 官方推荐的 <a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2">ProGit</a>（中文版）</p>
+<p> 首先推荐！其中对于 Git 的工作原理、工作特性的讲解是很到位的，恰到好处，既不深入以免让读者陷入原理的泥潭，毕竟大多只是把 Git 当做一种工具在用，但对于掌握 Git 的操作又非常有价值。如果熟悉一些 Git 的日常操作，想进一步理解 Git 的工作原理，推荐重点章节 1.3 Git 基础、2.2 记录每次更新到仓库的图2-1、3.1 何谓分支、3.2 分支的新建与合并【后续待定……因为暂时只看到这里】</p>
+</li>
+</ol>
+<span id="more"></span>
+
+<h2 id="Git-学习笔记"><a href="#Git-学习笔记" class="headerlink" title="Git 学习笔记"></a>Git 学习笔记</h2><p>最近想学点小知识，翻出了很久之前收藏的一篇链接-<a target="_blank" rel="noopener" href="http://blog.jobbole.com/82633/">有哪些实用的计算机相关技能，可以在一天内学会？</a>。</p>
+<p>第一篇是关于 Git 的。虽然我也用 Git，但一直以来都是 TortoiseGit，图形界面的东东，想通过这篇入门级的交互式教程，了解常用的 Git 命令。严格来说这不是学习笔记，只是在老老实实学完+实践完整个教程之后的几句总结，很少的几点。</p>
+<ol>
+<li><p>刚看前几节的时候，对一个问题比较困惑——“什么状态会是 unstaged 的呢？”</p>
+<blockquote>
+<p>后来了解了 git add -A.&#x2F;git add&#x2F;git rm&#x2F;git reset <filename>&#x2F;git commit…&#x2F;git checkout – <target>&#x2F; 命令，才明白长期使用图形界面，直接右击“提交”屏蔽了<strong>添加到 staging area</strong> 的细节。严格来说，每次 commit 之前都需要使用 add&#x2F;rm 命令将修改提交到 staging area，也可以直接使用 commit -a(-all)。</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Staging-Area.png"></p>
+</blockquote>
+</li>
+<li><p>在 11 节中提到了 hooks，对此充满了探知的欲望。联想到以前见过的一篇关于 <a target="_blank" rel="noopener" href="http://www.flickering.cn/uncategorized/2014/08/%E8%AE%A9-code-review%E6%88%90%E4%B8%BA%E4%B8%80%E7%A7%8D%E4%B9%A0%E6%83%AF/">Code Review</a> 的帖子。</p>
+</li>
+<li><p>关于 <code>git diff</code> 命令知之甚少啊。在 kindle 上对此进行了标注，抽空看。</p>
+</li>
+<li><p>切换和检出：<code>git checkout branch_name</code> 和 <code>git checkout -- file_name</code>，双横杠的就是为了万一有文件名和分支名相同的情况，使用双横杠保证检出文件，而非切换分支。</p>
+</li>
+<li><p>在比较旧的系统上使用 git 时，因为无法使用 git 的较新版本，加之系统方面的某些默认配置，使用起来有诸多不便。不便之处及其解决方法，罗列如下：</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">[使用 git <span class="built_in">log</span>、git diff 命令时出现 ESC[33 和 ESC[m 乱码的解决办法][ref1]</span></span><br><span class="line">git config --global core.pager &quot;less -r&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">[让 git输出颜色变成彩色的方法][ref2]</span></span><br><span class="line">git config --global color.status auto  </span><br><span class="line">git config --global color.diff auto  </span><br><span class="line">git config --global color.branch auto  </span><br><span class="line">git config --global color.interactive auto  </span><br></pre></td></tr></table></figure>
+
+<p> 使用 <code>git log</code>、<code>git diff</code> 命令时出现 <code>ESC[33</code> 和 <code>ESC[m</code> 乱码的<a target="_blank" rel="noopener" href="http://blog.yongli1992.com/2015/08/14/git-log-diff-esc-garbled/">解决办法</a>、<a target="_blank" rel="noopener" href="http://blog.csdn.net/cloudaice/article/details/7065142">让 git输出颜色变成彩色的方法</a></p>
+</li>
+<li><p>如何列出已经跟踪的文件？<code>git ls-files</code></p>
+</li>
+<li><p><code>git merge –squash</code> 合并分支时需要手动提交，给你修改 commit message 的机会（有时候开发分支上提交时非常随意）<a target="_blank" rel="noopener" href="https://www.wanglianghome.org/2010/08/05/git-merge-squash/">git merge –squash介绍</a></p>
+</li>
+</ol>
+<h1 id="GitHub"><a href="#GitHub" class="headerlink" title="GitHub"></a><a target="_blank" rel="noopener" href="https://github.com/">GitHub</a></h1><ol>
+<li><p><a target="_blank" rel="noopener" href="https://wuyuans.com/2012/05/github-simple-tutorial">github 简单使用教程</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://blog.csdn.net/lishuo_os_ds/article/details/8078475">GitHub 详细教程</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://blog.jobbole.com/40097/">学生和教育人士可免费申请 Github 私有仓库</a></p>
+<p> 链接：<a target="_blank" rel="noopener" href="https://education.github.com/">GitHubEducation</a></p>
+</li>
+</ol>
+<h1 id="Git-OSC"><a href="#Git-OSC" class="headerlink" title="Git@OSC"></a><a target="_blank" rel="noopener" href="https://git.oschina.net/">Git@OSC</a></h1><p>在实际生产中碰到的问题： </p>
+<ul>
+<li><a href="/2017/04/18/GitOfOSC/">“Git@OSC 禁止推送大于 100M 文件”</a></li>
+<li><a target="_blank" rel="noopener" href="http://git.mydoc.io/?t=130991">commit 关联 issue</a>，其中关闭 issue、评论 issue，无论我怎么尝试都毫无反应。真尼玛坑爹！</li>
+</ul>
+<p>想用 GitHub，在大陆这样的环境却感觉爱不起。可以两个都喜欢： 将项目同时托管到 Github 和 Git@OSC</p>
+<h1 id="Git-对比-SVN"><a href="#Git-对比-SVN" class="headerlink" title="Git 对比 SVN"></a>Git 对比 SVN</h1><p>git 和 svn 有什么不同？写于 2015年12月18日 16:58:27</p>
+<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>老东家其实是个很没意思的公司，是做测控的，跟软件唯一说得上的关联就是使用 NI 公司的 labview、labwindows&#x2F;cvi 工具，因为用的对方的 pci、pxi 板卡、工控机等。和 c++ 无关，和 Java 无关，和互联网更是八竿子都擦不上个边。</p>
+<p>就上面提到的两个开发的工具，还是个别人员在用，反正我没用。关于做软件，身边没有环境，没有团队，井底之蛙，好好的科班出身，差点就废了。也亏了学校的背景，在两年的“空”软件开发工作经验之后，依然能够有幸找到一家做软件的公司，linux 下的 c++ 开发。</p>
+<p>两年里无人引路，自学自用了 git，开始时困于 windows 下 git 服务搭建，后来开始使用网上的版本管理网站，比如 github（不怎么用）、bitbucket（已不再用）、oschina（主要在用）。操作的话使用 tortoise 替代原生的命令操作，也很方便。</p>
+<p>新公司用的 svn，目前用的很形式化，也就是说做版本管理大体上是个面子工程，领导让用所以就应付着上传代码，能应付过去就 ok 了。</p>
+<p>如果要介绍两者的区别，除了使用者的立场，还应该考虑公司的出发点。</p>
+<h2 id="个人使用选择-git，还是-svn？为什么？"><a href="#个人使用选择-git，还是-svn？为什么？" class="headerlink" title="个人使用选择 git，还是 svn？为什么？"></a>个人使用选择 git，还是 svn？为什么？</h2><p>——我选git，因为个人习惯，更因为 svn 不联网居然不能提交，<del>不能做版本管理</del>。svn 单机也可以做版本管理，参考：<a target="_blank" rel="noopener" href="http://blog.csdn.net/xgbing/article/details/7393692">不安装 SVN 服务器，使用 TortoiseSVN 创建单机版的 SVN</a>，其实还是个 c&#x2F;s 结构，在本机上建立个服务目录。</p>
+<p>——所以呀，没有明显区别、明显优势的情况下，就是个使用习惯的问题。手头的技能能用、够用，大多数人不愿意花时间、精力去 get 新技能的。</p>
+<p>网上百度一下，出现频率最多的应该就是这篇了<a target="_blank" rel="noopener" href="http://blog.jobbole.com/31444/">《Git 和 SVN 之间的五个基本区别》</a>：</p>
+<ol>
+<li>GIT 是分布式的，SVN 不是；</li>
+<li>GIT 把内容按元数据方式存储，而 SVN 是按文件；</li>
+<li>GIT 分支和 SVN 的分支不同；</li>
+<li>GIT 没有一个全局的版本号，而 SVN 有；</li>
+<li>GIT 的内容完整性要优于 SVN；</li>
+</ol>
+<p>另外，个人想卸载掉 TortoiseGit，练习以熟悉 git 的命令行模式，有一点担心的地方在于 差异对比的可视化方面图形界面显然比命令行好很多。</p>
+<h2 id="公司选择git，还是svn？又是为什么？"><a href="#公司选择git，还是svn？又是为什么？" class="headerlink" title="公司选择git，还是svn？又是为什么？"></a>公司选择git，还是svn？又是为什么？</h2><p>这方面找到蒋鑫的一篇，<a target="_blank" rel="noopener" href="http://blog.jobbole.com/20069/">《蒋鑫：为什么 Git 比 SVN 好》</a>，主要企业用户对 SVN 的迷信和对 Git 的误解，当年刚接触 git 时看的就是他写的关于 git 的一本书。</p>
+<p>还有一篇是说 svn 的，<a target="_blank" rel="noopener" href="http://developer.51cto.com/art/201312/423195.htm">《SVN 有任何胜过 git 的地方吗？》</a>，作者力证虽然 git 比svn好，但是 svn 也不是一无是处的，怎么感觉怪怪的…</p>
+<h1 id="GitSVN"><a href="#GitSVN" class="headerlink" title="GitSVN"></a>GitSVN</h1><p>当 Git SVN 混用（比如终端开发使用 git 管理，但公司要求提交到中心仓库 svn）时，<strong>不要使用</strong> git submodule 特性，不要使用 svn external 特性。另外，删除 submodule 不易。 </p>
+<ul>
+<li>从 svn 迁出到 git 仓库，git svn 命令相对容易上手</li>
+<li>将 git 仓库提交到 svn，<a target="_blank" rel="noopener" href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000">Pushing an existing Git repository to SVN</a></li>
+</ul>
+<p>over</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"># git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/03/26/OverGFW/" rel="prev" title="翻越“伟大的”墙">
+                  <i class="fa fa-angle-left"></i> 翻越“伟大的”墙
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/04/14/Kindle/" rel="next" title="Kindle 帖">
+                  Kindle 帖 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
