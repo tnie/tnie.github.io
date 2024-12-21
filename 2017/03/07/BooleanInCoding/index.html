@@ -20,16 +20,16 @@
     var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="2016年1月12日 18:14:37 本节转自 bool BOOL 和 _Bool辨析 布尔类型BOOL 类型在头文件 &lt;windef.h&gt; 中定义为 typedef int BOOL；在头文件 &lt;wtypes.h&gt; 中定义为 typedef long BOOL。BOOL 类型，即 int 类型的长度视实际环境来定，一般可认为是 4 个字节。BOOL 是微软定义的表达布尔">
+  <meta name="description" content="2016年1月12日 18:14:37 本节转自 bool BOOL 和 _Bool辨析 布尔类型BOOL 类型在头文件 &lt;windef.h&gt; 中定义为 typedef int BOOL；在头文件 &lt;wtypes.h&gt; 中定义为 typedef long BOOL。 BOOL 类型，即 int 类型的长度视实际环境来定，一般可认为是 4 个字节。  BOOL 是微软定义的表">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BOOL 和 bool（C++ 的） 和 _Bool（C 的）">
 <meta property="og:url" content="https://tnie.github.io/2017/03/07/BooleanInCoding/index.html">
 <meta property="og:site_name" content="不积小流，无以成江海">
-<meta property="og:description" content="2016年1月12日 18:14:37 本节转自 bool BOOL 和 _Bool辨析 布尔类型BOOL 类型在头文件 &lt;windef.h&gt; 中定义为 typedef int BOOL；在头文件 &lt;wtypes.h&gt; 中定义为 typedef long BOOL。BOOL 类型，即 int 类型的长度视实际环境来定，一般可认为是 4 个字节。BOOL 是微软定义的表达布尔">
+<meta property="og:description" content="2016年1月12日 18:14:37 本节转自 bool BOOL 和 _Bool辨析 布尔类型BOOL 类型在头文件 &lt;windef.h&gt; 中定义为 typedef int BOOL；在头文件 &lt;wtypes.h&gt; 中定义为 typedef long BOOL。 BOOL 类型，即 int 类型的长度视实际环境来定，一般可认为是 4 个字节。  BOOL 是微软定义的表">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/_Bool.png">
 <meta property="article:published_time" content="2017-03-07T02:02:49.000Z">
-<meta property="article:modified_time" content="2021-01-18T05:30:33.357Z">
+<meta property="article:modified_time" content="2023-05-20T04:21:13.560Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/_Bool.png">
@@ -231,7 +231,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -260,20 +260,22 @@
       
         <p>2016年1月12日 18:14:37</p>
 <p>本节转自 <a target="_blank" rel="noopener" href="http://developer.51cto.com/art/201312/420153.htm">bool BOOL 和 _Bool辨析</a></p>
-<h1 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a>布尔类型</h1><p>BOOL 类型在头文件 &lt;windef.h&gt; 中定义为 <code>typedef int BOOL</code>；在头文件 &lt;wtypes.h&gt; 中定义为 <code>typedef long BOOL</code>。<br>BOOL 类型，即 int 类型的长度视实际环境来定，一般可认为是 4 个字节。<br>BOOL 是微软定义的表达布尔逻辑的类型。与 C++ 中的 bool 类型不同是，它是一个<strong>三值逻辑</strong>：TRUE、FALSE 和 ERROR。当返回值为大于 0 的整数时为 TRUE，返回值为 0 时为 FALSE，返回值为 -1 时为 ERROR。</p>
-<p>bool 类型在 C++ 中以关键字的形式被支持，表示布尔类型，其对应变量的值只有真（true）和假（false）两种值。bool 在 C++ 里占用 1 字节。</p>
-<p>_Bool 是 C99 标准中定义的一个新关键字，以提供布尔类型。C2008 草案中只规定了 _Bool 类型的大小至少应能够存放 0 和 1 这两个值。而并没有规定具体的大小。这交给编译器自由发挥了。</p>
+<h1 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a>布尔类型</h1><p><code>BOOL</code> 类型在头文件 &lt;windef.h&gt; 中定义为 <code>typedef int BOOL</code>；在头文件 &lt;wtypes.h&gt; 中定义为 <code>typedef long BOOL</code>。</p>
+<p><code>BOOL</code> 类型，即 int 类型的长度视实际环境来定，一般可认为是 4 个字节。 </p>
+<p><code>BOOL</code> 是微软定义的表达布尔逻辑的类型。与 C++ 中的 bool 类型不同是，它是一个<strong>三值逻辑</strong>：TRUE、FALSE 和 ERROR。当返回值为大于 0 的整数时为 TRUE，返回值为 0 时为 FALSE，返回值为 -1 时为 ERROR。</p>
+<p><code>bool</code> 类型在 C++ 中以关键字的形式被支持，表示布尔类型，其对应变量的值只有真（true）和假（false）两种值。<code>bool</code> 在 C++ 里占用 1 字节。</p>
+<p><code>_Bool</code> 是 C99 标准中定义的一个新关键字，以提供布尔类型。C2008 草案中只规定了 <code>_Bool</code> 类型的大小至少应能够存放 0 和 1 这两个值。而并没有规定具体的大小。这交给编译器自由发挥了。</p>
 <p><strong>以上，足够读者区别彼此的使用场景了。</strong></p>
 <a id="more"></a>
 
 <h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>在 C 代码中使用布尔类型的几种方式：（如果编译器不支持 C99，就只能使用第一种方法了）</p>
 <h2 id="自己定义的“仿布尔类型”"><a href="#自己定义的“仿布尔类型”" class="headerlink" title="自己定义的“仿布尔类型”"></a>自己定义的“仿布尔类型”</h2><p>在 C99 标准被支持之前，我们常常自己模仿定义布尔类型，方式有很多种，常见的有下面两种：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 第一种方法 */</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> BOOL;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TRUE 1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FALSE 0</span></span><br><span class="line"><span class="comment">/* 第二种方法 */</span></span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">bool</span>&#123;</span><span class="literal">false</span>, <span class="literal">true</span>&#125;; </span><br></pre></td></tr></table></figure>
-<h2 id="使用-C99-新增的关键字-Bool"><a href="#使用-C99-新增的关键字-Bool" class="headerlink" title="使用 C99 新增的关键字 _Bool"></a>使用 C99 新增的关键字 _Bool</h2><p>标准并未对 _Bool 规定具体的大小。我们使用 gcc（64位环境）做下面测试：</p>
+<h2 id="使用-C99-新增的关键字-Bool"><a href="#使用-C99-新增的关键字-Bool" class="headerlink" title="使用 C99 新增的关键字 _Bool"></a>使用 C99 新增的关键字 _Bool</h2><p>标准并未对 <code>_Bool</code> 规定具体的大小。我们使用 gcc（64位环境）做下面测试：</p>
 <p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/_Bool.png" alt="测试结果"></p>
 <p>看来，gcc 编译器规定 _Bool 类型的长度为 1，只能取值为 0 或 1 。将任意非零值赋值给 _Bool 类型变量，都会先转换为 1，表示为真；将零值赋值给 _Bool 类型，结果为 0，表示为假。</p>
-<h2 id="使用-C99-新增头文件-stdbool-h"><a href="#使用-C99-新增头文件-stdbool-h" class="headerlink" title="使用 C99 新增头文件 stdbool.h"></a>使用 C99 新增头文件 stdbool.h</h2><p>在 C++ 中，通过 bool 来定义布尔变量，通过 true 和 false 对布尔变量进行赋值。C99 为了让我们能够写出与 C++ 兼容的代码（在 c 代码中使用 bool、true、false，而非在C++ 代码中使用 _Bool），添加了头文件 &lt;stdbool.h&gt; 。所以我们只要包含了该头文件，就可以像 C++ 中使用布尔变量的方式进行操作。</p>
-<p>在我自己的 linux 系统中查找 stdbool.h 头文件，找到两处：</p>
+<h2 id="使用-C99-新增头文件-stdbool-h"><a href="#使用-C99-新增头文件-stdbool-h" class="headerlink" title="使用 C99 新增头文件 stdbool.h"></a>使用 C99 新增头文件 stdbool.h</h2><p>在 C++ 中，通过 <code>bool</code> 来定义布尔变量，通过 true 和 false 对布尔变量进行赋值。C99 为了让我们能够写出与 C++ 兼容的代码（在 c 代码中使用 bool、true、false，而非在C++ 代码中使用 <code>_Bool</code>），添加了头文件 <code>&lt;stdbool.h&gt;</code> 。所以我们只要包含了该头文件，就可以像 C++ 中使用布尔变量的方式进行操作。</p>
+<p>在我自己的 linux 系统中查找 <code>stdbool.h</code> 头文件，找到两处：</p>
 <p>系统定义 </p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Betty ~]# vi /usr/lib/syslinux/com32/include/stdbool.h</span><br></pre></td></tr></table></figure>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* $Id: stdbool.h,v 1.1 2003/04/16 06:32:31 hpa Exp $</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* stdbool.h</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _STDBOOL_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _STDBOOL_H</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __cplusplus</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> !defined(__STDC_VERSION__) || (__STDC_VERSION__ &lt; 199901L)</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">if</span> !defined(__GNUC__) ||(__GNUC__ &lt; 3)</span></span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">char</span> <span class="built_in">_Bool</span>;           <span class="comment">/* For C compilers without _Bool */</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> bool  _Bool</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> true  1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> false 0</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/* C++ */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> bool  bool</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> true  true</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> false false</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __bool_true_false_are_defined 1</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* _STDBOOL_H */</span></span></span><br></pre></td></tr></table></figure>
@@ -379,20 +381,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -427,7 +429,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

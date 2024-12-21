@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="之前专门整理过 C++ 怎么写单例类，平日项目中涉及的场景大多简单，使用最基本的实现就完全能够应付过来。但是，还是有些复杂的场景需要考虑。 相互引用的单例们也就是 singletonA、singletonB 两者的构造相互调用。  使用常用的局部静态变量方式（lazy_result_loop.cpp），也是懒汉模式一种：相互依赖初始化，死循环，阻塞   123Object_2B_1::Object">
+  <meta name="description" content="之前专门整理过 C++ 怎么写单例类，平日项目中涉及的场景大多简单，使用最基本的实现就完全能够应付过来。但是，还是有些复杂的场景需要考虑。 相互引用的单例们也就是 singletonA、singletonB 两者的构造相互调用。 使用常用的局部静态变量方式（lazy_result_loop.cpp），也是懒汉模式一种：相互依赖初始化，死循环，阻塞 12Object_2B_1::Object_2B_">
 <meta property="og:type" content="article">
 <meta property="og:title" content="单例很糟糕？">
 <meta property="og:url" content="https://tnie.github.io/2018/09/06/singleton3/index.html">
 <meta property="og:site_name" content="不积小流，无以成江海">
-<meta property="og:description" content="之前专门整理过 C++ 怎么写单例类，平日项目中涉及的场景大多简单，使用最基本的实现就完全能够应付过来。但是，还是有些复杂的场景需要考虑。 相互引用的单例们也就是 singletonA、singletonB 两者的构造相互调用。  使用常用的局部静态变量方式（lazy_result_loop.cpp），也是懒汉模式一种：相互依赖初始化，死循环，阻塞   123Object_2B_1::Object">
+<meta property="og:description" content="之前专门整理过 C++ 怎么写单例类，平日项目中涉及的场景大多简单，使用最基本的实现就完全能够应付过来。但是，还是有些复杂的场景需要考虑。 相互引用的单例们也就是 singletonA、singletonB 两者的构造相互调用。 使用常用的局部静态变量方式（lazy_result_loop.cpp），也是懒汉模式一种：相互依赖初始化，死循环，阻塞 12Object_2B_1::Object_2B_">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-09-06T09:28:52.000Z">
-<meta property="article:modified_time" content="2021-01-18T05:30:33.404Z">
+<meta property="article:modified_time" content="2023-05-20T04:21:13.623Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta property="article:tag" content="GoF">
 <meta name="twitter:card" content="summary">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -259,12 +259,9 @@
       
         <p>之前专门整理过 C++ 怎么写单例类，平日项目中涉及的场景大多简单，使用最基本的实现就完全能够应付过来。但是，还是有些复杂的场景需要考虑。</p>
 <h1 id="相互引用的单例们"><a href="#相互引用的单例们" class="headerlink" title="相互引用的单例们"></a>相互引用的单例们</h1><p>也就是 singletonA、singletonB 两者的构造相互调用。</p>
-<ul>
-<li><p>使用常用的局部静态变量方式（<a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/blob/master/gof/lazy_result_loop.cpp">lazy_result_loop.cpp</a>），也是懒汉模式一种：相互依赖初始化，<strong>死循环</strong>，阻塞</p>
-  <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Object_2B_1::Object_2B_1() this:[00BFC14C] data_2b_1_ [1].</span><br><span class="line">Object_2B_2::Object_2B_2() this:[00BFC154] data_2b_2_ [2].</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li><p>使用全局静态变量方式（<a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/blob/master/gof/hungry_result_different.cpp">hungry_result_different.cpp</a>），饿汗模式：不会死循环，但奇葩在 Debug、Release 模式执行<strong>结果不一致</strong></p>
-</li>
-</ul>
+<p>使用常用的局部静态变量方式（<a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/blob/master/gof/lazy_result_loop.cpp">lazy_result_loop.cpp</a>），也是懒汉模式一种：相互依赖初始化，<strong>死循环</strong>，阻塞</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object_2B_1::Object_2B_1() this:[00BFC14C] data_2b_1_ [1].</span><br><span class="line">Object_2B_2::Object_2B_2() this:[00BFC154] data_2b_2_ [2].</span><br></pre></td></tr></table></figure>
+<p>使用全局静态变量方式（<a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/blob/master/gof/hungry_result_different.cpp">hungry_result_different.cpp</a>），饿汗模式：不会死循环，但奇葩在 Debug、Release 模式执行<strong>结果不一致</strong></p>
 <p>代码摘抄自 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/fullsail/archive/2013/01/03/2842618.html">BOOST 的 Singleton 模版详解</a>，以上就是“2B 实现有问题”。虽然作者自述“BOOST 的实现如何规避问题”，但在 msvc2015 中实测其代码<strong>并未解决问题</strong>，依旧是<strong>阻塞</strong>结果。</p>
 <a id="more"></a>
 
@@ -281,8 +278,9 @@
 <blockquote>
 <p>boost 没有一个通用的单例类的原因，已提供的单例类，都是在某个具体的模块中。</p>
 </blockquote>
-<h1 id="单例很糟糕？"><a href="#单例很糟糕？" class="headerlink" title="单例很糟糕？"></a>单例很糟糕？</h1><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/137975/what-is-so-bad-about-singletons" title="https://stackoverflow.com/questions/137975/what-is-so-bad-about-singletons">https://stackoverflow.com/questions/137975/what-is-so-bad-about-singletons</a></p>
-<p><a target="_blank" rel="noopener" href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i3-avoid-singletons">C++ 他爹都说要避免使用单例</a></p>
+<h1 id="单例很糟糕？"><a href="#单例很糟糕？" class="headerlink" title="单例很糟糕？"></a>单例很糟糕？</h1><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/137975/what-is-so-bad-about-singletons">What is so bad about singletons?</a></p>
+<p><a target="_blank" rel="noopener" href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i3-avoid-singletons">C++ 他爹都说要避免使用单例</a>，因为单例本质上是复杂化的全局变量，而 <a target="_blank" rel="noopener" href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i2-avoid-non-const-global-variables">非常量的全局变量也是要避免的</a>。</p>
+<p>结合我在 PC 客户端数据层的开发经历来说，自带线程管理的生产者、消费者、日志管理类、监控对象等（尤其是在 DLL 中使用时），大大增加了问题的复杂度，引入冲突，甚至引入 BUG。但解决方案是什么？更好的编码模式是什么？</p>
 
     </div>
 
@@ -382,20 +380,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -430,7 +428,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="QUdpSocket使用上存在几个注意事项，当其结果不符合预期时看看这里有没有记录。 QUdpSocket::readyRead()记录一个关于  信号的 bug ，有数据到达但此信号不再 emit ：官方相似 bug  描述 其内部实现依赖 hasPendingData 标志位判断是否发出信号（并调用关联的槽函数） ，但此标志位容易出错， Qt 将此标志位的复位操作交给了用户：  Note: A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QUdpSocket 使用注意事项">
+<meta property="og:url" content="https://tnie.github.io/2024/12/21/QUdpSocket/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="QUdpSocket使用上存在几个注意事项，当其结果不符合预期时看看这里有没有记录。 QUdpSocket::readyRead()记录一个关于  信号的 bug ，有数据到达但此信号不再 emit ：官方相似 bug  描述 其内部实现依赖 hasPendingData 标志位判断是否发出信号（并调用关联的槽函数） ，但此标志位容易出错， Qt 将此标志位的复位操作交给了用户：  Note: A">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-12-21T10:47:28.000Z">
+<meta property="article:modified_time" content="2024-12-21T11:05:00.560Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2024/12/21/QUdpSocket/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>QUdpSocket 使用注意事项 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2024/12/21/QUdpSocket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          QUdpSocket 使用注意事项
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-12-21 18:47:28 / 修改时间：19:05:00" itemprop="dateCreated datePublished" datetime="2024-12-21T18:47:28+08:00">2024-12-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/qt/" itemprop="url" rel="index"><span itemprop="name">qt</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="QUdpSocket"><a href="#QUdpSocket" class="headerlink" title="QUdpSocket"></a>QUdpSocket</h1><p>使用上存在几个注意事项，当其结果不符合预期时看看这里有没有记录。</p>
+<h2 id="QUdpSocket-readyRead"><a href="#QUdpSocket-readyRead" class="headerlink" title="QUdpSocket::readyRead()"></a><code>QUdpSocket::readyRead()</code></h2><p>记录一个关于  信号的 bug ，有数据到达但此信号不再 emit ：<a target="_blank" rel="noopener" href="https://bugreports.qt.io/browse/QTBUG-105871">官方相似 bug  描述</a></p>
+<p>其内部实现依赖 <code>hasPendingData</code> 标志位判断是否发出信号（并调用关联的槽函数） ，但此标志位容易出错， Qt 将此标志位的复位操作交给了用户：</p>
+<blockquote>
+<p><strong>Note</strong>: An incoming datagram should be read when you receive the <code>readyRead()</code> signal, otherwise this signal will not be emitted for the next datagram.</p>
+</blockquote>
+<a id="more"></a>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 摘自 Qt5.15.15 的 qabstractsocket.cpp +740</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">QAbstractSocketPrivate::canReadNotification</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (hasPendingData) &#123;</span><br><span class="line">            <span class="comment">// socket 可读事件不再通知</span></span><br><span class="line">            socketEngine-&gt;setReadNotificationEnabled(<span class="literal">false</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 此标志位需要重置为 false 才会再次 emitReadyRead</span></span><br><span class="line">        hasPendingData = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    emitReadyRead();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 摘自  Qt5.15.15 的 qudpsocket.cpp +468</span></span><br><span class="line"><span class="function">QNetworkDatagram <span class="title">QUdpSocket::receiveDatagram</span><span class="params">(qint64 maxSize)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//... </span></span><br><span class="line">    <span class="comment">// 不调用此函数或者 readDatagram() 就</span></span><br><span class="line">    <span class="comment">// 不会更新 hasPendingData 标志位，socket 可读事件也不再上报</span></span><br><span class="line">    d-&gt;hasPendingData = <span class="literal">false</span>;</span><br><span class="line">    d-&gt;socketEngine-&gt;setReadNotificationEnabled(<span class="literal">true</span>);</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过以上代码实现，可以推断出以下时序：</p>
+<ol start="0">
+<li><p>内部实现响应了 socket 的可读事件，执行了 <code>canReadNotification()</code></p>
+</li>
+<li><p>未执行 <code>QUdpSocket::readDatagram()</code> 或 <code>QUdpSocket::receiveDatagram()</code>  修改标志位</p>
+</li>
+<li><p>内部实现响应了 socket 的可读事件，执行了 <code>canReadNotification()</code> </p>
+</li>
+<li><p>不调用 <code>QUdpSocket::readDatagram()</code> 或 <code>QUdpSocket::receiveDatagram()</code>  就再也不会 <code>emitReadyRead()</code></p>
+</li>
+</ol>
+<p>如何复现问题呢？</p>
+<p>新建的 <code>QUdpSocket</code> 对象如果不关联 <code>readyRead()</code>槽函数，是不会主动接收数据的，也就不会执行 <code>canReadNotification()</code> </p>
+<ol start="0">
+<li>给 <code>readyRead()</code> 信号关联槽函数，且数据到达时才会执行 <code>canReadNotification()</code></li>
+<li>槽函数中不调用 <code>receiveDatagram()</code> 等相关接口；或某分支中未执行相关接口；或 <code>disconnect</code> 槽函数</li>
+<li>数据到达，但不再 <code>emitReadyRead()</code> 。 </li>
+</ol>
+<p>针对此问题的 workaround 围绕 <code>receiveDatagram()</code> 展开：</p>
+<ul>
+<li>槽函数中要保证所有的分支都会执行 <code>receiveDatagram()</code> 函数</li>
+<li>如果中途删除槽函数，重新关联槽函数时调用 <code>receiveDatagram()</code> 保证状态复位</li>
+</ul>
+<h2 id="datagram-without-payload"><a href="#datagram-without-payload" class="headerlink" title="datagram without payload"></a>datagram without payload</h2><p>在 <code>hasPendingDatagrams()</code>  内部实现中存在以下注释：UDP 有长度为零的报文 （udp datagram without payload ），所以额外提供了此接口，在收到零长度报文时也返回 <code>true</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*!</span></span><br><span class="line"><span class="comment">    Returns \c true if there is at least one datagram pending. This</span></span><br><span class="line"><span class="comment">    function is only called by UDP sockets, where a datagram can have</span></span><br><span class="line"><span class="comment">    a size of 0. TCP sockets call bytesAvailable().</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">QNativeSocketEngine::hasPendingDatagrams</span><span class="params">()</span> <span class="keyword">const</span></span></span><br></pre></td></tr></table></figure>
+<p>参考 Qt 手册 <code>qint64 QUdpSocket::pendingDatagramSize() const</code> ，没有报文时返回 -1 ，而非 0 。</p>
+<blockquote>
+<p>Returns the size of the first pending UDP datagram. If there is no datagram available, this function returns -1.</p>
+</blockquote>
+<h2 id="bad-checksum"><a href="#bad-checksum" class="headerlink" title="bad-checksum"></a>bad-checksum</h2><p>需要强调的是，以下 Qt 手册中例子也是存在问题的：<code>hasPendingDatagrams()</code> 返回值可能是 <code>false</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Server::initSocket</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    udpSocket = <span class="keyword">new</span> QUdpSocket(<span class="keyword">this</span>);</span><br><span class="line">    udpSocket-&gt;bind(QHostAddress::LocalHost, <span class="number">7755</span>);</span><br><span class="line"></span><br><span class="line">    connect(udpSocket, &amp;QUdpSocket::readyRead,</span><br><span class="line">            <span class="keyword">this</span>, &amp;Server::readPendingDatagrams);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Server::readPendingDatagrams</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (udpSocket-&gt;hasPendingDatagrams()) &#123;</span><br><span class="line">        QNetworkDatagram datagram = udpSocket-&gt;receiveDatagram();</span><br><span class="line">        processTheDatagram(datagram);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>之前提到的 bad checksum 报文会触发 <code>readyRead()</code> 信号执行槽函数，但 <code>hasPendingDatagrams()</code> 不成立，未能执行 <code>receiveDatagram()</code> 函数，后续收到新报文不再触发 <code>readyRead()</code> 信号。</p>
+<p>一般来说，bad checksum 会被内核过滤并丢弃。如何监控、查看此过程？什么情况下会不再过滤/过滤失败？</p>
+<h2 id="workaround"><a href="#workaround" class="headerlink" title="workaround"></a>workaround</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Q_ASSERT(<span class="literal">nullptr</span> != socket);</span><br><span class="line"><span class="keyword">while</span>(socket-&gt;hasPendingDatagrams())</span><br><span class="line">   &#123;</span><br><span class="line">       socket-&gt;receiveDatagram(<span class="number">0</span>); <span class="comment">// discard</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// emit readyRead() 信号依赖 receiveDatagram() 重置标志位</span></span><br><span class="line">   QObject::connect(socket, &amp;QUdpSocket::readyRead, <span class="keyword">this</span>, [=]()&#123;</span><br><span class="line">       <span class="keyword">if</span>(!socket-&gt;hasPendingDatagrams())</span><br><span class="line">       &#123;</span><br><span class="line">           QNetworkDatagram datagram = socket-&gt;receiveDatagram(); <span class="comment">// workaround for bad checksum</span></span><br><span class="line">           QString msg(<span class="string">&quot;** readyRead emitted, but nothing to get :(&quot;</span>);</span><br><span class="line">           QString warning = QString(<span class="string">R&quot;(&lt;font color=&quot;red&quot;&gt;%1&lt;/font&gt;)&quot;</span>).arg(msg);</span><br><span class="line">           ui-&gt;plainTextEditRecv-&gt;appendHtml(warning);</span><br><span class="line">           processTheDatagram(datagram);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">while</span>(socket-&gt;hasPendingDatagrams())&#123;</span><br><span class="line">           QNetworkDatagram datagram = socket-&gt;receiveDatagram();</span><br><span class="line">           processTheDatagram(datagram);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;);</span><br><span class="line">   socket-&gt;receiveDatagram(); <span class="comment">// workaround for connect() again</span></span><br></pre></td></tr></table></figure>
+<h1 id="QNetworkDatagram"><a href="#QNetworkDatagram" class="headerlink" title="QNetworkDatagram"></a><code>QNetworkDatagram</code></h1><p>数据报 <code>QNetworkDatagram</code> 接口有坑</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">QNetworkDatagram <span class="title">datagram</span><span class="params">(getPayload(), destinationAddress, destinationPort)</span></span>;</span><br><span class="line"><span class="keyword">if</span>(QString(<span class="string">&quot;不要使用以下接口&quot;</span>).isEmpty())</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">const</span> QHostAddress <span class="title">address</span><span class="params">(<span class="string">&quot;192.168.50.221&quot;</span>)</span></span>;</span><br><span class="line">    <span class="comment">// setSender() 参数和 bind() 绑定的地址及端口必须一致，否则 writeDatagram(const QNetworkDatagram &amp;) 执行失败</span></span><br><span class="line">    <span class="comment">// 建议不要调用 setSender() 此接口：此接口冗余，且容易错用。</span></span><br><span class="line">    <span class="comment">// writeDatagram(const QNetworkDatagram &amp;) 之前的 bind() 操作不会使用 setSender() 的参数</span></span><br><span class="line">    datagram.setSender(address);</span><br><span class="line">    <span class="comment">// 在 Windows 平台下，不能调用 setHopLimit()，因为底层配置 IP_TTL 是非法项造成 writeDatagram(const QNetworkDatagram &amp;) 执行失败</span></span><br><span class="line">    <span class="comment">// https://learn.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2</span></span><br><span class="line">    <span class="comment">//  Return code/value: WSAEINVAL</span></span><br><span class="line">    <span class="comment">// https://learn.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasendmsg</span></span><br><span class="line">    <span class="comment">//  Error code: WSAEINVAL</span></span><br><span class="line">    <span class="comment">// https://learn.microsoft.com/en-us/windows/win32/winsock/ipproto-ip-socket-options</span></span><br><span class="line">    <span class="comment">//  Options: IP_TTL</span></span><br><span class="line">    <span class="comment">// https://learn.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-getsockopt</span></span><br><span class="line">    <span class="comment">//  Return value: WSAEFAULT</span></span><br><span class="line">    datagram.setHopLimit(<span class="number">7</span>);</span><br><span class="line">    <span class="comment">// setInterfaceIndex() 和 bind() 冲突似乎没有不良影响。</span></span><br><span class="line">    <span class="comment">// 但如果不是 QNetworkInterface::allInterfaces() 集合内的索引，就会发送失败</span></span><br><span class="line">    datagram.setInterfaceIndex(<span class="number">119</span>);</span><br><span class="line">    qDebug() &lt;&lt; <span class="string">&quot;interfaceIndex is&quot;</span> &lt;&lt; datagram.interfaceIndex();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/01/12/serial-port/" rel="prev" title="串口编程">
+      <i class="fa fa-chevron-left"></i> 串口编程
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#QUdpSocket"><span class="nav-number">1.</span> <span class="nav-text">QUdpSocket</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#QUdpSocket-readyRead"><span class="nav-number">1.1.</span> <span class="nav-text">QUdpSocket::readyRead()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#datagram-without-payload"><span class="nav-number">1.2.</span> <span class="nav-text">datagram without payload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bad-checksum"><span class="nav-number">1.3.</span> <span class="nav-text">bad-checksum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#workaround"><span class="nav-number">1.4.</span> <span class="nav-text">workaround</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QNetworkDatagram"><span class="nav-number">2.</span> <span class="nav-text">QNetworkDatagram</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

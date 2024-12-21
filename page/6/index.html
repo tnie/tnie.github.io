@@ -196,7 +196,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/14/DoubSystems/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/08/24/automake3rd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -210,7 +210,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/04/14/DoubSystems/" class="post-title-link" itemprop="url">双系统</a>
+            <a href="/2017/08/24/automake3rd/" class="post-title-link" itemprop="url">Makefile 自动生成 - configure & make</a>
         </h2>
 
         <div class="post-meta">
@@ -220,7 +220,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-04-14 17:51:56" itemprop="dateCreated datePublished" datetime="2017-04-14T17:51:56+08:00">2017-04-14</time>
+              <time title="创建时间：2017-08-24 14:07:47" itemprop="dateCreated datePublished" datetime="2017-08-24T14:07:47+08:00">2017-08-24</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -235,7 +235,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
+                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
                 </span>
             </span>
 
@@ -250,12 +250,42 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>双系统，还是虚拟机？如果机器跑虚拟机资源足够（操作并不会明显卡，风扇不会疯狂地转），我会选择后者。双系统带来的问题，在于两个系统的切换需要重新关机重启而且使用图形界面的 Linux 对比 windows 毫无优势，Linux 的优点在于不带图形界面的前提下占用资源少。而如果在 Linux 中使用图形界面不单单耗费资源，而且体验不如 windows。</p>
-<p>你可以在虚拟机中不带界面跑 Linux，而双系统的情景下谁会只安装命令行（Linux 不带图形界面）的交互呢？</p>
-<p>在接触系统之前，先了解更底层的东西。</p>
+          <h1 id="执行脚本-configure"><a href="#执行脚本-configure" class="headerlink" title="执行脚本 ./configure"></a>执行脚本 ./configure</h1><p>configure：它能根据不同的系统，产生不同的 Makefile，从而使我们的程序具有可移植性。它还有一些参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>–cache-file=FILE</td>
+<td>测试系统的特性，并将结果放到FILE中</td>
+</tr>
+<tr>
+<td>–help</td>
+<td>输出帮助信息</td>
+</tr>
+<tr>
+<td>–no-create</td>
+<td>阻止其生成输出文件</td>
+</tr>
+<tr>
+<td>–quiet</td>
+<td>执行是不做输出</td>
+</tr>
+<tr>
+<td>–silent</td>
+<td>同上，若设置则不会有任何输出到屏幕</td>
+</tr>
+<tr>
+<td>–version</td>
+<td>输出automake的版本号</td>
+</tr>
+</tbody></table>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2017/04/14/DoubSystems/#more" rel="contents">
+              <a class="btn" href="/2017/08/24/automake3rd/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -279,7 +309,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/14/Kindle/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/08/24/autotools/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -293,7 +323,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/04/14/Kindle/" class="post-title-link" itemprop="url">Kindle 帖</a>
+            <a href="/2017/08/24/autotools/" class="post-title-link" itemprop="url">编译利器：大型项目如何使用Automake和Autoconf完成编译配置(ver+0.6)</a>
         </h2>
 
         <div class="post-meta">
@@ -303,7 +333,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-04-14 17:00:53" itemprop="dateCreated datePublished" datetime="2017-04-14T17:00:53+08:00">2017-04-14</time>
+              <time title="创建时间：2017-08-24 09:54:33" itemprop="dateCreated datePublished" datetime="2017-08-24T09:54:33+08:00">2017-08-24</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -318,7 +348,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
+                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
                 </span>
             </span>
 
@@ -333,14 +363,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>2016年1月6日 10:30:20。这篇笔记早就应该写了。其实就是汇总资源，网络链接等。</p>
-<p>我记得当初决定购买 kindle 时，在网上查了好多资料。可能是因为 chrome 书签没有同步的问题，公司用的笔记本上找不到有关的网页。</p>
-<p><a target="_blank" rel="noopener" href="http://kindlefere.com/post/66.html">如何用最简单的方法批量删除 Kindle 云端电子书</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/27741189">Kindle 有哪些鲜为人知的使用技巧？</a><br>    ！<a target="_blank" rel="noopener" href="http://www.douban.com/group/kindlemate/">Kindle标注笔记生词本管理器-Kindle Mate</a></p>
-<p><a target="_blank" rel="noopener" href="http://tieba.baidu.com/p/1976383035#">kindle 推送四种方式介绍及方法</a></p>
+          <p>这篇帖子很棒！我从百度文库中下载了 <a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/blob/master/autotools/%E7%BC%96%E8%AF%91%E5%88%A9%E5%99%A8%EF%BC%9A%E5%A4%A7%E5%9E%8B%E9%A1%B9%E7%9B%AE%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Automake%E5%92%8CAutoconf%E5%AE%8C%E6%88%90%E7%BC%96%E8%AF%91%E9%85%8D%E7%BD%AE(ver+0.6).docx?raw=true">此教程</a>，因为未做深度的考证，所以也不知原作者是谁，但在此谢谢作者。以下是作者原文，略有删改，本人有修改部分都已做出备注。</p>
+<hr>
+<p>使用过开源 C/C++ 项目的同学们都知道，标准的编译过程已经变成了简单的三部曲：configure/make/make install, 使用起来很方便，不像平时自己写代码，要手写一堆复杂的 Makefile，而且换个编译环境，Makefile 还需要修改（Eclipse 也是这样）。</p>
+<p>这么好的东东当然要拿来用了，但 GNU 的 Autotool 系列博大精深，工具数量又多，涉及的语言也多，要是自己从头看到尾，黄花菜都凉了，项目估计早就结束了；上网搜样例倒是有一大堆，但都是“hello world”的样例，离真正完成大型项目的目标还差得远。</p>
+<p>没有办法，对照网上的样例，再找几个开源的源码，然后参考各种 Autotools 的手册，花了 2 天时间，终于完成了一个基本可用的 Autotools。为了避免其他 XDJM 也浪费时间，因此将过程总结下来，就算是新年礼物，送给大家！！</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2017/04/14/Kindle/#more" rel="contents">
+              <a class="btn" href="/2017/08/24/autotools/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -364,7 +394,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/27/VersionControl/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/07/04/UUID/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -378,7 +408,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/03/27/VersionControl/" class="post-title-link" itemprop="url">版本控制</a>
+            <a href="/2017/07/04/UUID/" class="post-title-link" itemprop="url">UUID 入门</a>
         </h2>
 
         <div class="post-meta">
@@ -388,24 +418,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-03-27 09:23:18" itemprop="dateCreated datePublished" datetime="2017-03-27T09:23:18+08:00">2017-03-27</time>
+              <time title="创建时间：2017-07-04 16:54:05" itemprop="dateCreated datePublished" datetime="2017-07-04T16:54:05+08:00">2017-07-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
 
           
 
@@ -418,195 +439,230 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>2016年1月4日 17:23:45，和git有关的链接保存了很多，统一在这篇笔记里整理一下。</p>
-<h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a><a target="_blank" rel="noopener" href="https://git-scm.com/">Git</a></h1><ol>
-<li><p>廖雪峰的官方网站之 <a target="_blank" rel="noopener" href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000">Git教程</a></p>
-</li>
-<li><p>git@osc 官方推荐的 <a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2">ProGit</a>（中文版）</p>
-<p> 首先推荐！其中对于 Git 的工作原理、工作特性的讲解是很到位的，恰到好处，既不深入以免让读者陷入原理的泥潭，毕竟大多只是把 Git 当做一种工具在用，但对于掌握 Git 的操作又非常有价值。如果熟悉一些 Git 的日常操作，想进一步理解 Git 的工作原理，推荐重点章节 1.3 Git 基础、2.2 记录每次更新到仓库的图2-1、3.1 何谓分支、3.2 分支的新建与合并【后续待定……因为暂时只看到这里】</p>
-</li>
+          <p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%80%9A%E7%94%A8%E5%94%AF%E4%B8%80%E8%AF%86%E5%88%AB%E7%A0%81">通用唯一识别码</a>（英语：Universally Unique Identifier，简称 UUID）的标准型式包含 32 个 16 进制数字，以连字号分为五段，形式为 8-4-4-4-12 的 32 个字符。示例：</p>
+<pre><code>550e8400-e29b-41d4-a716-446655440000</code></pre>
+<p>接下来重点描述在开发中的使用及应用。</p>
+<h1 id="在-C-中的使用"><a href="#在-C-中的使用" class="headerlink" title="在 C++ 中的使用"></a>在 C++ 中的使用</h1><p>C++ 原生（C++03、C++11/0x）并不支持 UUID。所以要想在 C++ 代码中生成 UUID，如果要求跨平台推荐使用第三方库 Boost UUID，要么结合各自的平台，使用系统 API。以下方法整理自互联网，除 Boost Uuid 和 libuuid 使用过之外，其他的未亲自试验。</p>
+<h2 id="UUID-generation-using-Boost-in-C"><a href="#UUID-generation-using-Boost-in-C" class="headerlink" title="UUID generation using Boost in C++"></a>UUID generation using Boost in C++</h2><p>在 StackOverflow 上的一个例子：<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/3247861/example-of-uuid-generation-using-boost-in-c/3248017">跳转链接</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/uuid/uuid.hpp&gt;            // uuid class</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/uuid/uuid_generators.hpp&gt; // generators</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/uuid/uuid_io.hpp&gt;         // streaming operators etc.</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    boost::uuids::random_generator generator;</span><br><span class="line"></span><br><span class="line">    boost::uuids::uuid uuid1 = generator();</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; uuid1 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    boost::uuids::uuid uuid2 = generator();</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; uuid2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果以上例子满足不了你的需求，需要在更复杂的情景下使用，请移步 <a target="_blank" rel="noopener" href="http://www.boost.org/doc/libs/1_60_0/libs/uuid/uuid.html">Boost Uuid 官方文档</a>。</p>
+<h2 id="Qt-QUuid"><a href="#Qt-QUuid" class="headerlink" title="Qt QUuid"></a>Qt QUuid</h2><p><a target="_blank" rel="noopener" href="http://blog.csdn.net/yasi_xi/article/details/9297565">参考来源</a></p>
+<p>Qt 是一个跨平台的 C++ 编程框架，<code>QUuid</code> 类实现了 UUID 的生成、比较、转换等功能。</p>
+<p>函数 <code>QUuid createUuid()</code>，可用于生成 UUID。示例如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QUuid&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QString&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QUuid uuid = QUuid::createUuid();</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; qPrintable(uuid.toString()) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Linux-下生成-UUID"><a href="#Linux-下生成-UUID" class="headerlink" title="Linux 下生成 UUID"></a>Linux 下生成 UUID</h2><h3 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h3><p>Unix/Linux 环境中大都有一个名为 uuidgen 的小工具，运行即可生成一个 UUID 到标准输出。读取文件 <code>/proc/sys/kernel/random/uuid</code> 即得UUID，例如：</p>
+<pre><code>cat /proc/sys/kernel/random/uuid</code></pre>
+<h3 id="libuuid"><a href="#libuuid" class="headerlink" title="libuuid"></a>libuuid</h3><p><a target="_blank" rel="noopener" href="http://blog.csdn.net/yasi_xi/article/details/9297565">参考来源</a></p>
+<p>libuuid 是一个用于生成 UUID 的 C 库，具体用法参考 <a href="">http://linux.die.net/man/3/libuuid</a>，示例如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;uuid/uuid.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">uuid_t</span> uuid;</span><br><span class="line">    <span class="keyword">char</span> str[<span class="number">36</span>];</span><br><span class="line"></span><br><span class="line">    uuid_generate(uuid);</span><br><span class="line">    uuid_unparse(uuid, str);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, str);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 Linux 下编译时需要链接 uuid 库</p>
+<pre><code>gcc -o uuid uuid.c -luuid</code></pre>
+<p><strong>问题： 在什么系统下自带？在什么系统中需要另行安装？</strong></p>
+<p>在 Ubuntu 中，可以用下面的命令安装 libuuid：</p>
+<pre><code>sudo apt-get install uuid-dev</code></pre>
+<h2 id="Windows-下生成-UUID"><a href="#Windows-下生成-UUID" class="headerlink" title="Windows 下生成 UUID"></a>Windows 下生成 UUID</h2><h3 id="CoCreateGuid"><a href="#CoCreateGuid" class="headerlink" title="CoCreateGuid"></a>CoCreateGuid</h3><p><a target="_blank" rel="noopener" href="http://blog.csdn.net/yasi_xi/article/details/9297565">参考来源</a></p>
+<p>Windows 下提供了函数 <code>CoCreateGuid</code> 用于生成 GUID。需要使用的头文件是 <code>#include &lt;objbase.h&gt;</code>，需要链接的库是 <code>ole32.lib</code>，函数原型为：<code>HRESULT CoCreateGuid(GUID *pguid);</code> ，GUID 的原型为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">GUID</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    DWORD Data1;</span><br><span class="line">    WORD Data2;</span><br><span class="line">    WORD Data3;</span><br><span class="line">    BYTE Data4[<span class="number">8</span>];</span><br><span class="line">&#125; GUID;</span><br></pre></td></tr></table></figure>
+<h3 id="UuidCreate"><a href="#UuidCreate" class="headerlink" title="UuidCreate"></a>UuidCreate</h3><p><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/24365331/how-can-i-generate-uuid-in-c-without-using-boost-library">参考来源</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(lib, <span class="meta-string">&quot;rpcrt4.lib&quot;</span>)  <span class="comment">// UuidCreate - Minimum supported OS Win 2000</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    UUID uuid;</span><br><span class="line">    UuidCreate(&amp;uuid);</span><br><span class="line">    <span class="keyword">char</span> *str;</span><br><span class="line">    UuidToStringA(&amp;uuid, (RPC_CSTR*)&amp;str);</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;str&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    RpcStringFreeA((RPC_CSTR*)&amp;str);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="在-Java-中使用"><a href="#在-Java-中使用" class="headerlink" title="在 Java 中使用"></a>在 Java 中使用</h1><p>工作中偶尔会写一些 Java 的项目，所以也捎带整理一下。</p>
+<h1 id="在-MySQL-中"><a href="#在-MySQL-中" class="headerlink" title="在 MySQL 中"></a>在 MySQL 中</h1><p>MySQL 本身是带有生成 uuid 功能的。也就是我们惯用的整数递增作为主键，其实是可以用 uuid 替代的。可以在一条记录插入之前写触发器，调用 <code>UUID()</code> 函数生成 uuid。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/07/04/socket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/07/04/socket/" class="post-title-link" itemprop="url">socket 编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-07-04 16:54:05" itemprop="dateCreated datePublished" datetime="2017-07-04T16:54:05+08:00">2017-07-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>C/C++ 的 socket 编程。开篇</p>
+<ol>
+<li>socket 编程貌似是从 *nix 到的 windows？</li>
+<li>socket 编程源于 C，但 C++ 似乎并没有原生的支持，依旧是 C 语言下的 socket 编程？</li>
+<li>C++ 的网络编程，包含哪些具体的内容？单单是 socket 吗？ socket 编程不应该是更接近 C 语言吗？</li>
+<li></li>
 </ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/03/27/VersionControl/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/26/OverGFW/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/03/26/OverGFW/" class="post-title-link" itemprop="url">翻越“伟大的”墙</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-03-26 11:52:42" itemprop="dateCreated datePublished" datetime="2017-03-26T11:52:42+08:00">2017-03-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>用过哪些梯子？XX-Net、Shadowsocks、eg.</p>
-<h1 id="XX-Net"><a href="#XX-Net" class="headerlink" title="XX-Net"></a>XX-Net</h1><p>2016年1月14日 16:43:12</p>
-<p>下午花了一个小时左右的时间，重新搭梯子。翻墙成功，很开心。</p>
-<p>最开始是因为搭建 Android 开发环境，在线下载更新 Android 版本时，老是失败，前后花费了一周的时间。气急败坏地很是不爽政府为什么要屏蔽谷歌。另外，平时搜索技术性的疑难杂症，百度真心水的一般，谷歌却永远在墙的另一边。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/03/26/OverGFW/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/26/SomeMemosAboutWindows/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/03/26/SomeMemosAboutWindows/" class="post-title-link" itemprop="url">事关 Windows 使用的零散备忘</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-03-26 11:16:36" itemprop="dateCreated datePublished" datetime="2017-03-26T11:16:36+08:00">2017-03-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/windows/" itemprop="url" rel="index"><span itemprop="name">windows</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Linux-On-Windows"><a href="#Linux-On-Windows" class="headerlink" title="Linux On Windows"></a>Linux On Windows</h1><p>2016/1/28 18:23:05</p>
-<p>我知道标题这么表述是错误的，但要表达意思“在windows操作系统上使用linux特性、linux上的工具”是足够了的。列几个接触到工具：</p>
-<ul>
-<li><p>MinTTY</p>
-</li>
-<li><p>MSYS</p>
-</li>
-<li><p>Cygwin</p>
+<p>socket 编程，入门学习非常推荐吴秦的 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/skynet/archive/2010/12/12/1903949.html">Linux Socket编程（不限Linux）</a>。当做学习 socket 编程的第一篇完全足够，甩开网上其他的帖子一万八千里，强烈推荐。本意是整理 socket 的学习笔记，但有上述帖子完全足够，在此只记录一些“边边角角”的零碎知识。</p>
+<p>手册推荐：<a target="_blank" rel="noopener" href="http://beej.us/guide/bgnet/output/html/multipage/index.html">Beej’s Guide to Network Programming</a></p>
+<h1 id="htonl-函数、htons-函数"><a href="#htonl-函数、htons-函数" class="headerlink" title="htonl() 函数、htons() 函数"></a><code>htonl()</code> 函数、<code>htons()</code> 函数</h1><p>在吴秦的博客里重点强调了主机字节序（host byte order）与网络字节序（network byte order）的，上述两个函数就是用来实现两者之间的转换的。参考 <a target="_blank" rel="noopener" href="http://beej.us/guide/bgnet/output/html/multipage/htonsman.html">Beej’s Guide to Network Programming</a> 我们能够找到以下函数原型：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">uint32_t</span> <span class="title">htonl</span><span class="params">(<span class="keyword">uint32_t</span> hostlong)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">uint16_t</span> <span class="title">htons</span><span class="params">(<span class="keyword">uint16_t</span> hostshort)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">uint32_t</span> <span class="title">ntohl</span><span class="params">(<span class="keyword">uint32_t</span> netlong)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">uint16_t</span> <span class="title">ntohs</span><span class="params">(<span class="keyword">uint16_t</span> netshort)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>不需要死记硬背，函数的命名通俗易懂。强调一下，转换 ip 地址使用长整型转换函数，转换 port 使用短整型转换函数。我在码代码学习时，误用 <code>htonl(6666)；</code> 转换端口编译通过，运行时也不报错，启动多个服务程序也不报错 ps 正常情况重复启动服务程序时会报错“端口已经占用”。</p>
+<h2 id="INADDR-ANY-宏"><a href="#INADDR-ANY-宏" class="headerlink" title="INADDR_ANY 宏"></a><code>INADDR_ANY</code> 宏</h2><p>详细解释参考 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/16508685/understanding-inaddr-any-for-socket-programming-c">understanding INADDR_ANY for socket programming - c</a>。在此只强调一点，<code>INADDR_ANY</code> 表示的是一个服务器上所有的网卡。</p>
+<h1 id="inet-pton-函数"><a href="#inet-pton-函数" class="headerlink" title="inet_pton() 函数"></a><code>inet_pton()</code> 函数</h1><p>IP地址转换函数，可以在将 IP 地址在“点分十进制”和“二进制整数”之间转换。在 <a target="_blank" rel="noopener" href="http://beej.us/guide/bgnet/output/html/multipage/inet_ntopman.html">Beej’s Guide to Network Programming</a> 我们找到的描述以及函数原型：</p>
 <blockquote>
-<p>2016/3/14 19:30:31 cygwin 这种各方迁就的环境，能不用就不用。想要 *inux特性，直接用虚拟机装 Linux，没必要接触这种折中的方案。</p>
+<p>Convert IP addresses to human-readable form and back.</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">char</span> *<span class="title">inet_ntop</span><span class="params">(<span class="keyword">int</span> af, <span class="keyword">const</span> <span class="keyword">void</span> *src,</span></span></span><br><span class="line"><span class="function"><span class="params">                      <span class="keyword">char</span> *dst, <span class="keyword">socklen_t</span> size)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">inet_pton</span><span class="params">(<span class="keyword">int</span> af, <span class="keyword">const</span> <span class="keyword">char</span> *src, <span class="keyword">void</span> *dst)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>强调一点，<code>inet_pton()</code> 同样支持 “localhost”。</p>
+<h1 id="inet-addr-函数"><a href="#inet-addr-函数" class="headerlink" title="inet_addr() 函数"></a><del><code>inet_addr()</code> 函数</del></h1><blockquote>
+<p>Convert IP addresses from a dots-and-number string to a <code>struct in_addr</code> and back</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ALL THESE ARE DEPRECATED!  Use inet_pton()  or inet_ntop() instead!!</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">inet_ntoa</span><span class="params">(struct in_addr in)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">inet_aton</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *cp, struct in_addr *inp)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">in_addr_t</span> <span class="title">inet_addr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *cp)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到其中的注释，这三个函数即将淘汰。</p>
+<h1 id="学习-libevent"><a href="#学习-libevent" class="headerlink" title="学习 libevent"></a>学习 libevent</h1><h2 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h2><ol>
+<li><p><code>select()</code> 函数第一个参数为什么要 <code>maxfd+1</code>？不理解 <a target="_blank" rel="noopener" href="http://www.wangafu.net/~nickm/libevent-book/01_intro.html">官方手册</a> 中讲述 <code>select()</code> 低效的这段话：</p>
+<blockquote>
+<p>On the userspace side, …But on the kernel side,…</p>
 </blockquote>
 </li>
-</ul>
-<p>2016/3/19 18:21:58 实践证明，在Windows上安装虚拟机跑Linux是更好的选择。</p>
+<li><p>为什么在 Example: select()-based ROT13 server 中需要 <code>make_nonblocking()</code> ？为什么 Example: A low-level ROT13 server with Libevent 中需要 <code>evutil_make_socket_nonblocking()</code>？</p>
+</li>
+<li><p><code>setvbuf(stdout, NULL, _IONBF, 0);</code> 的意义？</p>
+</li>
+</ol>
+<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><p>最初步的认识，最简单的例子：<a target="_blank" rel="noopener" href="http://hahaya.github.io/hello-in-libevent/">使用libevent输出Hello</a></p>
+<blockquote>
+<p>（niel）这里只提到了 <code>strcut event_base</code>、<code>struct event</code>。给出的简单示例代码里，有一处瑕疵： <code>event_base_set()</code> 函数属于过时的函数，在 2.0 之前的版本中配合 <code>event_set()</code> 使用，在 2.0 及其之后的版本中这两者被  <code>event_new()</code> 替代，所以作者混用 <code>event_new()</code> + <code>event_base_set()</code> 表明了作者并未多花时间学习。</p>
+</blockquote>
+<p>接下来，我们可以学习一下：<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_9db214690101cet0.html">libevent入门教程：Echo Server based on libevent </a></p>
+<blockquote>
+<p>（niel）这篇博客循序渐进，讲到了 <code>strcut buffevent</code> 及其相关操作。美中不足的是作者在介绍过程中穿插记录了自己的疑惑，新手读起来打破了学习的连贯性，本就在学习新知识，却也要困于作者的“泥潭”。只能说这真的只是作者的学习笔记，并未从读者的角度做考虑。总的来说，帖子很不错！初次学习时，这些问题的存在让人很难受，影响学习进度、学习动力；但熟悉作者讲的知识之后，这些问题反而才是“金子”，认真思考这些问题。</p>
+</blockquote>
+<p>接下来推荐的学习资源就是官方手册了：<a target="_blank" rel="noopener" href="http://www.wangafu.net/~nickm/libevent-book/">Programming with Libevent</a></p>
+<blockquote>
+<p>（niel）虽然是用英文写的，但阅读起来毫无障碍，很容易理解。marks  C0、C1、R0 ~ R4、R8 认真阅读；R5、R6 重点关注了小部分函数，其余走马观花浏览了一下；R6a、R7、R9 三节没有看。开发过程中，查阅函数原型肯定是得翻这个手册的！</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000005594871">Libevent 官方文档学习笔记</a>，这篇帖子可以看一看，和自己读英文手册理解的相互佐证。</p>
+<p><a target="_blank" rel="noopener" href="https://taozj.org/201605/learn-note-of-libevent-(1)-basic-usage.html">Libevent学习笔记（一）：基本使用</a>，检验自己的学习成果。</p>
+<blockquote>
+<p>总的来说，后面这两篇帖子并不适合用来学习。更多的定位于作者知识的整理，并不是面向新手的入门介绍。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/27/automake2nd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/27/automake2nd/" class="post-title-link" itemprop="url">Automake 之 Flat 目录机构</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-27 16:45:13" itemprop="dateCreated datePublished" datetime="2017-04-27T16:45:13+08:00">2017-04-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2015年12月24日 19:01:26</p>
+<p>这个其实是个子篇。整体见 <a href="/2017/04/27/automake1st/">Makefile 自动生成</a></p>
+<p>在进入正文之前先通过下图对操作步骤及其中的依赖关系有个大致的概念，理解起来更容易：</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/automake1st/1.png" alt="流程图"></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2017/03/26/SomeMemosAboutWindows/#more" rel="contents">
+              <a class="btn" href="/2017/04/27/automake2nd/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -630,7 +686,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/21/unicodeInWindows/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/27/automake1st/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -644,7 +700,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/03/21/unicodeInWindows/" class="post-title-link" itemprop="url">使用 Unicode 字符集，慎用中文</a>
+            <a href="/2017/04/27/automake1st/" class="post-title-link" itemprop="url">Makefile 自动生成 - 三种目录结构</a>
         </h2>
 
         <div class="post-meta">
@@ -654,14 +710,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-03-21 16:40:57" itemprop="dateCreated datePublished" datetime="2017-03-21T16:40:57+08:00">2017-03-21</time>
+              <time title="创建时间：2017-04-27 16:45:04" itemprop="dateCreated datePublished" datetime="2017-04-27T16:45:04+08:00">2017-04-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -669,7 +725,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/windows/" itemprop="url" rel="index"><span itemprop="name">windows</span></a>
+                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
                 </span>
             </span>
 
@@ -684,272 +740,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>2015年10月29日 17:54:48</p>
-<h1 id="问题一：输出异常"><a href="#问题一：输出异常" class="headerlink" title="问题一：输出异常"></a>问题一：输出异常</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;tchar.h&gt;</span></span></span><br><span class="line"><span class="keyword">void</span> _tmain()&#123;</span><br><span class="line">	TCHAR *ch=_T(<span class="string">&quot;china&quot;</span>);</span><br><span class="line">	_tprintf(_T(<span class="string">&quot;%s\n&quot;</span>),ch);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>以上代码在以下 2 种字符集都可以正常输出，显示。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/03/21/unicodeInWindows/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/21/Cross-Platform-Text/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/03/21/Cross-Platform-Text/" class="post-title-link" itemprop="url">跨平台使用文本文件时的陷阱</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-03-21 15:34:42" itemprop="dateCreated datePublished" datetime="2017-03-21T15:34:42+08:00">2017-03-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>问题主要发生于将 windows 下的文本（源代码、脚本等）拷贝到 Linux 平台；反之，因为 windows 的霸道，其开发工具、编辑器会强制转换，所以一般不会产生问题。</p>
+          <p>2015年12月22日 14:48:52</p>
+<p>这个标题《Makefile 自动生成》 8 号立的，拖到今天刚好两周。ps 2017/8/24 14:04:25 删改了 2/3 的内容，改为现在的标题。</p>
+<p>一方面因为最近在忙别的工作，整理数据库表结构的；另一方面，是直到今天，对于自动生成 Makefile 操作依旧懵懵懂懂，在实际项目中无法使用，还是自己手动写 Makefile 文件。下面进入主题。</p>
+<p>Makefile 自动生成，实际项目中接触到的工具有：easymake、cmake 和 autotools。 在这里只整理 autotools。</p>
 <ul>
-<li>gcc 编译报错让我认识到，utf8 格式的文本还分带 BOM 头，不带 BOM 头；</li>
-<li>vim 启动有问题认识到换行、回车到现在还在影响着跨平台；</li>
+<li>easymake 怎么用，给个简单使用的参考，进一步的细节和更深程度上的使用，以后用到了再学。<a target="_blank" rel="noopener" href="http://www.cnblogs.com/Pony279/p/3888774.html">通用的 makefile 小工具分享 - Easymake 使用说明</a>。</li>
+<li>cmake 又是值得大书特书的一款工具。<a target="_blank" rel="noopener" href="http://www.hahack.com/codes/cmake/">CMake 入门实战</a></li>
 </ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/03/21/Cross-Platform-Text/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/20/ln-command/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/03/20/ln-command/" class="post-title-link" itemprop="url">硬链接是别名；软链接关键在于路径</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-03-20 18:10:00" itemprop="dateCreated datePublished" datetime="2017-03-20T18:10:00+08:00">2017-03-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2015年12月1日 20:00:13</p>
-<p>结论在前：如果不使用相对路径，则软链接、硬链接再怎么交叉混用都不会有问题。</p>
-<ul>
-<li>ln 直接创建硬链接到目标目录，和创建到当前目录，再mv到目标目录，效果一致。硬链接就是别名，全场通用。注意其应用限制。</li>
-<li>ln 的软链接关键在于依据路径是否能查找到文件。软链接的关键在于路径。</li>
-<li><strong>cp 操作，总是拷贝原文件到新副本，和链接毫无关联。</strong></li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/03/20/ln-command/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/17/how-to-install-applications-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/03/17/how-to-install-applications-1/" class="post-title-link" itemprop="url">linux 常见的应用安装方式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-03-17 14:51:36" itemprop="dateCreated datePublished" datetime="2017-03-17T14:51:36+08:00">2017-03-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>来自：<a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-24612962-id-3181499.html">http://blog.chinaunix.net/uid-24612962-id-3181499.html</a></p>
-<h1 id="安装包类型"><a href="#安装包类型" class="headerlink" title="安装包类型"></a>安装包类型</h1><p>解析Linux应用软件安装包，通常Linux应用软件的安装包有四种：</p>
+<p>autotools 作为重点学习，所以发现了很多篇不错的帖子。</p>
 <ol>
-<li><strong>tar</strong> 包，如 software-1.2.3-1.tar.gz。它是使用 UNIX 系统的打包工具 tar 打包的。 </li>
-<li><strong>rpm</strong> 包，如 software-1.2.3-1.i386.rpm。它是 Redhat Linux 提供的一种包封装格式。 </li>
-<li><strong>dpkg</strong> 包，如 software-1.2.3-1.deb。它是 Debain Linux 提供的一种包封装格式。 </li>
-<li><strong>bin</strong> 包，如 jdk-1_5_0_05-linux-i586.bin，有些 Linux 软件不公开源代码，只发布二进制可执行程序，这类程序一般会以 bin 来标记。 </li>
+<li><a href="/2017/08/24/autotools/">编译利器：大型项目如何使用Automake和Autoconf完成编译配置(ver+0.6)</a> 内容很棒，却找不到好的排版，将其摘入自己博客</li>
+<li><a target="_blank" rel="noopener" href="http://www.pchou.info/linux/2016/09/16/gnu-build-system-1.html">概念：GNU构建系统和Autotool</a>、<a target="_blank" rel="noopener" href="http://www.pchou.info/linux/2016/09/24/gnu-build-system-2.html">实践：GNU构建系统</a> 作者整理的真心不错，专业功底、语言描述、文章结构都很赞；</li>
+<li><a target="_blank" rel="noopener" href="https://geesun.github.io/posts/2015/02/autotool.html">使用autotools生成Makefile学习笔记</a> 不能当做一篇学习的帖子，其“常用功能分析”一节可以作为参考手册，认清知识点</li>
 </ol>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2017/03/17/how-to-install-applications-1/#more" rel="contents">
+              <a class="btn" href="/2017/04/27/automake1st/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -973,7 +780,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/17/how-to-install-applications/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/26/gxx/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -987,7 +794,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/03/17/how-to-install-applications/" class="post-title-link" itemprop="url">linux 安装应用</a>
+            <a href="/2017/04/26/gxx/" class="post-title-link" itemprop="url">linux 指令之 g++</a>
         </h2>
 
         <div class="post-meta">
@@ -997,7 +804,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-03-17 14:40:26" itemprop="dateCreated datePublished" datetime="2017-03-17T14:40:26+08:00">2017-03-17</time>
+              <time title="创建时间：2017-04-26 14:35:11" itemprop="dateCreated datePublished" datetime="2017-04-26T14:35:11+08:00">2017-04-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -1027,12 +834,289 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>2015年12月31日 17:10:54</p>
-<p>linux distribution 是 Linux 发行版。其实 Linux 是指的系统的内核，不能认为是一个系统。有人在内核的基础上增加一些软件，就成了一个操作系统了。这个系统因为以 Linux 为内核，所有就叫 Linux 发行版。大部分人为了简单，所以把发行版省掉了，实际上没有 Linux 这个操作系统，因为它只是个内核。现在出现 Linux 这一称呼，实际上是 Linux 发行版。这是正规的说法。</p>
-<p><a target="_blank" rel="noopener" href="http://blog.csdn.net/sftxlin/article/details/45722229">学linux，不用必须使用linux的图形界面</a>，这个也是我接触 Debian、SUSE 一两个月之后的想法。为什么在 linux 上必须使用图形界面呢？X-Window 对资源的消耗不比 windows 小，贪图界面为什么不用windows 呢，装 B 吗</p>
+          <p>2015年11月6日 16:57:34</p>
+<p>最全的学习材料当然是 GCC 的官方文档。如果有耐心但是英语不好的话，可以参看一下 <a target="_blank" rel="noopener" href="http://www.shanghai.ws/gnu/gcc_1.htm">这个网站</a>。先说</p>
+<h1 id="gcc-g-执行的四个过程："><a href="#gcc-g-执行的四个过程：" class="headerlink" title="gcc/g++ 执行的四个过程："></a>gcc/g++ 执行的四个过程：</h1><ol>
+<li><p><code>gcc -E</code> 仅作预处理，即只激活预处理，不进行编译、汇编和链接                       <strong>{通常以什么为后缀？}</strong></p>
+<p> <code>$gcc -E main.c -o main.i</code></p>
+</li>
+<li><p><code>gcc -s</code> 编译到汇编语言，不进行汇编和链接，即只激活预处理和编译，生成汇编语言</p>
+<p> <code>$gcc -S main.i -o main.s  #参数-S，大写</code></p>
+</li>
+<li><p><code>gcc -c</code> 编译、汇编到目标代码，不进行链接，即只激活预处理、编译和汇编功能，生成目标文件（.o）</p>
+<p> <code>$gcc -c main.s -o main.o</code></p>
+</li>
+<li><p>生成，到执行文件 （根据依赖关系链接各目标文件，生成最终的执行程序）</p>
+<p> <code>$gcc main.o printf1.o printf2.o -o main</code></p>
+</li>
+</ol>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2017/03/17/how-to-install-applications/#more" rel="contents">
+              <a class="btn" href="/2017/04/26/gxx/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/26/Makefile3rd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/26/Makefile3rd/" class="post-title-link" itemprop="url">Makefile 执行过程 & include 调用方式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-26 11:38:05" itemprop="dateCreated datePublished" datetime="2017-04-26T11:38:05+08:00">2017-04-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2015年12月8日 16:48:31</p>
+<p>此中测试代码见笔记 <a href="/2016/09/18/Makefile1st/">《Makefile入门》</a></p>
+<h1 id="Makefile-之执行过程"><a href="#Makefile-之执行过程" class="headerlink" title="Makefile 之执行过程"></a>Makefile 之执行过程</h1><ol>
+<li>依次读取变量“MAKEFILES”定义的 makefile 文件列表 </li>
+<li>读取工作目录下的 makefile 文件（根据命名的查找顺序“GNUmakefile”，“makefile”，“Makefile”，首先找到那个就读取那个） </li>
+<li>依次读取工作目录 makefile 文件中使用指示符“include”包含的文件 </li>
+<li><em>查找重建所有已读取的 makefile 文件的规则（如果存在一个目标是当前读取的某一个 makefile 文件，则<strong>执行此规则重建此 makefile 文件</strong>，完成以后从第一步开始重新执行）</em> </li>
+<li>初始化变量值并展开那些需要立即展开的变量和函数并根据预设条件确定执行分支 </li>
+<li>根据“终极目标”以及其他目标的依赖关系建立依赖关系链表 </li>
+<li>执行除“终极目标”以外的所有的目标的规则（规则中如果依赖文件中任一个文件的时间戳比目标文件新，则使用规则所定义的命令重建目标文件） </li>
+<li>执行“终极目标”所在的规则</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/04/26/Makefile3rd/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/25/shell-sub1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/25/shell-sub1/" class="post-title-link" itemprop="url">shell 及环境变量 -1.4 其他</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-25 16:31:37" itemprop="dateCreated datePublished" datetime="2017-04-25T16:31:37+08:00">2017-04-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2016年1月4日 10:05:04</p>
+<h1 id="shell-及环境变量-1-4-其他"><a href="#shell-及环境变量-1-4-其他" class="headerlink" title="shell 及环境变量 -1.4 其他"></a><a href="/2017/04/24/shell/">shell 及环境变量</a> -1.4 其他</h1><h2 id="参数置换"><a href="#参数置换" class="headerlink" title="参数置换"></a>参数置换</h2><p>shell提供了参数置换能力以便用户可以根据不同的条件来给变量赋不同的值。参数置换的变量有四种，这些变量通常与某一个位置参数相联系，根据指定的位置参数是否已经设置类决定变量的取值，它们的语法和功能分别如下。</p>
+<ul>
+<li><code>变量=$&#123;参数-word&#125;</code>：如果设置了参数，则用参数的值置换变量的值，否则用 word 置换。即这种变量的值等于某一个参数的值，如果该参数没有设置，则变量就等于 word 的值。</li>
+<li><code>变量=$&#123;参数=word&#125;</code>：如果设置了参数，则用参数的值置换变量的值，否则把变量设置成 word 然后再用 word 替换参数的值。注意，位置参数不能用于这种方式，因为在 shell 程序中不能为位置参数赋值。</li>
+<li><code>变量=$&#123;参数?word&#125;</code>：如果设置了参数，则用参数的值置换变量的值，否则就显示 word 并从 shell 中退出，如果省略了 word，则显示标准信息。这种变量要求一定等于某一个参数的值，如果该参数没有设置，就显示一个信息，然后退出，因此这种方式常用于出错指示。</li>
+<li><code>变量=$&#123;参数+word&#125;</code>：如果设置了参数，则用 word 置换变量，否则不进行置换。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/04/25/shell-sub1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/24/shell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/24/shell/" class="post-title-link" itemprop="url">shell 及 环境变量</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-24 09:25:47" itemprop="dateCreated datePublished" datetime="2017-04-24T09:25:47+08:00">2017-04-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2016/3/16 12:17:18</p>
+<p>汇总 3 篇。此处 shell 指工具，不涉及 shell 编程、脚本等知识。</p>
+<h1 id="shell-和简单操作"><a href="#shell-和简单操作" class="headerlink" title="shell 和简单操作"></a>shell 和简单操作</h1><h2 id="shell-简介"><a href="#shell-简介" class="headerlink" title="shell 简介"></a>shell 简介</h2><p><a target="_blank" rel="noopener" href="http://book.51cto.com/art/201107/277600.htm">Shell 是什么呢？</a> 确切地说，Shell 就是一个命令行解释器，它的作用就是遵循一定的语法将输入的命令加以解释并传给操作系统内核，它为用户提供了一个向 Linux 发送请求以便运行程序的接口，用户可以用 Shell 来启动、挂起、停止甚至是编写一些程序。</p>
+<p><a target="_blank" rel="noopener" href="http://book.51cto.com/art/201107/277601.htm">Linux Shell的种类</a> 很多，目前流行的 Shell 包括 ash、bash、ksh、csh、zsh 等，用户可以通过查看 /etc/shells 文件中的内容来查看自己主机中当前有哪些种类的 Shell。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/04/24/shell/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1055,7 +1139,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1123,20 +1207,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1171,7 +1255,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

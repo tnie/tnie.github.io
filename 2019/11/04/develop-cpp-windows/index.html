@@ -20,18 +20,24 @@
     var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="如题，在此做一份备忘，记录在 Windows 下进行 C++ 开发用到的工具、插件及其意义。 当然多少会涉及到如何安装、配置这些工具，但不会多做介绍。  Visual Studio，越新越好，但都有历史包袱 Visual AssistX 破解费时费力，还有兼容问题。非重度用户，可探索 visual studio IDE 自身 spdlog 通过 vcpkg 使用 vcpkg vld  Visual">
+  <meta name="description" content="如题，在此做一份备忘，记录在 Windows 下进行 C++ 开发用到的工具、插件及其意义。 当然多少会涉及到如何安装、配置这些工具，但不会多做介绍。  Visual Studio，越新越好，但都有历史包袱 Visual AssistX 破解费时费力，还有兼容问题。非重度用户，可探索 visual studio IDE 自身 vcpkg 包管理器 spdlog 通过 vcpkg 安装 vld, V">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在 Windows 下开发 C++ 程序">
 <meta property="og:url" content="https://tnie.github.io/2019/11/04/develop-cpp-windows/index.html">
 <meta property="og:site_name" content="不积小流，无以成江海">
-<meta property="og:description" content="如题，在此做一份备忘，记录在 Windows 下进行 C++ 开发用到的工具、插件及其意义。 当然多少会涉及到如何安装、配置这些工具，但不会多做介绍。  Visual Studio，越新越好，但都有历史包袱 Visual AssistX 破解费时费力，还有兼容问题。非重度用户，可探索 visual studio IDE 自身 spdlog 通过 vcpkg 使用 vcpkg vld  Visual">
+<meta property="og:description" content="如题，在此做一份备忘，记录在 Windows 下进行 C++ 开发用到的工具、插件及其意义。 当然多少会涉及到如何安装、配置这些工具，但不会多做介绍。  Visual Studio，越新越好，但都有历史包袱 Visual AssistX 破解费时费力，还有兼容问题。非重度用户，可探索 visual studio IDE 自身 vcpkg 包管理器 spdlog 通过 vcpkg 安装 vld, V">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/43124169-e83ae890-8f58-11e8-9c66-726a09766f7d.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/20201225152924.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/20201225153054.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/20201225153121.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/20201225153203.png">
 <meta property="article:published_time" content="2019-11-04T07:51:10.000Z">
-<meta property="article:modified_time" content="2021-01-18T05:30:33.377Z">
+<meta property="article:modified_time" content="2023-05-20T04:21:13.591Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta property="article:tag" content="cpp">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/43124169-e83ae890-8f58-11e8-9c66-726a09766f7d.png">
 
 <link rel="canonical" href="https://tnie.github.io/2019/11/04/develop-cpp-windows/">
 
@@ -230,7 +236,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
 
           
@@ -249,20 +255,27 @@
 <ol>
 <li>Visual Studio，越新越好，但都有历史包袱</li>
 <li><del>Visual AssistX</del> 破解费时费力，还有兼容问题。非重度用户，可探索 visual studio IDE 自身</li>
-<li><del>spdlog</del> 通过 vcpkg 使用</li>
-<li>vcpkg</li>
-<li>vld</li>
+<li><a href="https://tnie.github.io/2018/12/10/vcpkg/">vcpkg 包管理器</a></li>
+<li>spdlog 通过 vcpkg 安装</li>
+<li>vld, <a target="_blank" rel="noopener" href="https://kinddragon.github.io/vld/">Visual Leak Detector</a></li>
+<li>不使用制表符，转换为 4 个空格。配置 IDE 实现。</li>
 </ol>
 <p>Visual Studio2015 IDE 中需要安装的插件（vc2017 中可能已经内嵌了某些插件的功能）</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.TrailingWhitespaceVisualizer">Trailing Whitespace Visualizer</a></li>
 <li><a target="_blank" rel="noopener" href="https://github.com/tcbhat/cpptripleslash">cpptripleslash</a></li>
 <li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=VisualStudioPlatformTeam.ProductivityPowerTools2015">Productivity Power Tools 2015</a></li>
-<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=mreu.ProtobufLanguageService">Protobuf Language Service</a></li>
 </ul>
 <a id="more"></a>
 
-<h3 id="“监视”窗口中的格式说明符"><a href="#“监视”窗口中的格式说明符" class="headerlink" title="“监视”窗口中的格式说明符"></a><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/visualstudio/debugger/format-specifiers-in-cpp?view=vs-2017">“监视”窗口中的格式说明符</a></h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>* a = <span class="string">&quot;你好&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span>* a1 = <span class="string">&quot;Hello, world&quot;</span>;</span><br><span class="line">    <span class="built_in">string</span> b = <span class="string">u8&quot;你好&quot;</span>;</span><br><span class="line">    <span class="keyword">auto</span> c = <span class="string">u&quot;你好&quot;</span>; <span class="comment">// char16_t*</span></span><br><span class="line">    <span class="keyword">auto</span> d = <span class="string">U&quot;你好&quot;</span>; <span class="comment">// char32_t*</span></span><br><span class="line">    <span class="keyword">auto</span> e = <span class="number">68</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; a &lt;&lt; b &lt;&lt; c &lt;&lt; d &lt;&lt; e &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="如何用好"><a href="#如何用好" class="headerlink" title="如何用好"></a>如何用好</h1><h2 id="跨平台"><a href="#跨平台" class="headerlink" title="跨平台"></a>跨平台</h2><p>在 visual studio 开发 c++ 程序时，编写代码的规范：</p>
+<ul>
+<li>文件编码在 utf-8 和 utf-8-bom 中二选一</li>
+<li>回车统一使用 Unix(LF) 格式</li>
+</ul>
+<p>protoc.exe 生成的源文件是: 两个空格 + utf-8 + Unix(LF)</p>
+<h2 id="“监视”窗口中的格式说明符"><a href="#“监视”窗口中的格式说明符" class="headerlink" title="“监视”窗口中的格式说明符"></a>“监视”窗口中的格式说明符</h2><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/visualstudio/debugger/format-specifiers-in-cpp?view=vs-2017">“监视”窗口中的格式说明符</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>* a = <span class="string">&quot;你好&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span>* a1 = <span class="string">&quot;Hello, world&quot;</span>;</span><br><span class="line">    <span class="built_in">string</span> b = <span class="string">u8&quot;你好&quot;</span>;</span><br><span class="line">    <span class="keyword">auto</span> c = <span class="string">u&quot;你好&quot;</span>; <span class="comment">// char16_t*</span></span><br><span class="line">    <span class="keyword">auto</span> d = <span class="string">U&quot;你好&quot;</span>; <span class="comment">// char32_t*</span></span><br><span class="line">    <span class="keyword">auto</span> e = <span class="number">68</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; a &lt;&lt; b &lt;&lt; c &lt;&lt; d &lt;&lt; e &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>
@@ -302,10 +315,11 @@
 <td>char[15]</td>
 </tr>
 </tbody></table>
-<h3 id="调试多线程应用程序"><a href="#调试多线程应用程序" class="headerlink" title="调试多线程应用程序"></a><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/visualstudio/debugger/debug-multithreaded-applications-in-visual-studio?view=vs-2017">调试多线程应用程序</a></h3><h3 id="预编译头"><a href="#预编译头" class="headerlink" title="预编译头"></a>预编译头</h3><p>优点就是加快编译速度，YDStockProject 每次编译让我崩溃：一方面源于头文件依赖的混乱；另一方面可能就是源于 JUCE、BOOST 等使用大量模板的头文件的编译。</p>
+<h2 id="调试多线程应用程序"><a href="#调试多线程应用程序" class="headerlink" title="调试多线程应用程序"></a>调试多线程应用程序</h2><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/visualstudio/debugger/debug-multithreaded-applications-in-visual-studio?view=vs-2017">调试多线程应用程序</a></p>
+<h2 id="预编译头"><a href="#预编译头" class="headerlink" title="预编译头"></a>预编译头</h2><p>优点就是加快编译速度，YDStockProject 每次编译让我崩溃：一方面源于头文件依赖的混乱；另一方面可能就是源于 JUCE、BOOST 等使用大量模板的头文件的编译。</p>
 <p>学习过程中 get 的点</p>
 <ul>
-<li><p>源文件也可以创建预编译头。按需学习，暂时你无用</p>
+<li><p>源文件也可以创建预编译头。按需学习，暂时无用</p>
 </li>
 <li><p>每个源文件只能 <code>#include</code> 一个预编译头，但同一项目中不同源文件可以 <code>#include</code> 不同的预编译头</p>
 </li>
@@ -317,6 +331,68 @@
 </blockquote>
 </li>
 </ul>
+<h2 id="编译警告"><a href="#编译警告" class="headerlink" title="编译警告"></a>编译警告</h2><p>msvc 哪些编译警告敏感（eg C4566），哪些警告可以忽略？</p>
+<h1 id="避免踩坑"><a href="#避免踩坑" class="headerlink" title="避免踩坑"></a>避免踩坑</h1><p>msvc 宇宙第一的 ide 都有哪些坑？</p>
+<h2 id="不同版本的-stl-不兼容"><a href="#不同版本的-stl-不兼容" class="headerlink" title="不同版本的 stl 不兼容"></a>不同版本的 stl 不兼容</h2><p>谷歌喷 msvc 的 dll</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/43124169-e83ae890-8f58-11e8-9c66-726a09766f7d.png" alt="谷歌喷 msvc 的 dll"></p>
+<h2 id="msvc2015-内嵌的-git-残废"><a href="#msvc2015-内嵌的-git-残废" class="headerlink" title="msvc2015 内嵌的 git 残废"></a>msvc2015 内嵌的 git 残废</h2><p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/20201225152924.png"></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/37818902/diff-between-commits-in-visual-studio-2015-using-git">https://stackoverflow.com/questions/37818902/diff-between-commits-in-visual-studio-2015-using-git</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/coolcooldool/article/details/53815939">https://blog.csdn.net/coolcooldool/article/details/53815939</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.codewrecks.com/blog/index.php/2013/03/19/how-to-configure-diff-and-merge-tool-in-visual-studio-git-tools/">http://www.codewrecks.com/blog/index.php/2013/03/19/how-to-configure-diff-and-merge-tool-in-visual-studio-git-tools/</a></p>
+<h2 id="编译模式与项目属性"><a href="#编译模式与项目属性" class="headerlink" title="编译模式与项目属性"></a>编译模式与项目属性</h2><p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/20201225153054.png"></p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/20201225153121.png"></p>
+<h2 id="node-js8-在-vs2017-中才支持"><a href="#node-js8-在-vs2017-中才支持" class="headerlink" title="node.js8 在 vs2017 中才支持"></a>node.js8 在 vs2017 中才支持</h2><p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/20201225153203.png"></p>
+<h2 id="msvc2015-用旧编译器的库报错“无法解析的外部符号”"><a href="#msvc2015-用旧编译器的库报错“无法解析的外部符号”" class="headerlink" title="msvc2015 用旧编译器的库报错“无法解析的外部符号”"></a>msvc2015 用旧编译器的库报错“无法解析的外部符号”</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/hutianyou123/article/details/76577827">https://blog.csdn.net/hutianyou123/article/details/76577827</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/a/32418900/6728820">https://stackoverflow.com/a/32418900/6728820</a></p>
+<h2 id="不能自由选择-c-标准"><a href="#不能自由选择-c-标准" class="headerlink" title="不能自由选择 c++ 标准"></a>不能自由选择 c++ 标准</h2><h2 id="不能在动态库静态变量或全局变量的析构中-join-线程"><a href="#不能在动态库静态变量或全局变量的析构中-join-线程" class="headerlink" title="不能在动态库静态变量或全局变量的析构中 join() 线程"></a>不能在动态库静态变量或全局变量的析构中 join() 线程</h2><p><a target="_blank" rel="noopener" href="https://github.com/tnie/TestDll/issues/15">https://github.com/tnie/TestDll/issues/15</a></p>
+<h2 id="Windows-的-cmd-和-powershell-表现不一致"><a href="#Windows-的-cmd-和-powershell-表现不一致" class="headerlink" title="Windows 的 cmd 和 powershell 表现不一致"></a>Windows 的 cmd 和 powershell 表现不一致</h2><p>命令路径中存在空格，如何使用？ 注意 引号 <code>&quot;</code> 和 斜杠 <code>\</code> 的相对位置</p>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>cmd 执行结果</th>
+<th>power shell 执行结果</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&quot;C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe&quot; calculator.sln</code></td>
+<td>√</td>
+<td>×</td>
+<td>表达式或语句中包含意外的标记“calculator.sln”。</td>
+</tr>
+<tr>
+<td><code>&quot;C:\Program Files (x86)\MSBuild\14.0\Bin\&quot;MSBuild.exe calculator.sln</code></td>
+<td>√</td>
+<td>×</td>
+<td>表达式或语句中包含意外的标记“MSBuild.exe”。</td>
+</tr>
+<tr>
+<td><code>&quot;C:\Program Files (x86)&quot;\MSBuild\14.0\Bin\MSBuild.exe calculator.sln</code></td>
+<td>√</td>
+<td>×</td>
+<td>表达式或语句中包含意外的标记“\MSBuild\14.0\Bin\MSBuild.exe”。</td>
+</tr>
+<tr>
+<td><code>&quot;C:\Program Files (x86)\&quot;MSBuild\14.0\Bin\MSBuild.exe calculator.sln</code></td>
+<td>√</td>
+<td>×</td>
+<td>表达式或语句中包含意外的标记“MSBuild\14.0\Bin\MSBuild.exe”。</td>
+</tr>
+<tr>
+<td><code>C:\&quot;Program Files (x86)&quot;\MSBuild\14.0\Bin\MSBuild.exe calculator.sln</code></td>
+<td>×</td>
+<td>√</td>
+<td>MSBUILD : error MSB1008: 只能指定一个项目。</td>
+</tr>
+<tr>
+<td><code>C:&quot;\Program Files (x86)&quot;\MSBuild\14.0\Bin\MSBuild.exe calculator.sln</code></td>
+<td>√</td>
+<td>√</td>
+<td>/</td>
+</tr>
+</tbody></table>
+<h2 id="powershell-脚本的文件编码必须为-UTF-8-BOM，带-BOM-啊"><a href="#powershell-脚本的文件编码必须为-UTF-8-BOM，带-BOM-啊" class="headerlink" title="powershell 脚本的文件编码必须为 UTF-8 BOM，带 BOM 啊"></a>powershell 脚本的文件编码必须为 UTF-8 BOM，带 BOM 啊</h2><p>END</p>
 
     </div>
 
@@ -339,8 +415,8 @@
       <i class="fa fa-chevron-left"></i> 调试阿里云 CDN  同步延迟
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/11/04/bom/" rel="next" title="BOM 字节顺序标记">
-      BOM 字节顺序标记 <i class="fa fa-chevron-right"></i>
+    <a href="/2019/11/29/memoryLeak/" rel="next" title="内存泄漏">
+      内存泄漏 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -400,7 +476,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%80%9C%E7%9B%91%E8%A7%86%E2%80%9D%E7%AA%97%E5%8F%A3%E4%B8%AD%E7%9A%84%E6%A0%BC%E5%BC%8F%E8%AF%B4%E6%98%8E%E7%AC%A6"><span class="nav-number">1.</span> <span class="nav-text">“监视”窗口中的格式说明符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">调试多线程应用程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E7%BC%96%E8%AF%91%E5%A4%B4"><span class="nav-number">3.</span> <span class="nav-text">预编译头</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%94%A8%E5%A5%BD"><span class="nav-number">1.</span> <span class="nav-text">如何用好</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%A8%E5%B9%B3%E5%8F%B0"><span class="nav-number">1.1.</span> <span class="nav-text">跨平台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%80%9C%E7%9B%91%E8%A7%86%E2%80%9D%E7%AA%97%E5%8F%A3%E4%B8%AD%E7%9A%84%E6%A0%BC%E5%BC%8F%E8%AF%B4%E6%98%8E%E7%AC%A6"><span class="nav-number">1.2.</span> <span class="nav-text">“监视”窗口中的格式说明符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.3.</span> <span class="nav-text">调试多线程应用程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E7%BC%96%E8%AF%91%E5%A4%B4"><span class="nav-number">1.4.</span> <span class="nav-text">预编译头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E8%AD%A6%E5%91%8A"><span class="nav-number">1.5.</span> <span class="nav-text">编译警告</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E8%B8%A9%E5%9D%91"><span class="nav-number">2.</span> <span class="nav-text">避免踩坑</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E7%89%88%E6%9C%AC%E7%9A%84-stl-%E4%B8%8D%E5%85%BC%E5%AE%B9"><span class="nav-number">2.1.</span> <span class="nav-text">不同版本的 stl 不兼容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#msvc2015-%E5%86%85%E5%B5%8C%E7%9A%84-git-%E6%AE%8B%E5%BA%9F"><span class="nav-number">2.2.</span> <span class="nav-text">msvc2015 内嵌的 git 残废</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%B1%9E%E6%80%A7"><span class="nav-number">2.3.</span> <span class="nav-text">编译模式与项目属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-js8-%E5%9C%A8-vs2017-%E4%B8%AD%E6%89%8D%E6%94%AF%E6%8C%81"><span class="nav-number">2.4.</span> <span class="nav-text">node.js8 在 vs2017 中才支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#msvc2015-%E7%94%A8%E6%97%A7%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E5%BA%93%E6%8A%A5%E9%94%99%E2%80%9C%E6%97%A0%E6%B3%95%E8%A7%A3%E6%9E%90%E7%9A%84%E5%A4%96%E9%83%A8%E7%AC%A6%E5%8F%B7%E2%80%9D"><span class="nav-number">2.5.</span> <span class="nav-text">msvc2015 用旧编译器的库报错“无法解析的外部符号”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E8%83%BD%E8%87%AA%E7%94%B1%E9%80%89%E6%8B%A9-c-%E6%A0%87%E5%87%86"><span class="nav-number">2.6.</span> <span class="nav-text">不能自由选择 c++ 标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E8%83%BD%E5%9C%A8%E5%8A%A8%E6%80%81%E5%BA%93%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F%E6%88%96%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E6%9E%90%E6%9E%84%E4%B8%AD-join-%E7%BA%BF%E7%A8%8B"><span class="nav-number">2.7.</span> <span class="nav-text">不能在动态库静态变量或全局变量的析构中 join() 线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows-%E7%9A%84-cmd-%E5%92%8C-powershell-%E8%A1%A8%E7%8E%B0%E4%B8%8D%E4%B8%80%E8%87%B4"><span class="nav-number">2.8.</span> <span class="nav-text">Windows 的 cmd 和 powershell 表现不一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#powershell-%E8%84%9A%E6%9C%AC%E7%9A%84%E6%96%87%E4%BB%B6%E7%BC%96%E7%A0%81%E5%BF%85%E9%A1%BB%E4%B8%BA-UTF-8-BOM%EF%BC%8C%E5%B8%A6-BOM-%E5%95%8A"><span class="nav-number">2.9.</span> <span class="nav-text">powershell 脚本的文件编码必须为 UTF-8 BOM，带 BOM 啊</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -416,20 +492,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -464,7 +540,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

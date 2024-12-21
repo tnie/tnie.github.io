@@ -196,7 +196,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/11/04/develop-cpp-windows/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/10/21/streamingMediaProtocol/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -210,7 +210,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/11/04/develop-cpp-windows/" class="post-title-link" itemprop="url">在 Windows 下开发 C++ 程序</a>
+            <a href="/2021/10/21/streamingMediaProtocol/" class="post-title-link" itemprop="url">流媒体协议</a>
         </h2>
 
         <div class="post-meta">
@@ -220,15 +220,24 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-11-04 15:51:10" itemprop="dateCreated datePublished" datetime="2019-11-04T15:51:10+08:00">2019-11-04</time>
+              <time title="创建时间：2021-10-21 10:04:22" itemprop="dateCreated datePublished" datetime="2021-10-21T10:04:22+08:00">2021-10-21</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/media/" itemprop="url" rel="index"><span itemprop="name">media</span></a>
+                </span>
+            </span>
 
           
 
@@ -241,378 +250,109 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>如题，在此做一份备忘，记录在 Windows 下进行 C++ 开发用到的工具、插件及其意义。</p>
-<p>当然多少会涉及到如何安装、配置这些工具，但不会多做介绍。</p>
+          <p>音视频领域、流媒体领域涉及的协议，逐步了解。</p>
+<h1 id="GB-T-28181-202n-笔记"><a href="#GB-T-28181-202n-笔记" class="headerlink" title="GB/T 28181-202n 笔记"></a>GB/T 28181-202n 笔记</h1><p>9.1.1 注册和注销 f) 提到了 NAT 穿透的细节</p>
+<p>9.2.2.1 中三方呼叫的概念？</p>
+<p>MESSAGE 消息头 Content-type 头域为 Content-type: Application/MANSCDP+xml； </p>
+<p>9.8 历史音视频的回放，提到 媒体回放控制命令引用 MANSRTSP 协议</p>
+<p>实时音视频点播 &amp; 历史音视频回放，是将所有的历史音视频都存下来了吗？</p>
+<h2 id="SIP-协议"><a href="#SIP-协议" class="headerlink" title="SIP 协议"></a>SIP 协议</h2><p>SIP 会话发起协议（Session Initiation Protocol，缩写SIP），GB28181-2016 中称为“会话初始协议”</p>
+<p>SIP 与许多其它的协议协同工作，仅仅涉及通信会话的信令部分（control message）。SIP 报文内容发送会话描述协议（SDP），SDP 协议描述了会话所使用流媒体细节，如：使用哪个 IP 端口，采用哪种编解码器等等。SIP 的一个典型用途是：SIP “会话”传输一些简单的经过报文的实时传输协议流。RTP 本身才是语音或视频的载体。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/10/21/streamingMediaProtocol/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/09/11/WebRTC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/09/11/WebRTC/" class="post-title-link" itemprop="url">WebRTC 学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-09-11 17:22:12" itemprop="dateCreated datePublished" datetime="2021-09-11T17:22:12+08:00">2021-09-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/media/" itemprop="url" rel="index"><span itemprop="name">media</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>关键任务：open-webrtc-toolkits</p>
+<p>目标：</p>
 <ol>
-<li>Visual Studio，越新越好，但都有历史包袱</li>
-<li><del>Visual AssistX</del> 破解费时费力，还有兼容问题。非重度用户，可探索 visual studio IDE 自身</li>
-<li><del>spdlog</del> 通过 vcpkg 使用</li>
-<li>vcpkg</li>
-<li>vld</li>
+<li>搭建环境，能够简单使用上述工具包：客户端 windows sdk 或 js，部署服务端</li>
+<li>既然是 Intel 推出，是否支持低成本的 x86 架构，其他架构呢？跨平台特性？</li>
+<li>过程中是否需要很多知识点或者工具链，是影响任务进度的关键</li>
 </ol>
-<p>Visual Studio2015 IDE 中需要安装的插件（vc2017 中可能已经内嵌了某些插件的功能）</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.TrailingWhitespaceVisualizer">Trailing Whitespace Visualizer</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/tcbhat/cpptripleslash">cpptripleslash</a></li>
-<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=VisualStudioPlatformTeam.ProductivityPowerTools2015">Productivity Power Tools 2015</a></li>
-<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=mreu.ProtobufLanguageService">Protobuf Language Service</a></li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/04/develop-cpp-windows/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/11/04/debugCDN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/04/debugCDN/" class="post-title-link" itemprop="url">调试阿里云 CDN  同步延迟</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-04 15:49:33" itemprop="dateCreated datePublished" datetime="2019-11-04T15:49:33+08:00">2019-11-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>cdn 节点和源上相同文件的 etag 或 lm 是相同的。</p>
-<h1 id="http-header-response"><a href="#http-header-response" class="headerlink" title="http header response"></a>http header response</h1><p><a target="_blank" rel="noopener" href="https://kb.cnblogs.com/page/92320/">https://kb.cnblogs.com/page/92320/</a></p>
-<p>2019/7/23 14:00:43 请求源 101.200.199.142 cdnapp.ydtg.com.cn</p>
-<p>Date    原始服务器消息发出的时间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Server: nginx</span><br><span class="line">Date: Tue, 23 Jul 2019 06:00:42 GMT</span><br><span class="line">Content-Type: application&#x2F;octet-stream</span><br><span class="line">Content-Length: 1200940</span><br><span class="line">Last-Modified: Tue, 23 Jul 2019 00:58:00 GMT</span><br><span class="line">Connection: keep-alive</span><br><span class="line">ETag: &quot;5d365b98-12532c&quot;</span><br><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Access-Control-Allow-Credentials: true</span><br><span class="line">Accept-Ranges: bytes</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/04/debugCDN/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/11/04/windbg/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/04/windbg/" class="post-title-link" itemprop="url">windbg</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-04 15:47:49" itemprop="dateCreated datePublished" datetime="2019-11-04T15:47:49+08:00">2019-11-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="获取"><a href="#获取" class="headerlink" title="获取"></a>获取</h1><p>看一下 pageheap 针对的是什么问题？ <a target="_blank" rel="noopener" href="https://blog.csdn.net/xiaohyy/article/details/4174493">堆调试工具——pageheap的使用和原理分析</a></p>
-<p>pageheap 和 gflags 什么关系？前者被包含到了后者中。</p>
-<blockquote>
-<p>This version of GFlags includes the functionality of PageHeap (pageheap.exe), a tool that enables heap allocation monitoring in Windows. </p>
-</blockquote>
-<p>如何安装 gflags？安装 WinDbg</p>
-<blockquote>
-<p>GFlags is included in the <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/debugger-download-tools">Debugging Tools for Windows 10 (WinDbg).</a></p>
-</blockquote>
-<p>如何 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/">获取 WinDbg</a>？</p>
-<ul>
-<li><p>在安装过程中，通过 win 10 sdk 的方式（无论是通过 msvc2019 还是直接安装 win10 sdk）都没有成功。</p>
-</li>
-<li><p>最终单独安装的 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-hardware/drivers/download-the-wdk">Windows Driver Kit (WDK)</a></p>
-<blockquote>
-<p>Step 2: Install WDK for Windows 10, version 1903</p>
-</blockquote>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/04/windbg/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/05/07/spdlog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/07/spdlog/" class="post-title-link" itemprop="url">spdlog 日志库</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-05-07 10:31:30" itemprop="dateCreated datePublished" datetime="2019-05-07T10:31:30+08:00">2019-05-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在项目中弃用 glog，改用 <a target="_blank" rel="noopener" href="https://github.com/gabime/spdlog">spdlog</a>。花了三个小时，跟了一遍 example.cpp 中提到 <code>xxx_example()</code>，当底层跳转要进入 fmt 时就不再追踪。</p>
-<h1 id="学习-spdlog-源码"><a href="#学习-spdlog-源码" class="headerlink" title="学习 spdlog 源码"></a>学习 spdlog 源码</h1><ol>
-<li>在单参数构造函数中明确使用 <code>explicit</code> 关键词，避免隐式构造，避免隐式类型转换。</li>
-<li>log.h 存放模板类声明，但在头文件末尾 <code>#include log_impl.h</code>，后者存放模板类的定义</li>
-<li>颜色默认只针对 level 关键词，不同级别预设了不同的色彩。但也可以使用 <code>%^</code> <code>%$</code> 划定收尾。</li>
-<li>线程安全，支持多线程</li>
-<li>注册表工厂模式？</li>
-<li>fmt/spdlog 如何输出和二进制的？<code>spdlog::to_hex</code> 与 fmt 自身的二进制格式化输出有什么不同？ <a target="_blank" rel="noopener" href="http://fmtlib.net/latest/api.html#formatting-user-defined-types">fmt 对自定义类型的支持</a></li>
-<li>spdlog 本身是线程安全的，async_ 定位？</li>
-<li>spdlog 开启 <code>FMT_HEADER_ONLY</code> 预编译宏，使用 fmt</li>
-<li>spdlog 以 head-only 方式使用</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/05/07/spdlog/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/01/05/asio/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/01/05/asio/" class="post-title-link" itemprop="url">asio 网络库</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-01-05 09:38:00" itemprop="dateCreated datePublished" datetime="2019-01-05T09:38:00+08:00">2019-01-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>asio 封装了平台差异性，在 windows 下本质就是 IOCP。</p>
-<h1 id="Overlapped-IO-重叠输入输出"><a href="#Overlapped-IO-重叠输入输出" class="headerlink" title="Overlapped IO 重叠输入输出"></a>Overlapped IO 重叠输入输出</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/xiaoding133/article/details/7775139">异步 I/O 技术(Overlapped I/O)，避免使用多线程</a></p>
+<p>8/19/21 周五，工作计划：</p>
 <ol>
-<li><p>激发的文件 handles / 设备内核对象</p>
-</li>
-<li><p>激发的 event 对象 / 事件内核对象</p>
-<blockquote>
-<p>IOEvent 用的是 Overlapped IO 模型。使用起来也比较简单，仅需要将 fd buf overlapped(event) 这4者绑在一起，由内核完成数据的收发，并通过 event 通知应用层，应用层再进行数据操作已经完成后的操作，不需要多余的内存拷贝，数据已经在指定的 buf 上了。<a target="_blank" rel="noopener" href="https://blog.csdn.net/nightwizard2030/article/details/77602612">C++ SOCKET通信模型（二）IOEvent</a></p>
-</blockquote>
-</li>
-<li><p>异步过程调用 APCs（Asynchronous Procedure Calls）</p>
-</li>
-<li><p>I/O completion ports（重要）适用于高负载服务器</p>
-</li>
+<li>了解 JavaScript 的语法，编写 demo</li>
+<li>执行 OWT 的代码实验室的 js client。失败，案例描述和仓库代码不一致，本地服务器能够访问，但按钮功能异常。</li>
 </ol>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/05/asio/#more" rel="contents">
+              <a class="btn" href="/2021/09/11/WebRTC/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -636,7 +376,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/01/05/protobuf/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/06/11/interface/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -650,7 +390,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/05/protobuf/" class="post-title-link" itemprop="url">protobuf 压缩</a>
+            <a href="/2021/06/11/interface/" class="post-title-link" itemprop="url">C++ 接口形式</a>
         </h2>
 
         <div class="post-meta">
@@ -660,189 +400,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-05 09:35:51" itemprop="dateCreated datePublished" datetime="2019-01-05T09:35:51+08:00">2019-01-05</time>
+              <time title="创建时间：2021-06-11 15:46:03" itemprop="dateCreated datePublished" datetime="2021-06-11T15:46:03+08:00">2021-06-11</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在 github 上我们能找到 protobuf 的 <a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf/releases">最新发布版本</a></p>
-<p>在发布的压缩包中，我们只需要关注 protobuf-cpp-version.zip/tar.gz。有时 protobuf-version-win32.zip 也会让人疑惑，我们到底需不需要这个文件呢？让我们看一下其中的 readme.txt </p>
-<blockquote>
-<p>This package contains a precompiled binary version of the protocol buffer compiler (<code>protoc</code>). This binary is intended for users who want to use Protocol Buffers in <strong>languages other than C++</strong> but <strong>do NOT want to compile protoc</strong> themselves. </p>
-</blockquote>
-<p>简单说，是给 C++ 开发者之外的码农用的。</p>
-<p>但是，If you intend to use the included well known types，我们还是需要下载后者的。毕竟前者中 <code>.proto</code> 原型混杂在了大量的头文件中，而这里的原型文件一目了然。</p>
-<h1 id="二进制"><a href="#二进制" class="headerlink" title="二进制"></a>二进制</h1><p>在解析文件服务器上的历史 k 线时，碰到了比较特殊的问题：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/01/05/protobuf/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/12/10/vcpkg/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/12/10/vcpkg/" class="post-title-link" itemprop="url">vcpkg 包管理器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-12-10 10:04:22" itemprop="dateCreated datePublished" datetime="2018-12-10T10:04:22+08:00">2018-12-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>除特别备注，全部摘自 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/cpp/vcpkg?view=vs-2017">vcpkg: A C++ package manager for Windows, Linux and MacOS</a></p>
-<h1 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h1><p>此章节类似读书（博客）笔记。</p>
-<h2 id="安装库"><a href="#安装库" class="headerlink" title="安装库"></a>安装库</h2><ol>
-<li><p>同时支持动态链接库，以及 <a target="_blank" rel="noopener" href="https://blogs.msdn.microsoft.com/vcblog/2016/11/01/vcpkg-updates-static-linking-is-now-available/">静态链接</a>。Windows 下默认编译 32 位的动态库。</p>
-<blockquote>
-<p> If no triplet is specified, vcpkg will install and compile for <strong>the default triplet</strong> for the target platform: <code>x86-windows</code>, <code>x64-linux.cmake</code>, or <code>x64-osx.cmake</code>.</p>
-</blockquote>
-</li>
-<li><p>MT 和 MD：vcpkg 静态链接库默认 <code>/MT(d)</code>；动态链接库默认 <code>/MD(d)</code></p>
-<blockquote>
-<p>build static libraries against the static CRT (<code>/MT</code> in Visual Studio): <code>x86-windows-static</code>, <code>x64-windows-static</code>, etc.</p>
-</blockquote>
-<p> <a target="_blank" rel="noopener" href="https://github.com/Microsoft/vcpkg/issues/784">Change Compiler settings from MT to MD</a></p>
-<blockquote>
-<p>This should be as easy as copying <code>triplets\x86-windows-static.cmake</code> to a new file of your own name (<code>triplets\x86-windows-static-md.cmake</code>, for example). Then change the setting for <code>VCPKG_CRT_LINKAGE</code> to <code>dynamic</code> instead of <code>static</code>.</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/12/10/vcpkg/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/12/03/streambuf/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/12/03/streambuf/" class="post-title-link" itemprop="url">streambuf</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-12-03 10:05:37" itemprop="dateCreated datePublished" datetime="2018-12-03T10:05:37+08:00">2018-12-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -869,19 +434,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="streambuf"><a href="#streambuf" class="headerlink" title="streambuf"></a>streambuf</h1><p>中文版 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/io/basic_streambuf">https://zh.cppreference.com/w/cpp/io/basic_streambuf</a>，偶有误差，可参考英文版本纠正。</p>
-<p>英文版 <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/io/basic_streambuf">https://en.cppreference.com/w/cpp/io/basic_streambuf</a></p>
-<p>类 basic_streambuf 控制字符序列的输入与输出。它包含下列内容并提供到它们的访问：</p>
-<ol>
-<li><p>受控字符序列（<em>The controlled character sequence</em>），也称作 <em>buffer</em>，可包括：<em>input sequence</em> (also called <em>get area</em>) 用于缓冲输入操作；以及 <em>output sequence</em> (also called <em>put area</em>) 用于缓冲输出操作。</p>
-</li>
-<li><p>关联字符序列，又称作源（对于输入）或池（对于输出）。它可以是通过 OS API 访问的实体（文件、 TCP 接头、串行端口、其他字符设备），或者可以是能转译成字符源或池的对象（ <code>std::vector</code> 、数组、字符串字面量）</p>
-</li>
-</ol>
-<p>受控制序列中的字符表示和编码可以异于关联序列中的字符表示，该情况下典型地用 <code>std::codecvt</code> 本地环境进行转换。常见的例子是通过 <code>std::wfstream</code> 对象访问 UTF-8 （或其他多字节编码）文件：受控制字符序列由 <code>wchar_t</code> 字符组成，但关联序列由字节组成。</p>
+          <p>记录编写 C++ 代码过程中的疑惑、避坑的技巧等</p>
+<h1 id="深入理解-C"><a href="#深入理解-C" class="headerlink" title="深入理解 C++"></a>深入理解 C++</h1><ul>
+<li>引用折叠：<a target="_blank" rel="noopener" href="https://blog.csdn.net/big_yellow_duck/article/details/52433305">Effective Modern C++ 条款28 理解引用折叠</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/value_category">Value categories</a></li>
+</ul>
+<h1 id="模板遇上-DLL-导出"><a href="#模板遇上-DLL-导出" class="headerlink" title="模板遇上 DLL 导出"></a>模板遇上 DLL 导出</h1><p>模板是为了共用代码，使用模板时首先要完成实例化，而实例化要求看到模板的完整定义才可以。所以，如果给用户使用暴露模板，就要暴露模板的实现细节。</p>
+<p>DLL 是为了隐藏实现，只给用户暴露使用的接口，其中的具体实现用户是看不到的，也不需要关心。DLL 包装起来的是类的定义，而不是模板。所以，不存在“导出模板”，如果暴露模板定义给用户，那么用户是应当看到模板所有细节的，直接使用模板实例化（类或者函数）来用即可。</p>
+<p>如果不想暴露具体的实现，只能先实例化成具体的类或函数，然后将类或者函数导出。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/12/03/streambuf/#more" rel="contents">
+              <a class="btn" href="/2021/06/11/interface/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -905,7 +468,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/12/03/cmake/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/05/26/conditionalvariable/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -919,7 +482,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/03/cmake/" class="post-title-link" itemprop="url">cmake 备忘</a>
+            <a href="/2021/05/26/conditionalvariable/" class="post-title-link" itemprop="url">条件变量</a>
         </h2>
 
         <div class="post-meta">
@@ -929,14 +492,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-12-03 09:59:20" itemprop="dateCreated datePublished" datetime="2018-12-03T09:59:20+08:00">2018-12-03</time>
+              <time title="创建时间：2021-05-26 17:26:03" itemprop="dateCreated datePublished" datetime="2021-05-26T17:26:03+08:00">2021-05-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -944,7 +507,11 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
                 </span>
             </span>
 
@@ -959,13 +526,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>automake 系列工具友好性的确不咋地，而且只限于 *inux 平台。跨平台还是 cmake 为佳，也有越来越多的项目在使用 cmake，比如 google 的 gRPC，比如 zlib 也支持 cmake。</p>
-<p>如果只是说要编译三方库为自己所用，一般来说不需要掌握怎么编写 <code>CMakeLists.txt</code>；只有当自己的项目需要用 cmake 管理、组织编译时才需要弄懂 <code>CMakeLists.txt</code> 中的“语言”怎么编写。</p>
-<h1 id="使用-cmake"><a href="#使用-cmake" class="headerlink" title="使用 cmake"></a>使用 cmake</h1><pre><code>mkdir build &amp;&amp; cd build &amp;&amp; cmake .. &amp;&amp; cmake --build . --target install</code></pre>
-<p><code>cmake --build .</code> 在 linux 下等价于 <code>make</code>，在 windows 下等同于 msvc 生成解决方案 </p>
+          <p>这里不讲条件变量 <code>std::conditional_varibale</code> 的具体使用，自行上 cppreference 网站查阅手册。</p>
+<h1 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h1><p><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/thread/condition_variable">std::condition_variable 类型描述</a></p>
+<p>在 pthread 中条件变量的惯用手法是将 <code>wait</code> 放在 <code>while</code> 循环中。在 C++11 之后，常见的书写形式为</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">std</span>::unique_lock&lt;<span class="built_in">std</span>::mutex&gt; <span class="title">lk</span><span class="params">(m)</span></span>;</span><br><span class="line">cv.wait(lk, []&#123;<span class="keyword">return</span> ready;&#125;);</span><br></pre></td></tr></table></figure>
+<p>其完全等价于循环方式，而将 <code>wait</code> 放到循环中，主要是因为虚假唤醒的存在。</p>
+<blockquote>
+<p>此重载可用于在等待特定条件成为 true 时忽略虚假唤醒。</p>
+</blockquote>
+<p>初次之外，还有 <code>wait_for</code> 和 <code>wait_util</code>。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/12/03/cmake/#more" rel="contents">
+              <a class="btn" href="/2021/05/26/conditionalvariable/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -989,7 +561,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/09/06/singleton3/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/05/26/sharedptr/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -1003,7 +575,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/09/06/singleton3/" class="post-title-link" itemprop="url">单例很糟糕？</a>
+            <a href="/2021/05/26/sharedptr/" class="post-title-link" itemprop="url">智能指针</a>
         </h2>
 
         <div class="post-meta">
@@ -1013,14 +585,384 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-09-06 17:28:52" itemprop="dateCreated datePublished" datetime="2018-09-06T17:28:52+08:00">2018-09-06</time>
+              <time title="创建时间：2021-05-26 17:19:03" itemprop="dateCreated datePublished" datetime="2021-05-26T17:19:03+08:00">2021-05-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><code>shared_ptr&lt;void&gt;</code> 神奇不？</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/39288891/why-is-shared-ptrvoid-legal-while-unique-ptrvoid-is-ill-formed">Why is <code>shared_ptr&lt;void&gt;</code> legal, while <code>unique_ptr&lt;void&gt;</code> is ill-formed?</a></p>
+<p>智能指针类型转换时，自定义删除器怎么处理的？释放时执行自定义的删除器！</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/05/26/sharedptr/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/05/26/auto/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/26/auto/" class="post-title-link" itemprop="url">关键字 auto</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-26 16:01:03" itemprop="dateCreated datePublished" datetime="2021-05-26T16:01:03+08:00">2021-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// OK</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> itor = _functionCode.cbegin(); itor != _functionCode.cend(); ++itor)</span><br><span class="line"><span class="comment">// ERR</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> <span class="keyword">const</span> itor = _functionCode.cbegin(); itor != _functionCode.cend(); ++itor)</span><br><span class="line"><span class="comment">// why?</span></span><br></pre></td></tr></table></figure>
+<p><code>auto</code> 能够自动推导常量吗？引用呢？——不能！</p>
+<blockquote>
+<p><code>auto</code> 一般会忽略掉顶层 <code>const</code>，如果希望推导出的 <code>auto </code>类型是一个顶层 <code>const</code>，需要明确指出。P66</p>
+</blockquote>
+<blockquote>
+<p>可以将引用的类型设为 <code>auto</code>，此时原来的初始化规则仍然使用。设置一个类型为 <code>auto </code>的引用时，初始值中的顶层常量属性仍然保留。P66</p>
+</blockquote>
+<p><code>const_iterator</code> 可以读取元素，但不能修改元素的迭代器类型</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/05/26/auto/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/05/26/using/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/26/using/" class="post-title-link" itemprop="url">使用 using</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-26 15:56:38" itemprop="dateCreated datePublished" datetime="2021-05-26T15:56:38+08:00">2021-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>using 指示，第 703 页，两种使用场景：</p>
+<ul>
+<li>using declaration 声明 <code>using std::cout;</code></li>
+<li>using directive 指示 <code>using namespace std;</code></li>
+</ul>
+<blockquote>
+<p><strong>using 指示</strong>（using directive）和 using 声明类似的地方是，我们可以使用命名空间名字的简写形式；和 using 声明不同的地方是，我们无法控制哪些名字是可见的，因为所有名字都是可见的。</p>
+</blockquote>
+<p>后者不能用在类作用域中；前者虽然能用在类作用域中但<strong>只能指向基类成员</strong>。更多知识请进一步学习《C++ Primer》</p>
+<p>75 页明确提到头文件中不应使用 using 声明：</p>
+<blockquote>
+<p>位于头文件的代码一般来说不应该使用 using 声明。这是因为头文件的内容会拷贝到引用它的文件中去，如果头文件有某个 using 声明，那么每个使用了该头文件的文件就都会有这个声明。对应某些程序来说，由于不经意间包含了一些名字，反而可能产生始料未及的<strong>名字冲突</strong>。</p>
+</blockquote>
+<p>702 页提到使用 using 指示也可能造成名字冲突问题：</p>
+<blockquote>
+<p>如果我们提供了一个对 std 等命名空间的 using 指示而未做任何特殊控制的话，将重新引入由于使用了多个库而造成的<strong>名字冲突</strong>问题。</p>
+</blockquote>
+<p>在源文件中使用 using 指示是否能够接受呢？能够节省大量的重复代码，注意规避名字冲突即可——除非源文件引入了较多的三方库，名字冲突并不常见。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/05/26/locale/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/26/locale/" class="post-title-link" itemprop="url">编码转换和 locale</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-26 15:33:38" itemprop="dateCreated datePublished" datetime="2021-05-26T15:33:38+08:00">2021-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>学习 locale 和编码转换过程中的关键以及问题。</p>
+<ul>
+<li>不使用 locale，无法完成编码转换吗？Unicode 自身的 utf-8/16/32 的 <a target="_blank" rel="noopener" href="https://justcheckingonall.wordpress.com/2009/01/05/convert-utf-8-to-wchar_t/">存储方式之间的转换</a> 也不行吗？</li>
+<li>utf-8 对应 <code>char</code>、<code>string</code>；utf-16 对应 <code>wchar_t</code>/<code>wstring</code>，这种理解对吗？所以 <code>boost::locale::conv::to_utf&lt;char&gt;()</code> 就是转 utf-8（而不是 utf-16/32）？<code>boost::locale::conv::to_utf&lt;wchar_t&gt;()</code> 就是转 utf-16 （或 utf-32）？</li>
+<li>本地化策略集 locale 和程序运行有关系吗？ #139 </li>
+<li>C++17 为什么弃用了 <code>&lt;codecvt&gt;</code>？且 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/42946335/deprecated-header-codecvt-replacement">尚无替换方案</a> 吗？</li>
+<li>都有哪些本地化策略可选呢？</li>
+<li>如果统一使用 Unicode 编码（utf-8/16/32 存储方式无所谓），是否就不需要本地化策略 locale了？它是源于上世纪各个国家、地区闭门造车，独自扩展 ANSI 字符集带来的后果吧？</li>
+<li><a target="_blank" rel="noopener" href="https://ryanclouser.com/2016/08/11/C-11-Convert-to-from-UTF-8-wchar-t/">C++11 - Convert to/from UTF-8/wchar_t</a> 里面提到的 UTF8-CPP 和 NoWide 分别是什么？</li>
+</ul>
+<p>没有一致的 locale name o(╥﹏╥)o，windows 编程时<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/42946335/deprecated-header-codecvt-replacement">怎么写</a>？</p>
+<blockquote>
+<p>Locale names are not part of the C++ standard… <a target="_blank" rel="noopener" href="https://justcheckingonall.wordpress.com/2009/01/05/convert-utf-8-to-wchar_t/">引用来源</a></p>
+</blockquote>
+<p>关联问题：</p>
+<ol start="4">
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4324542/what-is-the-windows-equivalent-for-en-us-utf-8-locale">What is the Windows equivalent for en_US.UTF-8 locale?</a></li>
+<li><a target="_blank" rel="noopener" href="https://answers.microsoft.com/en-us/surface/forum/surfbook-surfaccess/how-to-change-system-locale-in-windows-10-the/d7826ef0-13cd-43ea-8e01-2846d813dfed">How to change system locale in Windows 10</a></li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/05/26/locale/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/05/26/pimpl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/26/pimpl/" class="post-title-link" itemprop="url">减少头文件依赖</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-26 15:33:38" itemprop="dateCreated datePublished" datetime="2021-05-26T15:33:38+08:00">2021-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1047,18 +989,98 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>之前专门整理过 C++ 怎么写单例类，平日项目中涉及的场景大多简单，使用最基本的实现就完全能够应付过来。但是，还是有些复杂的场景需要考虑。</p>
-<h1 id="相互引用的单例们"><a href="#相互引用的单例们" class="headerlink" title="相互引用的单例们"></a>相互引用的单例们</h1><p>也就是 singletonA、singletonB 两者的构造相互调用。</p>
+          <p>减少头文件的依赖。</p>
+<h1 id="Pimpl-Idiom"><a href="#Pimpl-Idiom" class="headerlink" title="Pimpl Idiom"></a>Pimpl Idiom</h1><p>《Effective C++》 <a target="_blank" rel="noopener" href="http://www.kuqin.com/language/20080106/3466.html">条款31</a>：将文件间的编译依存关系降至最低</p>
+<p>《Effective Modern C++》 <a target="_blank" rel="noopener" href="https://blog.csdn.net/big_yellow_duck/article/details/52351729">Item 22</a>: When using the Pimpl Idiom, define special member functions in<br>the implementation file. </p>
+<p>在其<strong>单例模式</strong>的基础上，使用 Interface class（<strong>工厂模式</strong>）而非 Handle class（Pimpl Idiom）更合适</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/04/02/coroutine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/02/coroutine/" class="post-title-link" itemprop="url">Coroutine 学习总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-02 10:05:00" itemprop="dateCreated datePublished" datetime="2021-04-02T10:05:00+08:00">2021-04-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考 <a target="_blank" rel="noopener" href="https://github.com/tnie/learn_chrono">tnie/learn_xxx</a> 中 coro 项目。</p>
+<p>如果想看懂 asio 如何支持 <code>co_await</code> 的，想更细致地用好协程，就需要了解更基础（同时也是更复杂的）内容。</p>
+<h1 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h1><p>微软专家 <a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/oldnewthing/20191209-00/?p=103195">C++ coroutines: Getting started with awaitable objects</a> 开篇的陈述，比我的倾向更具说服力：</p>
+<p>Coroutines were added to C++20, and <a target="_blank" rel="noopener" href="https://lewissbaker.github.io/">Lewis Baker</a> has a nice introduction to them.</p>
 <ul>
-<li><p>使用常用的局部静态变量方式（<a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/blob/master/gof/lazy_result_loop.cpp">lazy_result_loop.cpp</a>），也是懒汉模式一种：相互依赖初始化，<strong>死循环</strong>，阻塞</p>
-  <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Object_2B_1::Object_2B_1() this:[00BFC14C] data_2b_1_ [1].</span><br><span class="line">Object_2B_2::Object_2B_2() this:[00BFC154] data_2b_2_ [2].</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li><p>使用全局静态变量方式（<a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/blob/master/gof/hungry_result_different.cpp">hungry_result_different.cpp</a>），饿汗模式：不会死循环，但奇葩在 Debug、Release 模式执行<strong>结果不一致</strong></p>
-</li>
+<li><a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2017/09/25/coroutine-theory">Coroutine theory.</a></li>
+<li><a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await">Understanding operator <code>co_await</code>.</a></li>
+<li><a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type">Understanding the promise type.</a></li>
 </ul>
-<p>代码摘抄自 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/fullsail/archive/2013/01/03/2842618.html">BOOST 的 Singleton 模版详解</a>，以上就是“2B 实现有问题”。虽然作者自述“BOOST 的实现如何规避问题”，但在 msvc2015 中实测其代码<strong>并未解决问题</strong>，依旧是<strong>阻塞</strong>结果。</p>
+<p>特别推荐这几篇文章，作者写了 cppcoro 库，牛人！</p>
+<p>首推，此系列的文章作为入门。 </p>
+<p>对协程介绍时，先介绍 <code>awaitable/awaiter</code> 后 <code>promise</code>。学习笔记/摘抄，见 coroutine-a~c.md</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/09/06/singleton3/#more" rel="contents">
+              <a class="btn" href="/2021/04/02/coroutine/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1081,7 +1103,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1149,20 +1171,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1197,7 +1219,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

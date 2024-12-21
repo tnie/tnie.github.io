@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="学习 locale 和编码转换过程中的关键以及问题。  不使用 locale，无法完成编码转换吗？Unicode 自身的 utf-8&#x2F;16&#x2F;32 的 存储方式之间的转换 也不行吗？ utf-8 对应 char、string；utf-16 对应 wchar_t&#x2F;wstring，这种理解对吗？所以 boost::locale::conv::to_utf&lt;char&gt;() 就是转 utf-8（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编码转换和 locale">
+<meta property="og:url" content="https://tnie.github.io/2021/05/26/locale/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="学习 locale 和编码转换过程中的关键以及问题。  不使用 locale，无法完成编码转换吗？Unicode 自身的 utf-8&#x2F;16&#x2F;32 的 存储方式之间的转换 也不行吗？ utf-8 对应 char、string；utf-16 对应 wchar_t&#x2F;wstring，这种理解对吗？所以 boost::locale::conv::to_utf&lt;char&gt;() 就是转 utf-8（">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-05-26T07:33:38.000Z">
+<meta property="article:modified_time" content="2023-05-20T04:21:13.607Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2021/05/26/locale/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>编码转换和 locale | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/05/26/locale/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          编码转换和 locale
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-26 15:33:38" itemprop="dateCreated datePublished" datetime="2021-05-26T15:33:38+08:00">2021-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>学习 locale 和编码转换过程中的关键以及问题。</p>
+<ul>
+<li>不使用 locale，无法完成编码转换吗？Unicode 自身的 utf-8/16/32 的 <a target="_blank" rel="noopener" href="https://justcheckingonall.wordpress.com/2009/01/05/convert-utf-8-to-wchar_t/">存储方式之间的转换</a> 也不行吗？</li>
+<li>utf-8 对应 <code>char</code>、<code>string</code>；utf-16 对应 <code>wchar_t</code>/<code>wstring</code>，这种理解对吗？所以 <code>boost::locale::conv::to_utf&lt;char&gt;()</code> 就是转 utf-8（而不是 utf-16/32）？<code>boost::locale::conv::to_utf&lt;wchar_t&gt;()</code> 就是转 utf-16 （或 utf-32）？</li>
+<li>本地化策略集 locale 和程序运行有关系吗？ #139 </li>
+<li>C++17 为什么弃用了 <code>&lt;codecvt&gt;</code>？且 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/42946335/deprecated-header-codecvt-replacement">尚无替换方案</a> 吗？</li>
+<li>都有哪些本地化策略可选呢？</li>
+<li>如果统一使用 Unicode 编码（utf-8/16/32 存储方式无所谓），是否就不需要本地化策略 locale了？它是源于上世纪各个国家、地区闭门造车，独自扩展 ANSI 字符集带来的后果吧？</li>
+<li><a target="_blank" rel="noopener" href="https://ryanclouser.com/2016/08/11/C-11-Convert-to-from-UTF-8-wchar-t/">C++11 - Convert to/from UTF-8/wchar_t</a> 里面提到的 UTF8-CPP 和 NoWide 分别是什么？</li>
+</ul>
+<p>没有一致的 locale name o(╥﹏╥)o，windows 编程时<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/42946335/deprecated-header-codecvt-replacement">怎么写</a>？</p>
+<blockquote>
+<p>Locale names are not part of the C++ standard… <a target="_blank" rel="noopener" href="https://justcheckingonall.wordpress.com/2009/01/05/convert-utf-8-to-wchar_t/">引用来源</a></p>
+</blockquote>
+<p>关联问题：</p>
+<ol start="4">
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4324542/what-is-the-windows-equivalent-for-en-us-utf-8-locale">What is the Windows equivalent for en_US.UTF-8 locale?</a></li>
+<li><a target="_blank" rel="noopener" href="https://answers.microsoft.com/en-us/surface/forum/surfbook-surfaccess/how-to-change-system-locale-in-windows-10-the/d7826ef0-13cd-43ea-8e01-2846d813dfed">How to change system locale in Windows 10</a></li>
+</ol>
+<a id="more"></a>
+
+<h1 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h1><ul>
+<li><code>wctomb</code>  <code>wcstombs</code> ，这两个在处理过字符（串）时更新 <code>std::mbstate_t </code>类型的<strong>全局静态对象</strong>，而且不能为二个线程同时调用，这种情况下应使用以下两个函数</li>
+<li><code>wcrtomb</code> <code>wcsrtombs</code>，依旧需要在使用之前先调用 <code>setlocale</code> 函数安装指定的系统本地环境或其一部分，作为新的 C 本地环境。<br>  以下情形会造成 <code>wcstombs</code>/<code>wcsrtombs</code> 转换终止：<blockquote>
+<p>遇到任何非法多字节字符（按照当前 C 本地环境）。</p>
+</blockquote>
+</li>
+<li><code>setlocale</code> 修改影响本地环境依赖函数的<strong>全局状态</strong>，故从一个线程调用它，而另一线程同时执行任何下列函数是未定义行为：xxx <a target="_blank" rel="noopener" href="http://zh.cppreference.com/w/cpp/locale/setlocale">参考来源</a></li>
+</ul>
+<blockquote>
+<p>程序启动过程中，运行任何用户代码前会执行 <code>std::setlocale(LC_ALL, &quot;C&quot;);</code> 的等价代码。</p>
+</blockquote>
+<ol>
+<li>默认的最小本地环境为 <code>&quot;C&quot;</code>，其是否就是最小集？</li>
+<li>如果是最小集，是否意味着如果不设置新的本地环境，转换中文汉字、表情符号等就会造成转换终止？</li>
+<li>windows/msvc 是否又做了手脚？</li>
+</ol>
+<h1 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h1><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/42946335/deprecated-header-codecvt-replacement"><code>std::codecvt</code></a>， 中提到：</p>
+<blockquote>
+<p>Four standalone (<strong>locale-independent</strong>/本地环境无关) specializations are provided by the standard library:</p>
+</blockquote>
+<ul>
+<li>恒等转换的意义是什么？</li>
+<li>在 UTF-16 和 UTF-8 间转换</li>
+<li>在 UTF-32 和 UTF-8 间转换<br>  这两者的存在结合 “locale-independent” 是否间接证明了第一个猜测？<br>  不存在 UTF-16 和 UTF-32 之间的转换意味着什么？</li>
+<li><code>std::codecvt&lt;wchar_t, char, std::mbstate_t&gt;</code> | 在系统原生宽和单字节窄字符集间转换<br>  系统原生宽字符集：UTF-32(non-Windows)、UCS2(Windows)；<strong>单字节</strong>窄字符集：重点就在于 single-byte，将多字节编码剔除，如此最多也就是 ASCII、ANSI，这部分字符是无需 locale 的，不同的C 本地环境单字节窄字符集都相同。</li>
+</ul>
+<blockquote>
+<p>In addition, every locale object constructed in a C++ program implements its own (locale-specific) versions of these four specializations.</p>
+</blockquote>
+<p>如果上述的理解是正确的，既然都和 <code>locale</code> 无关，那么为什么还要和 <code>locale</code> 混在一起，放在 <code>&lt;locale&gt;</code> 头文件中呢？</p>
+<p>另外，针对 <a target="_blank" rel="noopener" href="http://zh.cppreference.com/w/cpp/locale/codecvt"><code>codecvt</code></a> 底部的表格（同 <a target="_blank" rel="noopener" href="http://zh.cppreference.com/w/cpp/locale/wstring_convert"><code>std::wstring_convert</code> </a> 底部表格？）有以下疑惑，这张表格藏着好多内容：</p>
+<ol>
+<li>UTF-16 和 UCS2 不同？两者之间还有转换？</li>
+<li>UTF-16 和 UTF-32 之间是存在转换的？为什么四个特化不包含这个？</li>
+</ol>
+<p><code>std::codecvt</code> 使用场景是否限于 <a target="_blank" rel="noopener" href="http://zh.cppreference.com/w/cpp/locale/wstring_convert"><code>std::wstring_convert</code> </a>?</p>
+<blockquote>
+<p>单独的编码转换平面 Codecvt</p>
+</blockquote>
+<p>什么概念？</p>
+<p><code>std::codecvt_utf8</code> 等什么作用？</p>
+<p>怎么就这么难理解？难用呢？</p>
+<h1 id="国际化？"><a href="#国际化？" class="headerlink" title="国际化？"></a>国际化？</h1><p>项目在非中文系统上编译警告（C4566），执行文件有 bug</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">content =<span class="string">&quot;股票/大智慧自定义/热门概念&quot;</span>;    <span class="comment">// 问题源头</span></span><br><span class="line">oss &lt;&lt; content &lt;&lt; xxx;</span><br><span class="line">...</span><br><span class="line">content = boost::locale::conv::to_utf&lt;<span class="keyword">char</span>&gt;(oss.str(), <span class="string">&quot;GBK&quot;</span>);    <span class="comment">// 将错误进行下去</span></span><br></pre></td></tr></table></figure>
+<p>写死 <code>GBK</code>（称之为“简体中文版”），这个应该和本地化策略 <code>locale </code>协同吧？</p>
+<ol>
+<li><del>软件在非中文系统上无法正常运行</del>吧？编译之后，<strong>简中版本</strong>拿到其他代码页的系统上应该是<strong>能够正常运行</strong>的。详细验证见后文。</li>
+<li>项目在 <del>非中文系统</del> 更换系统代码页后无法正常编译、执行吧？done 编译 C4566 警告（意味着已经错了），能够完成编译（编译的可执行文件潜藏 bug）；能够（带错）执行，程序不崩溃，但<strong>业务逻辑未实现</strong>。</li>
+</ol>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><ul>
+<li>写死 <code>GBK</code>：不同代码页编译有问题（源于编译时字符串字面值转为执行字符集是依赖本地化策略的），但 936 代码页编译成功后不同代码页（基本上意味着不同语言）执行没有问题（前提是系统存有/能够识别 936 代码页）;</li>
+<li>要解决编译问题，此处就需要和「编译时字符串字面值转为执行字符集是依赖本地化策略的」本地化策略协同。</li>
+</ul>
+<p>怎么分析也觉得“系统的本地化策略集和程序运行无关吧，只关系程序编译才是吧？”</p>
+<blockquote>
+<p>一个程序在运行之前并不知道系统的本地化策略集是什么，程序只有在运行之后才通过locale获得当时的本地化策略集。<a target="_blank" rel="noopener" href="http://www.cppblog.com/deane/archive/2011/08/11/153007.aspx">引用来源</a></p>
+</blockquote>
+<h3 id="验证2"><a href="#验证2" class="headerlink" title="验证2"></a>验证2</h3><p>参考 <a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/mt708818.aspx"><code>/execution-charset</code> (Set Execution Character Set)</a> 新增编译选项 <code>/execution-charset:.932 </code>：</p>
+<ol>
+<li><p>编译时抛出大量 C4566 警告，但编译能够成功；</p>
+<blockquote>
+<p>warning C4566: 由通用字符名称“\u5757”表示的字符不能在当前代码页(932)中表示出来。</p>
+</blockquote>
+<p> 事实上<strong>出现此警告即意味着错误</strong>：源文件中某字符（串）字面值未按预期使用，转换执行字符集时失败了（但编译继续，编译完成），生成的可执行文件中字面值的硬编码是错误的、混乱的。</p>
+<p> 此警告由 <code>content =&quot;股票/大智慧自定义/热门概念&quot;;  </code> 等简体中文字符抛出</p>
+</li>
+<li><p>启动软件，带错运行，通过 <code>boost::locale::conv::to_utf&lt;char&gt;(oss.str(), &quot;GBK&quot;);</code> 将<strong>错误的</strong>硬编码字节按照 GBK（936 codepage）转成 UTF-8，虽然能够转换完毕，但转换的结果肯定也是错的了</p>
+<p> 所以，业务方面请求已发送，但大智慧接口未返回有效数据，进而本地缓存无内容，按键精灵无个股、指数、板块等…</p>
+</li>
+</ol>
+<h3 id="验证1"><a href="#验证1" class="headerlink" title="验证1"></a>验证1</h3><p>根据  <a target="_blank" rel="noopener" href="https://answers.microsoft.com/en-us/surface/forum/surfbook-surfaccess/how-to-change-system-locale-in-windows-10-the/d7826ef0-13cd-43ea-8e01-2846d813dfed">How to change system locale in Windows 10</a> 描述修改 「非 Unicode 程序中所使用的的当前语言」属性：</p>
+<table>
+<thead>
+<tr>
+<th>当前语言</th>
+<th>编译</th>
+<th>运行</th>
+<th>运行「简体中文」版是否正常</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>中文(繁体，中国台湾)</td>
+<td>C4566 警告*</td>
+<td>按键精灵缺少板块</td>
+<td>正常</td>
+</tr>
+<tr>
+<td>英语(美国)</td>
+<td>同上</td>
+<td>同上</td>
+<td>同上</td>
+</tr>
+</tbody></table>
+<p>*：警告只限于 <code>initializeBlockInfoWithType()</code> 中的板块路径：</p>
+<ul>
+<li>函数所在的 DZHYUNRequest.cpp 文件使用的 UTF-8-BOM 编码（msvc 打开<strong>未乱码</strong>），「字面值（有 BOM） ，转 utf-8，转 执行字符集（无前缀，未指定相关编译选项，则目标是 current code page/Big5）」，再通过 <code>boost::locale::conv::to_utf&lt;char&gt;(oss.str(), &quot;GBK&quot;); </code> 将 Big5 硬编码字节当做 GBK 转换成 utf-8，所以出错造成按键精灵缺失板块。</li>
+<li>DZHYUNdef.cpp 文件使用的 GB2312 编码，所以在 msvc 中打开看到原本简体中文的位置变成了<strong>乱码</strong>（Big5 的皮，<strong>GBK 的芯</strong>），在后续的「字面值（无 BOM 则依据 current code page/Big5），转 utf-8，转 执行字符集（无前缀，未指定相关编译选项，则目标是 current code page/Big5）」没什么变化，再通过 <code>boost::locale::conv::to_utf&lt;char&gt;(oss.str(), &quot;GBK&quot;); </code> GBK 转换成 utf-8，反而正确了。</li>
+</ul>
+<h2 id="心得-结论"><a href="#心得-结论" class="headerlink" title="心得/结论"></a>心得/结论</h2><p>首先，源文件使用 UTF-8-BOM 格式保存；其次</p>
+<ul>
+<li>只用 u8 字符串 <code>string str = u8&quot;value&quot;</code>；</li>
+<li>编译选项指定「执行字符集」：<code>/execution-charset:utf-8 </code></li>
+</ul>
+<p>上述两种方式等效，可混用！</p>
+<h3 id="UTF-8-without-BOM"><a href="#UTF-8-without-BOM" class="headerlink" title="UTF-8 without BOM"></a>UTF-8 without BOM</h3><p>如果排斥 UTF-8 带 BOM，通过「文件-高级保存选项-」可以将编码改为<strong>无签名</strong>，<del>或者安装 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=vilicvane.ForceUTF8">ForceUTF8 插件</a>，避免手动调整每一个文件的编码</del>（插件有问题）。需要强调的是，使用无签名 UTF-8 编码，MSVC 会脑残：</p>
+<blockquote>
+<p> warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。</p>
+</blockquote>
+<p>需要明确告知编译器文件编码：<a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/mt708819.aspx"><code>/source-charset</code> (Set Source Character Set)</a>)，编译选项指定「源字符集」</p>
+<h3 id="简写-utf-8"><a href="#简写-utf-8" class="headerlink" title="简写 /utf-8"></a>简写 <code>/utf-8</code></h3><blockquote>
+<p>If you want to set both the source character set and the execution character set to UTF-8, you can use the <code>/utf-8</code> compiler option as a shortcut. It is equivalent to specifying <code>/source-charset:utf-8 /execution-charset:utf-8</code> on the command line. </p>
+</blockquote>
+<h3 id="控制台应用程序"><a href="#控制台应用程序" class="headerlink" title="控制台应用程序"></a>控制台应用程序</h3><p>windows 的命令行窗口以及 powershell 默认都是无法支持 utf-8 的，调教使其支持 utf-8 挺麻烦的。使用 utf-8 作为执行字符集，在控制台输出时就会产生乱码。所以如果打算通过控制台查看结果，可以使用 utf-8-bom 编码（或者 utf-8 编码并指定 <code>/source-charset:utf-8</code>），但不能修改执行字符集。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/05/26/pimpl/" rel="prev" title="减少头文件依赖">
+      <i class="fa fa-chevron-left"></i> 减少头文件依赖
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/05/26/using/" rel="next" title="使用 using">
+      使用 using <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0"><span class="nav-number">1.</span> <span class="nav-text">第二章</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0"><span class="nav-number">2.</span> <span class="nav-text">第三章</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BD%E9%99%85%E5%8C%96%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">国际化？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">3.1.</span> <span class="nav-text">分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%812"><span class="nav-number">3.1.1.</span> <span class="nav-text">验证2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%811"><span class="nav-number">3.1.2.</span> <span class="nav-text">验证1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%83%E5%BE%97-%E7%BB%93%E8%AE%BA"><span class="nav-number">3.2.</span> <span class="nav-text">心得&#x2F;结论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UTF-8-without-BOM"><span class="nav-number">3.2.1.</span> <span class="nav-text">UTF-8 without BOM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%86%99-utf-8"><span class="nav-number">3.2.2.</span> <span class="nav-text">简写 &#x2F;utf-8</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-number">3.2.3.</span> <span class="nav-text">控制台应用程序</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

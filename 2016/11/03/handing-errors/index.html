@@ -28,7 +28,7 @@
 <meta property="og:description" content="在项目开发中，非主体逻辑的部分在整体代码量中占得比重往往更大。比如我们做一个加减乘除计算器，需要处理用户输入非数字怎么办，数字太大溢出怎么办，零作为除数了怎么办等等；比如我们要读取配置文件中的用户名、密码，我们得首先处理配置文件不存在，内容格式不正确，用户名过长等等。 机器（具体说就是一门语言，比如 C++）是一板一眼的，你告诉它了它就能做，你没告诉的它就不知道。对机器来说不存在“常识”这个词。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2016-11-03T06:36:03.000Z">
-<meta property="article:modified_time" content="2021-01-18T05:30:33.385Z">
+<meta property="article:modified_time" content="2021-02-12T08:48:26.679Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta property="article:tag" content="exception">
 <meta name="twitter:card" content="summary">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2021-02-12 16:48:26" itemprop="dateModified" datetime="2021-02-12T16:48:26+08:00">2021-02-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -279,13 +279,15 @@
 <li><p>开发过程中很容易忘记处理错误返回值，程序带着错误执行的不确定性。等程序宕掉的时候，可能距离错误源十万八千里远，调试起来老费劲了。</p>
 </li>
 </ol>
-<p>实际上，上述只是涉及 <code>errorcode func(var1, var...)</code> 形式，更多：</p>
+<h2 id="其他传统的错误处理方式"><a href="#其他传统的错误处理方式" class="headerlink" title="其他传统的错误处理方式"></a>其他传统的错误处理方式</h2><p>而传统错误处理技术，检查到一个局部无法处理的问题时： <a target="_blank" rel="noopener" href="https://www.cnblogs.com/ggjucheng/archive/2011/12/18/2292089.html">来源</a></p>
 <ol>
-<li>Error-codes as Return Values</li>
-<li>Error-code as out-parameter</li>
-<li>Error Singletons</li>
+<li>终止程序(例如 <code>atol</code>,<code>atoi</code>,输入 NULL，会产生段错误，导致程序异常退出,如果没有core文件，找问题的人一定会发疯)</li>
+<li>返回一个表示错误的值(很多系统函数都是这样，例如 <code>malloc</code>，内存不足，分配失败，返回 NULL 指针)</li>
+<li>返回一个合法值，让程序处于某种非法的状态(最坑爹的东西，有些第三方库真会这样)</li>
+<li>调用一个预先准备好在出现”错误”的情况下用的函数。</li>
 </ol>
-<h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><p>到目前为止，除了学习异常时写过几个小的测试程序，对于异常并没有更多的认识。主要源于 google 编码规范中“禁止使用 C++ 异常”，以及有些大牛也不推荐使用异常（<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/22889420">参考</a>），所以下意识地对 <code>exception</code> 有些回避。</p>
+<p>第一种情况是不允许的，无条件终止程序的库无法运用到不能当机的程序里。第二种情况，比较常用，但是有时不合适，例如返回错误码是 int，每个调用都要检查错误值，极不方便，也容易让程序规模加倍(但是要精确控制逻辑，我觉得这种方式不错)。第三种情况，很容易误导调用者，万一调用者没有去检查全局变量 errno 或者通过其他方式检查错误，那是一个灾难，而且这种方式在并发的情况下不能很好工作。至于第四种情况，本人觉得比较少用，而且回调的代码不该多出现。</p>
+<h1 id="推荐使用异常"><a href="#推荐使用异常" class="headerlink" title="推荐使用异常"></a>推荐使用异常</h1><p>到目前为止，除了学习异常时写过几个小的测试程序，对于异常并没有更多的认识。主要源于 google 编码规范中“禁止使用 C++ 异常”，以及有些大牛也不推荐使用异常（<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/22889420">参考</a>），所以下意识地对 <code>exception</code> 有些回避。</p>
 <p>相比使用返回值的缺点，异常的优点有：</p>
 <ol>
 <li>程序逻辑和错误处理分离。</li>
@@ -300,6 +302,9 @@
 <p>一句话来概况就是<strong>不要用异常代替正常的控制流</strong>。只有当程序真的「不正常」的时候，才使用异常；反过来，当程序真正发生错误了，一定要使用异常而不是返回一个错误代码，因为错误代码总是倾向于被忽略。<a target="_blank" rel="noopener" href="https://www.byvoid.com/blog/cpp-constructor-exception">引用来源</a></p>
 </blockquote>
 <p>C++ 标准的中的 <a target="_blank" rel="noopener" href="https://isocpp.org/wiki/faq/exceptions">Exceptions and Error Handling</a></p>
+<h2 id="怎么用好-exception"><a href="#怎么用好-exception" class="headerlink" title="怎么用好 exception"></a>怎么用好 exception</h2><p>上述也就是在说 exception 的优缺点以及 exception 的必要性。可怎么样才是用好 exception，发挥了其优点，而非滥用、误用，放大了其缺点？仅仅知道其语法没甚意义。 </p>
+<p><a target="_blank" rel="noopener" href="https://isocpp.org/wiki/faq/exceptions#mindset-for-proper-use-of-eh">避免以下 mindset（观念模式/思维倾向）：</a></p>
+<p>我自己梳理标准库里的 <a href="https://tnie.github.io/2020/12/25/exception/">异常 std::exception</a></p>
 <h1 id="构造函数中的错误"><a href="#构造函数中的错误" class="headerlink" title="构造函数中的错误"></a>构造函数中的错误</h1><p>接下来说说处理构造函数中的错误，通常有三种常见的处理方法：</p>
 <blockquote>
 <p>使用一个额外的 <code>initialize()</code> 函数来初始化；标记错误状态；或者直接抛出异常。</p>
@@ -311,8 +316,6 @@
 </ol>
 <p>如何在构造函数中捕获异常，语法方面具体怎么写可以参考原文，也请自行学习。</p>
 <p>ps 整篇笔记主要参考自 <a target="_blank" rel="noopener" href="https://www.byvoid.com/blog/cpp-constructor-exception">如何处理C++构造函数中的错误</a>，作者的专业知识值得肯定，但文字功底就不敢恭维了：有些描述起承转合很是僵硬，逻辑上毫无关系的两句话竟然用的逗号衔接，有些段落在文字顺序、排版上强加因果，误导读者。总之，文章很不错，如果读到某个地方觉得别扭，考虑重组语句，甚至重组段落。</p>
-<h1 id="怎么用好-exception"><a href="#怎么用好-exception" class="headerlink" title="怎么用好 exception"></a>怎么用好 exception</h1><p>上述也就是在说 exception 的优缺点以及 exception 的必要性。可怎么样才是用好 exception，发挥了其优点，而非滥用、误用，放大了其缺点？仅仅知道其语法没甚意义。 </p>
-<p><a target="_blank" rel="noopener" href="https://isocpp.org/wiki/faq/exceptions#mindset-for-proper-use-of-eh">避免以下 mindset（观念模式/思维倾向）：</a></p>
 <h1 id="std-expected"><a href="#std-expected" class="headerlink" title="std::expected"></a>std::expected</h1><p>错误处理的新方式。但其作为一项提案，截止到 2019 年 3 月尚未成为标准。</p>
 <p><a target="_blank" rel="noopener" href="https://hackernoon.com/error-handling-in-c-or-why-you-should-use-eithers-in-favor-of-exceptions-and-error-codes-f0640912eb45">Error Handling in C++ or: Why You Should Use Eithers in Favor of Exceptions and Error-codes</a></p>
 <ul>
@@ -407,7 +410,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">使用返回值的缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8"><span class="nav-number">2.</span> <span class="nav-text">异常</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E9%94%99%E8%AF%AF"><span class="nav-number">3.</span> <span class="nav-text">构造函数中的错误</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E7%94%A8%E5%A5%BD-exception"><span class="nav-number">4.</span> <span class="nav-text">怎么用好 exception</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#std-expected"><span class="nav-number">5.</span> <span class="nav-text">std::expected</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">使用返回值的缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E4%BC%A0%E7%BB%9F%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">其他传统的错误处理方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E5%BC%82%E5%B8%B8"><span class="nav-number">2.</span> <span class="nav-text">推荐使用异常</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E7%94%A8%E5%A5%BD-exception"><span class="nav-number">2.1.</span> <span class="nav-text">怎么用好 exception</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E9%94%99%E8%AF%AF"><span class="nav-number">3.</span> <span class="nav-text">构造函数中的错误</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#std-expected"><span class="nav-number">4.</span> <span class="nav-text">std::expected</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -423,20 +426,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -471,7 +474,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

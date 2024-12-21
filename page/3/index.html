@@ -196,7 +196,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/04/02/git_submodule/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/31/coroutine-c/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -210,7 +210,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/04/02/git_submodule/" class="post-title-link" itemprop="url">Git Submoudle使用完整教程</a>
+            <a href="/2021/03/31/coroutine-c/" class="post-title-link" itemprop="url">C++ Coroutines Understanding the promise type</a>
         </h2>
 
         <div class="post-meta">
@@ -220,166 +220,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-04-02 16:26:03" itemprop="dateCreated datePublished" datetime="2018-04-02T16:26:03+08:00">2018-04-02</time>
+              <time title="创建时间：2021-03-31 15:31:00" itemprop="dateCreated datePublished" datetime="2021-03-31T15:31:00+08:00">2021-03-31</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>自从看了蒋鑫的《Git权威指南》之后就开始使用Git Submodule功能，团队也都熟悉了怎么使用，多个子系统（模块）都能及时更新到最新的公共资源，把使用的过程以及经验和容易遇到的问题分享给大家。</p>
-<p>Git Submodule功能刚刚开始学习可能觉得有点怪异，所以本教程把每一步的操作的命令和结果都用代码的形式展现给大家，以便更好的理解。</p>
-<p><strong>对于公共资源各种程序员的处理方式</strong>：</p>
-<p>每个公司的系统都会有一套统一的系统风格，或者针对某一个大客户的多个系统风格保持统一，而且如果风格改动后要同步到多个系统中；这样的需求几乎每个开发人员都遇到，下面看看各个层次的程序员怎么处理：</p>
-<p>假如对于系统的风格需要几个目录：css、images、js。</p>
-<p>普通程序员，把最新版本的代码逐个复制到每个项目中，如果有N个项目，那就是要复制N x 3次；如果漏掉了某个文件夹没有复制…@（&amp;#@#。</p>
-<p>文艺程序员，使用Git Submodule功能，执行：git submodule update，然后冲一杯咖啡悠哉的享受着。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/04/02/git_submodule/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/01/17/gitConfig/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/01/17/gitConfig/" class="post-title-link" itemprop="url">git 常用配置</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-01-17 15:08:43" itemprop="dateCreated datePublished" datetime="2018-01-17T15:08:43+08:00">2018-01-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在使用 git 版本仓库时，难免会出现默认配置不符合我们需要的地方。尤其是在 windows 上使用 git 时，不如意的地方就会更频繁的出现。这时需要我们自己手动微调 git 的默认配置，汇总如下：</p>
-<h1 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h1><p>经常输入 <code>git status</code> 查看库当前状态，如果终端环境不支持 tab 自动补全，频繁输入 <code>status</code> 完整单词就会变得很繁琐，考验耐心；即便支持自动补全，<code>git status</code> 和 <code>git stash</code> 也是前缀相同。这时我们可以考虑 <a target="_blank" rel="noopener" href="https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases">使用别名</a>：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git config --global alias.co checkout</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config --global alias.br branch</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config --global alias.ci commit</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config --global alias.st status</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/01/17/gitConfig/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/08/24/automake4th/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/08/24/automake4th/" class="post-title-link" itemprop="url">Makefile 自动生成 - 渣滓</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-08-24 15:08:46" itemprop="dateCreated datePublished" datetime="2017-08-24T15:08:46+08:00">2017-08-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -387,7 +235,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
                 </span>
             </span>
 
@@ -402,12 +250,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Configure-ac-文件解析"><a href="#Configure-ac-文件解析" class="headerlink" title="Configure.ac 文件解析"></a>Configure.ac 文件解析</h1><p>原理：Autoconf 是用来产生 “configure” 文档的工具。“configure” 是一个 shell script，它可以自动设定原始程序以符合各种不同平台上 Unix 系统的特性，并且根据系统参数及环境产生合适的 Makefile 文档或是 C 的标头档 (header file)，让原始程序可以很方便地在这些不同的平台上被编译出来。Autoconf 会读取 <del>configure.in</del> configure.ac 档然后产生 “configure” 这个 shell script。</p>
-<p><del>configure.in</del> configure.ac 文档的内容是一连串 GNU m4 的巨集，这些巨集经过 autoconf 处理后会变成检查系统特征的 shell script。<del>configure.in</del> configure.ac 内巨集的顺序并没有特别的规定，但是每一个 <del>configure.in</del> configure.ac 档必须在所有巨集前加入 AC_INIT 巨集，然後在所有巨集的最后面加上 AC_OUTPUT 巨集。</p>
-<p>一般先用 autoscan 这个工具扫描原始文件以产生一个 configure.scan 文件，再对 configure.scan 作些修改，从而生成 <del>configure.in</del> configure.ac 文件。</p>
+          <p>来源：<a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type">https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type</a></p>
+<h1 id="Coroutine-Concepts"><a href="#Coroutine-Concepts" class="headerlink" title="Coroutine Concepts"></a>Coroutine Concepts</h1><p>The compiler applies some fairly mechanical transformations to the code that you write to turn it into a state-machine that allows it to suspend execution at particular points within the function and then later resume execution.</p>
+<p>编译器会对您编写的代码进行一些相当机械的转换，以将其转换为状态机，使状态机可以在函数内的特定点挂起执行，然后再恢复执行。</p>
+<h1 id="Promise-objects"><a href="#Promise-objects" class="headerlink" title="Promise objects"></a>Promise objects</h1><p>The Promise object defines and controls the behaviour of the coroutine itself by implementing methods that are called at specific points during execution of the coroutine.</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2017/08/24/automake4th/#more" rel="contents">
+              <a class="btn" href="/2021/03/31/coroutine-c/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -431,7 +280,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/08/24/automake3rd/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/31/coroutine-b/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -445,7 +294,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/08/24/automake3rd/" class="post-title-link" itemprop="url">Makefile 自动生成 - configure & make</a>
+            <a href="/2021/03/31/coroutine-b/" class="post-title-link" itemprop="url">C++ Coroutines Understanding operator co_await</a>
         </h2>
 
         <div class="post-meta">
@@ -455,14 +304,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-08-24 14:07:47" itemprop="dateCreated datePublished" datetime="2017-08-24T14:07:47+08:00">2017-08-24</time>
+              <time title="创建时间：2021-03-31 11:57:00" itemprop="dateCreated datePublished" datetime="2021-03-31T11:57:00+08:00">2021-03-31</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -470,7 +319,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
                 </span>
             </span>
 
@@ -485,42 +334,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="执行脚本-configure"><a href="#执行脚本-configure" class="headerlink" title="执行脚本 ./configure"></a>执行脚本 ./configure</h1><p>configure：它能根据不同的系统，产生不同的 Makefile，从而使我们的程序具有可移植性。它还有一些参数：</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>–cache-file=FILE</td>
-<td>测试系统的特性，并将结果放到FILE中</td>
-</tr>
-<tr>
-<td>–help</td>
-<td>输出帮助信息</td>
-</tr>
-<tr>
-<td>–no-create</td>
-<td>阻止其生成输出文件</td>
-</tr>
-<tr>
-<td>–quiet</td>
-<td>执行是不做输出</td>
-</tr>
-<tr>
-<td>–silent</td>
-<td>同上，若设置则不会有任何输出到屏幕</td>
-</tr>
-<tr>
-<td>–version</td>
-<td>输出automake的版本号</td>
-</tr>
-</tbody></table>
+          <p>来源：<a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await">https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await</a></p>
+<h1 id="What-does-the-Coroutines-TS-give-us"><a href="#What-does-the-Coroutines-TS-give-us" class="headerlink" title="What does the Coroutines TS give us?"></a>What does the Coroutines TS give us?</h1><p>The facilities the C++ Coroutines TS provides in the language can be thought of as a low-level assembly-language for coroutines. These facilities can be difficult to use directly in a safe way and are mainly intended to be used by library-writers to build higher-level abstractions that application developers can work with safely.</p>
+<p>C ++ Coroutines TS 提供的功能可以被认为是协程的一种低级汇编语言。这些功能可能很难以安全的方式直接使用，并且主要旨在供库编写人员用来构建更高级的抽象，以便应用程序开发人员可以安全地使用它们。</p>
+<h1 id="Compiler-lt-gt-Library-interaction"><a href="#Compiler-lt-gt-Library-interaction" class="headerlink" title="Compiler &lt;-&gt; Library interaction"></a>Compiler &lt;-&gt; Library interaction</h1><p>Instead, it specifies a general mechanism for library code to customise the behaviour of the coroutine by implementing types that conform to a specific interface. The compiler then generates code that calls methods on instances of types provided by the library.</p>
+<p>它为库代码指定了一种通用机制，可通过 <em>实现符合特定接口的类型</em> 来自定义协程的行为。然后编译器调用 这些类型的方法 = <em>库提供的类型的实例的方法</em>。</p>
+<p>There are two kinds of interfaces that are defined by the coroutines TS: The <strong>Promise</strong> interface and the <strong>Awaitable</strong> interface.</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2017/08/24/automake3rd/#more" rel="contents">
+              <a class="btn" href="/2021/03/31/coroutine-b/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -544,7 +366,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/08/24/autotools/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/31/coroutine-a/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -558,7 +380,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/08/24/autotools/" class="post-title-link" itemprop="url">编译利器：大型项目如何使用Automake和Autoconf完成编译配置(ver+0.6)</a>
+            <a href="/2021/03/31/coroutine-a/" class="post-title-link" itemprop="url">Coroutine Theory</a>
         </h2>
 
         <div class="post-meta">
@@ -568,14 +390,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-08-24 09:54:33" itemprop="dateCreated datePublished" datetime="2017-08-24T09:54:33+08:00">2017-08-24</time>
+              <time title="创建时间：2021-03-31 10:05:00" itemprop="dateCreated datePublished" datetime="2021-03-31T10:05:00+08:00">2021-03-31</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -583,7 +405,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
                 </span>
             </span>
 
@@ -598,14 +420,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>这篇帖子很棒！我从百度文库中下载了 <a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/blob/master/autotools/%E7%BC%96%E8%AF%91%E5%88%A9%E5%99%A8%EF%BC%9A%E5%A4%A7%E5%9E%8B%E9%A1%B9%E7%9B%AE%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Automake%E5%92%8CAutoconf%E5%AE%8C%E6%88%90%E7%BC%96%E8%AF%91%E9%85%8D%E7%BD%AE(ver+0.6).docx?raw=true">此教程</a>，因为未做深度的考证，所以也不知原作者是谁，但在此谢谢作者。以下是作者原文，略有删改，本人有修改部分都已做出备注。</p>
-<hr>
-<p>使用过开源 C/C++ 项目的同学们都知道，标准的编译过程已经变成了简单的三部曲：configure/make/make install, 使用起来很方便，不像平时自己写代码，要手写一堆复杂的 Makefile，而且换个编译环境，Makefile 还需要修改（Eclipse 也是这样）。</p>
-<p>这么好的东东当然要拿来用了，但 GNU 的 Autotool 系列博大精深，工具数量又多，涉及的语言也多，要是自己从头看到尾，黄花菜都凉了，项目估计早就结束了；上网搜样例倒是有一大堆，但都是“hello world”的样例，离真正完成大型项目的目标还差得远。</p>
-<p>没有办法，对照网上的样例，再找几个开源的源码，然后参考各种 Autotools 的手册，花了 2 天时间，终于完成了一个基本可用的 Autotools。为了避免其他 XDJM 也浪费时间，因此将过程总结下来，就算是新年礼物，送给大家！！</p>
+          <p>来源：<a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2017/09/25/coroutine-theory">https://lewissbaker.github.io/2017/09/25/coroutine-theory</a></p>
+<h1 id="Coroutines"><a href="#Coroutines" class="headerlink" title="Coroutines"></a>Coroutines</h1><p>Coroutines generalise the operations of a function by separating out some of the steps performed in the <strong>Call</strong> and <strong>Return</strong> operations into three <strong>extra</strong> operations: <strong>Suspend</strong>, <strong>Resume</strong> and <strong>Destroy</strong>.</p>
+<p>比其他文章多描述了一个 Destroy 步骤，更准确。</p>
+<p>Note that, like the <code>Return</code> operation of a function, a coroutine can only be suspended from within the coroutine itself at well-defined suspend-points.</p>
+<p>请注意，就像函数的 <code>Return</code> 操作一样，协程只能在定义好的暂停点处从协程自身内部暂停。</p>
+<h2 id="Coroutine-activation-frames"><a href="#Coroutine-activation-frames" class="headerlink" title="Coroutine activation frames"></a>Coroutine activation frames</h2><p>With coroutines there are some parts of the activation frame that need to be preserved across coroutine suspension and there are some parts that only need to be kept around while the coroutine is executing. For example, the lifetime of a variable with a scope that does not span any coroutine suspend-points can potentially be stored on the stack.</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2017/08/24/autotools/#more" rel="contents">
+              <a class="btn" href="/2021/03/31/coroutine-a/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -629,7 +452,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/07/04/UUID/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/26/coroutine3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -643,7 +466,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/07/04/UUID/" class="post-title-link" itemprop="url">UUID 入门</a>
+            <a href="/2021/03/26/coroutine3/" class="post-title-link" itemprop="url">CO_AWAITING COROUTINES</a>
         </h2>
 
         <div class="post-meta">
@@ -653,305 +476,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-07-04 16:54:05" itemprop="dateCreated datePublished" datetime="2017-07-04T16:54:05+08:00">2017-07-04</time>
+              <time title="创建时间：2021-03-26 16:38:00" itemprop="dateCreated datePublished" datetime="2021-03-26T16:38:00+08:00">2021-03-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>维基百科中描述：通用唯一识别码（英语：Universally Unique Identifier，简称UUID）的目的，是让分布式系统中的所有元素，都能有唯一的辨识信息，而不需要通过中央控制端来做辨识信息的指定。</p>
-<blockquote>
-<p>目前最广泛应用的UUID，是微软公司的全局唯一标识符（GUID）</p>
-</blockquote>
-<p>UUID的标准型式包含32个16进制数字，以连字号分为五段，形式为8-4-4-4-12的32个字符。示例：</p>
-<pre><code>550e8400-e29b-41d4-a716-446655440000</code></pre>
-<p>接下来重点描述在开发中的使用及应用。</p>
-<h1 id="在-C-中的使用"><a href="#在-C-中的使用" class="headerlink" title="在 C++ 中的使用"></a>在 C++ 中的使用</h1><p>C++ 原生（C++03、C++11/0x）并不支持 UUID。所以要想在 C++ 代码中生成 UUID，如果要求跨平台推荐使用第三方库 Boost UUID，要么结合各自的平台，使用系统 API。以下方法整理自互联网，除 Boost Uuid 和 libuuid 使用过之外，其他的未亲自试验。</p>
-<h2 id="UUID-generation-using-Boost-in-C"><a href="#UUID-generation-using-Boost-in-C" class="headerlink" title="UUID generation using Boost in C++"></a>UUID generation using Boost in C++</h2><p>在 StackOverflow 上的一个例子：<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/3247861/example-of-uuid-generation-using-boost-in-c/3248017">跳转链接</a></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/uuid/uuid.hpp&gt;            // uuid class</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/uuid/uuid_generators.hpp&gt; // generators</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/uuid/uuid_io.hpp&gt;         // streaming operators etc.</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    boost::uuids::uuid uuid = boost::uuids::random_generator()();</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; uuid &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>连续两个括号 <code>()()</code> 是什么鬼？是不是打错了？——首先，这么写是正确的。这种使用形式<strong>涉及到的语法意义</strong>要进一步地学习并掌握。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/uuid/uuid.hpp&gt;            // uuid class</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/uuid/uuid_generators.hpp&gt; // generators</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/uuid/uuid_io.hpp&gt;         // streaming operators etc.</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    boost::uuids::random_generator generator;</span><br><span class="line"></span><br><span class="line">    boost::uuids::uuid uuid1 = generator();</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; uuid1 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    boost::uuids::uuid uuid2 = generator();</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; uuid2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果以上两个简单的例子满足不了你的需求，需要在更复杂的情景下使用，请移步 <a target="_blank" rel="noopener" href="http://www.boost.org/doc/libs/1_60_0/libs/uuid/uuid.html">Boost Uuid 官方文档</a>。</p>
-<h2 id="Qt-QUuid"><a href="#Qt-QUuid" class="headerlink" title="Qt QUuid"></a>Qt QUuid</h2><p><a target="_blank" rel="noopener" href="http://blog.csdn.net/yasi_xi/article/details/9297565">参考来源</a></p>
-<p>Qt是一个跨平台的C++编程框架，QUuid类实现了UUID的生成、比较、转换等功能。</p>
-<p>函数QUuid createUuid()，可用于生成一个随即UUID。示例如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QUuid&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QString&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QUuid uuid = QUuid::createUuid();</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; qPrintable(uuid.toString()) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Linux-下生成-UUID"><a href="#Linux-下生成-UUID" class="headerlink" title="Linux 下生成 UUID"></a>Linux 下生成 UUID</h2><h3 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h3><p>Unix/Linux环境中大都有一个名为uuidgen的小工具，运行即可生成一个UUID到标准输出。读取文件/proc/sys/kernel/random/uuid即得UUID，例如：</p>
-<pre><code>cat /proc/sys/kernel/random/uuid</code></pre>
-<h3 id="libuuid"><a href="#libuuid" class="headerlink" title="libuuid"></a>libuuid</h3><p><a target="_blank" rel="noopener" href="http://blog.csdn.net/yasi_xi/article/details/9297565">参考来源</a></p>
-<p>libuuid是一个用于生成UUID的C库，具体用法参考 <a href="">http://linux.die.net/man/3/libuuid</a>，示例如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;uuid/uuid.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">uuid_t</span> uuid;</span><br><span class="line">    <span class="keyword">char</span> str[<span class="number">36</span>];</span><br><span class="line"></span><br><span class="line">    uuid_generate(uuid);</span><br><span class="line">    uuid_unparse(uuid, str);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, str);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在Linux下编译时需要链接uuid库</p>
-<pre><code>gcc -o uuid uuid.c -luuid</code></pre>
-<p><strong>问题： 在什么系统下自带？在什么系统中需要另行安装？</strong></p>
-<p>在Ubuntu中，可以用下面的命令安装libuuid：</p>
-<pre><code>sudo apt-get install uuid-dev</code></pre>
-<h2 id="Windows-下生成-UUID"><a href="#Windows-下生成-UUID" class="headerlink" title="Windows 下生成 UUID"></a>Windows 下生成 UUID</h2><h3 id="CoCreateGuid"><a href="#CoCreateGuid" class="headerlink" title="CoCreateGuid"></a>CoCreateGuid</h3><p><a target="_blank" rel="noopener" href="http://blog.csdn.net/yasi_xi/article/details/9297565">参考来源</a></p>
-<p>Windows下提供了函数CoCreateGuid用于生成GUID。需要使用的头文件是”objbase.h”，需要链接的库是ole32.lib，函数原型为：</p>
-<p>HRESULT CoCreateGuid(GUID *pguid);<br>GUID的原型为</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">GUID</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    DWORD Data1;</span><br><span class="line">    WORD Data2;</span><br><span class="line">    WORD Data3;</span><br><span class="line">    BYTE Data4[<span class="number">8</span>];</span><br><span class="line">&#125; GUID;</span><br></pre></td></tr></table></figure>
-<h3 id="UuidCreate"><a href="#UuidCreate" class="headerlink" title="UuidCreate"></a>UuidCreate</h3><p><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/24365331/how-can-i-generate-uuid-in-c-without-using-boost-library">参考来源</a></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(lib, <span class="meta-string">&quot;rpcrt4.lib&quot;</span>)  <span class="comment">// UuidCreate - Minimum supported OS Win 2000</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    UUID uuid;</span><br><span class="line">    UuidCreate(&amp;uuid);</span><br><span class="line">    <span class="keyword">char</span> *str;</span><br><span class="line">    UuidToStringA(&amp;uuid, (RPC_CSTR*)&amp;str);</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;str&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    RpcStringFreeA((RPC_CSTR*)&amp;str);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="在-Java-中使用"><a href="#在-Java-中使用" class="headerlink" title="在 Java 中使用"></a>在 Java 中使用</h1><p>工作中偶尔会写一些 Java 的项目，所以也捎带整理一下。</p>
-<h1 id="在-MySQL-中"><a href="#在-MySQL-中" class="headerlink" title="在 MySQL 中"></a>在 MySQL 中</h1><p>MySQL 本身是带有生成 uuid 功能的。也就是我们惯用的整数递增作为主键，其实是可以用 uuid 替代的。可以在一条记录插入之前写触发器，调用 UUID() 函数生成 uuid。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/07/04/socket/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/07/04/socket/" class="post-title-link" itemprop="url">socket 编程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-07-04 16:54:05" itemprop="dateCreated datePublished" datetime="2017-07-04T16:54:05+08:00">2017-07-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>C/C++ 的 socket 编程。开篇</p>
-<ol>
-<li>socket 编程貌似是从 *nix 到的 windows？</li>
-<li>socket 编程源于 C，但 C++ 似乎并没有原生的支持，依旧是 C 语言下的 socket 编程？</li>
-<li>C++ 的网络编程，包含哪些具体的内容？单单是 socket 吗？ socket 编程不应该是更接近 C 语言吗？</li>
-<li></li>
-</ol>
-<p>socket 编程，入门学习非常推荐吴秦的 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/skynet/archive/2010/12/12/1903949.html">Linux Socket编程（不限Linux）</a>。当做学习 socket 编程的第一篇完全足够，甩开网上其他的帖子一万八千里，强烈推荐。本意是整理 socket 的学习笔记，但有上述帖子完全足够，在此只记录一些“边边角角”的零碎知识。</p>
-<p>手册推荐：<a target="_blank" rel="noopener" href="http://beej.us/guide/bgnet/output/html/multipage/index.html">Beej’s Guide to Network Programming</a></p>
-<h1 id="htonl-函数、htons-函数"><a href="#htonl-函数、htons-函数" class="headerlink" title="htonl() 函数、htons() 函数"></a><code>htonl()</code> 函数、<code>htons()</code> 函数</h1><p>在吴秦的博客里重点强调了主机字节序（host byte order）与网络字节序（network byte order）的，上述两个函数就是用来实现两者之间的转换的。参考 <a target="_blank" rel="noopener" href="http://beej.us/guide/bgnet/output/html/multipage/htonsman.html">Beej’s Guide to Network Programming</a> 我们能够找到以下函数原型：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">uint32_t</span> <span class="title">htonl</span><span class="params">(<span class="keyword">uint32_t</span> hostlong)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">uint16_t</span> <span class="title">htons</span><span class="params">(<span class="keyword">uint16_t</span> hostshort)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">uint32_t</span> <span class="title">ntohl</span><span class="params">(<span class="keyword">uint32_t</span> netlong)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">uint16_t</span> <span class="title">ntohs</span><span class="params">(<span class="keyword">uint16_t</span> netshort)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>不需要死记硬背，函数的命名通俗易懂。强调一下，转换 ip 地址使用长整型转换函数，转换 port 使用短整型转换函数。我在码代码学习时，误用 <code>htonl(6666)；</code> 转换端口编译通过，运行时也不报错，启动多个服务程序也不报错 ps 正常情况重复启动服务程序时会报错“端口已经占用”。</p>
-<h2 id="INADDR-ANY-宏"><a href="#INADDR-ANY-宏" class="headerlink" title="INADDR_ANY 宏"></a><code>INADDR_ANY</code> 宏</h2><p>详细解释参考 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/16508685/understanding-inaddr-any-for-socket-programming-c">understanding INADDR_ANY for socket programming - c</a>。在此只强调一点，<code>INADDR_ANY</code> 表示的是一个服务器上所有的网卡。</p>
-<h1 id="inet-pton-函数"><a href="#inet-pton-函数" class="headerlink" title="inet_pton() 函数"></a><code>inet_pton()</code> 函数</h1><p>IP地址转换函数，可以在将 IP 地址在“点分十进制”和“二进制整数”之间转换。在 <a target="_blank" rel="noopener" href="http://beej.us/guide/bgnet/output/html/multipage/inet_ntopman.html">Beej’s Guide to Network Programming</a> 我们找到的描述以及函数原型：</p>
-<blockquote>
-<p>Convert IP addresses to human-readable form and back.</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">char</span> *<span class="title">inet_ntop</span><span class="params">(<span class="keyword">int</span> af, <span class="keyword">const</span> <span class="keyword">void</span> *src,</span></span></span><br><span class="line"><span class="function"><span class="params">                      <span class="keyword">char</span> *dst, <span class="keyword">socklen_t</span> size)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">inet_pton</span><span class="params">(<span class="keyword">int</span> af, <span class="keyword">const</span> <span class="keyword">char</span> *src, <span class="keyword">void</span> *dst)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>强调一点，<code>inet_pton()</code> 同样支持 “localhost”。</p>
-<h1 id="inet-addr-函数"><a href="#inet-addr-函数" class="headerlink" title="inet_addr() 函数"></a><del><code>inet_addr()</code> 函数</del></h1><blockquote>
-<p>Convert IP addresses from a dots-and-number string to a <code>struct in_addr</code> and back</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ALL THESE ARE DEPRECATED!  Use inet_pton()  or inet_ntop() instead!!</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">inet_ntoa</span><span class="params">(struct in_addr in)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">inet_aton</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *cp, struct in_addr *inp)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">in_addr_t</span> <span class="title">inet_addr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *cp)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>我们可以看到其中的注释，这三个函数即将淘汰。</p>
-<h1 id="学习-libevent"><a href="#学习-libevent" class="headerlink" title="学习 libevent"></a>学习 libevent</h1><h2 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h2><ol>
-<li><p><code>select()</code> 函数第一个参数为什么要 <code>maxfd+1</code>？不理解 <a target="_blank" rel="noopener" href="http://www.wangafu.net/~nickm/libevent-book/01_intro.html">官方手册</a> 中讲述 <code>select()</code> 低效的这段话：</p>
-<blockquote>
-<p>On the userspace side, …But on the kernel side,…</p>
-</blockquote>
-</li>
-<li><p>为什么在 Example: select()-based ROT13 server 中需要 <code>make_nonblocking()</code> ？为什么 Example: A low-level ROT13 server with Libevent 中需要 <code>evutil_make_socket_nonblocking()</code>？</p>
-</li>
-<li><p><code>setvbuf(stdout, NULL, _IONBF, 0);</code> 的意义？</p>
-</li>
-</ol>
-<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><p>最初步的认识，最简单的例子：<a target="_blank" rel="noopener" href="http://hahaya.github.io/hello-in-libevent/">使用libevent输出Hello</a></p>
-<blockquote>
-<p>（niel）这里只提到了 <code>strcut event_base</code>、<code>struct event</code>。给出的简单示例代码里，有一处瑕疵： <code>event_base_set()</code> 函数属于过时的函数，在 2.0 之前的版本中配合 <code>event_set()</code> 使用，在 2.0 及其之后的版本中这两者被  <code>event_new()</code> 替代，所以作者混用 <code>event_new()</code> + <code>event_base_set()</code> 表明了作者并未多花时间学习。</p>
-</blockquote>
-<p>接下来，我们可以学习一下：<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_9db214690101cet0.html">libevent入门教程：Echo Server based on libevent </a></p>
-<blockquote>
-<p>（niel）这篇博客循序渐进，讲到了 <code>strcut buffevent</code> 及其相关操作。美中不足的是作者在介绍过程中穿插记录了自己的疑惑，新手读起来打破了学习的连贯性，本就在学习新知识，却也要困于作者的“泥潭”。只能说这真的只是作者的学习笔记，并未从读者的角度做考虑。总的来说，帖子很不错！初次学习时，这些问题的存在让人很难受，影响学习进度、学习动力；但熟悉作者讲的知识之后，这些问题反而才是“金子”，认真思考这些问题。</p>
-</blockquote>
-<p>接下来推荐的学习资源就是官方手册了：<a target="_blank" rel="noopener" href="http://www.wangafu.net/~nickm/libevent-book/">Programming with Libevent</a></p>
-<blockquote>
-<p>（niel）虽然是用英文写的，但阅读起来毫无障碍，很容易理解。marks  C0、C1、R0 ~ R4、R8 认真阅读；R5、R6 重点关注了小部分函数，其余走马观花浏览了一下；R6a、R7、R9 三节没有看。开发过程中，查阅函数原型肯定是得翻这个手册的！</p>
-</blockquote>
-<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000005594871">Libevent 官方文档学习笔记</a>，这篇帖子可以看一看，和自己读英文手册理解的相互佐证。</p>
-<p><a target="_blank" rel="noopener" href="https://taozj.org/201605/learn-note-of-libevent-(1)-basic-usage.html">Libevent学习笔记（一）：基本使用</a>，检验自己的学习成果。</p>
-<blockquote>
-<p>总的来说，后面这两篇帖子并不适合用来学习。更多的定位于作者知识的整理，并不是面向新手的入门介绍。</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/28/cherry/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/28/cherry/" class="post-title-link" itemprop="url">零散</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-28 09:49:26" itemprop="dateCreated datePublished" datetime="2017-04-28T09:49:26+08:00">2017-04-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p> 2016/3/14 10:51:03</p>
-<p>办公室抽屉中草稿纸上的内容，挑拣有用的信息誊录在此。草稿纸扔掉。</p>
-<blockquote>
-<p>以下每一项都可以展开，写一篇笔记的</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/28/cherry/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/27/automake2nd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/27/automake2nd/" class="post-title-link" itemprop="url">Automake 之 Flat 目录机构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-27 16:45:13" itemprop="dateCreated datePublished" datetime="2017-04-27T16:45:13+08:00">2017-04-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -959,7 +491,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
                 </span>
             </span>
 
@@ -974,107 +506,576 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>2015年12月24日 19:01:26</p>
-<p>这个其实是个子篇。整体见 <a href="/2017/04/27/automake1st/">Makefile 自动生成</a></p>
-<p>在进入正文之前先通过下图对操作步骤及其中的依赖关系有个大致的概念，理解起来更容易：</p>
-<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/automake1st/1.png" alt="流程图"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/27/automake2nd/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/27/automake1st/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/27/automake1st/" class="post-title-link" itemprop="url">Makefile 自动生成 - 三种目录结构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-27 16:45:04" itemprop="dateCreated datePublished" datetime="2017-04-27T16:45:04+08:00">2017-04-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2015年12月22日 14:48:52</p>
-<p>这个标题《Makefile 自动生成》 8 号立的，拖到今天刚好两周。ps 2017/8/24 14:04:25 删改了 2/3 的内容，改为现在的标题。</p>
-<p>一方面因为最近的工作是关于 MySQL，整理数据库表结构的；另一方面，是直到今天，对于自动生成 Makefile 操作依旧懵懵懂懂，在实际项目中无法使用，还是自己手动写 Makefile 文件。下面进入主题。</p>
-<p>Makefile 自动生成，实际项目中接触到的工具有：easymake、cmake 和 autotools。 在这里只整理 autotools。</p>
+          <p>来源：<a target="_blank" rel="noopener" href="https://blog.panicsoftware.com/co_awaiting-coroutines/">https://blog.panicsoftware.com/co_awaiting-coroutines/</a></p>
+<h1 id="Awaitable"><a href="#Awaitable" class="headerlink" title="Awaitable"></a>Awaitable</h1><p>As I have mentioned in the previous posts, the <code>suspend_always</code> and <code>suspend_never</code> are types, that fulfill the <code>Awaitable</code> concept. </p>
+<p>We can get the Awaitable object in two ways:</p>
 <ul>
-<li>easymake 怎么用，给个简单使用的参考，进一步的细节和更深程度上的使用，以后用到了再学。<a target="_blank" rel="noopener" href="http://www.cnblogs.com/Pony279/p/3888774.html">通用的 makefile 小工具分享 - Easymake 使用说明</a>。</li>
-<li>cmake 又是值得大书特书的一款工具。<a target="_blank" rel="noopener" href="http://www.hahack.com/codes/cmake/">CMake 入门实战</a></li>
+<li>Direct creation of Awaitable,</li>
+<li>Transformation of the object into Awaitable because of <code>await_transform</code> function.</li>
 </ul>
-<p>autotools 作为重点学习，所以发现了很多篇不错的帖子。</p>
-<ol>
-<li><a href="/2017/08/24/autotools/">编译利器：大型项目如何使用Automake和Autoconf完成编译配置(ver+0.6)</a> 内容很棒，却找不到好的排版，将其摘入自己博客</li>
-<li><a target="_blank" rel="noopener" href="http://www.pchou.info/linux/2016/09/16/gnu-build-system-1.html">概念：GNU构建系统和Autotool</a>、<a target="_blank" rel="noopener" href="http://www.pchou.info/linux/2016/09/24/gnu-build-system-2.html">实践：GNU构建系统</a> 作者整理的真心不错，专业功底、语言描述、文章结构都很赞；</li>
-<li><a target="_blank" rel="noopener" href="https://geesun.github.io/posts/2015/02/autotool.html">使用autotools生成Makefile学习笔记</a> 不能当做一篇学习的帖子，其“常用功能分析”一节可以作为参考手册，认清知识点</li>
-</ol>
+<h1 id="co-await-operator-and-Awaiter"><a href="#co-await-operator-and-Awaiter" class="headerlink" title="co_await operator and Awaiter"></a>co_await operator and Awaiter</h1><p>The <code>co_await</code> operator is actually responsible for two things:</p>
+<ul>
+<li>Forcing compiler to generate some coroutine boilerplate code</li>
+<li>Creating the Awaiter object.</li>
+</ul>
+<p>So first let’s have a look at how is the awaiter object is created. The <code>co_await</code> operator is responsible for the creation of the awaiter object. The <code>co_await</code> operator declaration is looked upon in the awaitable object and if it’s found this <code>co_await</code> operator is executed to obtain awaiter object. Otherwise, if the appropriate function is not found, then awaitable becomes the awaiter. </p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2017/04/27/automake1st/#more" rel="contents">
+              <a class="btn" href="/2021/03/26/coroutine3/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/26/coroutine2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/26/coroutine2/" class="post-title-link" itemprop="url">YOUR FIRST COROUTINE</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-26 11:03:00" itemprop="dateCreated datePublished" datetime="2021-03-26T11:03:00+08:00">2021-03-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>来源：<a target="_blank" rel="noopener" href="https://blog.panicsoftware.com/your-first-coroutine/">https://blog.panicsoftware.com/your-first-coroutine/</a></p>
+<p><code>std::future&lt;int&gt; foo();</code></p>
+<p>这是个普通函数，还是协程？这是由其具体实现决定的。</p>
+<p>If any of those keywords occur in the function, then it becomes a coroutine.</p>
+<ul>
+<li><code>co_await</code></li>
+<li><code>co_return</code></li>
+<li><code>co_yield</code></li>
+</ul>
+<p>So the operator <code>co_await</code> is a unary operator, which takes the <code>Awaitable</code> object as its argument.</p>
+<h1 id="Why-do-we-need-to-define-additional-types"><a href="#Why-do-we-need-to-define-additional-types" class="headerlink" title="Why do we need to define additional types?"></a>Why do we need to define additional types?</h1><p>So the object used to communicate with the coroutine is the object of the coroutine’s return type.</p>
+<p>我们使用协程的返回值，和协程进行沟通。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/03/26/coroutine2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/26/coroutine1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/26/coroutine1/" class="post-title-link" itemprop="url">COROUTINES INTRODUCTION</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-26 09:10:00" itemprop="dateCreated datePublished" datetime="2021-03-26T09:10:00+08:00">2021-03-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>来源：<a target="_blank" rel="noopener" href="https://blog.panicsoftware.com/coroutines-introduction/">https://blog.panicsoftware.com/coroutines-introduction/</a></p>
+<p>虽然协程作为重要特性，即将进入 C++ 20，但仍然有很多人吐槽。</p>
+<blockquote>
+<p> Main complaints were regarding the hardness to understand, lots of customisation points, and possibly not optimal performance due to possibly unoptimised dynamic memory allocations</p>
+</blockquote>
+<p>主要的抱怨是关于理解起来很难，大量的定制点以及，未优化的动态内存分配可能造成性能的损失。</p>
+<p>谷歌的提案存在一些问题，最终被接受的协程方案来自微软。</p>
+<h1 id="什么是协程"><a href="#什么是协程" class="headerlink" title="什么是协程"></a>什么是协程</h1><p>The coroutines already exist in many programming languages, may it be Python or C#. Coroutines provide one more way to create asynchronous code. How this way differs from threads and why do we need a dedicated language feature for coroutines and finally how we can benefit will be explained in this section.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/03/26/coroutine1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/02/18/openwrt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/18/openwrt/" class="post-title-link" itemprop="url">软路由 OpenWRT</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-18 11:52:42" itemprop="dateCreated datePublished" datetime="2021-02-18T11:52:42+08:00">2021-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>TODO</p>
+<ol start="4">
+<li>蓝牙网络连接，什么作用？删掉或禁用有影响吗？</li>
+<li>如何自动切换网关</li>
+<li>将 共享目录从台式机移到笔记本中，使用网线已经没有带宽限制了。</li>
+</ol>
+<h1 id="装机"><a href="#装机" class="headerlink" title="装机"></a>装机</h1><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Windows%E9%A0%90%E5%85%88%E5%AE%89%E8%A3%9D%E7%92%B0%E5%A2%83">Windows预先安装环境</a>（英语：Microsoft Windows Preinstallation Environment），简称 Windows PE 或 WinPE，是 Microsoft Windows 的轻量版本。</p>
+<p>关于装机的知识，通过 <a target="_blank" rel="noopener" href="http://www.wepe.com.cn/ubook/">微PE优盘使用说明书</a> 可以学习，虽然我们并不购买他家的优盘。以下摘录部分笔记。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/18/openwrt/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/02/02/function-template/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/02/function-template/" class="post-title-link" itemprop="url">函数模板</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-02 16:22:31" itemprop="dateCreated datePublished" datetime="2021-02-02T16:22:31+08:00">2021-02-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><code>std::function&lt;&gt;</code> 模板到底是什么？ 可以简单理解为对应 C 语言中的函数指针。入参或绑定的参数如果是原始指针或引用时，需要特别注意其生存周期。</p>
+<p>关于函数类模板，学习《Effective.Modern.C++》P39</p>
+<blockquote>
+<p>And maybe now you’re thinking “What’s a <code>std::function</code> object?” So let’s clear that up</p>
+</blockquote>
+<h1 id="boost-empty-value-的意义？"><a href="#boost-empty-value-的意义？" class="headerlink" title="boost::empty_value 的意义？"></a><code>boost::empty_value</code> 的意义？</h1><p>待补充</p>
+<h1 id="获得-std-function-对象"><a href="#获得-std-function-对象" class="headerlink" title="获得 std::function 对象"></a>获得 <code>std::function</code> 对象</h1><p>Lambda expressions </p>
+<blockquote>
+<p>Constructs a closure: an unnamed function object capable of capturing variables in scope. <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/lambda">摘自 lambda</a></p>
+</blockquote>
+<p>Function objects</p>
+<blockquote>
+<p>A function object is any object for which <strong>the function call operator</strong> is defined. <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/utility/functional">摘自 functional</a></p>
+</blockquote>
+<p><code>std::function</code>，推荐查看其 Example</p>
+<blockquote>
+<p>Class template <code>std::function</code> is a general-purpose polymorphic function wrapper. Instances of <code>std::function</code> can store, copy, and invoke any CopyConstructible Callable target – functions, lambda expressions, bind expressions, or other function objects, as well as pointers to member functions and pointers to data members. <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/utility/functional/function">摘自 function</a></p>
+</blockquote>
+<p>需要强调的是 C++ 标准未对 <code>std::bind</code> 表达式的返回类型做出定义，其返回值并不对应我们熟悉的任何类型，但可以直接赋值给 <code>std::function&lt;&gt;</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::function&lt;<span class="keyword">int</span>(<span class="keyword">int</span>)&gt; func = <span class="built_in">std</span>::<span class="built_in">tolower</span>;</span><br><span class="line"><span class="built_in">std</span>::function&lt;<span class="keyword">int</span>(<span class="keyword">int</span>)&gt; lamb = [](<span class="keyword">int</span> a) &#123; <span class="keyword">return</span> a; &#125;;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">string</span> <span class="title">str</span><span class="params">(<span class="string">&quot;niel&quot;</span>)</span></span>;</span><br><span class="line"><span class="built_in">std</span>::function&lt;<span class="keyword">size_t</span>(<span class="keyword">void</span>)&gt; bind = <span class="built_in">std</span>::bind(&amp;<span class="built_in">std</span>::<span class="built_in">string</span>::size, &amp;str);</span><br><span class="line"><span class="built_in">std</span>::function&lt;<span class="keyword">int</span>(<span class="keyword">int</span>, <span class="keyword">int</span>)&gt; object = <span class="built_in">std</span>::plus&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line"><span class="built_in">std</span>::function&lt;<span class="keyword">size_t</span>(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp;)&gt; p2mf = &amp;<span class="built_in">std</span>::<span class="built_in">string</span>::size;</span><br><span class="line"></span><br><span class="line"><span class="comment">//std::function&lt;size_t(void)&gt; bind = std::bind(&amp;std::string::size, std::ref(str));</span></span><br><span class="line"><span class="comment">//// 拷贝传参，请务必明白在做什么。also works, but str is copied</span></span><br><span class="line"><span class="comment">//std::function&lt;size_t(void)&gt; bind = std::bind(&amp;std::string::size, str);</span></span><br></pre></td></tr></table></figure>
+<h1 id="模板参数"><a href="#模板参数" class="headerlink" title="模板参数"></a>模板参数</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ERR，末尾多余的 const 造成报错内容在千里之外</span></span><br><span class="line"><span class="keyword">using</span> SENDFUNC = <span class="built_in">std</span>::function&lt;<span class="keyword">void</span>(CBD , <span class="keyword">void</span> <span class="keyword">const</span> * <span class="keyword">const</span> , <span class="keyword">size_t</span> ) <span class="keyword">const</span>&gt;;</span><br><span class="line"><span class="keyword">using</span> SENDFUNC = <span class="built_in">std</span>::function&lt;<span class="keyword">void</span>(CBD , <span class="keyword">void</span> <span class="keyword">const</span> * <span class="keyword">const</span> , <span class="keyword">size_t</span> ) <span class="comment">/*const*/</span>&gt;;</span><br></pre></td></tr></table></figure>
+<h1 id="递归调用"><a href="#递归调用" class="headerlink" title="递归调用"></a>递归调用</h1><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/2067988/recursive-lambda-functions-in-c11">为什么 <code>function&lt;&gt;</code> 对象递归调用自身不能使用 <code>auto</code>?</a></p>
+<p>vc2015 IntelliSence 提示</p>
+<blockquote>
+<p>使用 <code>auto</code> 类型说明符声明的变量不能出现在其自身的初始值设定项中</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/02/function-template/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/02/02/ppp-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/02/ppp-notes/" class="post-title-link" itemprop="url">《ppp》读书笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-02 16:22:31" itemprop="dateCreated datePublished" datetime="2021-02-02T16:22:31+08:00">2021-02-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="类接口：保持接口的最小化"><a href="#类接口：保持接口的最小化" class="headerlink" title="类接口：保持接口的最小化"></a>类接口：保持接口的最小化</h1><p>p207</p>
+<blockquote>
+<p>当我们试图最小化类接口时（在保证完整性的前提下），不得不忽略大量有用的操作。如果一个函数可以简单、优美、高效地实现为一个独立函数时（即实现为非成员函数），就应该将它的实现放在类外。<strong>采用这种方式，函数中的错误就不会直接破坏类对象中的数据</strong>。p213</p>
+</blockquote>
+<h1 id="如何创建自己的-vector"><a href="#如何创建自己的-vector" class="headerlink" title="如何创建自己的 vector"></a>如何创建自己的 <code>vector</code></h1><p>预留空间 和 <code>std::allocator</code> 类</p>
+<blockquote>
+<p>注意，我们并不对预留空间中的元素进行初始化。 p329</p>
+</blockquote>
+<blockquote>
+<p>我们需要处理非常尴尬的情况：数据结构同时包含已初始化数据和未初始化数据。p341</p>
+</blockquote>
+<p>因为内置的数值类型都是小对象，所以可以一律初始化，无需在意开销。但对于自定义类型，初始化要有的放矢。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/02/ppp-notes/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2020/12/25/c++20/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/25/c++20/" class="post-title-link" itemprop="url">c++20 特性</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-25 16:18:36" itemprop="dateCreated datePublished" datetime="2020-12-25T16:18:36+08:00">2020-12-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>学习 c++20 首先要有支持相关特性的编译器</p>
+<p>msvc2019 如果和工作用的 msvc2015 安装在同一台机器上，在使用 vcpkg 时会产生冲突</p>
+<p>clang 在 windows 下的使用并不平滑，如果初衷是 c++20，就不要舍本逐末。在熟悉 c++20 后回头折腾 clang</p>
+<p>虚拟机上安装 msvc2019，Hyper-V 是好的选择吗？如果要用 VMware 还是躲开 Hyper-V</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/25/c++20/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1097,7 +1098,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1165,20 +1166,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1213,7 +1214,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

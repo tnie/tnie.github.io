@@ -20,20 +20,19 @@
     var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="问题主要发生于将 windows 下的文本（源代码、脚本等）拷贝到 Linux 平台；反之，因为 windows 的霸道，其开发工具、编辑器会强制转换，所以一般不会产生问题。  gcc 编译报错让我认识到，utf8 格式的文本还分带 BOM 头，不带 BOM 头； vim 启动有问题认识到换行、回车到现在还在影响着跨平台；">
+  <meta name="description" content="问题主要发生于将 windows 下的文本（源代码、脚本等）拷贝到 Linux 平台；反之，因为 windows 的“主动”，其开发工具、编辑器会强制转换，所以一般不会产生问题。  gcc 编译报错让我认识到，utf8 格式的文本还分带 BOM 头，不带 BOM 头； vim 启动有问题认识到换行、回车到现在还在影响着跨平台；">
 <meta property="og:type" content="article">
 <meta property="og:title" content="跨平台使用文本文件时的陷阱">
 <meta property="og:url" content="https://tnie.github.io/2017/03/21/Cross-Platform-Text/index.html">
 <meta property="og:site_name" content="不积小流，无以成江海">
-<meta property="og:description" content="问题主要发生于将 windows 下的文本（源代码、脚本等）拷贝到 Linux 平台；反之，因为 windows 的霸道，其开发工具、编辑器会强制转换，所以一般不会产生问题。  gcc 编译报错让我认识到，utf8 格式的文本还分带 BOM 头，不带 BOM 头； vim 启动有问题认识到换行、回车到现在还在影响着跨平台；">
+<meta property="og:description" content="问题主要发生于将 windows 下的文本（源代码、脚本等）拷贝到 Linux 平台；反之，因为 windows 的“主动”，其开发工具、编辑器会强制转换，所以一般不会产生问题。  gcc 编译报错让我认识到，utf8 格式的文本还分带 BOM 头，不带 BOM 头； vim 启动有问题认识到换行、回车到现在还在影响着跨平台；">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Not-an-enditor-command.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Pattern-not-found.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/UnexpectedOutputOfScript.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/UnexpectedOutputOfScript-2.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/UnexpectedOutputOfScript-3.png">
 <meta property="article:published_time" content="2017-03-21T07:34:42.000Z">
-<meta property="article:modified_time" content="2021-01-18T05:30:33.358Z">
+<meta property="article:modified_time" content="2021-02-12T08:48:26.669Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Not-an-enditor-command.png">
@@ -235,7 +234,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2021-02-12 16:48:26" itemprop="dateModified" datetime="2021-02-12T16:48:26+08:00">2021-02-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -258,16 +257,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>问题主要发生于将 windows 下的文本（源代码、脚本等）拷贝到 Linux 平台；反之，因为 windows 的霸道，其开发工具、编辑器会强制转换，所以一般不会产生问题。</p>
+        <p>问题主要发生于将 windows 下的文本（源代码、脚本等）拷贝到 Linux 平台；反之，因为 windows 的“主动”，其开发工具、编辑器会强制转换，所以一般不会产生问题。</p>
 <ul>
 <li>gcc 编译报错让我认识到，utf8 格式的文本还分带 BOM 头，不带 BOM 头；</li>
 <li>vim 启动有问题认识到换行、回车到现在还在影响着跨平台；</li>
 </ul>
 <a id="more"></a>
 
-<h1 id="UTF-8-是否带-BOM-头"><a href="#UTF-8-是否带-BOM-头" class="headerlink" title="UTF-8 是否带 BOM 头"></a>UTF-8 是否带 BOM 头</h1><p>2016年1月14日 17:37:30</p>
-<p>ps 【…有4个链接要看】</p>
-<h2 id="BOM-概念"><a href="#BOM-概念" class="headerlink" title="BOM 概念"></a>BOM 概念</h2><p>BOM，就是 utf8-bom 中的 bom。</p>
+<h1 id="字符集和字符编码"><a href="#字符集和字符编码" class="headerlink" title="字符集和字符编码"></a>字符集和字符编码</h1><h2 id="ansi-体系和-unicode"><a href="#ansi-体系和-unicode" class="headerlink" title="ansi 体系和 unicode"></a>ansi 体系和 unicode</h2><p>参考：<a target="_blank" rel="noopener" href="http://blog.csdn.net/stephen1315/article/details/7476236">Unicode 字符集和多字节字符集关系</a></p>
+<p>ansi 机构最初的 ascii 字符集，后来各国各自扩充，中国大陆和新加坡等地区使用本地编码是 GB2312 或 GBK，中国港台地区使用的本地编码是 BIG5，韩国和日本的本地编码分别是 euc-kr 和 Shift_JIS。这些从 ANSI 标准派生的字符集被习惯的统称为 ANSI 字符集，它们正式的名称应该是 MBCS(Multi-Byte Chactacter System，即多字节字符系统)。ansi 体系，字符集一般只对应一种字符编码。</p>
+<p>再后来，为了大一统，出现了 unicode 字符集。</p>
+<h2 id="mbsc-和宽字节"><a href="#mbsc-和宽字节" class="headerlink" title="mbsc 和宽字节"></a>mbsc 和宽字节</h2><p>参考：<a target="_blank" rel="noopener" href="http://blog.csdn.net/leixiaohua1020/article/details/12753723">单字节字符集，多字节字符集，Unicode</a></p>
+<p>ASCII 是 SBCS。一个字节表示的 <code>0</code> 用来标志 SBCS 字符串的结束。  </p>
+<p>DBCS 字符串的结束标志也是一个单字节表示的 <code>0</code>。  </p>
+<p>Unicode 字符串使用两个字节表示的 <code>0</code> 作为它的结束标志。</p>
+<ul>
+<li>多字节（mbsc）包括 sbsc 和 dbsc 等。ascii 基本代表了 sbsc。ansi 和 mbsc 基本算同义词。</li>
+<li>宽字节，unicode 基本代表了宽字节。</li>
+</ul>
+<h1 id="BOM-概念"><a href="#BOM-概念" class="headerlink" title="BOM 概念"></a>BOM 概念</h1><p>BOM，就是 utf8-bom 中的 bom。</p>
 <p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BD%8D%E5%85%83%E7%B5%84%E9%A0%86%E5%BA%8F%E8%A8%98%E8%99%9F">字节顺序标记</a>（英语：byte-order mark，BOM）是位于码点 <code>U+FEFF</code> 的统一码字符的名称。统一码中，值为 <code>U+FFFE</code> 的码位被保证将不会被指定成一个统一码字符。Unicode 的编码点是唯一的，但表达方式（存储方式）多样。表达方式涉及 utf8,utf16 等；存储方式除了前者还涉及 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82%E5%BA%8F">字节顺序</a>。在 UTF-16 中：</p>
 <ul>
 <li>大尾序存储形式：数值的低有效位存储在存储地址高的位置。即 <code>0xFE,0xFF</code></li>
@@ -285,10 +293,10 @@
 <p>因为 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Unicode%E5%AD%97%E7%AC%A6%E5%B9%B3%E9%9D%A2%E6%98%A0%E5%B0%84">BMP 基本多文种平面</a> 基本包含了我们目前接触到的所有字符，所以 <code>\U</code> 大写的转移字符一般是用不到的。</p>
 <p>由此，如果我们想通过 C++ 的输出流创建 utf8-bom 文件并写入 <code>niel水</code> 有多样的代码可选：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// UTF-8 data with BOM</span></span><br><span class="line"><span class="built_in">std</span>::ofstream(<span class="string">&quot;text.txt&quot;</span>) &lt;&lt; <span class="string">u8&quot;\ufeff&quot;</span> &lt;&lt; <span class="string">u8&quot;niel\u6c34&quot;</span>;</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="built_in">std</span>::ofstream(<span class="string">&quot;text.txt&quot;</span>) &lt;&lt; <span class="string">&quot;\xef\xbb\xbf&quot;</span> &lt;&lt; <span class="string">u8&quot;niel水&quot;</span>;</span><br><span class="line"><span class="comment">// 两者并无本质区别：我们优先做了转码工作或者交给预处理器去做</span></span><br></pre></td></tr></table></figure>
-<h2 id="“error-stray-‘-357’-in-program”"><a href="#“error-stray-‘-357’-in-program”" class="headerlink" title="“error: stray ‘\357’ in program”"></a>“error: stray ‘\357’ in program”</h2><p>在 linux 上某次编译时老是报错，错误信息如下：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> g++ -I../../include unit_test.cpp -o unit_test</span></span><br><span class="line">unit_test.cpp:1: 错误： 程序中有游离的&#x27;\357&#x27;</span><br><span class="line">unit_test.cpp:1: 错误： 程序中有游离的&#x27;\273&#x27;</span><br><span class="line">unit_test.cpp:1: 错误： 程序中有游离的&#x27;\277&#x27;</span><br><span class="line">In file included from unit_test.cpp:63:</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h2 id="error-stray-‘-357’-in-program"><a href="#error-stray-‘-357’-in-program" class="headerlink" title="error: stray ‘\357’ in program"></a>error: stray ‘\357’ in program</h2><p>在 linux 上某次编译时老是报错，错误信息如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> g++ -I../../include unit_test.cpp -o unit_test</span></span><br><span class="line">unit_test.cpp:1: 错误： 程序中有游离的&#x27;\357&#x27;</span><br><span class="line">unit_test.cpp:1: 错误： 程序中有游离的&#x27;\273&#x27;</span><br><span class="line">unit_test.cpp:1: 错误： 程序中有游离的&#x27;\277&#x27;</span><br><span class="line">In file included from unit_test.cpp:63:</span><br></pre></td></tr></table></figure>
 <p>或在英文系统下：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> g++ -I../../include unit_test.cpp -o unit_test</span></span><br><span class="line">unit_test.cpp:1: error: stray &#x27;\357&#x27; in program</span><br><span class="line">unit_test.cpp:1: error: stray &#x27;\273&#x27; in program</span><br><span class="line">unit_test.cpp:1: error: stray &#x27;\277&#x27; in program</span><br><span class="line">In file included from unit_test.cpp:63:</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> g++ -I../../include unit_test.cpp -o unit_test</span></span><br><span class="line">unit_test.cpp:1: error: stray &#x27;\357&#x27; in program</span><br><span class="line">unit_test.cpp:1: error: stray &#x27;\273&#x27; in program</span><br><span class="line">unit_test.cpp:1: error: stray &#x27;\277&#x27; in program</span><br><span class="line">In file included from unit_test.cpp:63:</span><br></pre></td></tr></table></figure>
 <p><code>\357\273\277</code> （八进制）就是 <code>EF BB BF</code>（十六进制），这是 utf8 格式文本文件的 BOM 头。so……</p>
 <p>产生原因:</p>
 <p>文本文件（源代码文件 .cpp .h 等也是文本文件）的编码格式各种各样，没有明确的区分。而一些浏览文本文件的软件大多是用猜测的算法来区分这些编码，这里涉及内容很多，不多说。windows 下为了区分 UTF-8 编码格式，在以 UTF-8 编码的文本文件前写入三个字节的标志（0xef 0xbb 0xbf）来区分 UTF-8 编码的文本文件，也就是带 BOM 的 UTF-8。而 linux 下的一些编译器不识别 BOM，所以就会报错。</p>
@@ -303,16 +311,10 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat unit_test.cpp |hd -n 10</span></span><br><span class="line">00000000 ef bb bf 2f 2a 2a 2a 2a 2a 2a |.../******|</span><br><span class="line">0000000a</span><br></pre></td></tr></table></figure>
 <p>ps: <code>hd</code> 命令在 13x 系列服务器上不存在，在 Debian8 中有。 猜测应该是 <code>hexdump</code> 命令？？</p>
 <h1 id="回车、换行是两个字符"><a href="#回车、换行是两个字符" class="headerlink" title="回车、换行是两个字符"></a>回车、换行是两个字符</h1><p>虽然很早就意识到回车、换行的区别，在不同平台上不一致。但在新的系统、新的应用中，这个问题一般会被“抹掉”，不会再暴露出来。但在 N 年前的老机子就得注意了！</p>
-<h2 id="Not-an-editor-command-M"><a href="#Not-an-editor-command-M" class="headerlink" title="Not an editor command: ^M"></a>Not an editor command: ^M</h2><p>2015年11月20日 17:32:39</p>
-<p>转载自：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/ini_always/archive/2012/03/03/2378554.html">http://www.cnblogs.com/ini_always/archive/2012/03/03/2378554.html</a></p>
-<p>将 windows 下的 vim 配置文件 _vimrc 拷贝到 mac 下，重命名为 .vimrc，本指望实现共用配置文件。但在启动 vim 时却报了以下错误：</p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2006/04/post_213.html">回车和换行</a></p>
+<h2 id="Not-an-editor-command-M"><a href="#Not-an-editor-command-M" class="headerlink" title="Not an editor command: ^M"></a>Not an editor command: ^M</h2><p>将 windows 下的 vim 配置文件 _vimrc 拷贝到 mac 下，重命名为 .vimrc，本指望实现共用配置文件。但在启动 vim 时却报了以下错误：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">E492: Not an editor command: ^M</span><br><span class="line">E488: Trailing characters: nocompatible^M</span><br><span class="line">E15: Invalid expression: has(&quot;syntax&quot;)^M</span><br><span class="line">E171: Missing :endif</span><br></pre></td></tr></table></figure>
 <p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Not-an-enditor-command.png" alt="报错信息"></p>
-<p>Mac OS 的本质是 unix，而 unix-like 的文件换行符为 <code>\n</code>，但 windows 却非要把 <code>\r\n</code> 作为换行符，所以，vim 在解析从 windows 拷贝到 mac 的的 vimrc 时，因为遇到无法解析的 <code>\r</code>，所以报错。</p>
-<p>这个简单，用vim的神替换功能处理一下就好：<code>:%s/^M//gc</code>，<code>g</code> 选项表示全局替换，<code>c</code> 选项表示每次替换都需要确认。</p>
-<p>但要注意：这里的 <code>^M</code> 是特殊字符，并不是使用 <code>^</code>和 <code>M</code> 两个字符输入的，而是通过两个组合键 <code>C-V</code> <code>C-M</code> 输入的（C 代指 Ctrl），当然，<code>^M</code> 也可以使用 <code>\r</code> 表示。</p>
-<p>问题：我按照上面的执行替换指令后，报错 未找到 <code>\r</code>。不清楚为什么，反正不好用。</p>
-<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Pattern-not-found.png" alt="未找到 \r"></p>
 <p>从网上搜到的相关问题的解决办法： <a target="_blank" rel="noopener" href="http://blog.csdn.net/alex_xhl/article/details/6097191">vim 替换^M</a></p>
 <p>使用 <code>dos2unix</code> 命令。一般的分发版本中都带有这个小工具（如果没有可以根据下面的连接去下载），使用起来很方便：<code>$ dos2unix myfile.txt</code></p>
 <p>上面的命令会去掉行尾的^M。</p>
@@ -376,8 +378,8 @@
       <i class="fa fa-chevron-left"></i> 硬链接是别名；软链接关键在于路径
     </a></div>
       <div class="post-nav-item">
-    <a href="/2017/03/21/unicodeInWindows/" rel="next" title="使用 Unicode 字符集，慎用中文">
-      使用 Unicode 字符集，慎用中文 <i class="fa fa-chevron-right"></i>
+    <a href="/2017/03/26/SomeMemosAboutWindows/" rel="next" title="事关 Windows 使用的零散备忘">
+      事关 Windows 使用的零散备忘 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -437,7 +439,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UTF-8-%E6%98%AF%E5%90%A6%E5%B8%A6-BOM-%E5%A4%B4"><span class="nav-number">1.</span> <span class="nav-text">UTF-8 是否带 BOM 头</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BOM-%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">BOM 概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%80%9Cerror-stray-%E2%80%98-357%E2%80%99-in-program%E2%80%9D"><span class="nav-number">1.2.</span> <span class="nav-text">“error: stray ‘\357’ in program”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0-od-%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text">学习 od 命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E8%BD%A6%E3%80%81%E6%8D%A2%E8%A1%8C%E6%98%AF%E4%B8%A4%E4%B8%AA%E5%AD%97%E7%AC%A6"><span class="nav-number">2.</span> <span class="nav-text">回车、换行是两个字符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Not-an-editor-command-M"><span class="nav-number">2.1.</span> <span class="nav-text">Not an editor command: ^M</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E8%8E%AB%E5%90%8D%E5%85%B6%E5%A6%99%E7%9A%84%E6%89%93%E5%8D%B0"><span class="nav-number">2.2.</span> <span class="nav-text">脚本莫名其妙的打印</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E9%9B%86%E5%92%8C%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81"><span class="nav-number">1.</span> <span class="nav-text">字符集和字符编码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ansi-%E4%BD%93%E7%B3%BB%E5%92%8C-unicode"><span class="nav-number">1.1.</span> <span class="nav-text">ansi 体系和 unicode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mbsc-%E5%92%8C%E5%AE%BD%E5%AD%97%E8%8A%82"><span class="nav-number">1.2.</span> <span class="nav-text">mbsc 和宽字节</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BOM-%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">BOM 概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#error-stray-%E2%80%98-357%E2%80%99-in-program"><span class="nav-number">2.1.</span> <span class="nav-text">error: stray ‘\357’ in program</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0-od-%E5%91%BD%E4%BB%A4"><span class="nav-number">2.2.</span> <span class="nav-text">学习 od 命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E8%BD%A6%E3%80%81%E6%8D%A2%E8%A1%8C%E6%98%AF%E4%B8%A4%E4%B8%AA%E5%AD%97%E7%AC%A6"><span class="nav-number">3.</span> <span class="nav-text">回车、换行是两个字符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Not-an-editor-command-M"><span class="nav-number">3.1.</span> <span class="nav-text">Not an editor command: ^M</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E8%8E%AB%E5%90%8D%E5%85%B6%E5%A6%99%E7%9A%84%E6%89%93%E5%8D%B0"><span class="nav-number">3.2.</span> <span class="nav-text">脚本莫名其妙的打印</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -453,20 +455,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -501,7 +503,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

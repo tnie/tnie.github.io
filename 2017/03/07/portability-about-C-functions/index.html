@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/the-output-without-fflush-in-windows.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/func-about-cstr.png">
 <meta property="article:published_time" content="2017-03-07T01:27:48.000Z">
-<meta property="article:modified_time" content="2021-01-18T05:30:33.400Z">
+<meta property="article:modified_time" content="2023-05-20T04:21:13.607Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/snprintf-in-vc.png">
@@ -236,7 +236,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -277,6 +277,10 @@
 <li>并且不会在字符串末尾添加 <code>&#39;\0&#39;</code> 符；</li>
 <li>并且，如果字符串（第三个参数）超过 count，函数返回 <code>-1</code> 以标志可能导致的错误；</li>
 </ol>
+<p>上述描述如有异议或描述不清，请参考 <a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/2ts7cx93.aspx">微软文档</a>：</p>
+<blockquote>
+<p>Let <code>len </code>be the length of the formatted data string, <strong>not</strong> including the terminating null.<br>if <code>len</code> &lt; <code>count</code>, len characters are stored in buffer, a null-terminator is appended, and <code>len </code>is returned.<br>if <code>len</code> = <code>count</code>, len characters are stored in buffer, **no** null-terminator is appended, and <code>len </code>is returned.<br>If <code>len</code> &gt; <code>count</code>, count characters are stored in buffer, <strong>no</strong> null-terminator is appended, and a negative value is returned.</p>
+</blockquote>
 <p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/snprintf-in-vc.png" alt="windows-snprintf"></p>
 <h2 id="在linux下："><a href="#在linux下：" class="headerlink" title="在linux下："></a>在linux下：</h2><p>参考 <a target="_blank" rel="noopener" href="http://blog.csdn.net/crfoxzl/article/details/2062139"><code>snprintf</code> 函数用法</a></p>
 <ol>
@@ -284,6 +288,11 @@
 <li>并且，若成功则返回欲写入的字符串长度，若出错则返回负值；</li>
 </ol>
 <p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/snprintf-in-gcc.png" alt="linux-snprintf"></p>
+<p>snprinf 在 C++11 中是不是规范化了？是的</p>
+<p>从 <a target="_blank" rel="noopener" href="http://zh.cppreference.com/w/c/io/fprintf">C99</a>/<a target="_blank" rel="noopener" href="http://zh.cppreference.com/w/cpp/io/c/fprintf">C++11</a> 起，标准规范了 <code>snprintf </code>函数的定义，msvc 对此特性的支持比较晚：</p>
+<blockquote>
+<p>Beginning with the UCRT in Visual Studio 2015 and Windows 10, <code>snprintf </code>is no longer identical to <code>_snprintf</code>. The <code>snprintf </code>function behavior is now C99 standard compliant.<a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/2ts7cx93.aspx">摘自微软</a></p>
+</blockquote>
 <h1 id="access-函数，注意参数含义"><a href="#access-函数，注意参数含义" class="headerlink" title="access 函数，注意参数含义"></a><code>access</code> 函数，注意参数含义</h1><ul>
 <li>在windows下：<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_69ebf25c0100m57t.html">Access函数判断文件是否存在</a></li>
 <li>在linxu下：<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_6a1837e90100uh5d.html">linux C之access函数</a></li>
@@ -494,20 +503,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -542,7 +551,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

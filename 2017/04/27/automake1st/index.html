@@ -20,17 +20,17 @@
     var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="2015年12月22日 14:48:52 这个标题《Makefile 自动生成》 8 号立的，拖到今天刚好两周。ps 2017&#x2F;8&#x2F;24 14:04:25 删改了 2&#x2F;3 的内容，改为现在的标题。 一方面因为最近的工作是关于 MySQL，整理数据库表结构的；另一方面，是直到今天，对于自动生成 Makefile 操作依旧懵懵懂懂，在实际项目中无法使用，还是自己手动写 Makefile 文件。下面进入">
+  <meta name="description" content="2015年12月22日 14:48:52 这个标题《Makefile 自动生成》 8 号立的，拖到今天刚好两周。ps 2017&#x2F;8&#x2F;24 14:04:25 删改了 2&#x2F;3 的内容，改为现在的标题。 一方面因为最近在忙别的工作，整理数据库表结构的；另一方面，是直到今天，对于自动生成 Makefile 操作依旧懵懵懂懂，在实际项目中无法使用，还是自己手动写 Makefile 文件。下面进入主题。 Ma">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Makefile 自动生成 - 三种目录结构">
 <meta property="og:url" content="https://tnie.github.io/2017/04/27/automake1st/index.html">
 <meta property="og:site_name" content="不积小流，无以成江海">
-<meta property="og:description" content="2015年12月22日 14:48:52 这个标题《Makefile 自动生成》 8 号立的，拖到今天刚好两周。ps 2017&#x2F;8&#x2F;24 14:04:25 删改了 2&#x2F;3 的内容，改为现在的标题。 一方面因为最近的工作是关于 MySQL，整理数据库表结构的；另一方面，是直到今天，对于自动生成 Makefile 操作依旧懵懵懂懂，在实际项目中无法使用，还是自己手动写 Makefile 文件。下面进入">
+<meta property="og:description" content="2015年12月22日 14:48:52 这个标题《Makefile 自动生成》 8 号立的，拖到今天刚好两周。ps 2017&#x2F;8&#x2F;24 14:04:25 删改了 2&#x2F;3 的内容，改为现在的标题。 一方面因为最近在忙别的工作，整理数据库表结构的；另一方面，是直到今天，对于自动生成 Makefile 操作依旧懵懵懂懂，在实际项目中无法使用，还是自己手动写 Makefile 文件。下面进入主题。 Ma">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/automake1st/4.png">
 <meta property="article:published_time" content="2017-04-27T08:45:04.000Z">
-<meta property="article:modified_time" content="2021-01-18T05:30:33.367Z">
+<meta property="article:modified_time" content="2023-05-20T04:21:13.576Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta property="article:tag" content="make">
 <meta property="article:tag" content="makefile">
@@ -235,7 +235,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -260,7 +260,7 @@
       
         <p>2015年12月22日 14:48:52</p>
 <p>这个标题《Makefile 自动生成》 8 号立的，拖到今天刚好两周。ps 2017/8/24 14:04:25 删改了 2/3 的内容，改为现在的标题。</p>
-<p>一方面因为最近的工作是关于 MySQL，整理数据库表结构的；另一方面，是直到今天，对于自动生成 Makefile 操作依旧懵懵懂懂，在实际项目中无法使用，还是自己手动写 Makefile 文件。下面进入主题。</p>
+<p>一方面因为最近在忙别的工作，整理数据库表结构的；另一方面，是直到今天，对于自动生成 Makefile 操作依旧懵懵懂懂，在实际项目中无法使用，还是自己手动写 Makefile 文件。下面进入主题。</p>
 <p>Makefile 自动生成，实际项目中接触到的工具有：easymake、cmake 和 autotools。 在这里只整理 autotools。</p>
 <ul>
 <li>easymake 怎么用，给个简单使用的参考，进一步的细节和更深程度上的使用，以后用到了再学。<a target="_blank" rel="noopener" href="http://www.cnblogs.com/Pony279/p/3888774.html">通用的 makefile 小工具分享 - Easymake 使用说明</a>。</li>
@@ -285,7 +285,7 @@
 <p>niel 最让人难以忍受的是，看完作者的帖子，你发现你只会例子，做不到举一反三，稍微复杂点的项目（比如使用动态库、配置文件的存放）就无从下手。因为使用 autotools 的关键——怎么编写 configure.ac 和 Makefile.am——作者根本就没讲（没讲明白和没讲等价），从网上滥竽充数的各种帖子里生拉硬拽凑了第七、八、十节，作者自己都不会写 configure.ac、Makefile.am，给我们讲个毛线啊</p>
 </blockquote>
 <p>网上有很多帖子都参考了 IBM 的例解 <a target="_blank" rel="noopener" href="http://www.ibm.com/developerworks/cn/linux/l-makefile/">autoconf 和 automake 生成 Makefile 文件</a>，但相比上面这篇帖子就显得很一般了，只是平台好罢了！</p>
-<h1 id="概念介绍"><a href="#概念介绍" class="headerlink" title="概念介绍"></a>概念介绍</h1><h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><p>　　<br>makefile 用来定义整个工程的编译规则。一个工程中的源文件计数，其按类型、功能、模块分别放在若干个目录中，makefile 定义了一系列的规则来指定，哪些文件需要先编译，哪些文件需要后编译，哪些文件需要重新编译，甚至于进行更复杂的功能操作，因为 makefile 就像一个 Shell 脚本一样，其中也可以执行操作系统的命令。<br>　　<br>makefile 带来的好处就是——“自动化编译”，一旦写好，只需要一个 make 命令，整个工程完全自动编译，极大的提高了软件开发的效率。make 是一个命令工具，是一个解释 makefile 中指令的命令工具，一般来说，大多数的 IDE 都有这个命令，比如：Delphi 的 make，Visual C++ 的 nmake，Linux 下 GNU 的 make。可见，makefile 都成为了一种在工程方面的编译方法。</p>
+<h1 id="概念介绍"><a href="#概念介绍" class="headerlink" title="概念介绍"></a>概念介绍</h1><h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><p>makefile 用来定义整个工程的编译规则。一个工程中的源文件计数，其按类型、功能、模块分别放在若干个目录中，makefile 定义了一系列的规则来指定，哪些文件需要先编译，哪些文件需要后编译，哪些文件需要重新编译，甚至于进行更复杂的功能操作，因为 makefile 就像一个 Shell 脚本一样，其中也可以执行操作系统的命令。<br>　　<br>makefile 带来的好处就是——“自动化编译”，一旦写好，只需要一个 make 命令，整个工程完全自动编译，极大的提高了软件开发的效率。make 是一个命令工具，是一个解释 makefile 中指令的命令工具，一般来说，大多数的 IDE 都有这个命令，比如：Delphi 的 make，Visual C++ 的 nmake，Linux 下 GNU 的 make。可见，makefile 都成为了一种在工程方面的编译方法。</p>
 <h2 id="Autoconf"><a href="#Autoconf" class="headerlink" title="Autoconf"></a>Autoconf</h2><p>Autoconf 是一个用于生成可以自动地配置软件源码包，用以适应多种UNIX类系统的 shell 脚本（即 configure）工具。由 Autoconf 生成的配置脚本在运行的时候与 Autoconf 是无关的， 就是说配置脚本的用户并不需要拥有 Autoconf。 </p>
 <p>对于每个使用了 Autoconf 的软件包，Autoconf 从一个列举了该软件包需要的，或者可以使用的系统特征的列表的模板文件中生成配置脚本。在 shell 代码识别并响应了一个被列出的系统特征之后，Autoconf 允许多个可能使用（或者需要）该特征的软件包共享该特征。 如果后来因为某些原因需要调整 shell 代码，就只要在一个地方进行修改； 所有的配置脚本都将被自动地重新生成以使用更新了的代码。</p>
 <h2 id="Automake"><a href="#Automake" class="headerlink" title="Automake"></a>Automake</h2><p>Automake 是一个从 “Makefile.am”文件自动生成 “Makefile.in” 的工具。每个“Makefile.am”基本上是一系列 make 的宏定义 （make 规则也会偶尔出现）。生成的“Makefile.in”服从 GNU Makefile 标准。GNU Makefile 标准文档长、复杂，而且会发生改变。Automake 的目的就是解除个人 GNU 维护者维护 Makefile 的负担 （并且让 Automake 的维护者来承担这个负担）。典型的 Automake 输入文件是一系列简单的宏定义。处理所有这样的文件以创建 “Makefile.in”。在一个项目（project）的每个目录中通常包含一个 “Makefile.am”。Automake 在几个方面对一个项目做了限制；例如它假定项目使用 Autoconf 并且对 “configure.in”的内容施加了某些限制。 </p>
@@ -325,7 +325,7 @@
 </ol>
 <p>哈哈，一定看到你想要的结果了吧。ps：更详细介绍<a href="/2017/04/27/automake2nd/">《Automake 之 Flat 目录机构》</a></p>
 <h1 id="shallow-目录结构"><a href="#shallow-目录结构" class="headerlink" title="shallow 目录结构"></a>shallow 目录结构</h1><h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">helloworld </span><br><span class="line">|-mymain.c </span><br><span class="line">|head </span><br><span class="line">||-mytest.h </span><br><span class="line">||-mytest.c </span><br></pre></td></tr></table></figure>
-<p>　　<br>顶级目录 helloworld，该目录下存在一个主文件 mymain.c 和一个目录 head。head 目录中，mytest.h 头文件声明了 <code>sayhello()</code> 方法；mytest.c 中实现了 <code>sayhello()</code> 方法；mymain.c 中的 main 调用了 <code>sayhello()</code> 方法。 </p>
+<p>顶级目录 helloworld，该目录下存在一个主文件 mymain.c 和一个目录 head。head 目录中，mytest.h 头文件声明了 <code>sayhello()</code> 方法；mytest.c 中实现了 <code>sayhello()</code> 方法；mymain.c 中的 main 调用了 <code>sayhello()</code> 方法。 </p>
 <h2 id="执行步骤：-1"><a href="#执行步骤：-1" class="headerlink" title="执行步骤："></a>执行步骤：</h2><ol>
 <li><p>在顶层目录下运行 autoscan 产生 configure.scan 文件 </p>
 </li>
@@ -352,7 +352,7 @@
 </ol>
 <p>哈哈，shallow 的目录结构也搞定了哦。</p>
 <h1 id="Deep-目录结构"><a href="#Deep-目录结构" class="headerlink" title="Deep 目录结构"></a>Deep 目录结构</h1><h2 id="目录结构-1"><a href="#目录结构-1" class="headerlink" title="目录结构"></a>目录结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">helloworld </span><br><span class="line">|head </span><br><span class="line">||-mytest.h </span><br><span class="line">||-mytest.c </span><br><span class="line">|src </span><br><span class="line">||-mymain.c</span><br></pre></td></tr></table></figure>
-<p> 　　<br>顶级目录 helloworld，该目录下存在两个目录 src 和 head。Head 目录中，mytest.h 头文件声明了 <code>sayhello()</code> 方法；mytest.c 中实现了 <code>sayhello()</code>方法；src 目录中的 mymain.c 中的 main 调用了 <code>sayhello()</code> 方法。 </p>
+<p>顶级目录 helloworld，该目录下存在两个目录 src 和 head。Head 目录中，mytest.h 头文件声明了 <code>sayhello()</code> 方法；mytest.c 中实现了 <code>sayhello()</code>方法；src 目录中的 mymain.c 中的 main 调用了 <code>sayhello()</code> 方法。 </p>
 <h2 id="执行步骤"><a href="#执行步骤" class="headerlink" title="执行步骤"></a>执行步骤</h2><ol>
 <li><p> 在顶层目录下运行 autoscan 产生 configure.scan 文件 </p>
 </li>
@@ -502,20 +502,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -550,7 +550,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

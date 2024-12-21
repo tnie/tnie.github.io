@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="查看 std::exception 的定义，作为抽象类，其默认构造和拷贝构造都声明为 noexcept：  因为不允许复制 std::exception 抛出异常，故当派生类（例如 std::runtime_error ）必须管理用户定义的诊断信息时，常将它实现为写时复制的字符串。   为什么 std::exception 拷贝构造不允许抛出异常？ vc2010  查看 std::logic_er">
+  <meta name="description" content="查看 std::exception 的定义，除了析构函数，其他包括默认构造和拷贝构造在内的函数都声明为 noexcept：  因为不允许复制 std::exception 抛出异常，故当派生类（例如 std::runtime_error ）必须管理用户定义的诊断信息时，常将它实现为写时复制的字符串。  查看 std::logic_error 的定义 或 std::runtime_error 的定义">
 <meta property="og:type" content="article">
 <meta property="og:title" content="异常 std::exception">
 <meta property="og:url" content="https://tnie.github.io/2020/12/25/exception/index.html">
 <meta property="og:site_name" content="不积小流，无以成江海">
-<meta property="og:description" content="查看 std::exception 的定义，作为抽象类，其默认构造和拷贝构造都声明为 noexcept：  因为不允许复制 std::exception 抛出异常，故当派生类（例如 std::runtime_error ）必须管理用户定义的诊断信息时，常将它实现为写时复制的字符串。   为什么 std::exception 拷贝构造不允许抛出异常？ vc2010  查看 std::logic_er">
+<meta property="og:description" content="查看 std::exception 的定义，除了析构函数，其他包括默认构造和拷贝构造在内的函数都声明为 noexcept：  因为不允许复制 std::exception 抛出异常，故当派生类（例如 std::runtime_error ）必须管理用户定义的诊断信息时，常将它实现为写时复制的字符串。  查看 std::logic_error 的定义 或 std::runtime_error 的定义">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-12-25T08:18:36.000Z">
-<meta property="article:modified_time" content="2021-01-18T05:30:33.378Z">
+<meta property="article:modified_time" content="2023-05-20T04:21:13.591Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta name="twitter:card" content="summary">
 
@@ -229,7 +229,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -252,22 +252,171 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>查看 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/error/exception"><code>std::exception</code></a> 的定义，作为抽象类，其默认构造和拷贝构造都声明为 <code>noexcept</code>：</p>
+        <p>查看 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/error/exception"><code>std::exception</code> 的定义</a>，除了析构函数，其他包括默认构造和拷贝构造在内的函数都声明为 <code>noexcept</code>：</p>
 <blockquote>
 <p>因为不允许复制 <code>std::exception</code> 抛出异常，故当派生类（例如 <code>std::runtime_error</code> ）必须管理用户定义的诊断信息时，常将它实现为<strong>写时复制</strong>的字符串。</p>
 </blockquote>
-<ol>
-<li>为什么 <code>std::exception</code> 拷贝构造不允许抛出异常？ vc2010</li>
-</ol>
-<p>查看 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/error/logic_error"><code>std::logic_error</code></a> 或 <code>std::runtime_error</code> 的定义：</p>
+<p>查看 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/error/logic_error"><code>std::logic_error</code> 的定义</a> 或 <code>std::runtime_error</code> 的定义：</p>
 <blockquote>
 <p>因为不容许复制 <code>std::logic_error</code> 抛出异常，通常将此消息在内部存储为分离分配的<strong>引用计数</strong>字符串。这也是构造函数不接收 <code>std::string&amp;&amp;</code> 参数的理由：无论如何它必须复制内容。</p>
 </blockquote>
+<a id="more"></a>
+
 <ol>
-<li>子类的构造函数是可能抛出 <code>std::bad_alloc</code> 异常的，为什么子类的拷贝构造不能抛出异常？</li>
-<li><del>为什么抽象类提供了拷贝构造，而子类不提供呢</del>？使用了隐式声明的 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/copy_constructor">复制构造函数</a>。</li>
-<li><del><code>std::bad_alloc</code> 提供了拷贝操作符，而 <code>std::logic_error</code> 或 <code>std::runtime_error</code> 不需要</del>？ 参考在 vc2015 中标准实现文件 vcruntime_exception.h 中 <code>std::exception</code> 既没有实现为抽象类，同时也提供了拷贝操作符，所以其子类使用了 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/copy_assignment">隐式声明的复制赋值运算符</a></li>
+<li><p>为什么 <code>std::exception</code> 拷贝构造不允许抛出异常？ </p>
+<p> 反证法。如果允许其构造抛出异常，异常又继承自 <code>std::exception</code>，还是直接崩溃更合理。</p>
+</li>
+<li><p><code>std::logic_error</code> 等以字符串为入参的构造函数是可能抛出 <code>std::bad_alloc</code> 异常的，为什么子类的拷贝构造不能抛出异常？</p>
+<p> 不抛异常是理想状态，能够实现就尽力实现。</p>
+</li>
 </ol>
+<p><code>domain_error</code> <code>overflow_error</code> 和 <code>underflow_error</code>，并未用于数学函数中</p>
+<blockquote>
+<p>mathematical functions report domamin/overflow/underflow errors as specified in math_errhandling.</p>
+</blockquote>
+<p>标准库里的异常都是按需建立的，大多服务于特定的函数或库。能够在项目中借鉴、使用的也就七八个类型：</p>
+<ul>
+<li><code>logic_error</code> 及其大部分子类：<code>invalid_argument</code>, <code>domain_error</code>, <code>length_error</code>, <code>out_of_range</code></li>
+<li><code>runtime_error</code> 及其部分子类：<code>range_error</code>, <code>overflow_error</code>, <code>underflow_error</code></li>
+</ul>
+<p>相同层级的各异常类型的使用场景并非严格分离的，多个异常的定义存在重复、交叉，在同一场景中往往存在多个异常都可以使用。比如，</p>
+<ul>
+<li>用于线程库的 <code>future_error</code> 从 <code>logic_error</code> 继承；但</li>
+<li>用于正则表达式库的 <code>regex_error</code> 和用于格式化库的 <code>format_error</code> 又是从 <code>runtime_error</code> 继承；而</li>
+<li>用于 <code>optional</code>、<code>variant</code> 和 <code>any</code> 等类型的 bad_xxx 这些又是直接从 <code>std::exception</code> 继承</li>
+<li>在函数 <code>std::stoi</code> 抛出 <code>out_of_range</code> 的场景是不是更符合 <code>range_error</code> 的定义</li>
+</ul>
+<p>又比如：<code>length_error</code> 和 <code>range_error</code> 很像；<code>invalid_argument</code> 和 <code>domain_error</code> 重叠；</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/38733270/c-when-to-use-which-standard-exception">C++ When to use which (standard) exception?</a></p>
+<p>异常继承体系最初区分 logic error 和 runtime error 就过于理想，最终还是要 <strong>服务于具体的某个函数或库</strong> 才有意义。</p>
+<p>以下表格 <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42078760/article/details/80646206">摘自</a>，并修正错误 </p>
+<table>
+<thead>
+<tr>
+<th>异常</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>std::exception</strong></td>
+<td>该异常是所有标准 C++ 异常的父类。</td>
+</tr>
+<tr>
+<td>std::bad_alloc</td>
+<td>该异常可以通过 new 抛出。</td>
+</tr>
+<tr>
+<td>std::bad_cast</td>
+<td>该异常可以通过 dynamic_cast 抛出。</td>
+</tr>
+<tr>
+<td>std::bad_exception</td>
+<td>这在处理 C++ 程序中无法预期的异常时非常有用。</td>
+</tr>
+<tr>
+<td>std::bad_typeid</td>
+<td>该异常可以通过 typeid 抛出。</td>
+</tr>
+<tr>
+<td><strong>std::logic_error</strong></td>
+<td>理论上可以通过读取代码来检测到的异常。</td>
+</tr>
+<tr>
+<td>std::domain_error</td>
+<td>当使用了一个无效的数学域时，会抛出该异常。</td>
+</tr>
+<tr>
+<td>std::invalid_argument</td>
+<td>当使用了无效的参数时，会抛出该异常。</td>
+</tr>
+<tr>
+<td>std::length_error</td>
+<td>当创建了太长的 std::string 时，会抛出该异常。</td>
+</tr>
+<tr>
+<td>std::out_of_range</td>
+<td>该异常可以通过方法抛出，<del>例如 std::vector 和 <code>std::bitset&lt;&gt;::operator[]()</code></del>。</td>
+</tr>
+<tr>
+<td><strong>std::runtime_error</strong></td>
+<td>理论上不可以通过读取代码来检测到的异常。</td>
+</tr>
+<tr>
+<td>std::overflow_error</td>
+<td>当发生数学上溢时，会抛出该异常。</td>
+</tr>
+<tr>
+<td>std::range_error</td>
+<td>当尝试存储超出范围的值时，会抛出该异常。</td>
+</tr>
+<tr>
+<td>std::underflow_error</td>
+<td>当发生数学下溢时，会抛出该异常。</td>
+</tr>
+</tbody></table>
+<h1 id="跨线程使用异常"><a href="#跨线程使用异常" class="headerlink" title="跨线程使用异常"></a>跨线程使用异常</h1><p>跨线程使用异常，优先使用 <code>std::future</code>，或者请移步 <code>std::exception_ptr</code> 类型。</p>
+<blockquote>
+<p>定义 <code>std::future</code> 使用了后者；而后者就是为跨线程捕获异常新增的特性。 </p>
+</blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaoshiwang/p/10023543.html">多线程 等待一次性事件 异常处理</a></li>
+<li><a target="_blank" rel="noopener" href="http://bitdewy.github.io/blog/2013/09/23/exception-and-multithread/">异常与多线程</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41288428/is-stdexception-ptr-thread-safe">Is std::exception_ptr thread safe?</a></li>
+</ul>
+<h1 id="logic-error"><a href="#logic-error" class="headerlink" title="logic_error"></a>logic_error</h1><p>It reports <del>errors that are a consequence of</del> faulty logic within the program <del>such as violating logical preconditions or class invariants</del> and may be preventable.</p>
+<p>No standard library components throw this exception directly</p>
+<h2 id="invalid-argument"><a href="#invalid-argument" class="headerlink" title="invalid_argument."></a>invalid_argument.</h2><p>an argument value has not been accepted.</p>
+<p>This exception is thrown by <code>std::bitset::bitset</code>, and the <code>std::stoi</code> and <code>std::stof</code> families of functions.</p>
+<h2 id="domain-error"><a href="#domain-error" class="headerlink" title="domain_error"></a>domain_error</h2><p><code>domain_error</code>, that is, situations where the inputs are outside of the domain on which an operation is defined.</p>
+<p>The standard library components do not throw this exception。和 <code>std::invalid_argument</code> 的区别？ </p>
+<h2 id="length-error"><a href="#length-error" class="headerlink" title="length_error"></a>length_error</h2><p>attempt to exceed/超出 implementation defined length limits for some object.</p>
+<p>This exception is thrown by member functions of <code>std::basic_string</code> and <code>std::vector::reserve</code></p>
+<h2 id="out-of-range"><a href="#out-of-range" class="headerlink" title="out_of_range"></a>out_of_range</h2><p>attempt to access elements out of defined range.</p>
+<p>It may be thrown by the member functions of <code>std::bitset</code> and <code>std::basic_string</code>, by <code>std::stoi</code> and <code>std::stod</code> families of functions, and by the bounds-checked member access functions (e.g. <code>std::vector::at</code> and <code>std::map::at</code>).</p>
+<h2 id="future-error-C-11"><a href="#future-error-C-11" class="headerlink" title="future_error(C++11)"></a>future_error(C++11)</h2><p>that is thrown on failure by the functions in the thread library.</p>
+<h1 id="runtime-error"><a href="#runtime-error" class="headerlink" title="runtime_error"></a>runtime_error</h1><p>It reports errors that are due to events beyond the scope of the program and can not be easily predicted.</p>
+<p>Exceptions of type <code>std::runtime_error</code> are thrown by the following standard library components: <code>std::locale::locale</code> and <code>std::locale::combine</code>.</p>
+<h2 id="range-error"><a href="#range-error" class="headerlink" title="range_error"></a>range_error</h2><p>range errors (that is, situations where a result of a computation cannot be represented by the destination type).</p>
+<p>The only standard library components that throw this exception are <code>std::wstring_convert::from_bytes</code> and <code>std::wstring_convert::to_bytes</code>.</p>
+<p>template class <code>std::wstring_convert</code> is deprecated in c++17.</p>
+<h2 id="overflow-error"><a href="#overflow-error" class="headerlink" title="overflow_error"></a>overflow_error</h2><p>to report <strong>arithmetic</strong> overflow errors (that is, situations where a result of a computation is too large for the destination type)</p>
+<p>The only standard library components that throw this exception are <code>std::bitset::to_ulong</code> and <code>std::bitset::to_ullong</code>.</p>
+<h2 id="underflow-error"><a href="#underflow-error" class="headerlink" title="underflow_error"></a>underflow_error</h2><p>to report arithmetic underflow errors (that is, situations where the result of a computation is a subnormal floating-point value)</p>
+<p>The standard library components do not throw this exception.</p>
+<h2 id="regex-error-C-11"><a href="#regex-error-C-11" class="headerlink" title="regex_error(C++11)"></a>regex_error(C++11)</h2><p>to report errors in the regular expressions library.</p>
+<h2 id="tx-exception-TM-TS"><a href="#tx-exception-TM-TS" class="headerlink" title="tx_exception(TM TS)"></a>tx_exception(TM TS)</h2><p>can be used to cancel and roll back an atomic transaction initiated by the keyword <code>atomic_cancel</code>.</p>
+<h2 id="nonexistent-local-time-C-20"><a href="#nonexistent-local-time-C-20" class="headerlink" title="nonexistent_local_time(C++20)"></a>nonexistent_local_time(C++20)</h2><p>to report that an attempt was made to convert a nonexistent <code>std::chrono::local_time</code> to a <code>std::chrono::sys_time</code> without specifying a <code>std::chrono::choose</code> (such as <code>choose::earliest</code> or <code>choose::latest</code>).</p>
+<p>This exception is thrown by <code>std::chrono::time_zone::to_sys</code> and functions that call it (such as the constructors of <code>std::chrono::zoned_time</code> that takes a <code>std::chrono::local_time</code>).</p>
+<p>Ambiguous and nonexistent local times can occur as a result of time zone transitions (such as daylight saving time/夏令时).</p>
+<h2 id="ambiguous-local-time-C-20"><a href="#ambiguous-local-time-C-20" class="headerlink" title="ambiguous_local_time(C++20)"></a>ambiguous_local_time(C++20)</h2><p>to report that an attempt was made to convert a ambiguous <code>std::chrono::local_time</code> to a <code>std::chrono::sys_time</code> without specifying a <code>std::chrono::choose</code> (such as <code>choose::earliest</code> or <code>choose::latest</code>).</p>
+<p>This exception is thrown by <code>std::chrono::time_zone::to_sys</code> and functions that call it (such as the constructors of <code>std::chrono::zoned_time</code> that takes a <code>std::chrono::local_time</code>).</p>
+<p>Ambiguous and nonexistent local times can occur as a result of time zone transitions (such as daylight saving time/夏令时).</p>
+<h2 id="format-error-C-20"><a href="#format-error-C-20" class="headerlink" title="format_error(C++20)"></a>format_error(C++20)</h2><p>to report errors in the formatting library.</p>
+<h2 id="system-error-C-11"><a href="#system-error-C-11" class="headerlink" title="system_error(C++11)"></a>system_error(C++11)</h2><p>thrown by various library functions (typically the functions that interface with the OS facilities, e.g. the constructor of <code>std::thread</code>) when the exception has an associated <code>std::error_code</code>, which may be reported.</p>
+<h3 id="ios-base-failure-C-11"><a href="#ios-base-failure-C-11" class="headerlink" title="ios_base::failure(C++11)"></a>ios_base::failure(C++11)</h3><p>is thrown on failure by the functions in the Input/Output library.</p>
+<h3 id="filesystem-filesystem-error-C-17"><a href="#filesystem-filesystem-error-C-17" class="headerlink" title="filesystem::filesystem_error(C++17)"></a>filesystem::filesystem_error(C++17)</h3><p>is thrown on failure by the throwing overloads of the functions in the filesystem library.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">std</span>::<span class="keyword">uintmax_t</span> <span class="title">file_size</span><span class="params">( <span class="keyword">const</span> <span class="built_in">std</span>::filesystem::path&amp; p )</span></span>;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="keyword">uintmax_t</span> <span class="title">file_size</span><span class="params">( <span class="keyword">const</span> <span class="built_in">std</span>::filesystem::path&amp; p, <span class="built_in">std</span>::error_code&amp; ec )</span> <span class="keyword">noexcept</span></span>;</span><br></pre></td></tr></table></figure>
+<h1 id="bad-optional-access-C-17"><a href="#bad-optional-access-C-17" class="headerlink" title="bad_optional_access(C++17)"></a>bad_optional_access(C++17)</h1><p>be thrown by <code>std::optional::value</code> when accessing an optional object that does not contain a value.</p>
+<h1 id="bad-typeid"><a href="#bad-typeid" class="headerlink" title="bad_typeid"></a>bad_typeid</h1><p>is thrown when a <code>typeid</code> operator is applied to a dereferenced null pointer value of a <strong>polymorphic</strong> type.</p>
+<p>多态，含有虚函数的类型。</p>
+<p><code>std::nullptr_t</code> 类型很奇特，它不是指针类型。即 <code>std::nullptr_t p = nullptr;</code> 对变量 <code>*p</code> 解引用是错误的。</p>
+<h1 id="bad-cast"><a href="#bad-cast" class="headerlink" title="bad_cast"></a>bad_cast</h1><p>is thrown when a <code>dynamic_cast</code> to a <strong>reference type</strong> fails the run-time check (e.g. because the types are not related by inheritance), and also from <code>std::use_facet</code> if the requested facet does not exist in the locale.</p>
+<h2 id="bad-any-cast-C-17"><a href="#bad-any-cast-C-17" class="headerlink" title="bad_any_cast(C++17)"></a>bad_any_cast(C++17)</h2><p>be thrown by the value-returning forms of <code>std::any_cast</code> on failure.</p>
+<p>和类型 <code>std::any</code> 相关</p>
+<h1 id="bad-weak-ptr-C-11"><a href="#bad-weak-ptr-C-11" class="headerlink" title="bad_weak_ptr(C++11)"></a>bad_weak_ptr(C++11)</h1><p>thrown by the constructors of <code>std::shared_ptr</code> that take <code>std::weak_ptr</code> as the argument, when the <code>std::weak_ptr</code> refers to an already deleted object.</p>
+<p>优先使用 <code>std::weak_ptr&lt;T&gt;::lock</code> 避免上述异常。</p>
+<h1 id="bad-function-call-C-11"><a href="#bad-function-call-C-11" class="headerlink" title="bad_function_call(C++11)"></a>bad_function_call(C++11)</h1><p>thrown by <code>std::function::operator()</code> if the function wrapper has no target.</p>
+<h1 id="bad-alloc"><a href="#bad-alloc" class="headerlink" title="bad_alloc"></a>bad_alloc</h1><p>thrown as exceptions by the allocation functions to report failure to allocate storage.</p>
+<h2 id="bad-array-new-length-C-11"><a href="#bad-array-new-length-C-11" class="headerlink" title="bad_array_new_length(C++11)"></a>bad_array_new_length(C++11)</h2><p>thrown as exceptions by the new-expressions to report invalid array lengths.</p>
+<h1 id="bad-exception"><a href="#bad-exception" class="headerlink" title="bad_exception"></a>bad_exception</h1><p>thrown by the C++ runtime in the following situations:</p>
+<ul>
+<li>If <code>std::exception_ptr</code> stores a copy of the caught exception and if the copy constructor of the exception object caught by <code>std::current_exception</code> throws an exception, the captured exception is an instance of <code>std::bad_exception</code>.</li>
+</ul>
+<h1 id="bad-variant-access-C-17"><a href="#bad-variant-access-C-17" class="headerlink" title="bad_variant_access(C++17)"></a>bad_variant_access(C++17)</h1><p>thrown in the following situations:</p>
+<ul>
+<li><code>std::get(std::variant)</code> called with an index or type that does not match the currently active alternative</li>
+<li><code>std::visit</code> called to visit a variant that is valueless_by_exception</li>
+</ul>
 
     </div>
 
@@ -348,6 +497,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%A8%E7%BA%BF%E7%A8%8B%E4%BD%BF%E7%94%A8%E5%BC%82%E5%B8%B8"><span class="nav-number">1.</span> <span class="nav-text">跨线程使用异常</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#logic-error"><span class="nav-number">2.</span> <span class="nav-text">logic_error</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#invalid-argument"><span class="nav-number">2.1.</span> <span class="nav-text">invalid_argument.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#domain-error"><span class="nav-number">2.2.</span> <span class="nav-text">domain_error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#length-error"><span class="nav-number">2.3.</span> <span class="nav-text">length_error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#out-of-range"><span class="nav-number">2.4.</span> <span class="nav-text">out_of_range</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#future-error-C-11"><span class="nav-number">2.5.</span> <span class="nav-text">future_error(C++11)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#runtime-error"><span class="nav-number">3.</span> <span class="nav-text">runtime_error</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#range-error"><span class="nav-number">3.1.</span> <span class="nav-text">range_error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#overflow-error"><span class="nav-number">3.2.</span> <span class="nav-text">overflow_error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#underflow-error"><span class="nav-number">3.3.</span> <span class="nav-text">underflow_error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#regex-error-C-11"><span class="nav-number">3.4.</span> <span class="nav-text">regex_error(C++11)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tx-exception-TM-TS"><span class="nav-number">3.5.</span> <span class="nav-text">tx_exception(TM TS)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nonexistent-local-time-C-20"><span class="nav-number">3.6.</span> <span class="nav-text">nonexistent_local_time(C++20)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ambiguous-local-time-C-20"><span class="nav-number">3.7.</span> <span class="nav-text">ambiguous_local_time(C++20)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#format-error-C-20"><span class="nav-number">3.8.</span> <span class="nav-text">format_error(C++20)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#system-error-C-11"><span class="nav-number">3.9.</span> <span class="nav-text">system_error(C++11)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ios-base-failure-C-11"><span class="nav-number">3.9.1.</span> <span class="nav-text">ios_base::failure(C++11)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filesystem-filesystem-error-C-17"><span class="nav-number">3.9.2.</span> <span class="nav-text">filesystem::filesystem_error(C++17)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-optional-access-C-17"><span class="nav-number">4.</span> <span class="nav-text">bad_optional_access(C++17)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-typeid"><span class="nav-number">5.</span> <span class="nav-text">bad_typeid</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-cast"><span class="nav-number">6.</span> <span class="nav-text">bad_cast</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bad-any-cast-C-17"><span class="nav-number">6.1.</span> <span class="nav-text">bad_any_cast(C++17)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-weak-ptr-C-11"><span class="nav-number">7.</span> <span class="nav-text">bad_weak_ptr(C++11)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-function-call-C-11"><span class="nav-number">8.</span> <span class="nav-text">bad_function_call(C++11)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-alloc"><span class="nav-number">9.</span> <span class="nav-text">bad_alloc</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bad-array-new-length-C-11"><span class="nav-number">9.1.</span> <span class="nav-text">bad_array_new_length(C++11)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-exception"><span class="nav-number">10.</span> <span class="nav-text">bad_exception</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-variant-access-C-17"><span class="nav-number">11.</span> <span class="nav-text">bad_variant_access(C++17)</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -363,20 +513,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -411,7 +561,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

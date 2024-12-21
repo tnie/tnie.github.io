@@ -28,7 +28,7 @@
 <meta property="og:description" content="2018&#x2F;9&#x2F;19 17:46:55 这篇罗列概念很没水平，就别看了。 后记：这篇笔记限于罗列书中的概念，自己的理解并不多，组织章节也不好。后来又整理过一篇： 《再谈初始化》 ，两者不分先后，没有依赖关系。 参考《C++ Primer》和网上资源誊抄完正文后，自己总结如下：  定义一个变量&#x2F;对象时，如果不进行显式地初始化，就是默认初始化（除了使用 extern 进行纯粹的声明的）。需要关注的是，默">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2016-11-03T08:21:34.000Z">
-<meta property="article:modified_time" content="2021-01-18T05:30:33.390Z">
+<meta property="article:modified_time" content="2023-05-20T04:21:13.591Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta property="article:tag" content="c++11">
 <meta name="twitter:card" content="summary">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -312,9 +312,10 @@
  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">S</span> <span class="title">ales_data</span> &#123;</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> bookNo;</span><br><span class="line">    <span class="keyword">unsigned</span> units_sold = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">double</span> revenue = <span class="number">0.0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
 <li><p>如果提供的是初始元素值的列表，则只能把初始值都放在花括号里进行列表初始化，而不能放在圆括号里；</p>
  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; v1&#123;<span class="string">&quot;a&quot;</span>, <span class="string">&quot;an&quot;</span>, <span class="string">&quot;the&quot;</span>&#125;;  <span class="comment">// 列表初始化</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">v1</span><span class="params">(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;an&quot;</span>, <span class="string">&quot;the&quot;</span>)</span></span>;  <span class="comment">// 错误</span></span><br></pre></td></tr></table></figure>
-<h1 id="Value-initialization-值初始化"><a href="#Value-initialization-值初始化" class="headerlink" title="Value initialization 值初始化"></a>Value initialization 值初始化</h1></li>
+
+</li>
 </ol>
-<h2 id="初始化-vector-对象（P88）"><a href="#初始化-vector-对象（P88）" class="headerlink" title="初始化 vector 对象（P88）"></a>初始化 <code>vector</code> 对象（P88）</h2><p>我们可以只提供 <code>vector</code> 对象容纳的元素数量而略去初始值（原文：We can usually omit the value and supply only a size. ）。此时库会创建一个值初始化的元素初值（原文：a value-initialized element initializer），并把它赋给容器中的所有元素，这个初值由 <code>vector</code> 对象中元素的类型决定。 </p>
+<h1 id="Value-initialization-值初始化"><a href="#Value-initialization-值初始化" class="headerlink" title="Value initialization 值初始化"></a>Value initialization 值初始化</h1><h2 id="初始化-vector-对象（P88）"><a href="#初始化-vector-对象（P88）" class="headerlink" title="初始化 vector 对象（P88）"></a>初始化 <code>vector</code> 对象（P88）</h2><p>我们可以只提供 <code>vector</code> 对象容纳的元素数量而略去初始值（原文：We can usually omit the value and supply only a size. ）。此时库会创建一个值初始化的元素初值（原文：a value-initialized element initializer），并把它赋给容器中的所有元素，这个初值由 <code>vector</code> 对象中元素的类型决定。 </p>
 <p>如果 <code>vector</code> 对象的元素是内置类型，比如 <code>int</code>，则元素初始值自动设为<code>0</code>。如果元素是某种类类型，比如 <code>std::string</code>，则元素由类默认初始化。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">ivec</span><span class="params">(<span class="number">10</span>)</span></span>;     <span class="comment">//10个元素，每个都初始化为0</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">svec</span><span class="params">(<span class="number">10</span>)</span></span>;  <span class="comment">//10个元素，每个都是空string对象</span></span><br></pre></td></tr></table></figure>
 <p>对这种初始化的方式有两个特殊限制：</p>
@@ -432,20 +433,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -480,7 +481,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
