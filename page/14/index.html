@@ -196,6 +196,483 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/cpp11BigChanges/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/11/03/cpp11BigChanges/" class="post-title-link" itemprop="url">C++11 的重大改变</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-03 15:03:22" itemprop="dateCreated datePublished" datetime="2016-11-03T15:03:22+08:00">2016-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a target="_blank" rel="noopener" href="http://blog.smartbear.com/c-plus-plus/the-biggest-changes-in-c11-and-why-you-should-care/">The Biggest Changes in C++11 (and Why You Should Care)</a>，译文：<a target="_blank" rel="noopener" href="http://www.devbean.net/2012/11/biggest-changes-in-c11/">C++11 的重大改变</a></p>
+<p>事实上，核心 C++11 已经有了很大的改变。C++11 标准库同样增加了新的内容。捎带一句，<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/9538701/what-is-the-difference-between-c0x-and-c11">C++11, also formerly known as C++0x …</a></p>
+<h1 id="Core"><a href="#Core" class="headerlink" title="Core"></a>Core</h1><blockquote>
+<p>事实上，核心 C++11 已经有了很大的改变。现在它支持 lambda 表达式，自动类型推断，统一的初始化语法，委托构造函数，已删除和默认函数声明，nullptr，以及最重要的，右值引用——一种预言将会改变创造和处理对象方法的技术。</p>
+</blockquote>
+<h2 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0">匿名函数</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/20125256">Lambda 表达式有何用处？如何使用？ - KE meng 的回答</a></li>
+<li><a target="_blank" rel="noopener" href="https://msdn.microsoft.com/zh-cn/library/dd293608.aspx">C++ 中的 Lambda 表达式</a></li>
+<li>查看 C++ Primer 有关章节，讲解的很详细的。</li>
+</ul>
+<p>lambda 的函数调用运算符为 const-by-value，但对 <code>mutable</code> 关键字的使用可将其取消。</p>
+<h2 id="自动类型推断和-decltype"><a href="#自动类型推断和-decltype" class="headerlink" title="自动类型推断和 decltype"></a>自动类型推断和 decltype</h2><p>赋予 <code>auto</code> 关键词新生： <a target="_blank" rel="noopener" href="http://www.cppblog.com/amazon/archive/2009/12/09/102847.html">数据存储类型</a></p>
+<p><code>auto</code> 自动推导类型，轻度用户（不涉及模板）谨慎使用，在书写便利和代码易读两者之间寻求，滥用降低代码可读性。</p>
+<p>注意使用的限制</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">size_t</span> length = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> diff = <span class="number">0</span> - length;</span><br><span class="line"><span class="keyword">auto</span> diff2 = <span class="number">0</span> - length;</span><br><span class="line"><span class="comment">// diff != diff2</span></span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; (<span class="number">0</span> - length) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"><span class="comment">// NOTE 并未像我们预期的那这样子输出 -10</span></span><br></pre></td></tr></table></figure>
+<h2 id="统一初始化语法"><a href="#统一初始化语法" class="headerlink" title="统一初始化语法"></a>统一初始化语法</h2><p>列表初始化：初始化操作的多种变体是令人感觉困扰的重要原因之一。C++11 使用统一的大括号标记清除了这种混乱。</p>
+<h3 id="POD-程序设计-wikipedia"><a href="#POD-程序设计-wikipedia" class="headerlink" title="POD (程序设计) - wikipedia"></a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/POD_(%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1)">POD (程序设计) - wikipedia</a></h3><ul>
+<li><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C%2B%2B%E7%B1%BB">C++ 类 - wikipedia</a>，其中提到了“聚合类”和“POD”结构。值得抽时间全部看看</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/tingshuo/archive/2013/03/25/2981197.html">怎样理解 C++ 中的 Aggregate 和 POD 类型</a>，这是译文—<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special">An answer from stackoverflow</a>，这是原文。强调理论。<del>建议查看原文，其中 “What changes for C++11?” 一节在 cnblog 中并未出现，而关于 POD 的定义，C++03 标准和 C++11 并不相同。</del> 这是后半部分,<a target="_blank" rel="noopener" href="http://www.cnblogs.com/tingshuo/archive/2013/03/28/2986236.html">怎样理解 C++ 11 中的 trivial 和 standard-layout</a></p>
+<blockquote>
+<p>新标准中已经很少使用 POD 这个术语了，而是更多的在使用更精确的概念：trival和stand-layout。</p>
+</blockquote>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://blog.csdn.net/aqtata/article/details/35618709">【C++11】POD 数据类型</a>，只放定义和代码，看不懂。强调实用性。</p>
+</li>
+</ul>
+<p>看了以上几篇帖子之后，知道了几个名词：Aggregate 和 POD，trivial 和 standard-layout。但详细的概念很是混乱，其中一条条的“是与不是”、“有与没有”难道是让人用来背诵记忆的吗？实用主义不要求学究钻研，编码过程用到了再回来复习。目前，水过不学了。其实真要较真的话，应该直接去找 C++ 的新标准，网上的终究是个参考，会有出入。</p>
+<h2 id="删除和默认函数"><a href="#删除和默认函数" class="headerlink" title="删除和默认函数"></a>删除和默认函数</h2><ul>
+<li>多看书，多写代码</li>
+</ul>
+<h2 id="nullptr"><a href="#nullptr" class="headerlink" title="nullptr"></a>nullptr</h2><ul>
+<li><p>在此之前是什么样子？会有什么问题？深度探索一下。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://szjoshua.farbox.com/post/c-11nullptr">c++11 中的 nullptr 详解</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/22203461">NULL 和 0 - 蓝色的回答</a></p>
+<ul>
+<li>不推荐使用宏，甚至不承认宏。包括 <code>NULL</code>，C++标准是没有承认 <code>NULL</code> 是 null pointer constant 的。</li>
+<li>赋予 null pointer，应该是使用 <code>0</code>，而非 <code>NULL</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="委托构造函数"><a href="#委托构造函数" class="headerlink" title="委托构造函数"></a>委托构造函数</h2><ul>
+<li>减少代码量？</li>
+<li>委托构造函数<strong>在初始化列表中</strong>调用目标构造函数。我们把调用者称为委托构造函数，被调用者称为目标构造函数。</li>
+<li><a target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/cpp-11-faq/content/10.html">委托构造函数（Delegating constructors）</a></li>
+</ul>
+<h2 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h2><ul>
+<li><p>区分“左值”和“右值”。引用自 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8">右值引用 - wikipedia</a></p>
+<blockquote>
+<p>在C++11提出右值引用之前，C++03及更早的C++标准中，表达式的“值分类”（<a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/value_category">value categories</a>）属性为左值或右值。左值是对应（refer to）内存中有确定存储地址的对象的表达式的值，而右值是所有不是左值的表达式的值。因而，右值可以是字面量、临时对象等表达式。能否被赋值不是区分C++左值与右值的依据。C++的const左值是不可赋值的；而作为临时对象的右值可能允许被赋值。左值与右值的根本区别在于<strong>是否允许取地址&amp;运算符获得对应的内存地址</strong>。</p>
+</blockquote>
+</li>
+<li><p>移动语义？学习 C++ Prime</p>
+<ul>
+<li><p>移动构造函数、移动赋值运算符</p>
+<blockquote>
+<p>C++11 标准库大量使用了移动语义。许多算法和容器也为移动语义做了优化。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://jxq.me/2012/06/06/%E8%AF%91%E8%AF%A6%E8%A7%A3c%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8/#section_05">【译】详解 C++ 右值引用</a>，阅读笔记如下</p>
+<ol>
+<li><p>概述中 # &amp;foobar() 是取 foobar() 函数执行结果的地址，而不是函数指针，&amp;foobar 才是函数指针。</p>
+</li>
+<li><p>右值引用，总算渐渐明朗了。但前提是分清左值/右值。</p>
+<p> const 常量是左值，还是右值呢？——左值，因为 <code>const int max = 100;</code> 中 max 是可以使用 <code>&amp;</code> 取地址的。</p>
+</li>
+<li><p>move语义# 中“当赋值操作符的右边是右值的时候，我们希望赋值操作符被定义成下面这样：”，醍醐灌顶啊</p>
+<p> 此处的右值，在后续代码中可能会再次被用来给变量赋值吗？</p>
+<blockquote>
+<p>“move语义：当一个变量（a）作为拷贝构造函数或者赋值的来源时，这个变量要么就是以后都不会再使用，要么就是（使用时）作为赋值操作的目标（a = b）。”</p>
+</blockquote>
+<p> 也就是，这个变量不能再用了。</p>
+<p> ——参考 右值引用是右值吗？#</p>
+<blockquote>
+<p>“move语义的重点在于将其应用于那些不重要的东西上面，那些move之后会马上销毁而不会被再次用到的东西上面。”</p>
+</blockquote>
+</li>
+<li><p>强制move语义# 中：</p>
+<blockquote>
+<p>C++11中的swap函数是这样的:…</p>
+</blockquote>
+<p> swap函数不能只做 <code>a = std::move(b);</code> 吗？</p>
+<blockquote>
+<p>值得注意的是对那些没有实现move语义的类型来说（没有针对右值引用重载拷贝构造函数和赋值操作符），新的swap仍然和旧的一样。</p>
+</blockquote>
+<p> 可能只是为了兼容。参考 Debian8Light 代码验证。</p>
+</li>
+<li><p>右值引用是右值吗# 中读不懂：</p>
+<blockquote>
+<p>理论上来说goo()所引用的对象也可能在X x = goo();后被访问的到。但是回想一下，这种行为不正是我们想要的吗？我们也想随心所欲的在左值上面使用move语义。</p>
+</blockquote>
+</li>
+<li><p>move语义与编译器优化# 暂时读不懂</p>
+</li>
+<li><p><strong>完美转发相关内容暂时未看，涉及范型编程之泛型函数</strong></p>
+</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.ibm.com/developerworks/cn/aix/library/1307_lisl_c11/">C++11 标准新特性: 右值引用与转移语义</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/335994370">一文读懂 C++ 右值引用和 std::move</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/reference">左值引用、右值引用</a></li>
+</ul>
+<h1 id="Library"><a href="#Library" class="headerlink" title="Library"></a>Library</h1><blockquote>
+<p>2003年，C++ 以库技术报告 1（TR1）的形式经历了一次大型重构。TR1 包含了新的容器类（<code>unordered_set</code>，<code>unordered_map</code>，<code>unordered_multiset</code> 和 <code>unordered_multimap</code>）和许多新的库，例如正则表达式，元组，函数对象包装器。随着 C++11 的颁布，TR1 连同新的库一起正式集成到 C++ 标准中。下面是 C++11 标准库的特性：</p>
+</blockquote>
+<h2 id="线程库"><a href="#线程库" class="headerlink" title="线程库"></a>线程库</h2><blockquote>
+<p>毫无疑问，从程序员角度看，C++11 最重要的改进就是并发。</p>
+</blockquote>
+<h2 id="新的智能指针类"><a href="#新的智能指针类" class="headerlink" title="新的智能指针类"></a>新的智能指针类</h2><p>C++98 只定义了一个智能指针类 <code>auto_ptr</code>，而这个类现在已经被废弃了。</p>
+<p>C++11 包含了新的智能指针类：<code>shared_ptr</code> 、<code>weak_ptr</code> 和最近新加的 <code>unique_ptr</code>。</p>
+<p><code>weak_ptr</code> 是多线程下，判断某一（在多个线程中共享的）对象是否 alive 的唯一方法。</p>
+<h2 id="新的算法"><a href="#新的算法" class="headerlink" title="新的算法"></a>新的算法</h2><p>THE END</p>
+<p>延伸阅读：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/cpp-11-faq/content/88.html">C++11 FAQ中文版</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C%2B%2B11">C++11 - wikipedia</a>，还是很值得一看的。</li>
+<li><a target="_blank" rel="noopener" href="http://coolshell.cn/articles/5265.html">C++11 中值得关注的几大变化（详解）</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/sizeof-strlen-length-size/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/11/03/sizeof-strlen-length-size/" class="post-title-link" itemprop="url">内存和长度</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-03 15:03:00" itemprop="dateCreated datePublished" datetime="2016-11-03T15:03:00+08:00">2016-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>笔记针对以下问题：</p>
+<ol>
+<li>在c语言中，<code>sizeof</code>运算符和<code>strlen()</code>函数有什么区别的？</li>
+<li>如果/字符串/字符指针/用来存储汉字，对于这两者的计算结果有影响吗？</li>
+<li>在C++中，<code>sizeof</code>运算符和<code>strlen()</code>函数的定位？</li>
+<li>在C++中，string的<code>lengt()</code>和<code>size()</code></li>
+<li>在C++中，string用来存储汉字时，……</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/11/03/sizeof-strlen-length-size/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/trimSpace/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/11/03/trimSpace/" class="post-title-link" itemprop="url">C++ 去除空格</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-03 14:53:12" itemprop="dateCreated datePublished" datetime="2016-11-03T14:53:12+08:00">2016-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在 C++ 中怎么去除字符串首尾的空格？怎么去掉字符串中所有的空格？</p>
+<p>网上可以查到很多，有用 C 写的，有用纯 C++ 写的，混合的更是大有人在。功能都能实现，但哪个是最佳实践的？有以下几个标准 or 问题？</p>
+<ul>
+<li>代码足够简洁</li>
+<li>怎么保证效率？</li>
+<li>通用性：跨平台</li>
+<li>要不要考虑 C 调用问题？</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/11/03/trimSpace/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/memoryLayout/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/11/03/memoryLayout/" class="post-title-link" itemprop="url">从 static 到对象的内存布局</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-03 14:49:30" itemprop="dateCreated datePublished" datetime="2016-11-03T14:49:30+08:00">2016-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2016/9/8 17:07:08</p>
+<p>最近对于在类中使用的 <code>static</code> 有几个疑问，逐一列举并给出解惑。</p>
+<h1 id="问题一"><a href="#问题一" class="headerlink" title="问题一"></a>问题一</h1><p>问题一：我们都知道 C++ 类的静态成员变量在<strong>使用前</strong>必须要初始化。可是为什么一定要初始化呢？如果不初始化，为什么报 ld 链接错误？</p>
+<p>先强调一点，其中的使用包括在类的成员函数中对静态成员变量的访问。</p>
+<p>如果对于类的内存模型稍微理解那么一点点，这个问题其实很简单。</p>
+<ol>
+<li><p>类的定义是在 POD 结构体的基础上进行了的升级，定义类本质上是对其普通成员变量（不包括静态成员变量）的封装，就是 C 中普通的结构体。</p>
+</li>
+<li><p>对于其静态成员变量，可以理解为在此结构体外<strong>声明</strong>的 C 语言<del>静态</del>变量，并且在结构体与<del>静态</del>此变量之间建立了某种映射关系（绑定）。</p>
+</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/11/03/memoryLayout/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/handing-errors/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -983,504 +1460,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/09/18/Makefile1st/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/09/18/Makefile1st/" class="post-title-link" itemprop="url">Makefile 入门</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-09-18 16:08:08" itemprop="dateCreated datePublished" datetime="2016-09-18T16:08:08+08:00">2016-09-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>原来的笔记写于 2015年11月23日，当时使用的是为知笔记默认编辑器。十个月过去了，对于 make &amp; Makefile 也有了更多的认识。今天重新整理一下，不过仍然定位在<strong>入门的帖子</strong>，所以不会添加新的内容，只是修改表述不当的地方，对原有内容作出删减，并用 markdown 格式重写。</p>
-<p><strong>这篇本来是打算写成阅读笔记的。但是所知不多，刚开始学习应该博览，求入门，求上手使用。再加上看的东西越来愈多，单纯的记录一篇帖子中的重点、难点，较真于一处在实践中基本不会碰到的细节，格局太小，意义也不大。</strong></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/09/18/Makefile1st/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/08/26/PKM%20&%20GTD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/08/26/PKM%20&%20GTD/" class="post-title-link" itemprop="url">PKM & GTD</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-08-26 17:51:31" itemprop="dateCreated datePublished" datetime="2016-08-26T17:51:31+08:00">2016-08-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>个人知识管理（PKM）和时间管理（GTD），是很重要的。日常生活学习中肯定有零散的涉及到，但并无系统性、条理性的认识。有关的概念也是近两年才接触到，网上能搜到的东西很多，但太知识性的、深度的“规范”针对普通人又不具有实用价值，即，适当的掌握概念，按照“规则”整理知识，规划时间做事是有价值的，提升会很明显，但对于普通人来说并无掌握其原理的必要，简单的拿来用就可以了。过犹不及。</p>
-<p>最重要的是<strong>坚持</strong>。</p>
-<p>无论用什么方式，纸笔也好，还是 APP 也好，重要的是坚持，养成习惯。不能三天打鱼两天晒网。</p>
-<p>我自己使用过，或正在使用的工具：</p>
-<ol>
-<li><p>思维导图工具：<a target="_blank" rel="noopener" href="https://www.mindjet.com/mindmanager/">mindjet</a></p>
-<p> 最初半年的使用频率非常高，慢慢地到现在一两个月甚至用不上一次。工作、生活过程中记录事情，现在更习惯用列表，是思维固化了？还是这半年涉及的场景不需要发散性的思维？</p>
-</li>
-<li><p>GTD 工具：<a target="_blank" rel="noopener" href="http://doit.im/cn/">doit.im</a>，到 <a target="_blank" rel="noopener" href="https://www.any.do/">any.do</a>，再到接触 <a target="_blank" rel="noopener" href="http://www.thefabulous.co/">Fabulous</a> 之后简单的使用纸笔记录</p>
-<p> 挺好用。坚持得不够，买了一年的会员，高频率使用了半年，闲置了半年之后销户了。直到今天，在 Fabulous 中见到一段话，直戳痛点：</p>
-<blockquote>
-<p>别掉入<strong>无止境清单症候群</strong>的圈套。换句话说，当你加入太多待办事项，你只会完成最容易的几项。</p>
-<p>（而）迅速完成容易的事项会让你有种虚假的成就感。你会发现忙碌了一整天以后，其实并没有在你的终极目标上取得多少进展。</p>
-<p>必须养成专注的性格。选择最重要的几件事项，然后除掉其他（相对来说不重要的）。</p>
-</blockquote>
-<p> doit 我没能坚持下来就是因为错误的使用方式。每天罗列好多的内容，带来虚假的成就感；每天完成一些（大多是最容易的），看着任务打上对勾，被划掉，带来虚假的成就感。甚至为了“打对勾，划掉”写上已经完成的事项，写上不重要的、做不做并无关键区别、随手就能解决、非关键任务等等类似的内容。然后把上午、下午大块大块的完整时间用来处理这些个“自讨的”琐碎任务，以“划掉多少”等价“成就多少”。好脆弱的内心，好虚假的幻想！随着时间的积累（也就是半年），doit 列表中堆积了大量的待办事项，而且都是筛选之后需要花费一定时间、精力并且有意义的事情，积累的越多越是提醒着自己的失败。潜意识里回避真相，现实世界里就做出“不再使用这款工具”的决定。关键问题在于：</p>
-<ul>
-<li><p>罗列待办事项清单之后，安排事项处理顺序、处理日期不合理，对自身解决问题的能力没有清晰的认识，“拍脑袋”定日期；</p>
-<ul>
-<li>也就是：不抓重点，或者抓不住重点。精力有限，肯定要做取舍。</li>
-</ul>
-</li>
-<li><p>（因此）计划制定完之后，并不能严格的执行，做不到日清月清，更谈不上总结；</p>
-<p>这也是放弃 doit 使用 any.do 之后没多长时间，又放弃 any.do 而使用 Fabulous/纸笔的原因，如果纠正不了根本问题，依旧还会在工具之间跳来跳去，在一个工具上遗留大量的未完事务之后迁移到另一个工具，如此循环，一直得不到解脱。类似的应用层出不穷，上文提到的 3 个是非常棒的了，用好一个就能给生活带来质变，不要因为<strong>错误的习惯</strong>埋没、错过了。</p>
-<p>收集任务是前提；<strong>安排任务是关键；</strong>完成任务是目的。不能把时间浪费在“前提”上，在<strong>对自身解决问题的能力有清晰的认识</strong>的基础上，以<strong>量力而行、轻重缓急</strong>为原则<strong>制定当日计划</strong>是重中之重。</p>
-<p>制定计划，包含完成时间，还<strong>隐含完成的能力</strong>，而不单单是罗列待办事项，想到的就罗列出来，不管今天能不能完成，今天想到的就列到今天的待办事项里，没有这么无脑操作。</p>
-</li>
-</ul>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/08/13/build/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/08/13/build/" class="post-title-link" itemprop="url">构建 build</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-08-13 19:27:22" itemprop="dateCreated datePublished" datetime="2016-08-13T19:27:22+08:00">2016-08-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-12 16:48:26" itemprop="dateModified" datetime="2021-02-12T16:48:26+08:00">2021-02-12</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>整理为知笔记中和 make makefile automake 有关内容，成此篇。</p>
-<h1 id="从-gcc-说起"><a href="#从-gcc-说起" class="headerlink" title="从 gcc 说起"></a>从 <a target="_blank" rel="noopener" href="https://gcc.gnu.org/">gcc</a> 说起</h1><p>在介绍 make 之前，首先要保证你会使用 gcc/g++ 编译。了解 gcc 执行的四个阶段，知道预编译阶段、链接阶段需要什么，做什么操作；知道预编译时找不到头文件，链接时缺少库文件怎么处理；知道动态库、静态库的区别，怎么创建并使用它们。以上是必需的！只有掌握了上面的内容，才能保证面对一个简单的项目（可能包含头文件、源文件和链接库）知道怎么组织，最终得到可执行文件。</p>
-<p>维基百科的描述：</p>
-<blockquote>
-<p>GNU编译器套装（英语：GNU Compiler Collection，缩写为 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GCC">GCC</a>），一套编程语言编译器，以GPL及LGPL许可证所发行的自由软件，也是GNU项目的关键部分，也是GNU工具链的主要组成部分之一。GCC（特别是其中的C语言编译器）也常被认为是跨平台编译器的事实标准。</p>
-</blockquote>
-<h2 id="gcc-编译过程"><a href="#gcc-编译过程" class="headerlink" title="gcc 编译过程"></a>gcc 编译过程</h2><p>预处理、编译、汇编和链接。学习 gcc，比较重要的是预处理和链接：</p>
-<p>参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/youxin/p/3181214.html">gcc编译4个阶段</a></p>
-<ol>
-<li><p>预处理阶段</p>
-<blockquote>
-<p>预处理器（cpp）根据以字符#开头的命令（directives），修改原始的C程序。</p>
-</blockquote>
-<p> 也就是说预处理阶段，会查找并加载头文件生成一个新的C程序。</p>
-</li>
-<li><p>编译阶段</p>
-<p> 编译阶段会将代码翻译成汇编语言。</p>
-<blockquote>
-<p>汇编语言是非常有用的，它为不同高级语言不同编译器提供了 通用的语言。如：C编译器和Fortran编译器产生的输出文件用的都是一样的汇编语言。</p>
-</blockquote>
-</li>
-<li><p>汇编阶段</p>
-<p> 汇编阶段将汇编语言程序转换成为目标文件，也就是二进制机器码。</p>
-</li>
-<li><p>链接阶段</p>
-<p> 该阶段将用到的一个或多个目标文件（库文件）链接生成可执行文件。</p>
-<blockquote>
-<p>在预编译阶段包含进来的“stdio.h”中只有“printf”函数的声明，而没有函数的实现，那么，是在哪里实现的“printf”函数呢？答案是：系统把这些函数实现都做到名为libc.so.6的库文件中去了，链接阶段gcc会到系统默认的搜索路径”/usr/lib”下进行查找，也就是链接到libc.so.6库函数中去，这样就能实现函数”printf” 了，而这也就是链接的作用。</p>
-</blockquote>
-<p> 从上面可以看出，链接时需要目标文件的名称及其所在目录。</p>
-</li>
-</ol>
-<h2 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h2><p>知道了预处理器（cpp）要读取头文件，那么报错“xxx.h:No such file or directory”就需要确认我们是不是指定了查找目录，或者核对我们指定的路径是否包含该头文件；同样的道理，链接器（ld）需要链接目标文件，和前者稍有不用的地方在于：头文件一般都写在源代码中，我们只需要指定头文件路径；而链接目标文件时，既需要我们指出目标文件所在的目录，同时还需要我们指定使用目标路径下的哪个文件。</p>
-<p>以上算是原理。知其所以然之后，我们来看工具具体的使用方法：</p>
-<ol>
-<li>头文件相关的： -I 后跟绝对路径或相对路径，例如 <code>-I ./include</code>。预处理器会优先在 @搜索路径</li>
-<li>链接过程： -L 后跟绝对路径或相对路径，例如 <code> -L ./lib</code>， -l 后跟库名，例如 <code>-lmath</code>，对应库文件 libmath.a 或 libmath.so</li>
-<li>-c：使用源文件生成对应的目标文件，而不进行链接，使用  ，例如 <code>g++ -c main.cpp -o main.o</code></li>
-<li>-Wall：使 gcc 产生尽可能多的警告信息，并非全部。</li>
-<li>-Werror：把警告当做错误处理，即产生 warning 时就停止编译操作。</li>
-</ol>
-<p>特殊的参数：</p>
-<ol>
-<li><p>-nostdinc：使编译器不在系统缺省的头文件目录里面找头文件,一般和-I联合使用,明确限定头文件的位置。</p>
-</li>
-<li><p>-Wl,-rpath：在<strong>编译过程</strong>指定程序在<strong>运行时</strong>动态库的搜索路径，示例：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 当指定多个动态库搜索路径时，路径之间用冒号&quot;：&quot;分隔</span><br><span class="line">gcc -Wl,-rpath,libPath -L libPath -ltest hello.c</span><br></pre></td></tr></table></figure>
-<p> 将搜索路径信息写入可执行文件(rpath代表runtime path)。这样就不需要设置环境变量。坏处是，如果库文件移动位置，我们需要重新编译test。</p>
-</li>
-<li><p>…</p>
-</li>
-</ol>
-<p>更多的参数，更详细的使用说明可以查看 <a target="_blank" rel="noopener" href="https://gcc.gnu.org/onlinedocs/6.1.0/">官方手册</a>，或者使用 man info –help 等方式获取。</p>
-<h3 id="搜索顺序"><a href="#搜索顺序" class="headerlink" title="搜索顺序"></a>搜索顺序</h3><p>测试环境：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/code/test_search$ uname -a</span><br><span class="line">Linux debian8light 3.16.0-4-amd64 <span class="comment">#1 SMP Debian 3.16.7-ckt20-1+deb8u4 (2016-02-29) x86_64 GNU/Linux</span></span><br><span class="line">vimer@debian8light:~/code/test_search$ lsb_release -a</span><br><span class="line">No LSB modules are available.</span><br><span class="line">Distributor ID:	Debian</span><br><span class="line">Description:	Debian GNU/Linux 8.3 (jessie)</span><br><span class="line">Release:	8.3</span><br><span class="line">Codename:	jessie</span><br><span class="line">vimer@debian8light:~/code/test_search$ </span><br></pre></td></tr></table></figure>
-<p>在 gcc version 4.9.2 (Debian 4.9.2-10) 环境下实际测试，linux 编译时头文件的搜索路径：</p>
-<ol>
-<li>搜索会从 -I 开始</li>
-<li>再找 /usr/lib/gcc/x86_64-linux-gnu/4.9/include</li>
-<li>再找 /usr/local/include/</li>
-<li>查找 /usr/include/</li>
-</ol>
-<p>此测试只是确定以上 4 者相对的先后。测试时未包含更多的潜在的搜索路径，比如 gcc 的环境变量 C_INCLUDE_PATH、CPLUS_INCLUDE_PATH、OBJC_INCLUDE_PATH</p>
-<p>两种不类型的头文件 <code>#include&lt;&gt;</code> 和 <code>#include&quot;&quot;</code> 搜索规则：</p>
-<ol>
-<li>使用&lt;&gt;包含的头文件一般会先搜索-I选项后的路径（即用gcc编译时的-I选项，注意是大写），之后就是标准的系统头文件路径。</li>
-<li>而用””号包含的头文件会首先搜索当前的工作目录，之后的搜索路径才是和&lt;&gt;号包含的头文件所搜索的路径一样的路径。</li>
-</ol>
-<p><strong>事实上，知道上述提及的搜索路径即可。不必学究式地死记硬背之间的搜索顺序，能有多少意义呢？。</strong></p>
-<p>更直接、简单的方式，确认查找头文件时的路径搜索顺序。参考 <a target="_blank" rel="noopener" href="http://blog.csdn.net/maximuszhou/article/details/38559963">使用gcc时头文件路径和动态链接库路径</a>， 通过使用 -v 参数看到：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &quot;...&quot; search starts here:</span></span><br><span class="line"><span class="comment">#include &lt;...&gt; search starts here:</span></span><br><span class="line"> ./include</span><br><span class="line"> /usr/include/c++/4.9</span><br><span class="line"> /usr/include/x86_64-linux-gnu/c++/4.9</span><br><span class="line"> /usr/include/c++/4.9/backward</span><br><span class="line"> /usr/lib/gcc/x86_64-linux-gnu/4.9/include</span><br><span class="line"> /usr/<span class="built_in">local</span>/include</span><br><span class="line"> /usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed</span><br><span class="line"> /usr/include/x86_64-linux-gnu</span><br><span class="line"> /usr/include</span><br><span class="line">End of search list.</span><br></pre></td></tr></table></figure>
-<p>在此不再具体测试编译过程中链接库文件时的搜索顺序、运行时动态库的搜索顺序，真正需要用之间的搜索顺序时再写代码测试。</p>
-<h2 id="动态链接和静态链接"><a href="#动态链接和静态链接" class="headerlink" title="动态链接和静态链接"></a>动态链接和静态链接</h2><p>在“链接阶段”一节中出现了库文件“libc.so.6”。@Linxu 中动态库</p>
-<p>@引出静态库</p>
-<p>@动态链接和静态链接</p>
-<h1 id="make-和-Makefile"><a href="#make-和-Makefile" class="headerlink" title="make 和 Makefile"></a><a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/">make</a> 和 Makefile</h1><p>make 命令用来解释、执行 Makefile文件。针对开发 C++ 程序来说：Makefile 文件是对项目文件（以源文件、链接库为主，也包括头文件）依赖关系的描述，是对 gcc 命令的有效组织。抛开依赖关系，如果项目不复杂，你也可以用 shell 脚本来组织 gcc 命令，前提是根据依赖关系调整好编译命令的排序。虽然能够得到同样的结果，但是执行的效率不如前者，容错的能力不如前者，耗费的精力更是项目越大越难以承受。事实上：</p>
-<blockquote>
-<p>在make诞生之前，编译工作主要依赖于操作系统里面的类似于“make”、“install”功能的shell脚本。</p>
-</blockquote>
-<p>来看看维基百科中的描述：</p>
-<blockquote>
-<p>在软件开发中，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Make">make</a> 是一个工具程序（Utility software），经由读取叫做“makefile”的文件，自动化建构软件。</p>
-<p>它是一种转化文件形式的工具，转换的目标称为“target”；与此同时，它也检查文件的依赖关系，如果需要的话，它会调用一些外部软件来完成任务。它的依赖关系检查系统非常简单，主要根据依赖文件的修改时间进行判断。大多数情况下，它被用来编译源代码，生成结果代码，然后把结果代码连接起来生成可执行文件或者库文件。</p>
-<p>它使用叫做“makefile”的文件来确定一个target文件的依赖关系，然后把生成这个target的相关命令传给shell去执行。</p>
-</blockquote>
-<p>需要注意的是我们在 Linux 上用的一般是 make 的重写/改写版本 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/">GNU Make</a>，除此之外还有 BSD Make 等。</p>
-<p>我们来看怎么写 Makefile 文件。</p>
-<h1 id="automake"><a href="#automake" class="headerlink" title="automake"></a><a target="_blank" rel="noopener" href="https://www.gnu.org/software/automake/">automake</a></h1><p>人工写 Makefile 文件已经满足不了我们了。事实是人越来越懒，项目也越来越大，我们希望电脑帮我们做更多的工作。引用 Wikipedia 中的描述：</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Automake">GNU Automake</a> 是一种编程工具，可以产生供 make 程式使用的 Makefile，用来编译程式。它是自由软件基金会发起的 GNU 计划的其中一项，作为 GNU 构建系统的一部分。automake 所产生的Makefile 符合 GNU 编程标准。</p>
-<p>automake 是由 Perl 语言所写的，必须和 GNU autoconf 一并使用。</p>
-</blockquote>
-<h1 id="延伸"><a href="#延伸" class="headerlink" title="延伸"></a>延伸</h1><p>以下概念当做扩展知识保留下来，如果有兴趣可以展开学习：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Portable_Executable">PE 文件</a> 和 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8F%AF%E5%9F%B7%E8%A1%8C%E8%88%87%E5%8F%AF%E9%8F%88%E6%8E%A5%E6%A0%BC%E5%BC%8F">ELF 文件</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/08/13/headfile/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/08/13/headfile/" class="post-title-link" itemprop="url">怎么写头文件：内部链接、外部链接</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-08-13 19:16:39" itemprop="dateCreated datePublished" datetime="2016-08-13T19:16:39+08:00">2016-08-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>由内部链接、外部链接引出怎么写头文件。</p>
-<p>我看了一下，这篇笔记最早是在六月二号创建的，可是现在 2016/8/13 16:12:05 ，呵呵。一方面是自己懒，另一方面，对于“内部链接、外部链接”的概念，不多了解一些，不敢随便整理啊。</p>
-<p>我们先看看 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%A4%B4%E6%96%87%E4%BB%B6">维基百科- 头文件</a> 中说了什么：</p>
-<blockquote>
-<p>当一个子程序在定义的位置以外的地方被使用时，就需要进行<strong>前置声明</strong>，声明函数原型等。</p>
-</blockquote>
-<p>假设一个程序员不用“头文件”，那么他至少需要在两个地方维护函数的声明：一个是包含函数实现的的文件，以及使用该函数的文件。如果使用该函数的文件有很多个，那么对函数的定义进行更改时就是灾难。</p>
-<p>从某个方面来说，头文件降低了这种场景中程序员手工操作的复杂度（解放双手，繁琐的工作交给机器/编译器）。更重要的是保证了编写大型项目的易用性，难以想象如果没有头文件，几十万行的代码全都在一个源文件中。</p>
-<p>将函数原型移到 XXX 头文件中之后，我们可以在需要的地方通过 <code>#include &lt;XXX&gt;</code> <em>预处理器指令</em> 将其包含进来，这样每次编译时预处理阶段就会将 XXX 文件中的内容替换掉 <code>#include &lt;XXX&gt;</code> ，我们的函数原型也就被“前置声明”了。</p>
-<p>阅读 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Include_directive">wikipedia - include derective</a>，我们可以从更高的层次考虑 Include 行为，想想 Makefile 中的 include，shell 脚本中的 include，表示类似甚至同样意义的关键字还有 import、copy。</p>
-<p>在 C 语言中，什么内容需要放在头文件中，什么内容可以放在头文件中相对来说是比较容易区分的。接下来我们看看在 C++ 中，什么东西可以放在 .h 文件中，什么不能，什么东西又可以放在 .cpp 文件中。</p>
-<h1 id="声明和定义"><a href="#声明和定义" class="headerlink" title="声明和定义"></a>声明和定义</h1><p>首先需要区分开这两个概念，只是理解所有关键问题的前提。在笔记中暂时不展开说了，如果分不清楚，自行 Google。这里只备注几个容易混淆的条目：</p>
-<ul>
-<li><p>声明</p>
-<ol>
-<li><p>仅仅提供函数原型。类外面的，类里面的</p>
-</li>
-<li><p>class A；</p>
-</li>
-<li><p>typedef声明</p>
-</li>
-<li><p>在类中定义的静态数据成员的声明</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">int</span> a;  <span class="comment">// 声明</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-<li><p>定义</p>
-<ol>
-<li><p>在类定义之外，定义并初始化一个静态数据成员。如 A::a=0;</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">int</span> a;  <span class="comment">// 声明</span></span><br><span class="line">&#125;;</span><br><span class="line">A::a=<span class="number">0</span>；  <span class="comment">// 定义</span></span><br></pre></td></tr></table></figure></li>
-<li><p>在类外定义非内联成员函数</p>
-</li>
-</ol>
-</li>
-</ul>
-<h1 id="内部链接和外部链接"><a href="#内部链接和外部链接" class="headerlink" title="内部链接和外部链接"></a>内部链接和外部链接</h1><p>参考自：<a target="_blank" rel="noopener" href="http://blog.csdn.net/ithzhang/article/details/8119286">参考链接1</a>、<a target="_blank" rel="noopener" href="http://developer.51cto.com/art/201107/277364.htm">解析C++中的内部连接与外部连接</a></p>
-<p>链接把不同编译单元产生的符号联系起来。有两种链接方式：内部链接和外部链接。</p>
-<h2 id="内部链接"><a href="#内部链接" class="headerlink" title="内部链接"></a>内部链接</h2><p>如果一个符号名对于它的编译单元来说是局部的，并且在链接时不可能与其他编译单元中的同样的名称相冲突，那个这个符号就是内部链接。内部链接意味着对此符号的访问仅限于当前的编译单元中，对其他编译单元都是不可见的。</p>
-<p>具有内部链接的符号无法作用于当前文件外部，要让其影响程序的其他部分，可以将其放在.h文件中。此时在所有包含此.h文件的源文件都有自己的定义且互不影响。</p>
-<ol start="0">
-<li><p>所有的声明，包括类的声明，比如：<code>class A;</code>；(有时也将声明看作是无连接的，这里我们统一看成是内部连接的)。</p>
-<p> 由于声明只对当前编译单元有用，因此声明并不将任何东西写入.o文件。</p>
-<p> 这些声明<strong>本身</strong>不会影响到.o文件的内容。在编译阶段（狭义的，从高级语言到汇编语言到二进制，从 main.i 到 main.o，预处理已过，尚未链接），编译器只检测程序语法和函数、变量是否被声明。如果函数未被声明，编译器会报错。链接阶段，声明已经没有用了。</p>
-<p> 而函数调用会导致一个未定义的符号被写入到.o文件，此后此.o文件与定义此符号的.o文件被连接在一起，前面未定义的符号被解析。</p>
-</li>
-<li><p>局部变量肯定是内部链接性质的，更应该被看作无连接的；</p>
-</li>
-<li><p>全局变量，如果使用了 static、const 关键词修饰，其作用域仅仅在当前文件作用域内，其他文件中即使使用extern声明也是无法使用的。因此，带有 static、const 关键字的全局变量也是内部链接性质的；</p>
-<p> static 和 const 还是有区别的。static 和 extern不能对同一个变量同时声明；但 const 和 extern 不是同一存储类别，可以同时用在同一个变量的声明。所以，我们可以用使用extern关键字修改const的连接属性。<a target="_blank" rel="noopener" href="http://www.cnblogs.com/wangpei0522/p/4459624.html">更多详情</a>、<a target="_blank" rel="noopener" href="http://blog.csdn.net/xiexievv/article/details/8491494">特别说明</a></p>
-</li>
-<li><p>枚举 enum、联合 union 类型是内部链接性质的；</p>
-</li>
-<li><p><strong>类的定义</strong>是内部链接性质的：</p>
-<ul>
-<li><p>定义，意味着在同一编译单元中不能重复出现；</p>
-</li>
-<li><p>内部链接性质，意味着如果需要在其他编译单元使用，类必须被定义在头文件且被其他文件包含。</p>
-<p>  仅仅在其他文件中使用class a;声明是不行的，原因就是类的定义是内部链接，不会在目标文件导出符号。也就不会被其他单元解析它们的未定义符号。</p>
-</li>
-</ul>
-</li>
-<li><p>内联函数定义（包括自由函数和非自由函数）。</p>
-<p> 内联函数之所有具有内部链接，因为编译器在可能的时候，会将所有 对函数的调用替换为函数体，不将任何符号写入.o文件。</p>
-</li>
-<li><p>名字空间(包括全局名字空间)中的静态自由函数、静态友元函数、静态变量的定义。<a target="_blank" rel="noopener" href="http://developer.51cto.com/art/201107/277364.htm">补充条目来源</a></p>
-</li>
-</ol>
-<h2 id="外部链接"><a href="#外部链接" class="headerlink" title="外部链接"></a>外部链接</h2><p>在一个多文件的程序中，如果一个符号在链接时可以和其他编译单元交互，那么这个名称就有外部链接。外部链接意味着该定义不仅仅局限在单个编译单元中。它可以在.o文件中产生外部符号。可以被其他编译单元访问用来解析它们未定义的符号。因此它们在整个程序中必须是唯一的，否则将会导致重复定义。</p>
-<p><strong>区分：</strong>判断一个符号是内部链接还是外部链接的一个很好的方法就是看该符号是否被写入.o文件。</p>
-<ol>
-<li><p>类非内联成员函数，包括类成员函数和类静态成员函数</p>
-</li>
-<li><p>类的静态数据成员的定义具有外部链接性质</p>
- <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">int</span> a;  <span class="comment">// 内部链接</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">A::a = <span class="number">0</span>;  <span class="comment">// 外部链接</span></span><br></pre></td></tr></table></figure></li>
-<li><p>非内联函数</p>
-</li>
-<li><p>名字空间(包括全局名字空间)中非静态自由函数、非静态友元函数及非静态变量。<a target="_blank" rel="noopener" href="http://developer.51cto.com/art/201107/277364.htm">补充条目来源</a></p>
-<p> 前提是认为，类之外一般不存在使用 inline 修饰的函数。</p>
-</li>
-</ol>
-<h2 id="学习"><a href="#学习" class="headerlink" title="学习"></a>学习</h2><p><a target="_blank" rel="noopener" href="http://www.52rd.com/Blog/Detail_RD.Blog_imjacob_5682.html">摘抄来源</a></p>
-<p>Linkage</p>
-<p>To understand the behavior of C and C++ programs, you need to know about linkage. In an executing program, an identifier is represented by storage in memory that holds a variable or a compiled function body. Linkage describes this storage as it is seen by the linker. There are two types of linkage: internal linkage and external linkage.</p>
-<p>Internal linkage means that storage is created to represent the identifier only for the file being compiled. Other files may use the same identifier name with internal linkage, or for a global variable, and no conflicts will be found by the linker – separate storage is created for each identifier. Internal linkage is specified by the keyword static in C and C++.</p>
-<p>External linkage means that a single piece of storage is created to represent the identifier for all files being compiled. The storage is created once, and the linker must resolve all other references to that storage. Global variables and function names have external linkage. These are accessed from other files by declaring them with the keyword extern. Variables defined outside all functions (with the exception of const in C++) and function definitions default to external linkage. You can specifically force them to have internal linkage using the static keyword. You can explicitly state that an identifier has external linkage by defining it with the extern keyword. Defining a variable or function with extern is not necessary in C, but it is sometimes necessary for const in C++.</p>
-<p>Automatic (local) variables exist only temporarily, on the stack, while a function is being called. The linker doesn’t know about automatic variables, and so these have no linkage.</p>
-<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>综上，我们可以知道：将具有外部链接的定义放在头文件中几乎都是编程错误。因为如果该头文件中被多个源文件包含，那么就会存在多个定义，链接时就会出错。</p>
-<p>在头文件中放置内部链接的定义却是合法的，但不推荐使用的。</p>
-<p>链接，本质上都是具有<strong>外部链接性质的符号们</strong>的事情！</p>
-<h2 id="惯例"><a href="#惯例" class="headerlink" title="惯例"></a>惯例</h2><p>头文件为相关声明提供了一个集中存放的位置。头文件一般包含类的定义、枚举的定义、extern变量的声明、函数的声明、const int的定义、inline函数的定义。使用或者定义这些实体的文件要包含适当的头文件。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1552,7 +1531,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -196,6 +196,402 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/07/current-working-directory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/03/07/current-working-directory/" class="post-title-link" itemprop="url">当前工作目录是可以变化的</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-03-07 11:51:52" itemprop="dateCreated datePublished" datetime="2017-03-07T11:51:52+08:00">2017-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-12 16:48:26" itemprop="dateModified" datetime="2021-02-12T16:48:26+08:00">2021-02-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/windows/" itemprop="url" rel="index"><span itemprop="name">windows</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2015年10月29日 10:15:57</p>
+<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>在做 mfc 项目的时候需要获取当前目录，当时直接调用了 <code>GetCurrentDirectory()</code> 使用。当时在 VS2010 中有三个项目，目录结构如下：</p>
+<p><img src="https://raw.githubusercontent.com/nielong0610/MarkdownPhotos/master/TrayOnly-Directory.jpg" alt="TrayOnly项目的目录结构"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/03/07/current-working-directory/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/07/installMySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/03/07/installMySQL/" class="post-title-link" itemprop="url">安装 MySQL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-03-07 11:38:13" itemprop="dateCreated datePublished" datetime="2017-03-07T11:38:13+08:00">2017-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>完全没想到安装 mysql 会消耗掉将近一天的时间。从上午十一点，没吃饭没睡觉一直折腾到下午四点半，网上已经有了很详细的安装指导，却依旧卡在某个问题上两三个小时。文中会详细叙述。</p>
+<p>我们可以在不同的平台以“不同的姿势”搭建 mysql 环境。</p>
+<h1 id="Debian-安装-MySQL"><a href="#Debian-安装-MySQL" class="headerlink" title="Debian 安装 MySQL"></a>Debian 安装 MySQL</h1><p>通过 <a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/5.5/en/linux-installation-native.html">官方指导手册</a> 的章节标题我们就能感受到“姿势”的多种多样了。因为我使用的 Debian8，其官方软件库中 mysql-server-5.5，所以在此贴的链接也是 5.5 版本的。</p>
+<blockquote>
+<ul>
+<li><p>Installing MySQL on Unix/Linux Using Generic Binaries</p>
+</li>
+<li><p>Installing MySQL on Linux</p>
+<ul>
+<li>Installing MySQL on Linux Using Debian Packages</li>
+<li><a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/5.5/en/linux-installation-native.html">Installing MySQL on Linux Using Native Package Managers</a></li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Installing MySQL from Source</li>
+</ul>
+</blockquote>
+<p>如果你有管理员权限，很明显使用 Debian 原生的 apt-get 包管理器进行安装是最方便的。我也是敲入以下命令直接装的：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install mysql-client-5.5 mysql-server-5.5</span><br></pre></td></tr></table></figure>
+<p>关于 mysql-server 和 mysql-client 的区别：</p>
+<blockquote>
+<p>来一段引用或者 链接</p>
+</blockquote>
+<p>打算使用 windows 上的 Navicat 访问、管理数据库的。但是在虚拟机使用 NAT 模式前提下，windows 主机无法访问安装在 Debian 虚拟机中的 mysql 数据库。从网上查找资料了解到，修改为“Bridge”模式可以让宿主机、虚拟机彼此访问，但是涉及笔记本双网卡、气象局网络环境等，还要了解虚拟机三种网络模式，不想背离初衷（上午十点我只是打算写段访问数据库的 C++11 代码）太远，所以选择放弃！以后碰到了，再回来接续这些技能。</p>
+<p>在 Debian8Light 上卸载 mysql-server-5.5，保留了 mysql-client-5.5。</p>
+<h1 id="Windows7-安装-MySQL"><a href="#Windows7-安装-MySQL" class="headerlink" title="Windows7 安装 MySQL"></a>Windows7 安装 MySQL</h1><p>windows 下是“姿势”多多。既然是在 windos 上安装，就使用最新的 5.7 版本了。</p>
+<blockquote>
+<ul>
+<li>Installing MySQL on Microsoft Windows Using MySQL Installer</li>
+<li><a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/5.7/en/windows-install-archive.html">Installing MySQL on Microsoft Windows Using a noinstall Zip Archive</a></li>
+</ul>
+</blockquote>
+<p>使用 <a target="_blank" rel="noopener" href="http://dev.mysql.com/downloads/windows/installer/5.7.html">MySQL Installer</a> 安装包安装很简单，需要花费精力的是“尽可能的安装最小集，只安装那些你需要的”。对于这次的使用场景来说，我是练习写 C++ 代码用，而且已经有了 Navicat 工具。所以，我只需要安装 MySQL Server 和开发时所用的 Connector，其他的任何 GUI 工具和 Java、Python 连接器我都不需要。</p>
+<p><img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/mysql_custom.png" alt="MySQL 自定义安装"></p>
+<p>剔除那些根本就不会用到的功能花费了一些时间，除此之外，整个安装过程很顺利，装完之后连接成功直接使用。</p>
+<p>在好奇心和心理洁癖的驱使下，我尝试搭建了 <a target="_blank" rel="noopener" href="http://dev.mysql.com/downloads/mysql/">解压版 MySQL</a>。就是在这个过程中遇到了意外，花费了两个小时才解决。</p>
+<p>解压版本重点在于配置，根据网上的示范（5.5版本、5.6版本）搭建完毕，可是启动服务时老是失败，报错“本地计算机上的mysql服务启动后停止，……”。我当时脑袋也是不清醒，下意识地以为是配置文件的问题，或者是一台电脑安装两个实例带来的冲突。配置文件，我是把安装版的 my.ini 稍作修改直接拿过来用的，担心漏掉了某条配置没有改，造成冲突。可是校对之后仍没能解决问题；然后将安装版本卸载之后，还是出现这个错误，才反应过来直接 Google 这句错误信息。网上搜到的信息不多，但很有效。</p>
+<p>这是一个在 5.7.7 版本之后才有的现象，新的版本需要 <a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/5.7/en/windows-initialize-data-directory.html">Initializing the Data Directory</a>。如果英文水平不高，可以直接参考 <a target="_blank" rel="noopener" href="http://jingyan.baidu.com/article/0f5fb0991636376d8234ea7a.html">MySQL 5.7.9 ZIP 免安装版本配置过程</a>。</p>
+<p>而现在 2016/7/16 18:56:44 ，我要开始码代码了。</p>
+<h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><p>在 windows 上安装 msi 版本后，查看在其 /Data/ 目录下的 my.ini 配置文件。</p>
+<p>整个配置文件分为两部分： Client Section 和 Server Section。强调 mysql 和 mysqld 是不同的两个功能，尤其是用 mysql、mysqladmin等<strong>客户端工具</strong>连接数据库时（默认）使用 Client Section 区域的 port，mysqld 启动<strong>数据库服务</strong>时监听 Server Section 区域的 port 指定的端口。仔细阅读配置文件中的注释！</p>
+<h1 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h1><p>很很重要的一部分！但目前没有深入了解的必要，参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/goodhacker/p/3373213.html">MySQL 数据库赋予用户权限操作表</a> 只学习以下几点：</p>
+<ul>
+<li><p>查看权限：查看自己的权限，查看其他用户的权限</p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> grants <span class="keyword">for</span> dba;</span><br><span class="line"><span class="number">1141</span> <span class="operator">-</span> There <span class="keyword">is</span> <span class="keyword">no</span> such <span class="keyword">grant</span> defined <span class="keyword">for</span> <span class="keyword">user</span> <span class="string">&#x27;dba&#x27;</span> <span class="keyword">on</span> host <span class="string">&#x27;%&#x27;</span></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> grants <span class="keyword">for</span> dba<span class="variable">@localhost</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">---------------------------------------------------------------------------+</span></span><br><span class="line"><span class="operator">|</span> Grants <span class="keyword">for</span> dba<span class="variable">@localhost</span>                                                  <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">---------------------------------------------------------------------------+</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">GRANT</span> USAGE <span class="keyword">ON</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;dba&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>                                   <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">GRANT</span> <span class="keyword">ALL</span> PRIVILEGES <span class="keyword">ON</span> `testdb`.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;dba&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> <span class="keyword">WITH</span> <span class="keyword">GRANT</span> OPTION <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">---------------------------------------------------------------------------+</span></span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span></span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> grants <span class="keyword">for</span> developer;</span><br><span class="line"><span class="number">1141</span> <span class="operator">-</span> There <span class="keyword">is</span> <span class="keyword">no</span> such <span class="keyword">grant</span> defined <span class="keyword">for</span> <span class="keyword">user</span> <span class="string">&#x27;developer&#x27;</span> <span class="keyword">on</span> host <span class="string">&#x27;%&#x27;</span></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> grants <span class="keyword">for</span> developer@<span class="string">&#x27;192.168.195.%&#x27;</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------------------------------------------------------------------------------------------------------------------------------------+</span></span><br><span class="line"><span class="operator">|</span> Grants <span class="keyword">for</span> developer<span class="variable">@192</span><span class="number">.168</span><span class="number">.195</span>.<span class="operator">%</span>                                                                                                                        <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------------------------------------------------------------------------------------------------------------------------------------+</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">GRANT</span> USAGE <span class="keyword">ON</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;developer&#x27;</span>@<span class="string">&#x27;192.168.195.%&#x27;</span>                                                                                                         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">GRANT</span> <span class="keyword">CREATE</span>, <span class="keyword">DROP</span>, <span class="keyword">REFERENCES</span>, INDEX, <span class="keyword">ALTER</span>, <span class="keyword">EXECUTE</span>, <span class="keyword">CREATE</span> <span class="keyword">VIEW</span>, <span class="keyword">SHOW</span> <span class="keyword">VIEW</span>, <span class="keyword">CREATE</span> ROUTINE, <span class="keyword">ALTER</span> ROUTINE <span class="keyword">ON</span> `testdb`.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;developer&#x27;</span>@<span class="string">&#x27;192.168.195.%&#x27;</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------------------------------------------------------------------------------------------------------------------------------------+</span></span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span></span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> grants <span class="keyword">for</span> common_user;</span><br><span class="line"><span class="operator">+</span><span class="comment">-------------------------------------------------------------------------+</span></span><br><span class="line"><span class="operator">|</span> Grants <span class="keyword">for</span> common_user@<span class="operator">%</span>                                                <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-------------------------------------------------------------------------+</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">GRANT</span> USAGE <span class="keyword">ON</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;common_user&#x27;</span>@<span class="string">&#x27;%&#x27;</span>                                 <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">GRANT</span> <span class="keyword">SELECT</span>, <span class="keyword">INSERT</span>, <span class="keyword">UPDATE</span>, <span class="keyword">DELETE</span> <span class="keyword">ON</span> `testdb`.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;common_user&#x27;</span>@<span class="string">&#x27;%&#x27;</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-------------------------------------------------------------------------+</span></span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span></span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> </span><br></pre></td></tr></table></figure></li>
+<li><p>GRANT语句的主要用途是来给帐户授权的，但也可用来建立新帐户并同时授权。</p>
+<p>  创建 testdb 数据库，在其基础上创建 common_user developer dba 用户并授权</p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">SELECT</span>, <span class="keyword">INSERT</span>, <span class="keyword">UPDATE</span>, <span class="keyword">DELETE</span> <span class="keyword">ON</span> `testdb`.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;common_user&#x27;</span>@<span class="string">&#x27;%&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;common_user&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/Richardzhu/p/3318595.html">MySQL之权限管理</a> 了解更多的，记得去官网哦。</p>
+</li>
+</ul>
+<blockquote>
+<p> jack@’localhost’ 表示jack用户，@后面接限制的主机，可以是IP、IP段、域名以及%，%表示任何地方。<strong>注意：</strong>这里%有的版本不包括本地，以前碰到过给某个用户设置了%允许任何地方登录，但是在本地登录不了，这个和版本有关系，遇到这个问题再加一个localhost的用户就可以了。</p>
+<p>WITH GRANT OPTION 这个选项表示该用户可以将自己拥有的权限授权给别人。<strong>注意：</strong>经常有人在创建操作用户的时候不指定WITH GRANT OPTION选项导致后来该用户不能使用GRANT命令创建用户或者给其它用户授权。</p>
+</blockquote>
+<h1 id="编写代码"><a href="#编写代码" class="headerlink" title="编写代码"></a>编写代码</h1><p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/connector-cpp/en/">MySQL Connector/C++ Developer Guide</a></p>
+<p>在 C++ 中使用 MySQL 数据库，包含上述方法在内一共有 3 种：</p>
+<ol>
+<li>使用 Connector/C++，库文件命名 (lib)mysqlcppconn.xx</li>
+<li>使用 Connector/ODBC</li>
+<li>使用 Connector/C，库文件命名 libmysql.xx</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">文件夹 PATH 列表</span><br><span class="line">卷序列号为 CC94-9350</span><br><span class="line">C:.</span><br><span class="line">├─Connector.C++ 1.1</span><br><span class="line">│  ├─include</span><br><span class="line">│  │  └─cppconn</span><br><span class="line">│  └─lib</span><br><span class="line">│      └─opt</span><br><span class="line">├─Connector.ODBC 5.3</span><br><span class="line">└─MySQL Connector.C 6.1</span><br><span class="line">    ├─bin</span><br><span class="line">    ├─include</span><br><span class="line">    │  └─mysql</span><br><span class="line">    │      └─psi</span><br><span class="line">    └─lib</span><br><span class="line">        ├─vs10</span><br><span class="line">        ├─vs11</span><br><span class="line">        └─vs12</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/07/BooleanInCoding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/03/07/BooleanInCoding/" class="post-title-link" itemprop="url">BOOL 和 bool（C++ 的） 和 _Bool（C 的）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-03-07 10:02:49" itemprop="dateCreated datePublished" datetime="2017-03-07T10:02:49+08:00">2017-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2016年1月12日 18:14:37</p>
+<p>本节转自 <a target="_blank" rel="noopener" href="http://developer.51cto.com/art/201312/420153.htm">bool BOOL 和 _Bool辨析</a></p>
+<h1 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a>布尔类型</h1><p><code>BOOL</code> 类型在头文件 &lt;windef.h&gt; 中定义为 <code>typedef int BOOL</code>；在头文件 &lt;wtypes.h&gt; 中定义为 <code>typedef long BOOL</code>。</p>
+<p><code>BOOL</code> 类型，即 int 类型的长度视实际环境来定，一般可认为是 4 个字节。 </p>
+<p><code>BOOL</code> 是微软定义的表达布尔逻辑的类型。与 C++ 中的 bool 类型不同是，它是一个<strong>三值逻辑</strong>：TRUE、FALSE 和 ERROR。当返回值为大于 0 的整数时为 TRUE，返回值为 0 时为 FALSE，返回值为 -1 时为 ERROR。</p>
+<p><code>bool</code> 类型在 C++ 中以关键字的形式被支持，表示布尔类型，其对应变量的值只有真（true）和假（false）两种值。<code>bool</code> 在 C++ 里占用 1 字节。</p>
+<p><code>_Bool</code> 是 C99 标准中定义的一个新关键字，以提供布尔类型。C2008 草案中只规定了 <code>_Bool</code> 类型的大小至少应能够存放 0 和 1 这两个值。而并没有规定具体的大小。这交给编译器自由发挥了。</p>
+<p><strong>以上，足够读者区别彼此的使用场景了。</strong></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/03/07/BooleanInCoding/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/03/07/portability-about-C-functions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/03/07/portability-about-C-functions/" class="post-title-link" itemprop="url">一些 C 函数，痛苦的移植性</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-03-07 09:27:48" itemprop="dateCreated datePublished" datetime="2017-03-07T09:27:48+08:00">2017-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2015年11月17日 17:09:46</p>
+<p>有一个很好的链接：<a target="_blank" rel="noopener" href="http://ganquan.info/standard-c/">Standard C 语言标准函数库速查</a>。不在其中的自然就不是 C 标准库中的函数，不过有一点点瑕疵，这个速查的搜索功能不好用。</p>
+<ol>
+<li>即便是标准库中的函数，在不同平台也是会有差异的（但标准规定的部分应该是相同的）。比如：<code>fflush</code>、<code>fopen</code>；</li>
+<li>不在标准库中的函数：不同的平台使用了相似（甚至相同）的名字实现了相似的功能，所谓“相似”则必然有不同，其中的区别就是我们编码过程中的<strong>陷阱</strong>！（极端一点）可以认为只是不同平台不同实现选择了相同的名字而已。比如：<code>snprintf</code>、<code>access</code> 并不是标准 c 标准或者 c++ 标准中规定的函数。</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/03/07/portability-about-C-functions/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/02/16/git-credential/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -722,353 +1118,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/14/tar/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/12/14/tar/" class="post-title-link" itemprop="url">打包和压缩</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-12-14 17:00:24" itemprop="dateCreated datePublished" datetime="2016-12-14T17:00:24+08:00">2016-12-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p> 其实很简单的：甭管是打包还是压缩，参数一般以 vf 结尾，后跟包名称；打包的情况就是从 c（打包） x（解包） t（查看） 中挑一个；有压缩的话再从 z（gzip） j（bzip2） 中挑一个。Ok， 打完收工。</p>
-<ol>
-<li>如果打包的文件很多很多，造成刷屏，就需要把 v 参数去掉；</li>
-<li>包中追加（r）、更新（u）内容，使用率一般不是很高；</li>
-</ol>
-<hr>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/12/14/tar/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/09/library-static-dynamic/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/12/09/library-static-dynamic/" class="post-title-link" itemprop="url">共享库 & 静态库</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-12-09 17:11:43" itemprop="dateCreated datePublished" datetime="2016-12-09T17:11:43+08:00">2016-12-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2015年12月11日 14:53:34</p>
-<p>通常情况下，对函数库的链接是放在编译时期（compile time）完成的，所有相关的对象文件（object file）与牵涉到的函数库（library）被链接合成一个可执行文件（executable file）。程序在运行时，与函数库再无瓜葛，因为所有需要的函数已拷贝到自己门下。所以这些函数库被成为静态库（static libaray），通常文件名为“libxxx.a”的形式。<br>其实，我们也可以把对一些库函数的链接载入推迟到程序运行的时期（runtime），这就是如雷贯耳的动态链接库（dynamic link library）技术。</p>
-<h1 id="静态库概念"><a href="#静态库概念" class="headerlink" title="静态库概念"></a>静态库概念</h1><ol>
-<li>库是预编译的目标文件（object  files）的集合，它们可以被链接进程序。静态库以后缀为“.a”的特殊的存档（archive file）存储。</li>
-<li>标准系统库可在目录 <code>/usr/lib</code> 与 <code>/lib</code> 中找到。比如，在类 Unix 系统中 C 语言的数学库一般存储为文件 <code>/usr/lib/libm.a</code>。该库中函数的原型声明在头文件 <code>/usr/include/math.h</code> 中。</li>
-<li>C 标准库本身存储为 <code>/usr/lib/libc.a</code>，它包含 ANSI/ISO 标准指定的函数，比如 <code>printf</code>。对每一个 C 程序来说，<code>libc.a</code> 都默认被链接。</li>
-<li>静态库的优点是可以在不用重新<strong>编译</strong>程序<strong>库</strong>代码的情况下，进行程序的<strong>重新链接</strong>，这种方法节省了编译过程的时间（在编译大型程序的时候，需要花费很长的时间）。静态库的另一个优点是开发者可以提供库文件给使用的人员，不用开放源代码，这是库函数提供者经常采用的手段。</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/12/09/library-static-dynamic/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/09/Makefile2nd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/12/09/Makefile2nd/" class="post-title-link" itemprop="url">不同场景下的 Makefile</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-12-09 16:40:29" itemprop="dateCreated datePublished" datetime="2016-12-09T16:40:29+08:00">2016-12-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>姊妹篇 <a href="https://tnie.github.io/2016/09/18/Makefile1st/">《Makefile 入门》</a> 中已经介绍过隐含规则、自动推导。要想在 make &amp; Makefile 上精进，必须了解其隐含规则。它可以让你省去很多繁琐、重复的细节，快速高效地完成项目的编译和链接。</p>
-<p>隐含规则依赖同名（同名源文件-同名目标文件-同名可执行文件），一般而言设置好编译器属性、给出必要的头文件目录，就可以使用隐含规则生成同名的目标文件（.o 文件）；但实际项目中很少出现可执行文件由单独一个源文件/目标文件生成的情况，所以生成可执行文件（包括链接库）时一般不能只使用隐含规则达到目的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/12/09/Makefile2nd/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/05/pass-parameters/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/12/05/pass-parameters/" class="post-title-link" itemprop="url">传值、传指针和传引用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-12-05 16:16:33" itemprop="dateCreated datePublished" datetime="2016-12-05T16:16:33+08:00">2016-12-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>我们先从最简单的内置类型说起，结合汇编代码说说三者之间的联系和区别；然后我们再讲用户自定义类类型的三种传参方式的优劣。</p>
-<h1 id="内置类型"><a href="#内置类型" class="headerlink" title="内置类型"></a>内置类型</h1><p>内置类型的传值是最简单的，也是其他传参形式的基础。此处的“其它传参形式”指所有传参方式，包括内置类型的传指针、传引用，也包括自定义类类型的传值、传指针和传引用。</p>
-<h2 id="传指针也是传值"><a href="#传指针也是传值" class="headerlink" title="传指针也是传值"></a>传指针也是传值</h2><p>内存地址（指针）也是一个数值，所以从汇编代码的层次看，传值和传指针其实是一样的（《Head First C》中也提到 C 语言所有的传参都是传值）。传值之后的操作更大程度上依赖于业务：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/12/05/pass-parameters/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1140,7 +1189,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

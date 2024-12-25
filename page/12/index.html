@@ -196,6 +196,353 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/14/tar/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/12/14/tar/" class="post-title-link" itemprop="url">打包和压缩</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-12-14 17:00:24" itemprop="dateCreated datePublished" datetime="2016-12-14T17:00:24+08:00">2016-12-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p> 其实很简单的：甭管是打包还是压缩，参数一般以 vf 结尾，后跟包名称；打包的情况就是从 c（打包） x（解包） t（查看） 中挑一个；有压缩的话再从 z（gzip） j（bzip2） 中挑一个。Ok， 打完收工。</p>
+<ol>
+<li>如果打包的文件很多很多，造成刷屏，就需要把 v 参数去掉；</li>
+<li>包中追加（r）、更新（u）内容，使用率一般不是很高；</li>
+</ol>
+<hr>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/12/14/tar/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/09/library-static-dynamic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/12/09/library-static-dynamic/" class="post-title-link" itemprop="url">共享库 & 静态库</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-12-09 17:11:43" itemprop="dateCreated datePublished" datetime="2016-12-09T17:11:43+08:00">2016-12-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2015年12月11日 14:53:34</p>
+<p>通常情况下，对函数库的链接是放在编译时期（compile time）完成的，所有相关的对象文件（object file）与牵涉到的函数库（library）被链接合成一个可执行文件（executable file）。程序在运行时，与函数库再无瓜葛，因为所有需要的函数已拷贝到自己门下。所以这些函数库被成为静态库（static libaray），通常文件名为“libxxx.a”的形式。<br>其实，我们也可以把对一些库函数的链接载入推迟到程序运行的时期（runtime），这就是如雷贯耳的动态链接库（dynamic link library）技术。</p>
+<h1 id="静态库概念"><a href="#静态库概念" class="headerlink" title="静态库概念"></a>静态库概念</h1><ol>
+<li>库是预编译的目标文件（object  files）的集合，它们可以被链接进程序。静态库以后缀为“.a”的特殊的存档（archive file）存储。</li>
+<li>标准系统库可在目录 <code>/usr/lib</code> 与 <code>/lib</code> 中找到。比如，在类 Unix 系统中 C 语言的数学库一般存储为文件 <code>/usr/lib/libm.a</code>。该库中函数的原型声明在头文件 <code>/usr/include/math.h</code> 中。</li>
+<li>C 标准库本身存储为 <code>/usr/lib/libc.a</code>，它包含 ANSI/ISO 标准指定的函数，比如 <code>printf</code>。对每一个 C 程序来说，<code>libc.a</code> 都默认被链接。</li>
+<li>静态库的优点是可以在不用重新<strong>编译</strong>程序<strong>库</strong>代码的情况下，进行程序的<strong>重新链接</strong>，这种方法节省了编译过程的时间（在编译大型程序的时候，需要花费很长的时间）。静态库的另一个优点是开发者可以提供库文件给使用的人员，不用开放源代码，这是库函数提供者经常采用的手段。</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/12/09/library-static-dynamic/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/09/Makefile2nd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/12/09/Makefile2nd/" class="post-title-link" itemprop="url">不同场景下的 Makefile</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-12-09 16:40:29" itemprop="dateCreated datePublished" datetime="2016-12-09T16:40:29+08:00">2016-12-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>姊妹篇 <a href="https://tnie.github.io/2016/09/18/Makefile1st/">《Makefile 入门》</a> 中已经介绍过隐含规则、自动推导。要想在 make &amp; Makefile 上精进，必须了解其隐含规则。它可以让你省去很多繁琐、重复的细节，快速高效地完成项目的编译和链接。</p>
+<p>隐含规则依赖同名（同名源文件-同名目标文件-同名可执行文件），一般而言设置好编译器属性、给出必要的头文件目录，就可以使用隐含规则生成同名的目标文件（.o 文件）；但实际项目中很少出现可执行文件由单独一个源文件/目标文件生成的情况，所以生成可执行文件（包括链接库）时一般不能只使用隐含规则达到目的。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/12/09/Makefile2nd/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/05/pass-parameters/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/12/05/pass-parameters/" class="post-title-link" itemprop="url">传值、传指针和传引用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-12-05 16:16:33" itemprop="dateCreated datePublished" datetime="2016-12-05T16:16:33+08:00">2016-12-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我们先从最简单的内置类型说起，结合汇编代码说说三者之间的联系和区别；然后我们再讲用户自定义类类型的三种传参方式的优劣。</p>
+<h1 id="内置类型"><a href="#内置类型" class="headerlink" title="内置类型"></a>内置类型</h1><p>内置类型的传值是最简单的，也是其他传参形式的基础。此处的“其它传参形式”指所有传参方式，包括内置类型的传指针、传引用，也包括自定义类类型的传值、传指针和传引用。</p>
+<h2 id="传指针也是传值"><a href="#传指针也是传值" class="headerlink" title="传指针也是传值"></a>传指针也是传值</h2><p>内存地址（指针）也是一个数值，所以从汇编代码的层次看，传值和传指针其实是一样的（《Head First C》中也提到 C 语言所有的传参都是传值）。传值之后的操作更大程度上依赖于业务：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/12/05/pass-parameters/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/30/sscanf-regular/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -739,606 +1086,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/headFirstC-note1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/03/headFirstC-note1/" class="post-title-link" itemprop="url">《嗨翻C语言》（上）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-11-03 16:22:52" itemprop="dateCreated datePublished" datetime="2016-11-03T16:22:52+08:00">2016-11-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2016/2/23 14:41:06 </p>
-<p>《嗨翻C语言》，本书分为三个部分。</p>
-<blockquote>
-<p>本书分为三个部分：第 1 章到第 4 章是基础知识，包括基本语法、指针、字符串、小工具和源文件；第 5 章到第 8 章为进阶内容，有结构、联合、数据结构、<strong>堆、函数指针、动/静态链接；最后四章是高级主题，内容涵盖了系统调用、进程间通信、网络编程和多线程</strong>。（加粗部分的笔记在下篇）</p>
-</blockquote>
-<p>以下笔记没有严格按照章节进行整理，因为书中在多个章节可能提到同一类知识点，比如（略）</p>
-<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>在此笔记中，不记录不同 C 标准的差异，具体细节查看原书；不记录不同 OS 下编写 C 时的差异，具体细节查看原书或者 google。笔记中只对不同标准、不同 OS 下共性的语言原理、语法细节做出整理。</p>
-<p>此上篇整理了 1-190 项标注和笔记。</p>
-<h1 id="课外"><a href="#课外" class="headerlink" title="课外"></a>课外</h1><h2 id="三种C标准"><a href="#三种C标准" class="headerlink" title="三种C标准"></a>三种C标准</h2><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/ANSI_C">ANSI C</a> 始于 20 世纪 80 年代后期，适用于最古老的代码；1999 年开始的 C99 标准有了很大的改进；在 2011 年发布的最新标准 C11 中……想知道编译器支持哪种标准，可以查看编译器的文档。</p>
-<blockquote>
-<p>“指定初始化器”按名设置结构和联合字段，它属于 C99 标准;</p>
-<p>C99 标准支持“指定初始化器”，C++ 不支持。</p>
-<p>在代码中间的位置声明新变量，只有 C99 和 C11 标准才允许这样做，在 ANSI C（在此特指 C89）中，必须在函数的顶部声明局部变量；</p>
-</blockquote>
-<p>更多的区别：1. 在早期的 ANSI C 标准中，<code>main()</code> 函数可以是 <code>void</code> 类型。但是在 C99 中 <code>main</code> 函数的返回类型必须是 <code>int</code>。2. ANSI C标准没有用来表示真和假的值，C语言把0这个值当做假处理，把非0的任何值当做真处理。C99标准则允许在程序中使用true和false关键字。但编译器还是会把他们当做1和0这两个值来处理。</p>
-<p>扩展阅读：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/18731707/why-does-c11-not-support-designated-initializer-list-as-c99">Why does C++11 not support designated initializer list as C99?</a></li>
-<li><a target="_blank" rel="noopener" href="https://gcc.gnu.org/onlinedocs/gcc-6.1.0/gcc/Standards.html#Standards">Language Standards Supported by GCC</a></li>
-</ul>
-<h2 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h2><p>gcc 是 *inux 下的一款编译器，上述三种标准它都支持。</p>
-<p>ps 这种说法太笼统，请阅读 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/emituofo/archive/2012/07/20/2600995.html">GCC对C标准的支持</a>、<a target="_blank" rel="noopener" href="http://blog.csdn.net/njnu_mjn/article/details/8629739">GCC的默认C标准</a>、<a target="_blank" rel="noopener" href="http://www.crifan.com/figure_out_which_version_gcc_support_c11/">哪个版本的gcc才支持c11</a>、<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/33209351?sort=created">有哪些支持C11标准的编译器</a>）</p>
-<ul>
-<li>在不指定C标准的情况下，GCC默认使用GNU C，所以如果你想让编译器遵循C99标准，需要使用 -std=99 选项。</li>
-<li>gcc是到了4.7，才真正支持c11的。</li>
-</ul>
-<h2 id="windows下使用gcc"><a href="#windows下使用gcc" class="headerlink" title="windows下使用gcc"></a>windows下使用gcc</h2><p>虽然在本书中作者提供了以下两种方法，但是在后续的介绍中也多有提及其不足之处。而且在接触之后，我还是放弃了 Cygwin，转而在虚拟机上安装了 debian。</p>
-<blockquote>
-<p>如在Windows操作系统上使用gcc（GNU编译器套装），有两种选择：一种是 <a target="_blank" rel="noopener" href="http://www.cygwin.com/">Cygwin</a>，它可以完全模拟UNIX环境，自然也就包括了gcc；如果你只是想创建能够在Windows下运行的程序，<a target="_blank" rel="noopener" href="http://www.mingw.org/">MinGW</a> 可能更符合你的需要。</p>
-</blockquote>
-<p>摘两条在书中描述的 Cygwin 项目不完美的地方：</p>
-<blockquote>
-<p>一些Cygwin的gcc版本允许修改字符串字面值，不会报错，但这样做常常是错的。</p>
-<p>Cygwin的很多版本中，在多个信号的发送顺序和接收顺序问题上，做了不恰当的假设。</p>
-</blockquote>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>面向对象是一种对抗软件复杂性的技术。</p>
-<h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><h2 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h2><ul>
-<li><p>在C语言中，几乎每样东西都有返回值：表达式 <code>x = 4</code> 本身也有一个值，这个值是4，即赋给x的值。</p>
-<p>  Q1：这个赋值表达式能否进行<strong>再次赋值</strong>？例如 <code>(x=3)=4</code></p>
-<p>  A1：在C中编译无法通过，类似<code>3=4</code>；在C++中正常编译，运行，类似<code>x=4</code>。</p>
-<p>  注意：以下这种再次赋值是成立的。因为无论 <code>y=4</code>（C语言） 还是 <code>y=x</code>（C++） 都是成立的。</p>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">9</span>;</span><br><span class="line">    <span class="keyword">int</span> y = <span class="number">8</span>;</span><br><span class="line">    <span class="comment">// 方式一</span></span><br><span class="line">    y = x = <span class="number">4</span>;</span><br><span class="line">    <span class="comment">// or 两者意义相同</span></span><br><span class="line">    <span class="comment">// y = (x = 4);</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;x is %d, y is %d\n&quot;</span>, x, y);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  关键是理解 C/C++ 中左值的概念，而且 C 和 C++ 中是不一样的。</p>
-</li>
-<li><p>使用 <code>switch</code> 语句的好处之一是，可以用<strong>下落逻辑</strong>在不同的分支之间复用代码。</p>
-</li>
-</ul>
-<h2 id="存储器"><a href="#存储器" class="headerlink" title="存储器"></a>存储器</h2><p>如果真的想玩转C语言，就需要理解C语言如何操纵存储器。掌握指针和存储器寻址对成为一名地道的C程序员很重要。</p>
-<blockquote>
-<p>函数（例如 main() 函数）中声明变量，计算机会把它保存在一个叫栈（Stack）的存储器区段中；函数以外的地方声明变量，计算机则会把它保存在存储器的全局量段（Globals）；堆用于动态存储。</p>
-</blockquote>
-<p>存储器的分布图：参考位置#1022、位置#1322、位置#1448</p>
-<ul>
-<li>存储器是进程的</li>
-<li><code>sizeof</code> 是运算符，好比<code>+</code>、<code>&amp;</code>，它不是库函数。程序是在编译期间计算 <code>sizeof</code> 的。<code>sizeof</code> 运算告知某样东西在存储器中占多少字节，既可以对数据类型使用，也可以对某条数据使用。</li>
-</ul>
-<h2 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h2><ul>
-<li>指针就是存储器中某条数据的地址</li>
-<li>指针做了两件事：避免副本和共享数据。</li>
-<li>指针是一种<strong>间接形式</strong>的地址（怎么理解？）</li>
-<li><code>*</code> 运算符可以读取存储器地址中的内容。<code>*</code> 运算符还可以设置存储器地址中的内容。</li>
-</ul>
-<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><ul>
-<li><p>指向字符串字面值（string literal）的指针变量不能用来修改字符串的内容</p>
-<ul>
-<li>在存储器的非只读区域创建了字符串的副本，就可以修改它的字母</li>
-<li>如果你想把指针设成字符串字面值，必须确保使用了 <code>const</code> 关键字：  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bus error 运行时崩溃</span></span><br><span class="line"><span class="keyword">char</span> *card = <span class="string">&quot;JQK&quot;</span>;</span><br><span class="line">card[<span class="number">1</span>] = <span class="string">&#x27;A&#x27;</span>;</span><br></pre></td></tr></table></figure>
-  编译错误，比在运行时崩溃好太多了！  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 编译不通过</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *s = <span class="string">&quot;some string&quot;</span>;</span><br><span class="line">s[<span class="number">0</span>] = <span class="string">&#x27;S&#x27;</span>;</span><br></pre></td></tr></table></figure></li>
-<li>加不加 <code>const</code>，字符串字面值都是只读的，<code>const</code> 修饰符表示，一旦你试图用 <code>const</code> 修饰过的变量去修改数组，编译器就会报错      <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过jimmy 修改内容就会报编译错误,</span></span><br><span class="line"><span class="comment">// 但是通过masked_raider 修改就可以成功。</span></span><br><span class="line"><span class="keyword">char</span> masked_raider[] = <span class="string">&quot;Alive&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *jimmy = masked_raider;</span><br></pre></td></tr></table></figure>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2></li>
-</ul>
-</li>
-<li><p>数组的索引值是一个偏移量</p>
-</li>
-<li><p>数组变量好比指针……</p>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> quote[] = <span class="string">&quot;Cookies make you fat&quot;</span>;</span><br></pre></td></tr></table></figure>
-<p>  计算机为字符串的每一个字符以及结束字符 <code>\0</code> 在栈上分配空间，并把首字符的地址和 quote 变量关联起来。函数传参时传给函数的是指针。</p>
-</li>
-<li><p>数组变量与指针又不完全相同（区别：重点理解2、3点）</p>
-<ol>
-<li><code>sizeof(数组)</code> 是……数组的大小；<code>sizeof(指针)</code> 返回4或8。</li>
-<li>数组的地址……是数组的地址；指针的地址是另一个地址。         <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;s == s;  <span class="comment">// 数组变量</span></span><br><span class="line">&amp;t != t;  <span class="comment">// 指针</span></span><br></pre></td></tr></table></figure></li>
-<li>数组变量不能指向其他地方。<br> 计算机会为数组分配存储空间，但不会为数组变量分配任何空间。</li>
-</ol>
-</li>
-<li><p>指针退化</p>
-<p>  把数组赋给指针变量，指针变量只会包含数组的地址信息，而对数组的长度一无所知，相当于指针丢失了一些信息。我们把这种信息的丢失称为退化。</p>
-</li>
-</ul>
-<h2 id="结构（结构体）"><a href="#结构（结构体）" class="headerlink" title="结构（结构体）"></a>结构（结构体）</h2><ul>
-<li><p>结构可以像数组那样在结构中保存字段，但读取时只能按名访问。</p>
-<p>  Q1：数组变量就是一个指向数组的指针，那么结构变量是一个指向结构的指针吗？ </p>
-<p>  A1：不是，结构变量是结构本身的名字。 数组变量的地址是数组变量自身；结构变量的地址是指针，不是自身。</p>
-</li>
-<li><p>为结构变量赋值相当于叫计算机复制数据。</p>
-<blockquote>
-<p>重点在<strong>函数传参时</strong>很可能浪费较多存储资源；而数组作为函数参数传的是指针。</p>
-</blockquote>
-</li>
-<li><p>用 <code>typedef</code> 为结构创建别名。用 <code>typedef</code> 定义结构时可以省略结构名，只写类型名。</p>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义结构体</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">call_phone</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> cell_no;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *wallpaper;</span><br><span class="line">    <span class="keyword">float</span> minutes_of_charge;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 创建别名</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">call_phone</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> cell_no;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *wallpaper;</span><br><span class="line">    <span class="keyword">float</span> minutes_of_charge;</span><br><span class="line">&#125; phone;</span><br><span class="line"><span class="comment">// 省略结构名</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> cell_no;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *wallpaper;</span><br><span class="line">    <span class="keyword">float</span> minutes_of_charge;</span><br><span class="line">&#125; phone;</span><br></pre></td></tr></table></figure></li>
-<li><p>关于“对齐”，可以<strong>查看原文</strong>或者进一步从<strong>网上学习</strong></p>
-</li>
-<li><p>在C语言中，参数按值传递给函数。</p>
-<p>  作者要表达的就是字面意思!@但这句话在国内出版物中经常作为前半句出现—“值传参和“指针传参”，以至于之前理解都有偏差。其实“指针传参”还是按值传递给函数的。</p>
-</li>
-</ul>
-<h2 id="联合"><a href="#联合" class="headerlink" title="联合"></a>联合</h2><ul>
-<li><p>定义一种叫“量”的数据类型，然后根据特定的数据决定要保存个数、重量还是容积。</p>
-</li>
-<li><p>每次创建结构实例，计算机都会在存储器中相继摆放字段，联合则不同。当定义联合时，计算机以其中最大的字段分配空间，然后由你决定里面保存什么值。</p>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">    <span class="keyword">short</span> count;</span><br><span class="line">    <span class="keyword">float</span> weight;</span><br><span class="line">    <span class="keyword">float</span> volume;</span><br><span class="line">&#125; quantity;</span><br></pre></td></tr></table></figure></li>
-<li><p>指定初始化器（designated initializer）按名设置结构和联合字段，它属于C99标准</p>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">quantity q = &#123;.weight=<span class="number">1.5</span>&#125;;</span><br><span class="line">phone p= &#123;.cell_no=<span class="number">15210</span>, .minutes_of_charge=<span class="number">1.2</span>&#125;;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>联合提供了一种让你创建<em>支持不同数据类型的变量</em>的方法。</p>
-</blockquote>
-</li>
-<li><p>联合经常和结构一起用。创建联合相当于创建新的数据类型。</p>
-</li>
-<li><p>编译器不会记录你在联合中设置或读取过哪些字段。</p>
-<p>  Q1：可以在 <code>union</code> 中保存任何字段（<code>count</code>、<code>weight</code> 或者 <code>volume</code>）的值，这些不同类型的值保存在存储器中相同的位置……既然如此，你怎么知道我保存的是 <code>float</code> 还是 <code>short</code>？要是我保存了 <code>float</code> 字段，却读取了 <code>short</code> 字段呢？</p>
-<p>  A1：解决方法：只要用枚举或其他东西记录一下就行了。</p>
-</li>
-</ul>
-<h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><p>（略）</p>
-<h2 id="位字段"><a href="#位字段" class="headerlink" title="位字段"></a>位字段</h2><ul>
-<li><p>位字段（bitfield）的初衷是节省存储器空间：真/假的值只需要一位就能表示；月份等小范围的数字……</p>
-</li>
-<li><p>只有当多个位字段出现在同一个结构中，才能节省空间。</p>
-<blockquote>
-<p>如果编译器发现结构中只有一个位字段，还是会把它填充成一个字，这就是为什么位字段总是组合在一起。</p>
-</blockquote>
-</li>
-<li><p>可以用位字段指定一个字段有多少位。位字段应当声明为 <code>unsigned int</code></p>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="comment">// 是否第一次参观？</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> first_visit:<span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 还会再来吗？</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> come_agin:<span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 被咬掉了几根手指？</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> fingers_lost:<span class="number">4</span>;</span><br><span class="line">    <span class="comment">// 被鲨鱼袭击过吗？</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> shark_attack:<span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 一周来几天？</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> days_a_week:<span class="number">3</span>;</span><br><span class="line">&#125; survey;</span><br></pre></td></tr></table></figure>
-<p>Q1：为什么C语言不支持二进制字面值？ </p>
-</li>
-</ul>
-<p>A1：因为二进制字面值占了很大空间（<strong>质疑？</strong>），而且十六进制通常写起来更快。</p>
-<h2 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h2><ul>
-<li><p>为了保存可变数量的数据，需要一样比数组更灵活的东西，即链表。</p>
-<blockquote>
-<p>链表是一种抽象数据结构。链表是通用的，可以用来保存很多不同类型的数据，所以被称之为抽象数据结构。</p>
-</blockquote>
-</li>
-<li><p>与数组相比，链表还有一个优点：插入数据非常快。</p>
-<p>  Q1：如何在C语言中创建链表？</p>
-<p>  A1：通过创建递归结构实现。</p>
-</li>
-<li><p>如果一个结构包含一个链向同种结构的链接，那么这个结构就被称为递归结构。</p>
-<blockquote>
-<p>在递归结构中，需要包含一个相同类型的指针，C语言的语法不允许用typedef别名来声明它。<em>个人猜测，应该和声明顺序有关。毕竟如果 <code>typedef 新类型 newtype</code>，然后 <code>newtype * pointer</code> 创建指针，是可行的。</em></p>
-</blockquote>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在递归结构中，必须为结构体命名。别名可选</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">island</span> &#123;</span></span><br><span class="line">    <span class="keyword">char</span> *name;</span><br><span class="line">    <span class="keyword">char</span> *opens;</span><br><span class="line">    <span class="keyword">char</span> *closes;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">island</span> *<span class="title">next</span>;</span>  <span class="comment">// 此处不允许使用别名来声明</span></span><br><span class="line">&#125; island;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>C语言需要知道结构在存储器中占的具体大小，如果在结构中递归地复制它自己，那么两条数据就会不一样大。指针的大小是确定的。</p>
-</blockquote>
-</li>
-<li><p>在C语言中，<code>NULL</code> 的值实际上为0</p>
-</li>
-</ul>
-<h1 id="分而治之"><a href="#分而治之" class="headerlink" title="分而治之"></a>分而治之</h1><h2 id="小工具"><a href="#小工具" class="headerlink" title="小工具"></a>小工具</h2><p>问：什么是小工具？——其实就是其字面意思，重点是要有这个概念。</p>
-<blockquote>
-<p>操作系统都有小工具。类Unix的操作系统为完成工作会大量使用工具，Windows用的少一些。</p>
-<p>C语言小工具执行特定的小任务，例如读写文件、过滤数据。如果要完成更复杂的任务，可以把多个工具链接在一起。</p>
-<p>小工具是一个C程序，它做一件事情并把它做好。</p>
-<p>当你想解决一个大问题时，可以把它分解成一连串的小问题，然后针对每个小问题写一个小工具。</p>
-</blockquote>
-<p>问：为什么小工具要使用标准输入和标准输出？ </p>
-<blockquote>
-<p>答：有了它们，就可以轻易用管道将小工具们串连起来。</p>
-</blockquote>
-<p>问：如果两个程序用管道相连，第二个程序要不要等第一个程序执行完后才能开始运行？</p>
-<blockquote>
-<p>答：不需要，两个程序可以同时运行，第一个程序一发出数据，第二个程序马上就可以处理。</p>
-</blockquote>
-<h2 id="输入输出"><a href="#输入输出" class="headerlink" title="输入输出"></a>输入输出</h2><ul>
-<li><p>使用 <code>scanf()</code> 时要小心：限制 <code>scanf()</code> 能读入的字符数</p>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注意字符数组的长度,和scanf 读取的限制</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> card_name[<span class="number">3</span>];</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;输入牌名：&quot;</span>)；</span><br><span class="line">  <span class="built_in">scanf</span>(<span class="string">&quot;%2s&quot;</span>, card_name);</span><br><span class="line">  <span class="comment">// other code</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如果忘了限制 <code>scanf()</code> 读取字符串的长度，用户就可以输入远远超出程序空间的数据，多余的数据会写到计算机还没有分配好的存储器中</p>
-</blockquote>
-</li>
-<li><p>如果你要向 <code>fgets()</code> 函数传递数组变量，就用 <code>sizeof</code>；如果只是传指针，就应该输入你想要的长度。</p>
-</li>
-<li><p>操作系统控制数据如何进出标准输入、标准输出。</p>
-</li>
-<li><p><code>scanf()</code> 和 <code>printf()</code> 函数，只管从标准输入读数据，向标准输出写数据</p>
-</li>
-<li><p>进程有一只耳朵（标准输入）和两张嘴（标准输出和标准错误）</p>
-</li>
-<li><p><code>printf()</code> 其实只是 <code>fprintf()</code> 函数的特例，</p>
-</li>
-<li><p>可以用 <code>&gt;</code> 重定向标准输出，<code>2&gt;</code> 重定向标准错误。</p>
-</li>
-<li><p>用管道连接输入与输出</p>
-</li>
-</ul>
-<h2 id="创建自己的数据流"><a href="#创建自己的数据流" class="headerlink" title="创建自己的数据流"></a>创建自己的数据流</h2><ul>
-<li><p>程序运行时，操作系统会为它创建三条数据流：标准输入、标准输出和标准错误。但有时你需要创建自己的数据流。</p>
-<blockquote>
-<p>每条数据流用一个指向文件的指针来表示，可以用 <code>fopen()</code> 函数创建新数据流。</p>
-<p>创建数据流后，可以用 <code>fprintf()</code> 函数往数据流中打印数据;可以用 <code>fscanf()</code> 函数从数据流中读取数据。</p>
-<p>当用完数据流，别忘了使用 <code>fclose()</code> 函数关闭它。</p>
-</blockquote>
-</li>
-<li><p>虽然所有的数据流在程序结束后都会自动关闭，但你仍应该自己关闭它们：</p>
-</li>
-</ul>
-<h2 id="命令行参数"><a href="#命令行参数" class="headerlink" title="命令行参数"></a>命令行参数</h2><ul>
-<li><p>十个程序有九个需要选项。聊天程序有“系统设置”，游戏有调整难度的选项，而命令行工具需要有命令行选项。</p>
-<blockquote>
-<p>很多程序都会用到命令行选项，因此有一个专门的库函数，可以使用它来简化处理流程。这个库函数叫做 <code>getopt()</code>，每一次调用都会返回命令行中下一个参数。</p>
-<p>有关函数的具体使用方法，翻阅原书或者 google 都行。</p>
-</blockquote>
-</li>
-<li><p>unistd.h头文件不属于C标准库，而是POSIX库中的一员。POSIX的目标是创建一套能够在所有主流操作系统上使用的函数。</p>
-</li>
-</ul>
-<h2 id="使用多个源文件"><a href="#使用多个源文件" class="headerlink" title="使用多个源文件"></a>使用多个源文件</h2><ul>
-<li><p>当编译器看到尖括号，就会到标准库代码所在目录查找头文件；用引号把文件名括起来，编译器就会在本地查找文件。</p>
-</li>
-<li><p>C语言是一种很小的语言，共有32+n个保留字。以下列出部分：</p>
-<blockquote>
-<p>auto register static extern typedef union volatile</p>
-</blockquote>
-</li>
-<li><p>使用头文件</p>
-<ul>
-<li><p>（函数）声明与定义分离</p>
-<blockquote>
-<p>将声明和定义分离之后也不用再严格调整函数定义之间的顺序。</p>
-<p>把声明放到一个独立的头文件中有两大优点，第一是主代码变短了，第二可以共享代码（被两个以上源文件 include 时）。</p>
-</blockquote>
-</li>
-<li><p>如此，就可以在不同的文件之间共享函数了，但如果你想<strong>共享变量</strong>呢？</p>
-<blockquote>
-<p>为了防止两个源文件中的同名变量相互干扰，变量的作用域仅限于某个文件内。如果你想共享变量，就应该在头文件中声明，并在变量名前加上 <code>extern</code> <strong>关键字</strong>（需要进一步的学习）：</p>
-</blockquote>
-<p>  ps：原文表述不太恰当。改为：</p>
-<ol>
-<li>为了防止两个源文件中的同名变量相互干扰，变量的作用域仅限于某个文件内——（这句话存在异议，使用 gcc 实际编译时不同文件使用同名变量会报错“重复定义”）。</li>
-<li>如果你想共享变量，就应该在头文件中声明。——声明变量，即在变量名前使用 <code>extern</code> 关键字，不应该用“并”。</li>
-<li>关于 <code>extern</code>，见《进一步学习extern》笔记。</li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="动态存储"><a href="#动态存储" class="headerlink" title="动态存储"></a>动态存储</h1><ul>
-<li>——另起篇幅</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/multiThread/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/03/multiThread/" class="post-title-link" itemprop="url">在C++类中创建线程函数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-11-03 16:22:19" itemprop="dateCreated datePublished" datetime="2016-11-03T16:22:19+08:00">2016-11-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在这篇学习总结中，我们先给出在C++类中定义线程函数的方法，然后讲述在多线程下很容易发生的资源竞争的特例——析构竞态。</p>
-<h1 id="在C-类中定义线程函数"><a href="#在C-类中定义线程函数" class="headerlink" title="在C++类中定义线程函数"></a>在C++类中定义线程函数</h1><p>参考：<a target="_blank" rel="noopener" href="http://rangercyh.blog.51cto.com/1444712/795759">在C++类中定义线程函数的方法</a></p>
-<p>在多线程的开发中，一般都是把线程函数写成全局函数来使用。但是如果要把线程操作写成类，线程函数放在类里面呢？</p>
-<p>下意识地会把线程函数写作普通的类函数，但这样子是有问题的。因为在创建线程的 api 中传入的线程函数需要在编译时确定地址，如果是普通的类函数，编译时不能确定地址，需要创建类的对象才能获取。我们可以把线程的执行函数写成 static 函数，或者是全局函数，因为这两者的函数地址在编译时是确定的。</p>
-<p>两者的区别：static 在形式上能够体现“包装”性，能够保全类的封装性；全局函数貌似通过命名空间也能提供“包装性”呢，破坏类的封装性。实际业务中，我个人更倾向于前者——使用类的静态函数作为线程入口函数。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/11/03/multiThread/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/int-string-int/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/03/int-string-int/" class="post-title-link" itemprop="url">C++中int型和std::string互相转换</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-11-03 16:22:07" itemprop="dateCreated datePublished" datetime="2016-11-03T16:22:07+08:00">2016-11-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>每次用到时，都要到网上搜索一下的感觉很不好。尤其是经常用到，每次搜索时你完全能认识到你已经查过很多遍了。另外，和不自信（拿不准的心理）以及养成了这种坏习惯都有关系，查得多了自然知道调用 C 标准库 atoi（itoa 不是 C 标准库函数）以及使用 stringstream 流来解决问题，但每每觉得差那么一点意思，不够简洁。每次用到时都要搜索一下，可能是希望找到一种让内心舒坦的转换“手法”吧。</p>
-<p>参考 <a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/community/forums/html/topic?id=21b31ae2-0960-4068-a555-ce9e6c27da9b">C++11 中的 string - atoi/itoa</a>，岂止是参考，根本就是抄袭。可是好不喜欢原文的排版。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/11/03/int-string-int/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/initialization/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/03/initialization/" class="post-title-link" itemprop="url">初始化</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-11-03 16:21:34" itemprop="dateCreated datePublished" datetime="2016-11-03T16:21:34+08:00">2016-11-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2018/9/19 17:46:55 这篇罗列概念很没水平，就别看了。</p>
-<p>后记：这篇笔记限于罗列书中的概念，自己的理解并不多，组织章节也不好。后来又整理过一篇： <a href="https://tnie.github.io/2016/12/20/initialization2nd/">《再谈初始化》</a> ，两者不分先后，没有依赖关系。</p>
-<p>参考《C++ Primer》和网上资源誊抄完正文后，自己总结如下：</p>
-<ol>
-<li><p>定义一个变量/对象时，如果不进行显式地初始化，就是<strong>默认初始化</strong>（除了使用 <code>extern</code> 进行纯粹的声明的）。需要关注的是，默认初始化时编译器究竟赋予了变量/对象什么内容。</p>
-</li>
-<li><p>默认初始化变数太多，比如造成内置类型未定义行为，对于使用编译器合成的默认构造函数的类也可能产生不良影响，所以在定义变量时最好进行初始化！初始化的语法格式有好多种呢：</p>
-<ul>
-<li>根据是否使用等号分为拷贝初始化和直接初始化；</li>
-<li>根据是否使用了花括号，区分出列表初始化；</li>
-</ul>
-</li>
-<li><p>想在初始化时偷懒，不想写太多参数（<code>vector</code> 值初始化）；但又操心默认初始不好使（<code>new</code> 动态分配时值初始化）。所以，又出现了值初始化。</p>
-</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/11/03/initialization/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1410,7 +1157,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

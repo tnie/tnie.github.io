@@ -219,21 +219,23 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-12-21 18:47:28 / 修改时间：19:05:00" itemprop="dateCreated datePublished" datetime="2024-12-21T18:47:28+08:00">2024-12-21</time>
+              <time title="创建时间：2024-12-21 18:47:28" itemprop="dateCreated datePublished" datetime="2024-12-21T18:47:28+08:00">2024-12-21</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 20:30:43" itemprop="dateModified" datetime="2024-12-25T20:30:43+08:00">2024-12-25</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/qt/" itemprop="url" rel="index"><span itemprop="name">qt</span></a>
+                  <a href="/categories/qt/" itemprop="url" rel="index"><span itemprop="name">qt</span></a>
                 </span>
             </span>
 
@@ -257,6 +259,379 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2024/12/21/QUdpSocket/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2024/11/16/rpathFeatureInQt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/16/rpathFeatureInQt/" class="post-title-link" itemprop="url">Qt 版本和显示异常</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-16 13:47:00" itemprop="dateCreated datePublished" datetime="2024-11-16T13:47:00+08:00">2024-11-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 20:32:52" itemprop="dateModified" datetime="2024-12-25T20:32:52+08:00">2024-12-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/qt/" itemprop="url" rel="index"><span itemprop="name">qt</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>开发 Qt 软件过程中发现折线图（Qt Charts 二维折线图）显示不全、圆环刻度值（<code>QPainter</code> 自绘）显示异常。</p>
+<p>上述问题和程序运行时使用的 Qt 版本有关，但和编译时使用的 Qt 版本无关：</p>
+<ul>
+<li>项目源码是在 Qt 5.13.2 下构建开发的，未针对 5.12.12 做适配</li>
+<li>但使用 Qt 5.12.12 也能够编译成功；</li>
+<li>运行时必须使用 Qt 5.13.2 ，如果运行时使用 5.12.12 就会出现上述现象。</li>
+</ul>
+<p>使用 Qt 5.13.2 构建的可执行文件，运行时库如果使用 5.12.12 会启动失败，报错：<br><code>undefined symbol: qt_resourceFeatureZlib, version Qt_5</code></p>
+<p>在 Qt Creator 中运行、调试项目时，使用的 Qt 版本一般和编译期的版本一致，但我们可以打破这种一致性：</p>
+<ul>
+<li>编译时，关闭 <code>QT.global.enabled_features = rpath </code> 特性：此特性在 5.12.12 中默认关闭；在 5.13.2 中默认开启。</li>
+<li>运行时，修改 <code>LD_LIBRARY_PATH</code> 使找到的 Qt 运行时库和编译时的库版本不一致</li>
+</ul>
+<p>在设备上部署软件后，如何约束运行时使用的 Qt 版本（以及第三方库）：</p>
+<ul>
+<li>通过 <code>-rpath</code> 特性约束，要求设备上存在对应的目录</li>
+<li>通过 <code>LD_LIBRARY_PATH</code> 环境变量约束</li>
+</ul>
+<p>可以使用 <code>readelf -d a.out</code> 查看可执行文件是否指定了运行时库的查找路径。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/16/rpathFeatureInQt/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2024/11/16/installQt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/16/installQt/" class="post-title-link" itemprop="url">在 Ubuntu 上搭建 Qt 开发环境</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-16 13:25:00" itemprop="dateCreated datePublished" datetime="2024-11-16T13:25:00+08:00">2024-11-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 20:25:55" itemprop="dateModified" datetime="2024-12-25T20:25:55+08:00">2024-12-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/qt/" itemprop="url" rel="index"><span itemprop="name">qt</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>搭建环境：</p>
+<ul>
+<li>Qt 在 Qt5.12.12 之前提供 Windows/Linux/Mac 离线安装包，只有 x86 架构的</li>
+<li>Qt 目前已经支持 ARM 架构，但只有在线安装包</li>
+<li>Qt 从源码构建安装，费时费力还容易出错。我还没掌握</li>
+<li>Qt 在 Linux 还可以通过各系统的软件仓库安装，版本陈旧，也需要联网</li>
+</ul>
+<h1 id="软件仓库"><a href="#软件仓库" class="headerlink" title="软件仓库"></a>软件仓库</h1><p>系统环境：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">niel@ubuntu:~$ cat /etc/lsb-release </span><br><span class="line">DISTRIB_ID=Ubuntu</span><br><span class="line">DISTRIB_RELEASE=20.04</span><br><span class="line">DISTRIB_CODENAME=focal</span><br><span class="line">DISTRIB_DESCRIPTION=&quot;Ubuntu 20.04.1 LTS&quot;</span><br><span class="line">niel@ubuntu:~$ uname -a</span><br><span class="line">Linux ubuntu 5.4.0-42-generic #46-Ubuntu SMP Fri Jul 10 00:24:02 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
+<p>克隆仓库需要较大的磁盘空间，下载过程也耗时比较久：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt install apt-mirror</span><br><span class="line">vim /etc/apt/mirror.list</span><br><span class="line">apt-mirror</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/16/installQt/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2024/09/05/QDateTime/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/09/05/QDateTime/" class="post-title-link" itemprop="url">QDateTime/QDateTimeEdit 难用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-09-05 18:25:00" itemprop="dateCreated datePublished" datetime="2024-09-05T18:25:00+08:00">2024-09-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 20:18:52" itemprop="dateModified" datetime="2024-12-25T20:18:52+08:00">2024-12-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/qt/" itemprop="url" rel="index"><span itemprop="name">qt</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在 Qt 中虽然存在 <code>QTimeZone</code> 类型，但其官方手册中多次强调了用户<strong>不应</strong>直接使用 <code>QTimeZone</code> ，而是结合 <code>Qt::TimeSpec</code> 枚举值使用 <code>QDateTime</code> 。</p>
+<blockquote>
+<p>This class is primarily designed for use in QDateTime; most applications will not need to access this class directly and should instead use <code>QDateTime</code> with a <code>Qt::TimeSpec</code> of <code>Qt::TimeZone</code>.</p>
+</blockquote>
+<blockquote>
+<p>If you require a <code>QDateTime</code> that uses the current system time zone at any given moment then you should use a <code>Qt::TimeSpec</code> of <code>Qt::LocalTime</code>.</p>
+</blockquote>
+<p>Time Zone Offsets 时差</p>
+<blockquote>
+<p>The total offset is comprised of two component parts, the standard time offset and the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Daylight_saving_time">daylight-saving time</a> offset. 夏时制</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/05/QDateTime/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2024/06/20/qDebug/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/06/20/qDebug/" class="post-title-link" itemprop="url">Qt 的日志框架</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-06-20 20:25:00" itemprop="dateCreated datePublished" datetime="2024-06-20T20:25:00+08:00">2024-06-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 20:24:28" itemprop="dateModified" datetime="2024-12-25T20:24:28+08:00">2024-12-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/qt/" itemprop="url" rel="index"><span itemprop="name">qt</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在 Qt Creator 如何运行终端程序呢？</p>
+<p>在项目的 Build &amp; Run 配置中，勾选 Run in terminal 即可。</p>
+<p>选中 Run in terminal 之前，应用程序 Run in 哪里呢？</p>
+<p>通过 Windows 任务管理器查看，勾选后作为 qtcreator_process_stub.exe （和 Qt Creator 进程同级别）的子进程运行，没有勾选的话作为 Qt Creator 的子进程运行。</p>
+<h1 id="Qt-的日志框架"><a href="#Qt-的日志框架" class="headerlink" title="Qt 的日志框架"></a>Qt 的日志框架</h1><p>最常用的函数： <code>qDebug(const char *message,  ...)</code></p>
+<p>Calls the message handler with the debug message <em>message</em>. </p>
+<ul>
+<li>If no message handler has been installed, the message is printed to <code>stderr</code>. </li>
+<li>Under Windows the message is sent to the console, if it is a console application; otherwise, it is sent to the debugger. </li>
+<li>On QNX, the message is sent to slogger2. </li>
+<li>This function does nothing if <code>QT_NO_DEBUG_OUTPUT</code> was defined during compilation.</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/06/20/qDebug/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -311,7 +686,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-21 19:03:59" itemprop="dateModified" datetime="2024-12-21T19:03:59+08:00">2024-12-21</time>
+                <time title="修改时间：2024-12-22 14:08:18" itemprop="dateModified" datetime="2024-12-22T14:08:18+08:00">2024-12-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -335,7 +710,20 @@
 
       
           <p>我们在谈到“串口”的时候，往往还会提到 RS-232 、RS-485 等等，它们之间的关系是什么？</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Serial_port"><em>串行端口</em></a> 的概念，是和 <em>并行端口</em> 相对的。串口一次只传输 1bit ，但并行端口会同时传输多个 bit 。</p>
+<p>通信，传输字符/字节。</p>
+<blockquote>
+<p>历史上<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82">字节</a>长度曾基于硬件为 1-48 bit不等，最初通常使用6 bit 或9 bit 为一字节。今日标准以 8 bit 作为一字节。</p>
+</blockquote>
+<p>虽然以太网、FireWire 和 USB 等接口也以串行流的形式发送数据，但术语 <em>串行端口</em> 通常表示符合 RS-232 或相关标准（如 RS-485 或 RS-422）的硬件。</p>
 <p>我们可能会用到 232 串口线、或者 422 串口线连接两个设备，但使用 Qt serial port 模块写软件不用考虑使用了哪种串口线，只需要关注收发两端的波特率、校验位、停止位等一致。</p>
+<p>The most well-known options are </p>
+<ul>
+<li>speed, </li>
+<li>number of data bits per character, </li>
+<li>parity, and </li>
+<li>number of stop bits per character.</li>
+</ul>
 <h1 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h1><p>RS-232 是美国电子工业联盟制定的串行数据通信的接口标准，它广泛用于计算机串行接口外设连接。</p>
 <blockquote>
 <p>它规定连接电缆和机械、电气特性、信号功能及发送过程。其他常用电气标准还有 RS-422-A、RS-423A、RS-485。</p>
@@ -494,7 +882,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-27 22:25:37" itemprop="dateModified" datetime="2024-04-27T22:25:37+08:00">2024-04-27</time>
+                <time title="修改时间：2024-12-22 14:08:18" itemprop="dateModified" datetime="2024-12-22T14:08:18+08:00">2024-12-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -524,6 +912,9 @@
 <p>Ubuntu MATE 针对老旧桌面型、笔记型、树莓派等硬件性能等级不高的设备，或喜欢简洁、不用特效桌面环境者。</p>
 </blockquote>
 <p>银河麒麟 V10 在做去 GNOME，去 MATE 化。</p>
+<blockquote>
+<p>UKUI 或称 UbuntuKylin UI，最早是一个基于 Mate 制作的桌面环境。</p>
+</blockquote>
 <p>中标麒麟 V7 在系统信息中展示桌面环境使用 MATE。</p>
           <!--noindex-->
             <div class="post-button">
@@ -727,359 +1118,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2022/02/15/kubernetes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/15/kubernetes/" class="post-title-link" itemprop="url">kubernetes 笔记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-02-15 15:16:12" itemprop="dateCreated datePublished" datetime="2022-02-15T15:16:12+08:00">2022-02-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Kubernetes 是一个开源的<strong>容器编排引擎</strong>，用来对容器化应用进行自动化部署、 扩缩和管理。</p>
-<h1 id="kubernetes"><a href="#kubernetes" class="headerlink" title="kubernetes"></a>kubernetes</h1><p>如何理解 k8s 对象这个概念？ <a target="_blank" rel="noopener" href="https://kubernetes.io/zh/docs/concepts/overview/working-with-objects/">使用 Kubernetes 对象</a></p>
-<p>k8s 可以有多个节点（Node），每个节点可以有多个 POD，pod 是一组（一个或多个）容器。</p>
-<blockquote>
-<p>Kubernetes 通过将容器放入在节点（Node）上运行的 Pod 中来执行你的工作负载。 节点可以是一个虚拟机或者物理机器。</p>
-</blockquote>
-<blockquote>
-<p><em>Pod</em> 是可以在 Kubernetes 中创建和管理的、最小的可部署的计算单元。</p>
-</blockquote>
-<blockquote>
-<p>每个 Pod 一个容器”模型是最常见的 Kubernetes 用例。</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/15/kubernetes/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2022/02/11/tryAnaconda/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/11/tryAnaconda/" class="post-title-link" itemprop="url">使用 Anaconda 包管理器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-02-11 10:05:09" itemprop="dateCreated datePublished" datetime="2022-02-11T10:05:09+08:00">2022-02-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>关于 python 语言的学习，参见 <a target="_blank" rel="noopener" href="https://github.com/tnie/learnPython">c++ 开发人员学习 python 的记录</a></p>
-<p>上述笔记缺少了 Anaconda 环境和包管理方面的内容，在这里补充。</p>
-<p>Anaconda 下载包，在墙里的体验很差。 <a target="_blank" rel="noopener" href="https://www.cpci.dev/anaconda-mirrors-configure/">Anaconda 国内源配置</a> </p>
-<p>目前（2022年2月11日） v2rayN 代理有问题，<strong>开启代理会造成 Anaconda 更新失败</strong> 等异常，报错如下：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/11/tryAnaconda/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/12/18/officeNetwork/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/18/officeNetwork/" class="post-title-link" itemprop="url">科学地上网</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-12-18 18:04:12" itemprop="dateCreated datePublished" datetime="2021-12-18T18:04:12+08:00">2021-12-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>如何改进上网环境？如何在监控环境下相对舒适地“搬砖”，如何利用虚拟机？</p>
-<p>整体方案很简单，将认证工具、监控工具放在虚拟机 Ubuntu 中，网络选择桥接模式，直连园区无线网完成帐号认证工作；新增网卡将网络分享给其他虚拟机。</p>
-<p>2021年11月22日更新，Ubuntu 虚拟机已删除 。</p>
-<p>知易行难，具体实现过程中，因为缺乏网络相关的知识体系（尤其是路由配置等）花了较多时间，绕了很多弯。</p>
-<h1 id="查看-IP-地址"><a href="#查看-IP-地址" class="headerlink" title="查看 IP 地址"></a>查看 IP 地址</h1><p>在终端中查看 IP 地址的命令：<code>ip a</code>，在 Debian 10 或 Ubuntu 20 版本中已经没有 <code>ifconfig</code> 命令、<code>iptables 命令。</code></p>
-<p>更多请参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/81212996">如何在 Ubuntu 中检查你的 IP 地址</a></p>
-<h1 id="配置生效"><a href="#配置生效" class="headerlink" title="配置生效"></a>配置生效</h1><p>最初每次更改之后都是重启系统，保证配置生效。网络不通的原因可能很多，也弄不明白，按照网上的教程操作之后还是失败就难免怀疑配置是否生效。</p>
-<p>重启系统很笨重，但又不清楚针对网络配置的刷新（或重启）命令，后来发现图形界面网络配置项是提供了开关按钮的：重启（开关一次）网络配置生效。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/18/officeNetwork/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/12/06/gb28181/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/06/gb28181/" class="post-title-link" itemprop="url">国标阅读笔记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-12-06 10:33:12" itemprop="dateCreated datePublished" datetime="2021-12-06T10:33:12+08:00">2021-12-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/media/" itemprop="url" rel="index"><span itemprop="name">media</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>国标阅读笔记</p>
-<ul>
-<li>MANSCDP 协议（监控报警联网系统控制描述协议，Monitoringand Alarming Network System Control Description Protocol），在 GB/T 28181-2016 的附录 A 描述</li>
-<li>MANSRTSP 协议（监控报警联网系统实时流协议，Monitoring and Alarming Network System Real-Time Streaming Protocol），在 GB/T 28181-2016 的附录 B 描述</li>
-</ul>
-<p>XML 数据类型</p>
-<p>XML Schema 简介</p>
-<h1 id="SVAC-音视频编解码协议"><a href="#SVAC-音视频编解码协议" class="headerlink" title="SVAC 音视频编解码协议"></a>SVAC 音视频编解码协议</h1><p>《SVAC 安全防范监控数字视音频编解码技术标准》(简称 SVAC，Surveillance Video and Audio  Coding)。其国标号是 GB/T  25724-2017，于 2010 年提出 SVAC1.0 标准，2017 年升级为 SVAC2.0 版本，现行标准为 SVAC2.0 标准。</p>
-<p>GB28121 中使用的 2010 年的 v1.0 版本 SVAC。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/06/gb28181/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1151,7 +1189,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
