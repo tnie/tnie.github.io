@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="从桌面开发突然进入 VxWorks 嵌入式开发，有几个认知上的调整：  桌面开发的时候，驱动、操作系统和 IDE 之后，我们才开始新建项目、编写代码； 嵌入式开发，从板级支持包、系统镜像就需要新建对应的项目了。 理解嵌入式系统可裁剪，镜像大概率并不支持那些在桌面操作系统上常见的指令、服务和开发所需的库，需要有针对性的一个一个配置相应的驱动、组件。  Das U-Boot加载桌面操作系统之前的引导阶">
+<meta property="og:type" content="article">
+<meta property="og:title" content="接触嵌入式">
+<meta property="og:url" content="https://tnie.github.io/2023/12/13/VxWorks/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="从桌面开发突然进入 VxWorks 嵌入式开发，有几个认知上的调整：  桌面开发的时候，驱动、操作系统和 IDE 之后，我们才开始新建项目、编写代码； 嵌入式开发，从板级支持包、系统镜像就需要新建对应的项目了。 理解嵌入式系统可裁剪，镜像大概率并不支持那些在桌面操作系统上常见的指令、服务和开发所需的库，需要有针对性的一个一个配置相应的驱动、组件。  Das U-Boot加载桌面操作系统之前的引导阶">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-13T11:06:00.000Z">
+<meta property="article:modified_time" content="2024-12-25T14:15:09.427Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2023/12/13/VxWorks/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>接触嵌入式 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/12/13/VxWorks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          接触嵌入式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-12-13 19:06:00" itemprop="dateCreated datePublished" datetime="2023-12-13T19:06:00+08:00">2023-12-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 22:15:09" itemprop="dateModified" datetime="2024-12-25T22:15:09+08:00">2024-12-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>从桌面开发突然进入 VxWorks 嵌入式开发，有几个认知上的调整：</p>
+<ol>
+<li>桌面开发的时候，驱动、操作系统和 IDE 之后，我们才开始新建项目、编写代码；</li>
+<li>嵌入式开发，从板级支持包、系统镜像就需要新建对应的项目了。</li>
+<li>理解嵌入式系统可裁剪，镜像大概率并不支持那些在桌面操作系统上常见的指令、服务和开发所需的库，需要有针对性的一个一个配置相应的驱动、组件。</li>
+</ol>
+<h1 id="Das-U-Boot"><a href="#Das-U-Boot" class="headerlink" title="Das U-Boot"></a>Das U-Boot</h1><p>加载桌面操作系统之前的引导阶段，按下任意键进入 BIOS。与之类似，我们在板子引导程序读秒期间（使用串口调试工具）发送任意键能够进入 uboot，使用 <code>printenv</code> 等命令查看状态。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看版本</span></span><br><span class="line">version</span><br><span class="line"><span class="meta">#</span><span class="bash"> 获取帮助</span></span><br><span class="line">help</span><br><span class="line">?</span><br><span class="line"><span class="meta">#</span><span class="bash"> 打印环境变量</span></span><br><span class="line">printenv</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查询 FAT 格式设备的目录和文件信息</span></span><br><span class="line">fatls scsi 0:8</span><br><span class="line">fatls scsi 0:1</span><br><span class="line"><span class="meta">#</span><span class="bash"> bootcmd 自动启动时执行命令</span></span><br><span class="line">setenv bootcmd &quot;fatload scsi 0:1 0x90100000 Ft2004.elf; bootvx32 0x90100000;&quot;</span><br><span class="line">saveenv</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看日期时间</span></span><br><span class="line">date</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看帮助</span></span><br><span class="line">help date</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 更多</span></span><br><span class="line">fatinfo - print information about filesystem  </span><br><span class="line">fatload - load binary file from a dos filesystem  </span><br><span class="line">fatls - list files in a directory (default /)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
+<p>如何从 tftp 加载系统镜像并启动？ U-boot 中的 <code>ipaddr=</code> 似乎没有生效，<code>ping</code> 失败。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">ft2004#</span><span class="bash">ping 127.0.0.1</span></span><br><span class="line">Trying ethernet@28210000</span><br><span class="line">ethernet@28210000 Waiting for PHY auto negotiation to complete......... TIMEOUT !</span><br><span class="line">Could not initialize PHY ethernet@28210000</span><br><span class="line">FAIL</span><br><span class="line">Trying ethernet@2820c000</span><br><span class="line">DMA reset timeout</span><br><span class="line">FAIL</span><br><span class="line">ping failed; host 127.0.0.1 is not alive</span><br><span class="line"><span class="meta">ft2004#</span></span><br></pre></td></tr></table></figure>
+<p>如何通过串口从主机拷贝文件到硬盘？<code>load[bxyz]</code> 到内存，再从内存到文件系统。 <code>[rs]z</code> 命令是什么？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 检查</span></span><br><span class="line">ping 10.23.50.128</span><br></pre></td></tr></table></figure>
+<p>如何从 U 盘启动？</p>
+<p>使用 <code>loady</code> 使用串口将 <code>ft2004.elf</code> 内核文件加载到内存（传输很慢，需要耐心），然后 <code>bootvx32 0x90100000</code> 启动。</p>
+<p>之前 U 盘没有插好（可能是 USB 接口接触不良），前后晃动一下 U 盘能够看到 <code>/bd0</code> ，能够从 U 盘拷贝文件了！ </p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/52fhy/p/5026308.html">ssh 文件传输命令：sz 与 rz 命令</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/arnoldlu/p/10537549.html">使用 sz/rz 基于串口传输文件</a></p>
+<h1 id="VxWorks"><a href="#VxWorks" class="headerlink" title="VxWorks"></a>VxWorks</h1><p>关于 VxWorks 和 WorkBench 的环境，网上能够轻松找到的是 Vxworks 6.8 的版本，不过也是十年前的环境了。</p>
+<p><strong><em><a target="_blank" rel="noopener" href="https://www.ecb.torontomu.ca/~courses/ee8205/Data-Sheets/Tornado-VxWorks/vxworks/ref/envLib.html#envShow">envShow</a></em>( )</strong> - display the environment for a task</p>
+<p>VxWorks 环境变量分为全局环境变量和私有环境变量，后者在 task 内部生效，在 task 之间不共享。</p>
+<p>现代实时操作系统是基于多任务和任务间通信的概念的操作系统。</p>
+<p>多任务环境允许一个实时应用由一组各自独立的任务组成，每个任务拥有自己的执行线程和一组系统资源。</p>
+<p>任务间通信工具实现这些任务间的同步和通信，以协调它们之间的活动。在 Vxworks 中任务间通信工具包括信号量、消息队列和事件等。</p>
+<p>可以在 VxWorks 中输入 <code>help</code>/<code>nethelp</code> 显示命令。</p>
+<p>可下载工程（Downloadable Kernel Module Project）</p>
+<h2 id="注释风格"><a href="#注释风格" class="headerlink" title="注释风格"></a>注释风格</h2><p>VxWorks WorkBench 中 C/C++ 编译器参数默认包含 <code>-ansi</code> ，而 C89 中只支持 <code>/* comment */</code> 注释风格。</p>
+<blockquote>
+<p>ANSI C、ISO C、Standard C是指美国国家标准协会（ANSI）和国际标准化组织（ISO）对 C 语言发布的标准。历史上，ANSI C 这个名字专门用于指代此标准的原始版本，也是支持最好的版本（称为 C89 或 C90）</p>
+</blockquote>
+<p>使其支持 <code>// comment</code> 形式的注释:</p>
+<ol>
+<li>工程属性的 Build Properties 选项卡中，打开 Build Tools</li>
+<li>找到 C/C++ compiler 和 assembler</li>
+<li>删掉其中的 <code>-ansi</code></li>
+<li>ok了</li>
+</ol>
+<h2 id="相对路径"><a href="#相对路径" class="headerlink" title="相对路径"></a>相对路径</h2><p>Tornado 中配置代码的相对路径，例如设置头文件包含路径。</p>
+<p>在工程的”Builds”选项卡中, 点开”default”, 弹出”Properties: build specification ‘default’”对话框,<br>点开”C/C++ compiler”, 再点开右下的”Include paths…”, 弹出设备包含路径的对话框</p>
+<p>路径中可以使用一些全局路径，如：<code>$(PRJ_DIR)</code> 、  <code>$(WIND_BASE)</code></p>
+<p>比如表示 bsp 包 pcPentium_LW 的路径：<code>$(WIND_BASE)/target/config/pcPentium_LW</code></p>
+<p>比如表示 vx 工程所在的文件夹的上 2 层路径：<code>$(PRJ_DIR)/../..</code></p>
+<p>同样的这些 <code>$</code> 打头的全局路径，也可以用做一些第三方库文件的相对路径中，比如在设置 <code>EXTRA_MODULES</code> 时，也可使用。</p>
+<h1 id="DeltaOS"><a href="#DeltaOS" class="headerlink" title="DeltaOS"></a>DeltaOS</h1><p>做国产平替会使用到 DeltaOS 道系统，开发环境是 LambdaPro 。需要付费。</p>
+<p>从同事手中转过来 xp 的虚拟机包含试用版的 LambdaPro ，试用期在 22年10月中旬左右。开发环境没有虚拟的仿真机，将编译结果放到飞腾的板子运行，通过补充单行日志来调试。</p>
+<p>碰到的第一个问题，不知道如何连接、使用这块板子。网口在没启动系统、未进行配置的时候是无法使用的，多个网口也不知道连接哪一个是可用的（二维魔方的右下角）。串口之前没接触过。</p>
+<p>2024年4月24日，备忘：右下角的网口似乎损坏了，无法生效。改用左下角的网口 ngb0 ，插上网线后 D53 灯会亮。</p>
+<p>2024年5月22日，备忘：哪个网口可以用，每次都不一样。通过串口输出查看分配的 ip ，通过插拔网线和修改对端主机的 ip 查找可用网口。</p>
+<h2 id="串口驱动"><a href="#串口驱动" class="headerlink" title="串口驱动"></a>串口驱动</h2><p>在设备管理器中，查看串口失败，报串口驱动问题，“PL2303HXA自2012已停产，请联系供货商”，USB 不识别。<a target="_blank" rel="noopener" href="https://blog.csdn.net/wtf3505/article/details/104138727">解决”PL2303HXA自2012已停产，请联系供货商” USB不识别的问题-CSDN博客</a></p>
+<p>可以使用 xshell 作为串口调试工具：串口波特率 11520 ；数据位 8 ；</p>
+<h2 id="加载系统"><a href="#加载系统" class="headerlink" title="加载系统"></a>加载系统</h2><p>碰到的第二个问题是，系统引导配置的环境变量有问题，无法加载系统。</p>
+<p>注意：加载 VxWorks 或者 DeltaOS 系统镜像成功后，在串口调试工具中会输出显著的 VXWOERKS 的符号图形。</p>
+<h2 id="缺少组件"><a href="#缺少组件" class="headerlink" title="缺少组件"></a>缺少组件</h2><p>进入 DeltaOS 系统后，常用的命令行操作（或函数）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看网络地址，尝试使用 telnet 和 ftp</span> </span><br><span class="line"><span class="meta">#</span><span class="bash"> 一般是 168.67.0.1</span></span><br><span class="line">ifconfig</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看设备</span></span><br><span class="line">devs</span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出当前目录。在根目录下不能使用，需要先进入某个磁盘，比如 ata0:1</span></span><br><span class="line">ls</span><br><span class="line"><span class="meta">#</span><span class="bash"> 拷贝文件</span></span><br><span class="line">copy &quot;src&quot; , &quot;dest&quot;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 加载目标代码</span></span><br><span class="line">ld &lt; a.out</span><br><span class="line"><span class="meta">#</span><span class="bash"> 执行目标代码的函数</span></span><br><span class="line">helloKitty</span><br><span class="line"><span class="meta">#</span><span class="bash"> 卸载目标代码</span></span><br><span class="line">unld(&quot;a.out&quot;)</span><br></pre></td></tr></table></figure>
+<p>在 DeltaOS 或 VxWorks 中，无论是使用上述 <code>ifconfig</code> 命令，还是连接 telnet 服务或 ftp 服务，都需要在制作系统镜像时保证添加了对应的组件，否则是无法使用的。</p>
+<p>碰到的第三个问题，终于和项目有关了。运行 DKM 项目编译出的 out 文件时，报错找不到符号链接（符号未定义）。因为不熟悉嵌入式可裁剪特性，不熟悉组件，匆匆接手也不熟悉编译的项目结构，我无法判断缺失的接口定义是镜像缺失（一般通过新增组件解决）还是项目丢失了源代码，或者删除代码后未及时清理无效的调用。</p>
+<p>网上找不到关于道系统和 LambdaPro 的相关资料，通过 LambdaPro 帮助菜单了解开发环境等工具的使用方式。但帮助手册的质量一般，存在更新不及时等问题。</p>
+<h2 id="LambdaPro"><a href="#LambdaPro" class="headerlink" title="LambdaPro"></a>LambdaPro</h2><p>对称多处理器（Symmetric Multi-Processor, SMP）系统。</p>
+<p>制作系统镜像时，一般都是多核的（smp）。编译 dkm 项目时，相应的也应该使用 smp 的配置来生成。</p>
+<p>@todo 怎么切换项目的调试模式？</p>
+<h2 id="配置-IP"><a href="#配置-IP" class="headerlink" title="配置 IP"></a>配置 IP</h2><p>VxWorks 配置网络的接口 <strong>ifLib</strong> - network interface library，似乎在这块板子上无法生效，代码中相关的函数调用全部注释了。</p>
+<p>这块板子加载了 NGBE 的驱动，似乎是网讯的网卡驱动。目前已知的能够生效的配置网路的接口是 ifconfig ，但在 Vxworks 体系内似乎不是常规操作，更像是板子自定义的函数。</p>
+<blockquote>
+<p>VxWorks 6.9 下组件 <code>INCLUDE_IFCONFIG</code> 提供了命令 <code>ifconfig()</code>，包含组件 <code>INCLUDE_IPIFCONFIG_CMD</code> 后，也可以在 cmd 里使用 <code>ifconfig</code> 命令用 于配置或查询网络接口。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/11/04/FTP/" rel="prev" title="FTP">
+      <i class="fa fa-chevron-left"></i> FTP
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/01/12/serial-port/" rel="next" title="串口编程">
+      串口编程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Das-U-Boot"><span class="nav-number">1.</span> <span class="nav-text">Das U-Boot</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VxWorks"><span class="nav-number">2.</span> <span class="nav-text">VxWorks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E9%87%8A%E9%A3%8E%E6%A0%BC"><span class="nav-number">2.1.</span> <span class="nav-text">注释风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84"><span class="nav-number">2.2.</span> <span class="nav-text">相对路径</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DeltaOS"><span class="nav-number">3.</span> <span class="nav-text">DeltaOS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%B2%E5%8F%A3%E9%A9%B1%E5%8A%A8"><span class="nav-number">3.1.</span> <span class="nav-text">串口驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.2.</span> <span class="nav-text">加载系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%BA%E5%B0%91%E7%BB%84%E4%BB%B6"><span class="nav-number">3.3.</span> <span class="nav-text">缺少组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LambdaPro"><span class="nav-number">3.4.</span> <span class="nav-text">LambdaPro</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-IP"><span class="nav-number">3.5.</span> <span class="nav-text">配置 IP</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">152</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

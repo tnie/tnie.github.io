@@ -227,7 +227,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-25 20:30:43" itemprop="dateModified" datetime="2024-12-25T20:30:43+08:00">2024-12-25</time>
+                <time title="修改时间：2024-12-25 21:53:16" itemprop="dateModified" datetime="2024-12-25T21:53:16+08:00">2024-12-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -755,6 +755,241 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/12/13/VxWorks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/12/13/VxWorks/" class="post-title-link" itemprop="url">接触嵌入式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-12-13 19:06:00" itemprop="dateCreated datePublished" datetime="2023-12-13T19:06:00+08:00">2023-12-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 22:15:09" itemprop="dateModified" datetime="2024-12-25T22:15:09+08:00">2024-12-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>从桌面开发突然进入 VxWorks 嵌入式开发，有几个认知上的调整：</p>
+<ol>
+<li>桌面开发的时候，驱动、操作系统和 IDE 之后，我们才开始新建项目、编写代码；</li>
+<li>嵌入式开发，从板级支持包、系统镜像就需要新建对应的项目了。</li>
+<li>理解嵌入式系统可裁剪，镜像大概率并不支持那些在桌面操作系统上常见的指令、服务和开发所需的库，需要有针对性的一个一个配置相应的驱动、组件。</li>
+</ol>
+<h1 id="Das-U-Boot"><a href="#Das-U-Boot" class="headerlink" title="Das U-Boot"></a>Das U-Boot</h1><p>加载桌面操作系统之前的引导阶段，按下任意键进入 BIOS。与之类似，我们在板子引导程序读秒期间（使用串口调试工具）发送任意键能够进入 uboot，使用 <code>printenv</code> 等命令查看状态。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看版本</span></span><br><span class="line">version</span><br><span class="line"><span class="meta">#</span><span class="bash"> 获取帮助</span></span><br><span class="line">help</span><br><span class="line">?</span><br><span class="line"><span class="meta">#</span><span class="bash"> 打印环境变量</span></span><br><span class="line">printenv</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查询 FAT 格式设备的目录和文件信息</span></span><br><span class="line">fatls scsi 0:8</span><br><span class="line">fatls scsi 0:1</span><br><span class="line"><span class="meta">#</span><span class="bash"> bootcmd 自动启动时执行命令</span></span><br><span class="line">setenv bootcmd &quot;fatload scsi 0:1 0x90100000 Ft2004.elf; bootvx32 0x90100000;&quot;</span><br><span class="line">saveenv</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看日期时间</span></span><br><span class="line">date</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看帮助</span></span><br><span class="line">help date</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 更多</span></span><br><span class="line">fatinfo - print information about filesystem  </span><br><span class="line">fatload - load binary file from a dos filesystem  </span><br><span class="line">fatls - list files in a directory (default /)</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/12/13/VxWorks/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/11/04/FTP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/11/04/FTP/" class="post-title-link" itemprop="url">FTP</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-11-04 20:56:00" itemprop="dateCreated datePublished" datetime="2023-11-04T20:56:00+08:00">2023-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 22:24:23" itemprop="dateModified" datetime="2024-12-25T22:24:23+08:00">2024-12-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>FTP 通信分为主动 active 被动 PASV 模式。</p>
+<p>FTP 通信会占用两个 TCP 通道：一个用于命令，一个用于数据。</p>
+<p>主动、被动是站在（响应命令的）服务端的角度来说：<br>FTP 客户端首先向服务端 21 端口发送命令，然后</p>
+<ul>
+<li>（最初只有）主动模式：客户端启动端口，服务端连接</li>
+<li>（解决痛点）被动模式：服务端启动端口，客户端连接</li>
+</ul>
+<p>windows 平台下 cmd/powershell 中的 ftp 命令不支持被动模式，文件管理器支持被动模式。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/11/04/FTP/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/10/07/multicast/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/07/multicast/" class="post-title-link" itemprop="url">多播</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-07 18:25:00" itemprop="dateCreated datePublished" datetime="2023-10-07T18:25:00+08:00">2023-10-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 22:19:42" itemprop="dateModified" datetime="2024-12-25T22:19:42+08:00">2024-12-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>摘抄自《计算机网络（第7版）-谢希仁》教材，读书笔记。</p>
+<p>OSI 的七层协议体系结构的概念清楚，理论也较完整，但它既复杂又不实用。</p>
+<p>TCP/IP 的体系结构则不同，但它现在却得到了非常广泛的应用。TCP/IP 是一个四层的体系结构，它包含应用层、运输层、网际层和网络接口层（用<strong>网际层</strong>这个名字是强调这一层是为了<strong>解决不同网络的互连问题</strong>）。不过从实质上将，TCP/IP 只有最上面的三层，因为最下面的网络接口层并没有什么具体内容。</p>
+<p>互联网是由大量的<strong>异构</strong>(heterogeneous)网络通过<strong>路由器</strong>(router)相互连接起来的。互联网使用的网络层协议是无连接的网际协议 IP(Internet Protocol) 和许多种路由选择协议，因此互联网的网络层也叫做网际层或 IP 层。</p>
+<h2 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h2><p>局域网虽然是个网络，但我们并不把局域网放在网络层中讨论。这是因为在网络层要讨论的问题是多个网络互联的问题，是讨论分组（packet）怎样从一个网络，通过路由器，转发到另一个网络。在本章中我们研究的是在同一个局域网中，分组（packet）怎样从一台主机传送到另一台主机，但并不经过路由器转发。从整个互联网来看，局域网仍属于数据链路层的范围。</p>
+<p>packet 小包裹、信息包，在教材中一般翻译为“分组”，但“分组”在日常对话中多理解成动词，给读者造成困扰。分组：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/10/07/multicast/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/05/30/createProcess/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -847,281 +1082,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/05/17/displayManager/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/05/17/displayManager/" class="post-title-link" itemprop="url">桌面环境</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-05-17 14:37:04" itemprop="dateCreated datePublished" datetime="2023-05-17T14:37:04+08:00">2023-05-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-22 14:08:18" itemprop="dateModified" datetime="2024-12-22T14:08:18+08:00">2024-12-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>GNOME 和 MATE 都是桌面环境。</p>
-<p>GNOME2 在 2010年9月之后，转向 GNOME3 的开发。</p>
-<p>出现分歧，在 2011 年基于 GNOME2 派生出 MATE。</p>
-<blockquote>
-<p>Ubuntu MATE 针对老旧桌面型、笔记型、树莓派等硬件性能等级不高的设备，或喜欢简洁、不用特效桌面环境者。</p>
-</blockquote>
-<p>银河麒麟 V10 在做去 GNOME，去 MATE 化。</p>
-<blockquote>
-<p>UKUI 或称 UbuntuKylin UI，最早是一个基于 Mate 制作的桌面环境。</p>
-</blockquote>
-<p>中标麒麟 V7 在系统信息中展示桌面环境使用 MATE。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/05/17/displayManager/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/03/26/osi/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/03/26/osi/" class="post-title-link" itemprop="url">网络协议</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-03-26 11:52:42" itemprop="dateCreated datePublished" datetime="2023-03-26T11:52:42+08:00">2023-03-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-21 19:03:59" itemprop="dateModified" datetime="2024-12-21T19:03:59+08:00">2024-12-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/network/" itemprop="url" rel="index"><span itemprop="name">network</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/TCP/IP%E5%8D%8F%E8%AE%AE%E6%97%8F">互联网协议套件</a></p>
-<p>OSI 七层模型和 TCP/IP 四层模型：</p>
-<ul>
-<li>http、ftp 应用层</li>
-<li>[表示层]</li>
-<li>[会话层]</li>
-<li>tcp/udp 传输层</li>
-<li>ip、icmp 网络层</li>
-<li>ethernet/以太网 数据链路层</li>
-<li>[物理层]</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/03/26/osi/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2022/02/15/centos/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/15/centos/" class="post-title-link" itemprop="url">CentOS 7.9 开发环境</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-02-15 15:16:12" itemprop="dateCreated datePublished" datetime="2022-02-15T15:16:12+08:00">2022-02-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>合作厂商A的代码，虽然宣称支持跨平台，早期也的确做过大量的平台适配工作。但目前看来，跨平台的工作应该是暂停了，至于后期是否重新拾起来不得而知。</p>
-<p>除了客户端是 windows 版本之外，所有的服务（包括设备接入、流媒体服务、流媒体服务调度、存储服务、存储服务调度等等）都是使用 centos7 作为部署环境的。至于是否使用 centos7 作为开发环境，就看各位喜好了，但编译环境肯定还是 centos7 没跑了。</p>
-<p>如果使用 centos7  作为编码环境，有两个选择：</p>
-<ul>
-<li>自己搭建虚拟机，借由图形界面的 IDE 进行开发，使用 git/svn 等版本控制工具时也更加直观</li>
-<li>使用 xshell 等工具远程访问开发服务器，借由 vim 进行开发</li>
-</ul>
-<p>后者更具有灵活性，也更方便和同事合作开发，避免同事改动内容后（未提交 svn）手工导出到虚拟机的烦恼，后期如果权限收紧 svn 不再开放外网权限，手工导出源码存在合规问题，即便合规导入导出也是一件很繁琐的事情。但没有图形界面沟通时总是短板（组内同事水平不一）。</p>
-<p>先尝试 vim 编码开发，如果学习曲线不够平滑，效率提升困难，后面试验使用图形界面进行开发。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/15/centos/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1189,7 +1153,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">149</span>
+          <span class="site-state-item-count">152</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

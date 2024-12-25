@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>BOOL 和 bool（C++ 的） 和 _Bool（C 的）</title>
+    <url>/2017/03/07/BooleanInCoding/</url>
+    <content><![CDATA[<p>2016年1月12日 18:14:37</p>
+<p>本节转自 <a href="http://developer.51cto.com/art/201312/420153.htm">bool BOOL 和 _Bool辨析</a></p>
+<h1 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a>布尔类型</h1><p><code>BOOL</code> 类型在头文件 &lt;windef.h&gt; 中定义为 <code>typedef int BOOL</code>；在头文件 &lt;wtypes.h&gt; 中定义为 <code>typedef long BOOL</code>。</p>
+<p><code>BOOL</code> 类型，即 int 类型的长度视实际环境来定，一般可认为是 4 个字节。 </p>
+<p><code>BOOL</code> 是微软定义的表达布尔逻辑的类型。与 C++ 中的 bool 类型不同是，它是一个<strong>三值逻辑</strong>：TRUE、FALSE 和 ERROR。当返回值为大于 0 的整数时为 TRUE，返回值为 0 时为 FALSE，返回值为 -1 时为 ERROR。</p>
+<p><code>bool</code> 类型在 C++ 中以关键字的形式被支持，表示布尔类型，其对应变量的值只有真（true）和假（false）两种值。<code>bool</code> 在 C++ 里占用 1 字节。</p>
+<p><code>_Bool</code> 是 C99 标准中定义的一个新关键字，以提供布尔类型。C2008 草案中只规定了 <code>_Bool</code> 类型的大小至少应能够存放 0 和 1 这两个值。而并没有规定具体的大小。这交给编译器自由发挥了。</p>
+<p><strong>以上，足够读者区别彼此的使用场景了。</strong></p>
+<a id="more"></a>
+
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>在 C 代码中使用布尔类型的几种方式：（如果编译器不支持 C99，就只能使用第一种方法了）</p>
+<h2 id="自己定义的“仿布尔类型”"><a href="#自己定义的“仿布尔类型”" class="headerlink" title="自己定义的“仿布尔类型”"></a>自己定义的“仿布尔类型”</h2><p>在 C99 标准被支持之前，我们常常自己模仿定义布尔类型，方式有很多种，常见的有下面两种：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 第一种方法 */</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> BOOL;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TRUE 1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FALSE 0</span></span><br><span class="line"><span class="comment">/* 第二种方法 */</span></span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">bool</span>&#123;</span><span class="literal">false</span>, <span class="literal">true</span>&#125;; </span><br></pre></td></tr></table></figure>
+<h2 id="使用-C99-新增的关键字-Bool"><a href="#使用-C99-新增的关键字-Bool" class="headerlink" title="使用 C99 新增的关键字 _Bool"></a>使用 C99 新增的关键字 _Bool</h2><p>标准并未对 <code>_Bool</code> 规定具体的大小。我们使用 gcc（64位环境）做下面测试：</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/_Bool.png" alt="测试结果"></p>
+<p>看来，gcc 编译器规定 _Bool 类型的长度为 1，只能取值为 0 或 1 。将任意非零值赋值给 _Bool 类型变量，都会先转换为 1，表示为真；将零值赋值给 _Bool 类型，结果为 0，表示为假。</p>
+<h2 id="使用-C99-新增头文件-stdbool-h"><a href="#使用-C99-新增头文件-stdbool-h" class="headerlink" title="使用 C99 新增头文件 stdbool.h"></a>使用 C99 新增头文件 stdbool.h</h2><p>在 C++ 中，通过 <code>bool</code> 来定义布尔变量，通过 true 和 false 对布尔变量进行赋值。C99 为了让我们能够写出与 C++ 兼容的代码（在 c 代码中使用 bool、true、false，而非在C++ 代码中使用 <code>_Bool</code>），添加了头文件 <code>&lt;stdbool.h&gt;</code> 。所以我们只要包含了该头文件，就可以像 C++ 中使用布尔变量的方式进行操作。</p>
+<p>在我自己的 linux 系统中查找 <code>stdbool.h</code> 头文件，找到两处：</p>
+<p>系统定义 </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@Betty ~]# vi /usr/lib/syslinux/com32/include/stdbool.h</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* $Id: stdbool.h,v 1.1 2003/04/16 06:32:31 hpa Exp $</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* stdbool.h</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _STDBOOL_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _STDBOOL_H</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __cplusplus</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> !defined(__STDC_VERSION__) || (__STDC_VERSION__ &lt; 199901L)</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">if</span> !defined(__GNUC__) ||(__GNUC__ &lt; 3)</span></span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">char</span> <span class="built_in">_Bool</span>;           <span class="comment">/* For C compilers without _Bool */</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> bool  _Bool</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> true  1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> false 0</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/* C++ */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> bool  bool</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> true  true</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> false false</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __bool_true_false_are_defined 1</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* _STDBOOL_H */</span></span></span><br></pre></td></tr></table></figure>
+<p>GCC 定义 </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@Betty ~]# vi /usr/lib/gcc/x86_64-redhat-linux/4.1.1/include/stdbool.h</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Copyright (C) 1998, 1999, 2000 Free Software Foundation, Inc.</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment">This file is part of GCC.</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment">GCC is free software; you can redistribute it and/or modify</span></span><br><span class="line"><span class="comment">it under the terms of the GNU General Public License as published by</span></span><br><span class="line"><span class="comment">the Free Software Foundation; either version 2, or (at your option)</span></span><br><span class="line"><span class="comment">any later version.</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment">GCC is distributed in the hope that it will be useful,</span></span><br><span class="line"><span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of</span></span><br><span class="line"><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></span><br><span class="line"><span class="comment">GNU General Public License for more details.</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment">You should have received a copy of the GNU General Public License</span></span><br><span class="line"><span class="comment">along with GCC; see the file COPYING.  If not, write to</span></span><br><span class="line"><span class="comment">the Free Software Foundation, 51 Franklin Street, Fifth Floor,</span></span><br><span class="line"><span class="comment">Boston, MA 02110-1301, USA.  */</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/* As a special exception, if you include this header file into source</span></span><br><span class="line"><span class="comment">   files compiled by GCC, this header file does not by itself cause</span></span><br><span class="line"><span class="comment">   the resulting executable to be covered by the GNU General Public</span></span><br><span class="line"><span class="comment">   License.  This exception does not however invalidate any other</span></span><br><span class="line"><span class="comment">   reasons why the executable file might be covered by the GNU General</span></span><br><span class="line"><span class="comment">   Public License.  */</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * ISO C Standard:  7.16  Boolean type and values  &lt;stdbool.h&gt;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _STDBOOL_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _STDBOOL_H</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __cplusplus</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> bool    _Bool</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> true    1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> false   0</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span> <span class="comment">/* __cplusplus */</span></span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/* Supporting &lt;stdbool.h&gt; in C++ is a GCC extension.  */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _Bool   bool</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> bool    bool</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> false   false</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> true    true</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* __cplusplus */</span></span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/* Signal that all the definitions are present.  */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __bool_true_false_are_defined   1</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span>  <span class="comment">/* stdbool.h */</span> </span></span><br></pre></td></tr></table></figure>
+<h1 id="真假大小写"><a href="#真假大小写" class="headerlink" title="真假大小写"></a>真假大小写</h1><p>相应的真假大小写区别—— false/true 是标准 C++ 语言里新增的关键字，而 FALSE/TRUE 是通过 <code>#define</code>，用途是解决程序在 C 与 C++ 中环境的差异,以下是 FALSE/TRUE 在 windef.h 的定义：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> FALSE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FALSE 0 </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> TRUE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TRUE 1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
+<p>也就是说 FALSE/TRUE 是 int 类型，而 false/true 是 bool 类型。所以两者不一样的，只不过我们在使用中没有这种感觉，因为 C++ 会帮你做隐式转换。</p>
+]]></content>
+      <categories>
+        <category>cpp</category>
+        <category>cpp-code</category>
+      </categories>
+  </entry>
+  <entry>
     <title>CString 类</title>
     <url>/2017/03/08/CStringOfVC/</url>
     <content><![CDATA[<p>2015年12月7日 16:55:34</p>
@@ -87,93 +123,6 @@
       <tags>
         <tag>develop</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>BOOL 和 bool（C++ 的） 和 _Bool（C 的）</title>
-    <url>/2017/03/07/BooleanInCoding/</url>
-    <content><![CDATA[<p>2016年1月12日 18:14:37</p>
-<p>本节转自 <a href="http://developer.51cto.com/art/201312/420153.htm">bool BOOL 和 _Bool辨析</a></p>
-<h1 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a>布尔类型</h1><p><code>BOOL</code> 类型在头文件 &lt;windef.h&gt; 中定义为 <code>typedef int BOOL</code>；在头文件 &lt;wtypes.h&gt; 中定义为 <code>typedef long BOOL</code>。</p>
-<p><code>BOOL</code> 类型，即 int 类型的长度视实际环境来定，一般可认为是 4 个字节。 </p>
-<p><code>BOOL</code> 是微软定义的表达布尔逻辑的类型。与 C++ 中的 bool 类型不同是，它是一个<strong>三值逻辑</strong>：TRUE、FALSE 和 ERROR。当返回值为大于 0 的整数时为 TRUE，返回值为 0 时为 FALSE，返回值为 -1 时为 ERROR。</p>
-<p><code>bool</code> 类型在 C++ 中以关键字的形式被支持，表示布尔类型，其对应变量的值只有真（true）和假（false）两种值。<code>bool</code> 在 C++ 里占用 1 字节。</p>
-<p><code>_Bool</code> 是 C99 标准中定义的一个新关键字，以提供布尔类型。C2008 草案中只规定了 <code>_Bool</code> 类型的大小至少应能够存放 0 和 1 这两个值。而并没有规定具体的大小。这交给编译器自由发挥了。</p>
-<p><strong>以上，足够读者区别彼此的使用场景了。</strong></p>
-<a id="more"></a>
-
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>在 C 代码中使用布尔类型的几种方式：（如果编译器不支持 C99，就只能使用第一种方法了）</p>
-<h2 id="自己定义的“仿布尔类型”"><a href="#自己定义的“仿布尔类型”" class="headerlink" title="自己定义的“仿布尔类型”"></a>自己定义的“仿布尔类型”</h2><p>在 C99 标准被支持之前，我们常常自己模仿定义布尔类型，方式有很多种，常见的有下面两种：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 第一种方法 */</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> BOOL;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TRUE 1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FALSE 0</span></span><br><span class="line"><span class="comment">/* 第二种方法 */</span></span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">bool</span>&#123;</span><span class="literal">false</span>, <span class="literal">true</span>&#125;; </span><br></pre></td></tr></table></figure>
-<h2 id="使用-C99-新增的关键字-Bool"><a href="#使用-C99-新增的关键字-Bool" class="headerlink" title="使用 C99 新增的关键字 _Bool"></a>使用 C99 新增的关键字 _Bool</h2><p>标准并未对 <code>_Bool</code> 规定具体的大小。我们使用 gcc（64位环境）做下面测试：</p>
-<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/_Bool.png" alt="测试结果"></p>
-<p>看来，gcc 编译器规定 _Bool 类型的长度为 1，只能取值为 0 或 1 。将任意非零值赋值给 _Bool 类型变量，都会先转换为 1，表示为真；将零值赋值给 _Bool 类型，结果为 0，表示为假。</p>
-<h2 id="使用-C99-新增头文件-stdbool-h"><a href="#使用-C99-新增头文件-stdbool-h" class="headerlink" title="使用 C99 新增头文件 stdbool.h"></a>使用 C99 新增头文件 stdbool.h</h2><p>在 C++ 中，通过 <code>bool</code> 来定义布尔变量，通过 true 和 false 对布尔变量进行赋值。C99 为了让我们能够写出与 C++ 兼容的代码（在 c 代码中使用 bool、true、false，而非在C++ 代码中使用 <code>_Bool</code>），添加了头文件 <code>&lt;stdbool.h&gt;</code> 。所以我们只要包含了该头文件，就可以像 C++ 中使用布尔变量的方式进行操作。</p>
-<p>在我自己的 linux 系统中查找 <code>stdbool.h</code> 头文件，找到两处：</p>
-<p>系统定义 </p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@Betty ~]# vi /usr/lib/syslinux/com32/include/stdbool.h</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* $Id: stdbool.h,v 1.1 2003/04/16 06:32:31 hpa Exp $</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* stdbool.h</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _STDBOOL_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _STDBOOL_H</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __cplusplus</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> !defined(__STDC_VERSION__) || (__STDC_VERSION__ &lt; 199901L)</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">if</span> !defined(__GNUC__) ||(__GNUC__ &lt; 3)</span></span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">char</span> <span class="built_in">_Bool</span>;           <span class="comment">/* For C compilers without _Bool */</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> bool  _Bool</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> true  1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> false 0</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/* C++ */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> bool  bool</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> true  true</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> false false</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __bool_true_false_are_defined 1</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* _STDBOOL_H */</span></span></span><br></pre></td></tr></table></figure>
-<p>GCC 定义 </p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@Betty ~]# vi /usr/lib/gcc/x86_64-redhat-linux/4.1.1/include/stdbool.h</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Copyright (C) 1998, 1999, 2000 Free Software Foundation, Inc.</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment">This file is part of GCC.</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment">GCC is free software; you can redistribute it and/or modify</span></span><br><span class="line"><span class="comment">it under the terms of the GNU General Public License as published by</span></span><br><span class="line"><span class="comment">the Free Software Foundation; either version 2, or (at your option)</span></span><br><span class="line"><span class="comment">any later version.</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment">GCC is distributed in the hope that it will be useful,</span></span><br><span class="line"><span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of</span></span><br><span class="line"><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></span><br><span class="line"><span class="comment">GNU General Public License for more details.</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment">You should have received a copy of the GNU General Public License</span></span><br><span class="line"><span class="comment">along with GCC; see the file COPYING.  If not, write to</span></span><br><span class="line"><span class="comment">the Free Software Foundation, 51 Franklin Street, Fifth Floor,</span></span><br><span class="line"><span class="comment">Boston, MA 02110-1301, USA.  */</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/* As a special exception, if you include this header file into source</span></span><br><span class="line"><span class="comment">   files compiled by GCC, this header file does not by itself cause</span></span><br><span class="line"><span class="comment">   the resulting executable to be covered by the GNU General Public</span></span><br><span class="line"><span class="comment">   License.  This exception does not however invalidate any other</span></span><br><span class="line"><span class="comment">   reasons why the executable file might be covered by the GNU General</span></span><br><span class="line"><span class="comment">   Public License.  */</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * ISO C Standard:  7.16  Boolean type and values  &lt;stdbool.h&gt;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _STDBOOL_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _STDBOOL_H</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __cplusplus</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> bool    _Bool</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> true    1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> false   0</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span> <span class="comment">/* __cplusplus */</span></span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/* Supporting &lt;stdbool.h&gt; in C++ is a GCC extension.  */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _Bool   bool</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> bool    bool</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> false   false</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> true    true</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* __cplusplus */</span></span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/* Signal that all the definitions are present.  */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __bool_true_false_are_defined   1</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span>  <span class="comment">/* stdbool.h */</span> </span></span><br></pre></td></tr></table></figure>
-<h1 id="真假大小写"><a href="#真假大小写" class="headerlink" title="真假大小写"></a>真假大小写</h1><p>相应的真假大小写区别—— false/true 是标准 C++ 语言里新增的关键字，而 FALSE/TRUE 是通过 <code>#define</code>，用途是解决程序在 C 与 C++ 中环境的差异,以下是 FALSE/TRUE 在 windef.h 的定义：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> FALSE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FALSE 0 </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> TRUE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TRUE 1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
-<p>也就是说 FALSE/TRUE 是 int 类型，而 false/true 是 bool 类型。所以两者不一样的，只不过我们在使用中没有这种感觉，因为 C++ 会帮你做隐式转换。</p>
-]]></content>
-      <categories>
-        <category>cpp</category>
-        <category>cpp-code</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>双系统</title>
-    <url>/2017/04/14/DoubSystems/</url>
-    <content><![CDATA[<p>双系统，还是虚拟机？如果机器跑虚拟机资源足够（操作并不会明显卡，风扇不会疯狂地转），我会选择后者。双系统带来的问题，在于两个系统的切换需要重新关机重启而且使用图形界面的 Linux 对比 windows 毫无优势，Linux 的优点在于不带图形界面的前提下占用资源少。而如果在 Linux 中使用图形界面不单单耗费资源，而且体验不如 windows。</p>
-<p>你可以在虚拟机中不带界面跑 Linux，而双系统的情景下谁会只安装命令行（Linux 不带图形界面）的交互呢？</p>
-<p>在接触系统之前，先了解更底层的东西。</p>
-<a id="more"></a>
-
-<h1 id="系统之下"><a href="#系统之下" class="headerlink" title="系统之下"></a>系统之下</h1><h2 id="BIOS-legacy-对比-efi-uefi"><a href="#BIOS-legacy-对比-efi-uefi" class="headerlink" title="BIOS(legacy) 对比 efi(uefi)"></a>BIOS(legacy) 对比 efi(uefi)</h2><ol>
-<li><a href="http://www.iruanmi.com/what-is-gpt-and-what-is-uefi/">什么是GPT，什么是UEFI？</a></li>
-<li><a href="http://jingyan.baidu.com/article/d713063504112013fdf47589.html">win8/win8.1 UEFI + GPT 安装详细图解</a></li>
-<li><a href="http://wenku.baidu.com/link?url=bkY8iCaUf8fOxZ3BxIfmgEkS3cQHJ8XBj8n9dejFPER1rXswuNgZQ5QxOh6k0g3ivLbpujWQwekrB8zPm429NlAOfgAkA--YGeLFRXpyIeq">Thinkpad X240使用U盘安装Win7系统</a></li>
-<li><a href="http://zhidao.baidu.com/question/582824734443443885.html?qbl=relate_question_0&word=uefi%20legacy%20boot%EF%BF%BD%EF%BF%BD%CA%B2%C3%B4%EF%BF%BD%EF%BF%BD%CB%BC">Legacy 跟UEFI 有什么区别</a></li>
-<li><a href="http://zhidao.baidu.com/link?url=9MlMCIMzazG3Xf0Pcj72s3vlWQyTdLG6Bgp3diyx_4HIItpyjgsF_wqC-iSk_z6FIQkvCuqdlKOuBaIg4mK9D_">启动uefi boot装WIN8后,将BIOS的BOOT中的uefi boot变回Legacy boot就无法进入系统，怎么办？</a></li>
-</ol>
-<h2 id="grub-对比-mbr"><a href="#grub-对比-mbr" class="headerlink" title="grub 对比 mbr"></a>grub 对比 mbr</h2><ol>
-<li><a href="http://zhidao.baidu.com/link?url=tiGGUtSqZgLPXwKbHk9rzzZvgwvD9NSSbEMv7yg1xpQ0fMAk09zt-jpJ_oUyAuk94OLaDbC-d_Nv5FpXYwdojq">什么是GRUB 和MBR?</a></li>
-<li><a href="http://blog.chinaunix.net/uid-9078996-id-2010311.html">MBR和grub工作原理</a></li>
-</ol>
-<h2 id="mbr-vs-gpt"><a href="#mbr-vs-gpt" class="headerlink" title="mbr vs. gpt"></a>mbr vs. gpt</h2><p>（略）</p>
-<h1 id="双系统"><a href="#双系统" class="headerlink" title="双系统"></a>双系统</h1><p>Linux 那么多发行版，选择哪一个呢？菜鸟上手的话，选一个简单的就好。不要犯“旱鸭子学游泳，过一个暑假还没下水”的错误。</p>
-<h2 id="Linux-发行版"><a href="#Linux-发行版" class="headerlink" title="Linux 发行版"></a>Linux 发行版</h2><ol>
-<li><a href="http://blog.csdn.net/educast/article/details/38315433">CentOS、Ubuntu、Debian三个linux比较异同</a></li>
-<li><a href="http://www.zhihu.com/question/19599986">服务器操作系统应该选择 Debian/Ubuntu 还是 CentOS？</a></li>
-<li><a href="http://zhidao.baidu.com/question/240548764.html?qbl=relate_question_1&word=linux%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%C4%B8%EF%BF%BD%EF%BF%BD%E6%B1%BE&optimi=4">linux哪个版本好</a></li>
-</ol>
-<h3 id="安装-Debian"><a href="#安装-Debian" class="headerlink" title="安装 Debian"></a>安装 Debian</h3><ol>
-<li><a href="https://www.debian.org/distrib/">获取 Debian</a></li>
-<li><a href="https://www.debian.org/releases/stable/amd64/index.html.zh-cn">Debian GNU/Linux 安装手册</a></li>
-<li><a href="http://www.mintos.org/distros/debian-install.html">Debian的几种简单安装方法</a></li>
-</ol>
-<p>如果有兴趣，可以看看 <a href="https://debian-handbook.info/get/">《Debian Jessie from Discovery to Mastery》</a></p>
-<h2 id="Win7-安装-Debian"><a href="#Win7-安装-Debian" class="headerlink" title="Win7 安装 Debian"></a>Win7 安装 Debian</h2><ol>
-<li><a href="http://www.cppblog.com/niewenlong/archive/2013/01/29/197612.html">win7下硬盘安装debian</a></li>
-<li><a href="http://www.2cto.com/os/201412/361206.html">Win7上从硬盘安装Debian</a></li>
-<li><a href="http://my.oschina.net/lowkey2046/blog/210102">Window 下U盘安装 Debian</a></li>
-</ol>
-<h2 id="Win8-安装-Linux"><a href="#Win8-安装-Linux" class="headerlink" title="Win8 安装 Linux"></a>Win8 安装 Linux</h2><ol>
-<li><a href="http://forum.ubuntu.org.cn/viewtopic.php?f=77&t=467746">在预装Win8.1的电脑上安装ubuntu</a></li>
-<li><a href="http://zhidao.baidu.com/link?url=-UOwMH65heQtk61Os3tQQ4xtj5DOxU0kiyH3Mz77S1Q_msDBLSEFOuQ-CfKQxwKSR_YnqmwJfi3_POjBYcTg4Z9DO4fMTo9jHR4iblHJ2ye">如何在Win8下安装Debian</a></li>
-</ol>
-<h1 id="系统之上"><a href="#系统之上" class="headerlink" title="系统之上"></a>系统之上</h1><h2 id="gnome-vs-kde"><a href="#gnome-vs-kde" class="headerlink" title="gnome vs. kde"></a>gnome vs. kde</h2><ol>
-<li><a href="http://zhidao.baidu.com/link?url=bHe8hUgqDOkRKELjkqb9NDwyvF4QVds9ho8NVP_JlTWgieQ4TtXuaqDHY7rnLkiWM7FsRdZED7Mr9flI3Nyq9q">KDE和GNOME的区别</a></li>
-<li><a href="http://blog.csdn.net/dlodj/article/details/6674316">x-window、gnome、kde的区别</a></li>
-<li><a href="http://www.jb51.net/LINUXjishu/78428.html">linux桌面环境gnome,kde,xfce,lxde 使用比较</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>tools</category>
-      </categories>
   </entry>
   <entry>
     <title>跨平台使用文本文件时的陷阱</title>
@@ -341,6 +290,81 @@
       <tags>
         <tag>develop</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>双系统</title>
+    <url>/2017/04/14/DoubSystems/</url>
+    <content><![CDATA[<p>双系统，还是虚拟机？如果机器跑虚拟机资源足够（操作并不会明显卡，风扇不会疯狂地转），我会选择后者。双系统带来的问题，在于两个系统的切换需要重新关机重启而且使用图形界面的 Linux 对比 windows 毫无优势，Linux 的优点在于不带图形界面的前提下占用资源少。而如果在 Linux 中使用图形界面不单单耗费资源，而且体验不如 windows。</p>
+<p>你可以在虚拟机中不带界面跑 Linux，而双系统的情景下谁会只安装命令行（Linux 不带图形界面）的交互呢？</p>
+<p>在接触系统之前，先了解更底层的东西。</p>
+<a id="more"></a>
+
+<h1 id="系统之下"><a href="#系统之下" class="headerlink" title="系统之下"></a>系统之下</h1><h2 id="BIOS-legacy-对比-efi-uefi"><a href="#BIOS-legacy-对比-efi-uefi" class="headerlink" title="BIOS(legacy) 对比 efi(uefi)"></a>BIOS(legacy) 对比 efi(uefi)</h2><ol>
+<li><a href="http://www.iruanmi.com/what-is-gpt-and-what-is-uefi/">什么是GPT，什么是UEFI？</a></li>
+<li><a href="http://jingyan.baidu.com/article/d713063504112013fdf47589.html">win8/win8.1 UEFI + GPT 安装详细图解</a></li>
+<li><a href="http://wenku.baidu.com/link?url=bkY8iCaUf8fOxZ3BxIfmgEkS3cQHJ8XBj8n9dejFPER1rXswuNgZQ5QxOh6k0g3ivLbpujWQwekrB8zPm429NlAOfgAkA--YGeLFRXpyIeq">Thinkpad X240使用U盘安装Win7系统</a></li>
+<li><a href="http://zhidao.baidu.com/question/582824734443443885.html?qbl=relate_question_0&word=uefi%20legacy%20boot%EF%BF%BD%EF%BF%BD%CA%B2%C3%B4%EF%BF%BD%EF%BF%BD%CB%BC">Legacy 跟UEFI 有什么区别</a></li>
+<li><a href="http://zhidao.baidu.com/link?url=9MlMCIMzazG3Xf0Pcj72s3vlWQyTdLG6Bgp3diyx_4HIItpyjgsF_wqC-iSk_z6FIQkvCuqdlKOuBaIg4mK9D_">启动uefi boot装WIN8后,将BIOS的BOOT中的uefi boot变回Legacy boot就无法进入系统，怎么办？</a></li>
+</ol>
+<h2 id="grub-对比-mbr"><a href="#grub-对比-mbr" class="headerlink" title="grub 对比 mbr"></a>grub 对比 mbr</h2><ol>
+<li><a href="http://zhidao.baidu.com/link?url=tiGGUtSqZgLPXwKbHk9rzzZvgwvD9NSSbEMv7yg1xpQ0fMAk09zt-jpJ_oUyAuk94OLaDbC-d_Nv5FpXYwdojq">什么是GRUB 和MBR?</a></li>
+<li><a href="http://blog.chinaunix.net/uid-9078996-id-2010311.html">MBR和grub工作原理</a></li>
+</ol>
+<h2 id="mbr-vs-gpt"><a href="#mbr-vs-gpt" class="headerlink" title="mbr vs. gpt"></a>mbr vs. gpt</h2><p>（略）</p>
+<h1 id="双系统"><a href="#双系统" class="headerlink" title="双系统"></a>双系统</h1><p>Linux 那么多发行版，选择哪一个呢？菜鸟上手的话，选一个简单的就好。不要犯“旱鸭子学游泳，过一个暑假还没下水”的错误。</p>
+<h2 id="Linux-发行版"><a href="#Linux-发行版" class="headerlink" title="Linux 发行版"></a>Linux 发行版</h2><ol>
+<li><a href="http://blog.csdn.net/educast/article/details/38315433">CentOS、Ubuntu、Debian三个linux比较异同</a></li>
+<li><a href="http://www.zhihu.com/question/19599986">服务器操作系统应该选择 Debian/Ubuntu 还是 CentOS？</a></li>
+<li><a href="http://zhidao.baidu.com/question/240548764.html?qbl=relate_question_1&word=linux%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%C4%B8%EF%BF%BD%EF%BF%BD%E6%B1%BE&optimi=4">linux哪个版本好</a></li>
+</ol>
+<h3 id="安装-Debian"><a href="#安装-Debian" class="headerlink" title="安装 Debian"></a>安装 Debian</h3><ol>
+<li><a href="https://www.debian.org/distrib/">获取 Debian</a></li>
+<li><a href="https://www.debian.org/releases/stable/amd64/index.html.zh-cn">Debian GNU/Linux 安装手册</a></li>
+<li><a href="http://www.mintos.org/distros/debian-install.html">Debian的几种简单安装方法</a></li>
+</ol>
+<p>如果有兴趣，可以看看 <a href="https://debian-handbook.info/get/">《Debian Jessie from Discovery to Mastery》</a></p>
+<h2 id="Win7-安装-Debian"><a href="#Win7-安装-Debian" class="headerlink" title="Win7 安装 Debian"></a>Win7 安装 Debian</h2><ol>
+<li><a href="http://www.cppblog.com/niewenlong/archive/2013/01/29/197612.html">win7下硬盘安装debian</a></li>
+<li><a href="http://www.2cto.com/os/201412/361206.html">Win7上从硬盘安装Debian</a></li>
+<li><a href="http://my.oschina.net/lowkey2046/blog/210102">Window 下U盘安装 Debian</a></li>
+</ol>
+<h2 id="Win8-安装-Linux"><a href="#Win8-安装-Linux" class="headerlink" title="Win8 安装 Linux"></a>Win8 安装 Linux</h2><ol>
+<li><a href="http://forum.ubuntu.org.cn/viewtopic.php?f=77&t=467746">在预装Win8.1的电脑上安装ubuntu</a></li>
+<li><a href="http://zhidao.baidu.com/link?url=-UOwMH65heQtk61Os3tQQ4xtj5DOxU0kiyH3Mz77S1Q_msDBLSEFOuQ-CfKQxwKSR_YnqmwJfi3_POjBYcTg4Z9DO4fMTo9jHR4iblHJ2ye">如何在Win8下安装Debian</a></li>
+</ol>
+<h1 id="系统之上"><a href="#系统之上" class="headerlink" title="系统之上"></a>系统之上</h1><h2 id="gnome-vs-kde"><a href="#gnome-vs-kde" class="headerlink" title="gnome vs. kde"></a>gnome vs. kde</h2><ol>
+<li><a href="http://zhidao.baidu.com/link?url=bHe8hUgqDOkRKELjkqb9NDwyvF4QVds9ho8NVP_JlTWgieQ4TtXuaqDHY7rnLkiWM7FsRdZED7Mr9flI3Nyq9q">KDE和GNOME的区别</a></li>
+<li><a href="http://blog.csdn.net/dlodj/article/details/6674316">x-window、gnome、kde的区别</a></li>
+<li><a href="http://www.jb51.net/LINUXjishu/78428.html">linux桌面环境gnome,kde,xfce,lxde 使用比较</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>tools</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>FTP</title>
+    <url>/2023/11/04/FTP/</url>
+    <content><![CDATA[<p>FTP 通信分为主动 active 被动 PASV 模式。</p>
+<p>FTP 通信会占用两个 TCP 通道：一个用于命令，一个用于数据。</p>
+<p>主动、被动是站在（响应命令的）服务端的角度来说：<br>FTP 客户端首先向服务端 21 端口发送命令，然后</p>
+<ul>
+<li>（最初只有）主动模式：客户端启动端口，服务端连接</li>
+<li>（解决痛点）被动模式：服务端启动端口，客户端连接</li>
+</ul>
+<p>windows 平台下 cmd/powershell 中的 ftp 命令不支持被动模式，文件管理器支持被动模式。</p>
+<a id="more"></a>
+
+<p>在 linux 下部署 ftp 服务使用 vsftpd ，其配置中比较敏感的一项（以及关联的两项）</p>
+<ul>
+<li>chroot_local_user [=YES 开启 chroot()]</li>
+<li>chroot_limit_enable [=YES 对上述配置做出微调] 和 chroot_list_file</li>
+</ul>
+<p>建议三者组合，针对个别敏感 ftp 账户（或者全部 ftp 账户）开启 chroot() =将用户限制在主目录，避免切换到主目录之外。</p>
+<p>此外，用户主目录下可能存在权限异常的文件（和目录）也会直接影响到读写、ls 查看、cd 切换工作目录等操作。</p>
+<h1 id="TFTP"><a href="#TFTP" class="headerlink" title="TFTP"></a>TFTP</h1><p>FTP服务一般运行在 20 和 21 两个端口，分为主动模式和被动模式。</p>
+<p>TFTP 使用 UDP（端口69）作为其传输协议（不像 FTP 使用 TCP 端口 21）。</p>
+]]></content>
   </entry>
   <entry>
     <title>Flume &amp; Redis 学习笔记V0.1</title>
@@ -707,6 +731,23 @@
       </tags>
   </entry>
   <entry>
+    <title>父子进程</title>
+    <url>/2017/03/17/Parent-Process-Child-xxx/</url>
+    <content><![CDATA[<p>2016/6/21 17:52:03</p>
+<p>参见 维基百科 词条：<a href="https://zh.wikipedia.org/wiki/%E7%88%B6%E8%BF%9B%E7%A8%8B">父进程</a>、<a href="https://zh.wikipedia.org/wiki/%E5%AD%90%E8%BF%9B%E7%A8%8B">子进程</a></p>
+<p>关于僵尸进程和孤儿进程，在上述维基百科中也有提到，更详细的知识参考 <a href="http://www.cnblogs.com/Anker/p/3271773.html">孤儿进程与僵尸进程</a></p>
+<a id="more"></a>
+
+<blockquote>
+<p>严格地来说，僵死进程并不是问题的根源，罪魁祸首是产生出大量僵死进程的那个父进程。因此，当我们寻求如何消灭系统中大量的僵死进程时，答案就是把产生大 量僵死进程的那个元凶枪毙掉（也就是通过kill发送SIGTERM或者SIGKILL信号啦）。枪毙了元凶进程之后，它产生的僵死进程就变成了孤儿进 程，这些孤儿进程会被init进程接管，init进程会wait()这些孤儿进程，释放它们占用的系统进程表中的资源，这样，这些已经僵死的孤儿进程 就能瞑目而去了。</p>
+</blockquote>
+<p>也就是说，<strong>僵尸进程存在的前提是父进程不死</strong>。父进程死，僵尸进程就变成孤儿进程，没有危害 了。</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
     <title>POD 类型</title>
     <url>/2016/12/15/POD/</url>
     <content><![CDATA[<p>POD 类型是一个神神道道的概念，有点反人类。好在大多时候我们并不需要涉及这个概念，即便在一些场景中用到了，C++11 新增的 3 个与之有关的判断也足够了。</p>
@@ -764,23 +805,6 @@
       <categories>
         <category>cpp</category>
         <category>cpp-concept</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>父子进程</title>
-    <url>/2017/03/17/Parent-Process-Child-xxx/</url>
-    <content><![CDATA[<p>2016/6/21 17:52:03</p>
-<p>参见 维基百科 词条：<a href="https://zh.wikipedia.org/wiki/%E7%88%B6%E8%BF%9B%E7%A8%8B">父进程</a>、<a href="https://zh.wikipedia.org/wiki/%E5%AD%90%E8%BF%9B%E7%A8%8B">子进程</a></p>
-<p>关于僵尸进程和孤儿进程，在上述维基百科中也有提到，更详细的知识参考 <a href="http://www.cnblogs.com/Anker/p/3271773.html">孤儿进程与僵尸进程</a></p>
-<a id="more"></a>
-
-<blockquote>
-<p>严格地来说，僵死进程并不是问题的根源，罪魁祸首是产生出大量僵死进程的那个父进程。因此，当我们寻求如何消灭系统中大量的僵死进程时，答案就是把产生大 量僵死进程的那个元凶枪毙掉（也就是通过kill发送SIGTERM或者SIGKILL信号啦）。枪毙了元凶进程之后，它产生的僵死进程就变成了孤儿进 程，这些孤儿进程会被init进程接管，init进程会wait()这些孤儿进程，释放它们占用的系统进程表中的资源，这样，这些已经僵死的孤儿进程 就能瞑目而去了。</p>
-</blockquote>
-<p>也就是说，<strong>僵尸进程存在的前提是父进程不死</strong>。父进程死，僵尸进程就变成孤儿进程，没有危害 了。</p>
-]]></content>
-      <categories>
-        <category>linux</category>
       </categories>
   </entry>
   <entry>
@@ -917,11 +941,26 @@
 </blockquote>
 <h2 id="bad-checksum"><a href="#bad-checksum" class="headerlink" title="bad-checksum"></a>bad-checksum</h2><p>需要强调的是，以下 Qt 手册中例子也是存在问题的：<code>hasPendingDatagrams()</code> 返回值可能是 <code>false</code>。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Server::initSocket</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    udpSocket = <span class="keyword">new</span> QUdpSocket(<span class="keyword">this</span>);</span><br><span class="line">    udpSocket-&gt;bind(QHostAddress::LocalHost, <span class="number">7755</span>);</span><br><span class="line"></span><br><span class="line">    connect(udpSocket, &amp;QUdpSocket::readyRead,</span><br><span class="line">            <span class="keyword">this</span>, &amp;Server::readPendingDatagrams);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Server::readPendingDatagrams</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (udpSocket-&gt;hasPendingDatagrams()) &#123;</span><br><span class="line">        QNetworkDatagram datagram = udpSocket-&gt;receiveDatagram();</span><br><span class="line">        processTheDatagram(datagram);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>之前提到的 bad checksum 报文会触发 <code>readyRead()</code> 信号执行槽函数，但 <code>hasPendingDatagrams()</code> 不成立，未能执行 <code>receiveDatagram()</code> 函数，后续收到新报文不再触发 <code>readyRead()</code> 信号。</p>
-<p>一般来说，bad checksum 会被内核过滤并丢弃。如何监控、查看此过程？什么情况下会不再过滤/过滤失败？</p>
+<p>生产环境下遇到过 bad checksum 报文触发 <code>readyRead()</code> 信号执行槽函数，但 <code>hasPendingDatagrams()</code> 不成立，未能执行 <code>receiveDatagram()</code> 函数，后续收到新报文不再触发 <code>readyRead()</code> 信号。</p>
+<p>因为数据是收到了的，只是不再触发 <code>readyRead()</code> 信号，所以当时的解决方案是改用定时器轮询。</p>
+<h3 id="todo"><a href="#todo" class="headerlink" title="todo"></a>todo</h3><p>一般来说，bad checksum 会被内核过滤并丢弃。如何监控、查看此过程？什么情况下会不再过滤/过滤失败？</p>
+<p>POSIX <code>socket()</code> using <code>SOCK_DGRAM </code>会过滤掉校验和错误的包，难道 QUdpSocket 不是基于 <code>SOCK_DGRAM</code>，而是封装的 <code>SOCK_RAW </code>吗 ？</p>
+<p><a href="https://stackoverflow.com/questions/30780082/sock-raw-option-in-socket-system-call">‘SOCK_RAW’ option in ‘socket’ system call</a></p>
+<p>socket <code>SO_NO_CHECK</code></p>
+<p>除了在生产环境录取的异常报文，如何模拟 bad checksum 报文呢？</p>
 <h2 id="workaround"><a href="#workaround" class="headerlink" title="workaround"></a>workaround</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">Q_ASSERT(<span class="literal">nullptr</span> != socket);</span><br><span class="line"><span class="keyword">while</span>(socket-&gt;hasPendingDatagrams())</span><br><span class="line">   &#123;</span><br><span class="line">       socket-&gt;receiveDatagram(<span class="number">0</span>); <span class="comment">// discard</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// emit readyRead() 信号依赖 receiveDatagram() 重置标志位</span></span><br><span class="line">   QObject::connect(socket, &amp;QUdpSocket::readyRead, <span class="keyword">this</span>, [=]()&#123;</span><br><span class="line">       <span class="keyword">if</span>(!socket-&gt;hasPendingDatagrams())</span><br><span class="line">       &#123;</span><br><span class="line">           QNetworkDatagram datagram = socket-&gt;receiveDatagram(); <span class="comment">// workaround for bad checksum</span></span><br><span class="line">           QString msg(<span class="string">&quot;** readyRead emitted, but nothing to get :(&quot;</span>);</span><br><span class="line">           QString warning = QString(<span class="string">R&quot;(&lt;font color=&quot;red&quot;&gt;%1&lt;/font&gt;)&quot;</span>).arg(msg);</span><br><span class="line">           ui-&gt;plainTextEditRecv-&gt;appendHtml(warning);</span><br><span class="line">           processTheDatagram(datagram);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">while</span>(socket-&gt;hasPendingDatagrams())&#123;</span><br><span class="line">           QNetworkDatagram datagram = socket-&gt;receiveDatagram();</span><br><span class="line">           processTheDatagram(datagram);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;);</span><br><span class="line">   socket-&gt;receiveDatagram(); <span class="comment">// workaround for connect() again</span></span><br></pre></td></tr></table></figure>
 <h1 id="QNetworkDatagram"><a href="#QNetworkDatagram" class="headerlink" title="QNetworkDatagram"></a><code>QNetworkDatagram</code></h1><p>数据报 <code>QNetworkDatagram</code> 接口有坑</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">QNetworkDatagram <span class="title">datagram</span><span class="params">(getPayload(), destinationAddress, destinationPort)</span></span>;</span><br><span class="line"><span class="keyword">if</span>(QString(<span class="string">&quot;不要使用以下接口&quot;</span>).isEmpty())</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">const</span> QHostAddress <span class="title">address</span><span class="params">(<span class="string">&quot;192.168.50.221&quot;</span>)</span></span>;</span><br><span class="line">    <span class="comment">// setSender() 参数和 bind() 绑定的地址及端口必须一致，否则 writeDatagram(const QNetworkDatagram &amp;) 执行失败</span></span><br><span class="line">    <span class="comment">// 建议不要调用 setSender() 此接口：此接口冗余，且容易错用。</span></span><br><span class="line">    <span class="comment">// writeDatagram(const QNetworkDatagram &amp;) 之前的 bind() 操作不会使用 setSender() 的参数</span></span><br><span class="line">    datagram.setSender(address);</span><br><span class="line">    <span class="comment">// 在 Windows 平台下，不能调用 setHopLimit()，因为底层配置 IP_TTL 是非法项造成 writeDatagram(const QNetworkDatagram &amp;) 执行失败</span></span><br><span class="line">    <span class="comment">// https://learn.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2</span></span><br><span class="line">    <span class="comment">//  Return code/value: WSAEINVAL</span></span><br><span class="line">    <span class="comment">// https://learn.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasendmsg</span></span><br><span class="line">    <span class="comment">//  Error code: WSAEINVAL</span></span><br><span class="line">    <span class="comment">// https://learn.microsoft.com/en-us/windows/win32/winsock/ipproto-ip-socket-options</span></span><br><span class="line">    <span class="comment">//  Options: IP_TTL</span></span><br><span class="line">    <span class="comment">// https://learn.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-getsockopt</span></span><br><span class="line">    <span class="comment">//  Return value: WSAEFAULT</span></span><br><span class="line">    datagram.setHopLimit(<span class="number">7</span>);</span><br><span class="line">    <span class="comment">// setInterfaceIndex() 和 bind() 冲突似乎没有不良影响。</span></span><br><span class="line">    <span class="comment">// 但如果不是 QNetworkInterface::allInterfaces() 集合内的索引，就会发送失败</span></span><br><span class="line">    datagram.setInterfaceIndex(<span class="number">119</span>);</span><br><span class="line">    qDebug() &lt;&lt; <span class="string">&quot;interfaceIndex is&quot;</span> &lt;&lt; datagram.interfaceIndex();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">QNetworkDatagram <span class="title">datagram</span><span class="params">(getPayload(), destinationAddress, destinationPort)</span></span>;</span><br><span class="line"><span class="keyword">if</span>(QString(<span class="string">&quot;不要使用以下接口&quot;</span>).isEmpty())</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">const</span> QHostAddress <span class="title">address</span><span class="params">(<span class="string">&quot;192.168.50.221&quot;</span>)</span></span>;</span><br><span class="line">    <span class="comment">// setSender() 参数和 bind() 绑定的地址及端口必须一致，否则 writeDatagram(const QNetworkDatagram &amp;) 执行失败</span></span><br><span class="line">    <span class="comment">// 建议不要调用 setSender() 此接口：此接口冗余，且容易错用。</span></span><br><span class="line">    <span class="comment">// writeDatagram(const QNetworkDatagram &amp;) 之前的 bind() 操作不会使用 setSender() 的参数</span></span><br><span class="line">    datagram.setSender(address);</span><br><span class="line">    <span class="comment">// 在 Windows 平台下，不能调用 setHopLimit()，因为底层配置 IP_TTL 是非法项造成 writeDatagram(const QNetworkDatagram &amp;) 执行失败</span></span><br><span class="line">    <span class="comment">// https://learn.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2</span></span><br><span class="line">    <span class="comment">//  Return code/value: WSAEINVAL</span></span><br><span class="line">    <span class="comment">// https://learn.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasendmsg</span></span><br><span class="line">    <span class="comment">//  Error code: WSAEINVAL</span></span><br><span class="line">    <span class="comment">// https://learn.microsoft.com/en-us/windows/win32/winsock/ipproto-ip-socket-options</span></span><br><span class="line">    <span class="comment">//  Options: IP_TTL</span></span><br><span class="line">    <span class="comment">// https://learn.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-getsockopt</span></span><br><span class="line">    <span class="comment">//  Return value: WSAEFAULT</span></span><br><span class="line">    datagram.setHopLimit(<span class="number">7</span>);</span><br><span class="line">    <span class="comment">// setInterfaceIndex() 和 bind() 冲突似乎没有不良影响。</span></span><br><span class="line">    <span class="comment">// 但如果不是 QNetworkInterface::allInterfaces() 集合内的索引，就会发送失败</span></span><br><span class="line">    datagram.setInterfaceIndex(<span class="number">119</span>);</span><br><span class="line">    qDebug() &lt;&lt; <span class="string">&quot;interfaceIndex is&quot;</span> &lt;&lt; datagram.interfaceIndex();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="抓包过滤字节"><a href="#抓包过滤字节" class="headerlink" title="抓包过滤字节"></a>抓包过滤字节</h1><p>tcpdump 和 wireshark 过滤字节的语法存在差异：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tcpdump udp[34:2]&#x3D;0xa753</span><br><span class="line">udp.payload[26:2] &#x3D;&#x3D; A753  # wireshark</span><br><span class="line">tcpdump -i enaphyt4i0  udp[34:2]&#x3D;0xa753 and dst 224.8.50.5</span><br></pre></td></tr></table></figure>
+<h1 id="网卡-offload-特性"><a href="#网卡-offload-特性" class="headerlink" title="网卡 offload 特性"></a>网卡 offload 特性</h1><p><a href="https://wdd.js.org/network/udp-checksum-offload/">Udp Checksum Offload</a></p>
+<p>查看网卡的 offload 特性 <code>ethtool -k enaphyt4i0</code></p>
+<p>接收网络报文关闭校验 <code>ethtool -K enaphyt4i0 rx off</code></p>
+<p><a href="https://superuser.com/questions/961617/how-to-disable-checksums-on-ethernet-card-in-windows-10">How to disable checksums on ethernet card in Windows 10?</a></p>
+<blockquote>
+<p>网卡属性 - 配置 - 高级 - UDP 校验和分载传输（IPv4）</p>
+</blockquote>
+]]></content>
       <categories>
         <category>qt</category>
       </categories>
@@ -1174,6 +1213,77 @@
       <tags>
         <tag>git</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>接触嵌入式</title>
+    <url>/2023/12/13/VxWorks/</url>
+    <content><![CDATA[<p>从桌面开发突然进入 VxWorks 嵌入式开发，有几个认知上的调整：</p>
+<ol>
+<li>桌面开发的时候，驱动、操作系统和 IDE 之后，我们才开始新建项目、编写代码；</li>
+<li>嵌入式开发，从板级支持包、系统镜像就需要新建对应的项目了。</li>
+<li>理解嵌入式系统可裁剪，镜像大概率并不支持那些在桌面操作系统上常见的指令、服务和开发所需的库，需要有针对性的一个一个配置相应的驱动、组件。</li>
+</ol>
+<h1 id="Das-U-Boot"><a href="#Das-U-Boot" class="headerlink" title="Das U-Boot"></a>Das U-Boot</h1><p>加载桌面操作系统之前的引导阶段，按下任意键进入 BIOS。与之类似，我们在板子引导程序读秒期间（使用串口调试工具）发送任意键能够进入 uboot，使用 <code>printenv</code> 等命令查看状态。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看版本</span></span><br><span class="line">version</span><br><span class="line"><span class="meta">#</span><span class="bash"> 获取帮助</span></span><br><span class="line">help</span><br><span class="line">?</span><br><span class="line"><span class="meta">#</span><span class="bash"> 打印环境变量</span></span><br><span class="line">printenv</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查询 FAT 格式设备的目录和文件信息</span></span><br><span class="line">fatls scsi 0:8</span><br><span class="line">fatls scsi 0:1</span><br><span class="line"><span class="meta">#</span><span class="bash"> bootcmd 自动启动时执行命令</span></span><br><span class="line">setenv bootcmd &quot;fatload scsi 0:1 0x90100000 Ft2004.elf; bootvx32 0x90100000;&quot;</span><br><span class="line">saveenv</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看日期时间</span></span><br><span class="line">date</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看帮助</span></span><br><span class="line">help date</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 更多</span></span><br><span class="line">fatinfo - print information about filesystem  </span><br><span class="line">fatload - load binary file from a dos filesystem  </span><br><span class="line">fatls - list files in a directory (default /)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
+<p>如何从 tftp 加载系统镜像并启动？ U-boot 中的 <code>ipaddr=</code> 似乎没有生效，<code>ping</code> 失败。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">ft2004#</span><span class="bash">ping 127.0.0.1</span></span><br><span class="line">Trying ethernet@28210000</span><br><span class="line">ethernet@28210000 Waiting for PHY auto negotiation to complete......... TIMEOUT !</span><br><span class="line">Could not initialize PHY ethernet@28210000</span><br><span class="line">FAIL</span><br><span class="line">Trying ethernet@2820c000</span><br><span class="line">DMA reset timeout</span><br><span class="line">FAIL</span><br><span class="line">ping failed; host 127.0.0.1 is not alive</span><br><span class="line"><span class="meta">ft2004#</span></span><br></pre></td></tr></table></figure>
+<p>如何通过串口从主机拷贝文件到硬盘？<code>load[bxyz]</code> 到内存，再从内存到文件系统。 <code>[rs]z</code> 命令是什么？</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 检查</span></span><br><span class="line">ping 10.23.50.128</span><br></pre></td></tr></table></figure>
+<p>如何从 U 盘启动？</p>
+<p>使用 <code>loady</code> 使用串口将 <code>ft2004.elf</code> 内核文件加载到内存（传输很慢，需要耐心），然后 <code>bootvx32 0x90100000</code> 启动。</p>
+<p>之前 U 盘没有插好（可能是 USB 接口接触不良），前后晃动一下 U 盘能够看到 <code>/bd0</code> ，能够从 U 盘拷贝文件了！ </p>
+<p><a href="https://www.cnblogs.com/52fhy/p/5026308.html">ssh 文件传输命令：sz 与 rz 命令</a></p>
+<p><a href="https://www.cnblogs.com/arnoldlu/p/10537549.html">使用 sz/rz 基于串口传输文件</a></p>
+<h1 id="VxWorks"><a href="#VxWorks" class="headerlink" title="VxWorks"></a>VxWorks</h1><p>关于 VxWorks 和 WorkBench 的环境，网上能够轻松找到的是 Vxworks 6.8 的版本，不过也是十年前的环境了。</p>
+<p><strong><em><a href="https://www.ecb.torontomu.ca/~courses/ee8205/Data-Sheets/Tornado-VxWorks/vxworks/ref/envLib.html#envShow">envShow</a></em>( )</strong> - display the environment for a task</p>
+<p>VxWorks 环境变量分为全局环境变量和私有环境变量，后者在 task 内部生效，在 task 之间不共享。</p>
+<p>现代实时操作系统是基于多任务和任务间通信的概念的操作系统。</p>
+<p>多任务环境允许一个实时应用由一组各自独立的任务组成，每个任务拥有自己的执行线程和一组系统资源。</p>
+<p>任务间通信工具实现这些任务间的同步和通信，以协调它们之间的活动。在 Vxworks 中任务间通信工具包括信号量、消息队列和事件等。</p>
+<p>可以在 VxWorks 中输入 <code>help</code>/<code>nethelp</code> 显示命令。</p>
+<p>可下载工程（Downloadable Kernel Module Project）</p>
+<h2 id="注释风格"><a href="#注释风格" class="headerlink" title="注释风格"></a>注释风格</h2><p>VxWorks WorkBench 中 C/C++ 编译器参数默认包含 <code>-ansi</code> ，而 C89 中只支持 <code>/* comment */</code> 注释风格。</p>
+<blockquote>
+<p>ANSI C、ISO C、Standard C是指美国国家标准协会（ANSI）和国际标准化组织（ISO）对 C 语言发布的标准。历史上，ANSI C 这个名字专门用于指代此标准的原始版本，也是支持最好的版本（称为 C89 或 C90）</p>
+</blockquote>
+<p>使其支持 <code>// comment</code> 形式的注释:</p>
+<ol>
+<li>工程属性的 Build Properties 选项卡中，打开 Build Tools</li>
+<li>找到 C/C++ compiler 和 assembler</li>
+<li>删掉其中的 <code>-ansi</code></li>
+<li>ok了</li>
+</ol>
+<h2 id="相对路径"><a href="#相对路径" class="headerlink" title="相对路径"></a>相对路径</h2><p>Tornado 中配置代码的相对路径，例如设置头文件包含路径。</p>
+<p>在工程的”Builds”选项卡中, 点开”default”, 弹出”Properties: build specification ‘default’”对话框,<br>点开”C/C++ compiler”, 再点开右下的”Include paths…”, 弹出设备包含路径的对话框</p>
+<p>路径中可以使用一些全局路径，如：<code>$(PRJ_DIR)</code> 、  <code>$(WIND_BASE)</code></p>
+<p>比如表示 bsp 包 pcPentium_LW 的路径：<code>$(WIND_BASE)/target/config/pcPentium_LW</code></p>
+<p>比如表示 vx 工程所在的文件夹的上 2 层路径：<code>$(PRJ_DIR)/../..</code></p>
+<p>同样的这些 <code>$</code> 打头的全局路径，也可以用做一些第三方库文件的相对路径中，比如在设置 <code>EXTRA_MODULES</code> 时，也可使用。</p>
+<h1 id="DeltaOS"><a href="#DeltaOS" class="headerlink" title="DeltaOS"></a>DeltaOS</h1><p>做国产平替会使用到 DeltaOS 道系统，开发环境是 LambdaPro 。需要付费。</p>
+<p>从同事手中转过来 xp 的虚拟机包含试用版的 LambdaPro ，试用期在 22年10月中旬左右。开发环境没有虚拟的仿真机，将编译结果放到飞腾的板子运行，通过补充单行日志来调试。</p>
+<p>碰到的第一个问题，不知道如何连接、使用这块板子。网口在没启动系统、未进行配置的时候是无法使用的，多个网口也不知道连接哪一个是可用的（二维魔方的右下角）。串口之前没接触过。</p>
+<p>2024年4月24日，备忘：右下角的网口似乎损坏了，无法生效。改用左下角的网口 ngb0 ，插上网线后 D53 灯会亮。</p>
+<p>2024年5月22日，备忘：哪个网口可以用，每次都不一样。通过串口输出查看分配的 ip ，通过插拔网线和修改对端主机的 ip 查找可用网口。</p>
+<h2 id="串口驱动"><a href="#串口驱动" class="headerlink" title="串口驱动"></a>串口驱动</h2><p>在设备管理器中，查看串口失败，报串口驱动问题，“PL2303HXA自2012已停产，请联系供货商”，USB 不识别。<a href="https://blog.csdn.net/wtf3505/article/details/104138727">解决”PL2303HXA自2012已停产，请联系供货商” USB不识别的问题-CSDN博客</a></p>
+<p>可以使用 xshell 作为串口调试工具：串口波特率 11520 ；数据位 8 ；</p>
+<h2 id="加载系统"><a href="#加载系统" class="headerlink" title="加载系统"></a>加载系统</h2><p>碰到的第二个问题是，系统引导配置的环境变量有问题，无法加载系统。</p>
+<p>注意：加载 VxWorks 或者 DeltaOS 系统镜像成功后，在串口调试工具中会输出显著的 VXWOERKS 的符号图形。</p>
+<h2 id="缺少组件"><a href="#缺少组件" class="headerlink" title="缺少组件"></a>缺少组件</h2><p>进入 DeltaOS 系统后，常用的命令行操作（或函数）：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看网络地址，尝试使用 telnet 和 ftp</span> </span><br><span class="line"><span class="meta">#</span><span class="bash"> 一般是 168.67.0.1</span></span><br><span class="line">ifconfig</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看设备</span></span><br><span class="line">devs</span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出当前目录。在根目录下不能使用，需要先进入某个磁盘，比如 ata0:1</span></span><br><span class="line">ls</span><br><span class="line"><span class="meta">#</span><span class="bash"> 拷贝文件</span></span><br><span class="line">copy &quot;src&quot; , &quot;dest&quot;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 加载目标代码</span></span><br><span class="line">ld &lt; a.out</span><br><span class="line"><span class="meta">#</span><span class="bash"> 执行目标代码的函数</span></span><br><span class="line">helloKitty</span><br><span class="line"><span class="meta">#</span><span class="bash"> 卸载目标代码</span></span><br><span class="line">unld(&quot;a.out&quot;)</span><br></pre></td></tr></table></figure>
+<p>在 DeltaOS 或 VxWorks 中，无论是使用上述 <code>ifconfig</code> 命令，还是连接 telnet 服务或 ftp 服务，都需要在制作系统镜像时保证添加了对应的组件，否则是无法使用的。</p>
+<p>碰到的第三个问题，终于和项目有关了。运行 DKM 项目编译出的 out 文件时，报错找不到符号链接（符号未定义）。因为不熟悉嵌入式可裁剪特性，不熟悉组件，匆匆接手也不熟悉编译的项目结构，我无法判断缺失的接口定义是镜像缺失（一般通过新增组件解决）还是项目丢失了源代码，或者删除代码后未及时清理无效的调用。</p>
+<p>网上找不到关于道系统和 LambdaPro 的相关资料，通过 LambdaPro 帮助菜单了解开发环境等工具的使用方式。但帮助手册的质量一般，存在更新不及时等问题。</p>
+<h2 id="LambdaPro"><a href="#LambdaPro" class="headerlink" title="LambdaPro"></a>LambdaPro</h2><p>对称多处理器（Symmetric Multi-Processor, SMP）系统。</p>
+<p>制作系统镜像时，一般都是多核的（smp）。编译 dkm 项目时，相应的也应该使用 smp 的配置来生成。</p>
+<p>@todo 怎么切换项目的调试模式？</p>
+<h2 id="配置-IP"><a href="#配置-IP" class="headerlink" title="配置 IP"></a>配置 IP</h2><p>VxWorks 配置网络的接口 <strong>ifLib</strong> - network interface library，似乎在这块板子上无法生效，代码中相关的函数调用全部注释了。</p>
+<p>这块板子加载了 NGBE 的驱动，似乎是网讯的网卡驱动。目前已知的能够生效的配置网路的接口是 ifconfig ，但在 Vxworks 体系内似乎不是常规操作，更像是板子自定义的函数。</p>
+<blockquote>
+<p>VxWorks 6.9 下组件 <code>INCLUDE_IFCONFIG</code> 提供了命令 <code>ifconfig()</code>，包含组件 <code>INCLUDE_IPIFCONFIG_CMD</code> 后，也可以在 cmd 里使用 <code>ifconfig</code> 命令用 于配置或查询网络接口。</p>
+</blockquote>
+]]></content>
   </entry>
   <entry>
     <title>WebRTC 学习</title>
@@ -2839,72 +2949,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++ Coroutines Understanding the promise type</title>
-    <url>/2021/03/31/coroutine-c/</url>
-    <content><![CDATA[<p>来源：<a href="https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type">https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type</a></p>
-<h1 id="Coroutine-Concepts"><a href="#Coroutine-Concepts" class="headerlink" title="Coroutine Concepts"></a>Coroutine Concepts</h1><p>The compiler applies some fairly mechanical transformations to the code that you write to turn it into a state-machine that allows it to suspend execution at particular points within the function and then later resume execution.</p>
-<p>编译器会对您编写的代码进行一些相当机械的转换，以将其转换为状态机，使状态机可以在函数内的特定点挂起执行，然后再恢复执行。</p>
-<h1 id="Promise-objects"><a href="#Promise-objects" class="headerlink" title="Promise objects"></a>Promise objects</h1><p>The Promise object defines and controls the behaviour of the coroutine itself by implementing methods that are called at specific points during execution of the coroutine.</p>
-<a id="more"></a>
-
-<blockquote>
-<p>Before we go on, I want you to try and rid yourself of any preconceived notions of what a “promise” is. While, in some use-cases, the coroutine promise object does indeed act in a similar role to the <code>std::promise</code> part of a <code>std::future</code> pair, for other use-cases the analogy is somewhat stretched. It may be easier to think about the coroutine’s promise object as being a “coroutine state controller” object that controls the behaviour of the coroutine and can be used to track its state.</p>
-<p>在继续之前，我希望您尝试摆脱对“promise”的任何先入为主的观念。虽然在某些用例中，协程的 promise 对象确实起到了与 <code>std::future</code> 的 <code>std::promise</code> 部分相似的作用，但在其他用例中，类推却有些捉襟见肘。将协程的 promise 对象视为控制协程行为并可以用来跟踪其状态的“<strong>协程状态控制器</strong>”对象可能更容易些。</p>
-</blockquote>
-<p>When you write a coroutine function that has a body, <code>&lt;body-statements&gt;</code>, which contains one of the coroutine keywords (<code>co_return</code>, <code>co_await</code>, <code>co_yield</code>) then the body of the coroutine is transformed to something (roughly) like the following:</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">co_await</span> promise.initial_suspend();</span><br><span class="line">  <span class="keyword">try</span></span><br><span class="line">  &#123;</span><br><span class="line">    &lt;body-statements&gt;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (...)</span><br><span class="line">  &#123;</span><br><span class="line">    promise.unhandled_exception();</span><br><span class="line">  &#125;</span><br><span class="line">FinalSuspend:</span><br><span class="line">  <span class="keyword">co_await</span> promise.final_suspend();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>When a coroutine function is called there are a number of steps that are performed prior to executing the code in the source of the coroutine body that are a little different to regular functions.</p>
-<p>Here is a summary of the steps (I’ll go into more detail on each of the steps below).</p>
-<ol>
-<li>Allocate a coroutine frame using <code>operator new</code> (optional).</li>
-<li>Copy any function parameters to the coroutine frame.</li>
-<li>Call the constructor for the promise object of type, <code>P</code>.</li>
-<li>Call the <code>promise.get_return_object()</code> method to obtain the result to return to the caller when the coroutine first suspends. Save the result as a local variable.</li>
-<li>Call the <code>promise.initial_suspend()</code> method and <code>co_await</code> the result.</li>
-<li>When the <code>co_await promise.initial_suspend()</code> expression resumes (either immediately or asynchronously), then the coroutine starts executing the coroutine body statements that you wrote.</li>
-</ol>
-<p>Some additional steps are executed when execution reaches a <code>co_return</code> statement:</p>
-<ol>
-<li>Call <code>promise.return_void()</code> or <code>promise.return_value(&lt;expr&gt;)</code></li>
-<li>Destroy all variables with automatic storage duration in reverse order they were created.</li>
-<li>Call <code>promise.final_suspend()</code> and <code>co_await</code> the result.</li>
-</ol>
-<p>If instead, execution leaves <code>&lt;body-statements&gt;</code> due to an unhandled exception then:</p>
-<ol>
-<li>Catch the exception and call <code>promise.unhandled_exception()</code> from within the catch-block.</li>
-<li>Call <code>promise.final_suspend()</code> and <code>co_await</code> the result.</li>
-</ol>
-<p>Once execution propagates outside of the coroutine body then the coroutine frame is destroyed. Destroying the coroutine frame involves a number of steps:</p>
-<ol>
-<li>Call the destructor of the promise object.</li>
-<li>Call the destructors of the function parameter copies.</li>
-<li>Call <code>operator delete</code> to free the memory used by the coroutine frame (optional)</li>
-<li>Transfer execution back to the caller/resumer.</li>
-</ol>
-<p>When execution first reaches a <code>&lt;return-to-caller-or-resumer&gt;</code> point inside a <code>co_await</code> expression, or if the coroutine runs to completion without hitting a <code>&lt;return-to-caller-or-resumer&gt;</code> point, then the coroutine is either suspended or destroyed and the return-object previously returned from the call to <code>promise.get_return_object()</code> is then returned to the caller of the coroutine.</p>
-<p>之后，作者就上述步骤进行了详细的介绍。</p>
-<h2 id="How-the-compiler-chooses-the-promise-type"><a href="#How-the-compiler-chooses-the-promise-type" class="headerlink" title="How the compiler chooses the promise type"></a>How the compiler chooses the promise type</h2><p>The type of the promise object is determined from the signature of the coroutine by using the <code>std::experimental::coroutine_traits</code> class.</p>
-<p>模板类的参数，就是协程函数签名中的返回类型+入参类型。</p>
-<p>模板类 <code>coroutine_traits</code> 的默认实现，是使用返回类型的嵌套类型或类型别名：</p>
-<p><code>using promise_type = typename RET::promise_type;</code></p>
-<p>如果有权限，则在返回值类型中定义嵌套类即可；否则新增 <code>coroutine_traits</code> 特例化。</p>
-<h2 id="Identifying-a-specific-coroutine-activation-frame"><a href="#Identifying-a-specific-coroutine-activation-frame" class="headerlink" title="Identifying a specific coroutine activation frame"></a>Identifying a specific coroutine activation frame</h2><p>When you call a coroutine function, a coroutine frame is created. In order to resume the associated coroutine or destroy the coroutine frame you need some way to identify or refer to that particular coroutine frame.</p>
-<p>The mechanism the Coroutines TS provides for this is the <code>coroutine_handle</code> type.</p>
-<p>You can obtain a coroutine_handle for a coroutine in two ways:</p>
-<ol>
-<li>It is passed to the <code>await_suspend()</code> method during a <code>co_await</code> expression.</li>
-<li>If you have a reference to the coroutine’s promise object, you can reconstruct its coroutine_handle using <code>coroutine_handle&lt;Promise&gt;::from_promise()</code>.</li>
-</ol>
-<p>Note that the coroutine_handle is <strong>NOT</strong> and RAII object. You must manually call <code>.destroy()</code> to destroy the coroutine frame and free its resources.</p>
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-      <tags>
-        <tag>coroutine</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Coroutine 学习总结</title>
     <url>/2021/04/02/coroutine/</url>
     <content><![CDATA[<p>参考 <a href="https://github.com/tnie/learn_chrono">tnie/learn_xxx</a> 中 coro 项目。</p>
@@ -2987,6 +3031,72 @@
 <p>The secret of stackless coroutines is that they can suspend themselves only from the top-level function.</p>
 <p>无栈协程只能在顶层函数暂停执行。</p>
 <p>每次 suspend 时 frame 释放掉(pop)，resume 的时候由 coroutine object (as local variable on the caller’s frame) 再次建立 frame。—— 参考 <a href="https://lewissbaker.github.io/2017/09/25/coroutine-theory">coroutine-theory</a> 的 The ‘Resume’ operation 章节。</p>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+      <tags>
+        <tag>coroutine</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ Coroutines Understanding the promise type</title>
+    <url>/2021/03/31/coroutine-c/</url>
+    <content><![CDATA[<p>来源：<a href="https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type">https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type</a></p>
+<h1 id="Coroutine-Concepts"><a href="#Coroutine-Concepts" class="headerlink" title="Coroutine Concepts"></a>Coroutine Concepts</h1><p>The compiler applies some fairly mechanical transformations to the code that you write to turn it into a state-machine that allows it to suspend execution at particular points within the function and then later resume execution.</p>
+<p>编译器会对您编写的代码进行一些相当机械的转换，以将其转换为状态机，使状态机可以在函数内的特定点挂起执行，然后再恢复执行。</p>
+<h1 id="Promise-objects"><a href="#Promise-objects" class="headerlink" title="Promise objects"></a>Promise objects</h1><p>The Promise object defines and controls the behaviour of the coroutine itself by implementing methods that are called at specific points during execution of the coroutine.</p>
+<a id="more"></a>
+
+<blockquote>
+<p>Before we go on, I want you to try and rid yourself of any preconceived notions of what a “promise” is. While, in some use-cases, the coroutine promise object does indeed act in a similar role to the <code>std::promise</code> part of a <code>std::future</code> pair, for other use-cases the analogy is somewhat stretched. It may be easier to think about the coroutine’s promise object as being a “coroutine state controller” object that controls the behaviour of the coroutine and can be used to track its state.</p>
+<p>在继续之前，我希望您尝试摆脱对“promise”的任何先入为主的观念。虽然在某些用例中，协程的 promise 对象确实起到了与 <code>std::future</code> 的 <code>std::promise</code> 部分相似的作用，但在其他用例中，类推却有些捉襟见肘。将协程的 promise 对象视为控制协程行为并可以用来跟踪其状态的“<strong>协程状态控制器</strong>”对象可能更容易些。</p>
+</blockquote>
+<p>When you write a coroutine function that has a body, <code>&lt;body-statements&gt;</code>, which contains one of the coroutine keywords (<code>co_return</code>, <code>co_await</code>, <code>co_yield</code>) then the body of the coroutine is transformed to something (roughly) like the following:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">co_await</span> promise.initial_suspend();</span><br><span class="line">  <span class="keyword">try</span></span><br><span class="line">  &#123;</span><br><span class="line">    &lt;body-statements&gt;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (...)</span><br><span class="line">  &#123;</span><br><span class="line">    promise.unhandled_exception();</span><br><span class="line">  &#125;</span><br><span class="line">FinalSuspend:</span><br><span class="line">  <span class="keyword">co_await</span> promise.final_suspend();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>When a coroutine function is called there are a number of steps that are performed prior to executing the code in the source of the coroutine body that are a little different to regular functions.</p>
+<p>Here is a summary of the steps (I’ll go into more detail on each of the steps below).</p>
+<ol>
+<li>Allocate a coroutine frame using <code>operator new</code> (optional).</li>
+<li>Copy any function parameters to the coroutine frame.</li>
+<li>Call the constructor for the promise object of type, <code>P</code>.</li>
+<li>Call the <code>promise.get_return_object()</code> method to obtain the result to return to the caller when the coroutine first suspends. Save the result as a local variable.</li>
+<li>Call the <code>promise.initial_suspend()</code> method and <code>co_await</code> the result.</li>
+<li>When the <code>co_await promise.initial_suspend()</code> expression resumes (either immediately or asynchronously), then the coroutine starts executing the coroutine body statements that you wrote.</li>
+</ol>
+<p>Some additional steps are executed when execution reaches a <code>co_return</code> statement:</p>
+<ol>
+<li>Call <code>promise.return_void()</code> or <code>promise.return_value(&lt;expr&gt;)</code></li>
+<li>Destroy all variables with automatic storage duration in reverse order they were created.</li>
+<li>Call <code>promise.final_suspend()</code> and <code>co_await</code> the result.</li>
+</ol>
+<p>If instead, execution leaves <code>&lt;body-statements&gt;</code> due to an unhandled exception then:</p>
+<ol>
+<li>Catch the exception and call <code>promise.unhandled_exception()</code> from within the catch-block.</li>
+<li>Call <code>promise.final_suspend()</code> and <code>co_await</code> the result.</li>
+</ol>
+<p>Once execution propagates outside of the coroutine body then the coroutine frame is destroyed. Destroying the coroutine frame involves a number of steps:</p>
+<ol>
+<li>Call the destructor of the promise object.</li>
+<li>Call the destructors of the function parameter copies.</li>
+<li>Call <code>operator delete</code> to free the memory used by the coroutine frame (optional)</li>
+<li>Transfer execution back to the caller/resumer.</li>
+</ol>
+<p>When execution first reaches a <code>&lt;return-to-caller-or-resumer&gt;</code> point inside a <code>co_await</code> expression, or if the coroutine runs to completion without hitting a <code>&lt;return-to-caller-or-resumer&gt;</code> point, then the coroutine is either suspended or destroyed and the return-object previously returned from the call to <code>promise.get_return_object()</code> is then returned to the caller of the coroutine.</p>
+<p>之后，作者就上述步骤进行了详细的介绍。</p>
+<h2 id="How-the-compiler-chooses-the-promise-type"><a href="#How-the-compiler-chooses-the-promise-type" class="headerlink" title="How the compiler chooses the promise type"></a>How the compiler chooses the promise type</h2><p>The type of the promise object is determined from the signature of the coroutine by using the <code>std::experimental::coroutine_traits</code> class.</p>
+<p>模板类的参数，就是协程函数签名中的返回类型+入参类型。</p>
+<p>模板类 <code>coroutine_traits</code> 的默认实现，是使用返回类型的嵌套类型或类型别名：</p>
+<p><code>using promise_type = typename RET::promise_type;</code></p>
+<p>如果有权限，则在返回值类型中定义嵌套类即可；否则新增 <code>coroutine_traits</code> 特例化。</p>
+<h2 id="Identifying-a-specific-coroutine-activation-frame"><a href="#Identifying-a-specific-coroutine-activation-frame" class="headerlink" title="Identifying a specific coroutine activation frame"></a>Identifying a specific coroutine activation frame</h2><p>When you call a coroutine function, a coroutine frame is created. In order to resume the associated coroutine or destroy the coroutine frame you need some way to identify or refer to that particular coroutine frame.</p>
+<p>The mechanism the Coroutines TS provides for this is the <code>coroutine_handle</code> type.</p>
+<p>You can obtain a coroutine_handle for a coroutine in two ways:</p>
+<ol>
+<li>It is passed to the <code>await_suspend()</code> method during a <code>co_await</code> expression.</li>
+<li>If you have a reference to the coroutine’s promise object, you can reconstruct its coroutine_handle using <code>coroutine_handle&lt;Promise&gt;::from_promise()</code>.</li>
+</ol>
+<p>Note that the coroutine_handle is <strong>NOT</strong> and RAII object. You must manually call <code>.destroy()</code> to destroy the coroutine frame and free its resources.</p>
 ]]></content>
       <categories>
         <category>cpp</category>
@@ -3517,6 +3627,40 @@
       </tags>
   </entry>
   <entry>
+    <title>不值得读</title>
+    <url>/2016/11/30/do-not-read/</url>
+    <content><![CDATA[<p>以前写书的人都是高手。写专业书籍首先要求技术够牛，其次文笔也要可以。进入新世纪，什么杂七杂八、牛鬼蛇神都可以出版书了，市场上充斥着大量的垃圾，浪费纸张浪费木材不说，万一被市场、群众（被大众所选择的不一定是对的）欺骗买了这样的书你真是想死的心都有。也有一些书，处在尴尬的层次——（尤其是专业书籍）算不上佳作，匆匆一瞥也挑不出问题，可是当你真正深入阅读时慢慢发现细节惨不忍睹（尤其是计算机领域渣渣们为了名利职称等翻译国外著作）。</p>
+<h1 id="别看《C-Primer-Plus》"><a href="#别看《C-Primer-Plus》" class="headerlink" title="别看《C++ Primer Plus》"></a>别看《C++ Primer Plus》</h1><p>这本书是带“光环”的。在国内一些博客网站上，程序员们对这本书的评价还是可以的，<a href="https://book.douban.com/subject/1319751/">豆瓣的评分</a>也蛮高的。所谓群众的选择！但我接触过之后，开始怀疑“给予这本书肯定评价的程序员难道都是渣渣吗？或者都是门外汉拿这本书入门，觉得学到东西了所以给予肯定？”。以下是以前的记录，可以得出结论：原作者的水平就值得怀疑，翻译之后不会比原作更好。<strong>英文原著、译文都不值得看！</strong></p>
+<p>2016/2/17 9:52:41</p>
+<p>因为网上关于《C++ Primer》的电纸书资源有限，好吧，只找到英文原版第五版的mobi格式，而恰巧搜索资源的时候找到了《Plus》第五版的中文资源，亚马逊官方的，排版也不错，所以就在kindle 上看了，当时是打算重点学习后面的章节：函数重载、类的设计与使用、继承、异常处理等。</p>
+<p>到目前读了20%，因为前四章的内容都比较基础，所以并没有详细地一页页读过来，而是拣选不熟的知识点学习。但已经有点烦了，确实好些地方娓娓道来，让人豁然开朗（跟我水平低也有关），但更多的细节上的不注意让人慢慢地烦躁起来，从网上找到两篇评论，恰巧说到了我的感觉。无论如何，打算放弃了，而且我<strong>绝对不会推荐</strong>别人读这本书的。</p>
+<ol>
+<li><p><a href="http://book.douban.com/review/5472087/">关注 C++ Primer Plus（第 6 版）的同学，请留步</a></p>
+</li>
+<li><p><a href="http://www.amazon.cn/review/R2QJQH8LI1JADU/ref=cm_cr_dp_title?ie=UTF8&ASIN=B008A4XZRI&channel=detail-glance&nodeID=&store=books">小错误太多，很不负责任</a>，66/71 认为此评论有用。这足够说明问题了。</p>
+</li>
+<li><p>还看到一个犀利的评价：</p>
+<p> <img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/cpp-primer-plus.png"></p>
+</li>
+</ol>
+<p>甚至会怀疑，那些让我豁然开朗，觉得学到东西的文字叙述是否真的就是那么回事，作者没有诓我吧。</p>
+<p>最后一根稻草，是指针这一块的。</p>
+<p>4.7.1节 讲到声明和初始化指针，提到声明指针时，<code>*</code> 操作符两边的空格问题，本身说的就不清楚，再加上难以自圆其说 指针声明中 <code>*</code> 和 解引用 <code>*</code> 的区别，甚至在作者的描述中两者是一致的。<br>我完全被打败了，弄糊涂了。所以去翻《C++ Primer》，很清晰，一点就明。</p>
+<p>更多的错误就不说了，算是跳读的，虽说到了20%的进度，但就实际阅读的可能不到5%，我标注了8个明显的上下文不一致错误、翻译错误，让人费解的地方。</p>
+<p>所以，打算去啃《Primer》英文原版了。</p>
+<h1 id="别看《C-Concurrency-in-Action》译作"><a href="#别看《C-Concurrency-in-Action》译作" class="headerlink" title="别看《C++ Concurrency in Action》译作"></a>别看《C++ Concurrency in Action》译作</h1><p><strong>原著是值得肯定的</strong>，是 C++ 领域少有的介绍并发编程、多线程的书。但 <a href="https://book.douban.com/review/7485014/">国内翻译的版本</a> 被喷的一无是处，不再多说。</p>
+<p>另外，GitBook 上有一份陈晓伟翻译的 <a href="https://www.gitbook.com/book/chenxiaowei/cpp_concurrency_in_action/details">《C++并发编程(中文版)》</a>，我起初抱着很大的期望去读的。目前（2016/7/14 10:07:18 ） 快读到第二章结尾了，发现其中也有好多不尽人意之处，甚至有些完全翻译错误，将读者带跑带偏。某句话末尾多出个词汇，文字输入时音正字错（“人为”写成“认为”）的现象更是频繁出现。读起来磕磕绊绊，最主要的还是担心译者水平，翻译错误——很明显的错误能够发现，然后去找原文矫正；可是意识不到就代表没有错误了吗？——肯定有，译者的英文水平其实挺一般的。</p>
+<p>所以，打算去看英文原版了。好在作者用的都是日常词汇，读起来并不“卡”，只是会慢些而已。</p>
+<p>追评：原著写得挺好的，真正地去读英文原版会发现也没想象中那么困难，已经向第 4 章迈进了。目前阅读进度缓慢甚至停滞，主要是因为阅读目的（并发入门）已经达到，后面的进阶内容在目前用不到，所以读书的动力就不大了。</p>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+      <tags>
+        <tag>memo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>桌面环境</title>
     <url>/2023/05/17/displayManager/</url>
     <content><![CDATA[<p>GNOME 和 MATE 都是桌面环境。</p>
@@ -3555,40 +3699,6 @@
       </categories>
       <tags>
         <tag>systemd systemctl</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>不值得读</title>
-    <url>/2016/11/30/do-not-read/</url>
-    <content><![CDATA[<p>以前写书的人都是高手。写专业书籍首先要求技术够牛，其次文笔也要可以。进入新世纪，什么杂七杂八、牛鬼蛇神都可以出版书了，市场上充斥着大量的垃圾，浪费纸张浪费木材不说，万一被市场、群众（被大众所选择的不一定是对的）欺骗买了这样的书你真是想死的心都有。也有一些书，处在尴尬的层次——（尤其是专业书籍）算不上佳作，匆匆一瞥也挑不出问题，可是当你真正深入阅读时慢慢发现细节惨不忍睹（尤其是计算机领域渣渣们为了名利职称等翻译国外著作）。</p>
-<h1 id="别看《C-Primer-Plus》"><a href="#别看《C-Primer-Plus》" class="headerlink" title="别看《C++ Primer Plus》"></a>别看《C++ Primer Plus》</h1><p>这本书是带“光环”的。在国内一些博客网站上，程序员们对这本书的评价还是可以的，<a href="https://book.douban.com/subject/1319751/">豆瓣的评分</a>也蛮高的。所谓群众的选择！但我接触过之后，开始怀疑“给予这本书肯定评价的程序员难道都是渣渣吗？或者都是门外汉拿这本书入门，觉得学到东西了所以给予肯定？”。以下是以前的记录，可以得出结论：原作者的水平就值得怀疑，翻译之后不会比原作更好。<strong>英文原著、译文都不值得看！</strong></p>
-<p>2016/2/17 9:52:41</p>
-<p>因为网上关于《C++ Primer》的电纸书资源有限，好吧，只找到英文原版第五版的mobi格式，而恰巧搜索资源的时候找到了《Plus》第五版的中文资源，亚马逊官方的，排版也不错，所以就在kindle 上看了，当时是打算重点学习后面的章节：函数重载、类的设计与使用、继承、异常处理等。</p>
-<p>到目前读了20%，因为前四章的内容都比较基础，所以并没有详细地一页页读过来，而是拣选不熟的知识点学习。但已经有点烦了，确实好些地方娓娓道来，让人豁然开朗（跟我水平低也有关），但更多的细节上的不注意让人慢慢地烦躁起来，从网上找到两篇评论，恰巧说到了我的感觉。无论如何，打算放弃了，而且我<strong>绝对不会推荐</strong>别人读这本书的。</p>
-<ol>
-<li><p><a href="http://book.douban.com/review/5472087/">关注 C++ Primer Plus（第 6 版）的同学，请留步</a></p>
-</li>
-<li><p><a href="http://www.amazon.cn/review/R2QJQH8LI1JADU/ref=cm_cr_dp_title?ie=UTF8&ASIN=B008A4XZRI&channel=detail-glance&nodeID=&store=books">小错误太多，很不负责任</a>，66/71 认为此评论有用。这足够说明问题了。</p>
-</li>
-<li><p>还看到一个犀利的评价：</p>
-<p> <img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/cpp-primer-plus.png"></p>
-</li>
-</ol>
-<p>甚至会怀疑，那些让我豁然开朗，觉得学到东西的文字叙述是否真的就是那么回事，作者没有诓我吧。</p>
-<p>最后一根稻草，是指针这一块的。</p>
-<p>4.7.1节 讲到声明和初始化指针，提到声明指针时，<code>*</code> 操作符两边的空格问题，本身说的就不清楚，再加上难以自圆其说 指针声明中 <code>*</code> 和 解引用 <code>*</code> 的区别，甚至在作者的描述中两者是一致的。<br>我完全被打败了，弄糊涂了。所以去翻《C++ Primer》，很清晰，一点就明。</p>
-<p>更多的错误就不说了，算是跳读的，虽说到了20%的进度，但就实际阅读的可能不到5%，我标注了8个明显的上下文不一致错误、翻译错误，让人费解的地方。</p>
-<p>所以，打算去啃《Primer》英文原版了。</p>
-<h1 id="别看《C-Concurrency-in-Action》译作"><a href="#别看《C-Concurrency-in-Action》译作" class="headerlink" title="别看《C++ Concurrency in Action》译作"></a>别看《C++ Concurrency in Action》译作</h1><p><strong>原著是值得肯定的</strong>，是 C++ 领域少有的介绍并发编程、多线程的书。但 <a href="https://book.douban.com/review/7485014/">国内翻译的版本</a> 被喷的一无是处，不再多说。</p>
-<p>另外，GitBook 上有一份陈晓伟翻译的 <a href="https://www.gitbook.com/book/chenxiaowei/cpp_concurrency_in_action/details">《C++并发编程(中文版)》</a>，我起初抱着很大的期望去读的。目前（2016/7/14 10:07:18 ） 快读到第二章结尾了，发现其中也有好多不尽人意之处，甚至有些完全翻译错误，将读者带跑带偏。某句话末尾多出个词汇，文字输入时音正字错（“人为”写成“认为”）的现象更是频繁出现。读起来磕磕绊绊，最主要的还是担心译者水平，翻译错误——很明显的错误能够发现，然后去找原文矫正；可是意识不到就代表没有错误了吗？——肯定有，译者的英文水平其实挺一般的。</p>
-<p>所以，打算去看英文原版了。好在作者用的都是日常词汇，读起来并不“卡”，只是会慢些而已。</p>
-<p>追评：原著写得挺好的，真正地去读英文原版会发现也没想象中那么困难，已经向第 4 章迈进了。目前阅读进度缓慢甚至停滞，主要是因为阅读目的（并发入门）已经达到，后面的进阶内容在目前用不到，所以读书的动力就不大了。</p>
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-      <tags>
-        <tag>memo</tag>
       </tags>
   </entry>
   <entry>
@@ -6013,6 +6123,29 @@
       </categories>
   </entry>
   <entry>
+    <title>有料的博客</title>
+    <url>/2016/12/14/memo-url/</url>
+    <content><![CDATA[<p>书山有路勤为径</p>
+<h1 id="有料"><a href="#有料" class="headerlink" title="有料"></a>有料</h1><ul>
+<li><a href="https://program-think.blogspot.com/">编程随想的博客</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/">阮一峰的网络日志</a></li>
+<li><a href="http://www.midphoto.com/chinese/chinese.htm">杨飞工作室</a></li>
+<li><a href="http://www.playpcesor.com/">電腦玩物</a></li>
+<li><a href="http://sspai.com/tag/android">少数派-Android</a></li>
+<li><a href="http://www.rainymood.com/">雨声</a></li>
+</ul>
+<h1 id="专业"><a href="#专业" class="headerlink" title="专业"></a>专业</h1><ul>
+<li><a href="http://linuxtools-rst.readthedocs.io/zh_CN/latest/index.html">Linux工具快速教程</a></li>
+<li><a href="http://linux-wiki.cn/">Linux 中文知识库</a></li>
+<li><a href="http://blog.jobbole.com/82633/">有哪些实用的计算机相关技能，可以在一天内学会？</a></li>
+<li><a href="http://www.cnblogs.com/haippy/p/3284540.html">C++11 并发指南系列 - cnblogs</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>memo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>编码转换和 locale</title>
     <url>/2021/05/26/locale/</url>
     <content><![CDATA[<p>学习 locale 和编码转换过程中的关键以及问题。</p>
@@ -6153,29 +6286,6 @@
       <categories>
         <category>cpp</category>
       </categories>
-  </entry>
-  <entry>
-    <title>有料的博客</title>
-    <url>/2016/12/14/memo-url/</url>
-    <content><![CDATA[<p>书山有路勤为径</p>
-<h1 id="有料"><a href="#有料" class="headerlink" title="有料"></a>有料</h1><ul>
-<li><a href="https://program-think.blogspot.com/">编程随想的博客</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/">阮一峰的网络日志</a></li>
-<li><a href="http://www.midphoto.com/chinese/chinese.htm">杨飞工作室</a></li>
-<li><a href="http://www.playpcesor.com/">電腦玩物</a></li>
-<li><a href="http://sspai.com/tag/android">少数派-Android</a></li>
-<li><a href="http://www.rainymood.com/">雨声</a></li>
-</ul>
-<h1 id="专业"><a href="#专业" class="headerlink" title="专业"></a>专业</h1><ul>
-<li><a href="http://linuxtools-rst.readthedocs.io/zh_CN/latest/index.html">Linux工具快速教程</a></li>
-<li><a href="http://linux-wiki.cn/">Linux 中文知识库</a></li>
-<li><a href="http://blog.jobbole.com/82633/">有哪些实用的计算机相关技能，可以在一天内学会？</a></li>
-<li><a href="http://www.cnblogs.com/haippy/p/3284540.html">C++11 并发指南系列 - cnblogs</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>memo</tag>
-      </tags>
   </entry>
   <entry>
     <title>从 static 到对象的内存布局</title>
@@ -6373,7 +6483,7 @@
 <li><a href="http://www.mindmanager.cc/zhucema-jihuoma-xuliehao.html">各版本MindManager注册码-激活码-序列号地址</a></li>
 <li><a href="http://www.weiyu.la/2013/2332.html">Mindjet MindManager 14.0.334 正式发布（最后更新：2013-11-11）</a></li>
 </ul>
-<p>ps：目前在用的版本和中文汉化包，都在百度云盘中上传了备份。<a href="mailto:&#110;&#105;&#101;&#108;&#x6f;&#x6e;&#x67;&#50;&#48;&#x31;&#x34;&#x40;&#x31;&#x36;&#51;&#x2e;&#x63;&#111;&#x6d;">&#110;&#105;&#101;&#108;&#x6f;&#x6e;&#x67;&#50;&#48;&#x31;&#x34;&#x40;&#x31;&#x36;&#51;&#x2e;&#x63;&#111;&#x6d;</a></p>
+<p>ps：目前在用的版本和中文汉化包，都在百度云盘中上传了备份。<a href="mailto:&#x6e;&#105;&#101;&#x6c;&#111;&#110;&#103;&#x32;&#x30;&#x31;&#x34;&#64;&#49;&#x36;&#51;&#x2e;&#x63;&#x6f;&#x6d;">&#x6e;&#105;&#101;&#x6c;&#111;&#110;&#103;&#x32;&#x30;&#x31;&#x34;&#64;&#49;&#x36;&#51;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
 <p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/mindmanager/117c25cd-6171-4608-b210-336c5df6f9cc.jpg" alt="启动时弹出对话框"></p>
 ]]></content>
       <categories>
@@ -6441,6 +6551,87 @@
         <category>cpp</category>
         <category>cpp-code</category>
       </categories>
+  </entry>
+  <entry>
+    <title>多播</title>
+    <url>/2023/10/07/multicast/</url>
+    <content><![CDATA[<p>摘抄自《计算机网络（第7版）-谢希仁》教材，读书笔记。</p>
+<p>OSI 的七层协议体系结构的概念清楚，理论也较完整，但它既复杂又不实用。</p>
+<p>TCP/IP 的体系结构则不同，但它现在却得到了非常广泛的应用。TCP/IP 是一个四层的体系结构，它包含应用层、运输层、网际层和网络接口层（用<strong>网际层</strong>这个名字是强调这一层是为了<strong>解决不同网络的互连问题</strong>）。不过从实质上将，TCP/IP 只有最上面的三层，因为最下面的网络接口层并没有什么具体内容。</p>
+<p>互联网是由大量的<strong>异构</strong>(heterogeneous)网络通过<strong>路由器</strong>(router)相互连接起来的。互联网使用的网络层协议是无连接的网际协议 IP(Internet Protocol) 和许多种路由选择协议，因此互联网的网络层也叫做网际层或 IP 层。</p>
+<h2 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h2><p>局域网虽然是个网络，但我们并不把局域网放在网络层中讨论。这是因为在网络层要讨论的问题是多个网络互联的问题，是讨论分组（packet）怎样从一个网络，通过路由器，转发到另一个网络。在本章中我们研究的是在同一个局域网中，分组（packet）怎样从一台主机传送到另一台主机，但并不经过路由器转发。从整个互联网来看，局域网仍属于数据链路层的范围。</p>
+<p>packet 小包裹、信息包，在教材中一般翻译为“分组”，但“分组”在日常对话中多理解成动词，给读者造成困扰。分组：</p>
+<a id="more"></a>
+
+<ol>
+<li>网络专有名词。大多数计算机网络都不能连续地传送任意长的数据，所以实际上网络系统把数据分割成小块，然后逐块地发送，这种小块就称作分组（packet）。也有些书籍把分组定义为网络层的协议数据单元。</li>
+<li>动词。把一堆人或物划分成几组人或物。</li>
+</ol>
+<p>链路层使用的信道主要有两种类型：1）点对点信道 2）广播信道。局域网使用的是广播信道。</p>
+<p>对于点对点的链路，点对点协议 PPP 则是目前使用得最广泛的数据链路层协议。 PPP 协议就是用户计算机和 ISP 网络服务提供商进行通信时所使用的数据链路层协议（计算机还未获取到 IP 地址，不可能使用 IP 协议/网络层）。</p>
+<p><strong>Ethernet 以太网</strong>已经在局域网市场占据了绝对优势。现在以太网几乎成为了局域网的同义词。</p>
+<p>48 位的 MAC 地址中存在 2 个特殊位分别指示：0单个站地址/1组地址，全球管理/本地管理。</p>
+<p>发往本站的 MAC 帧包括三种帧：单播帧、广播帧、多播帧。以太网适配器的混杂模式，不再过滤 MAC 帧，“窃听”发往本站、其他站的所有帧。</p>
+<p>交换式集线器（switching hub）通常称为以太网交换机（switch）或第二层交换机（L2 switch），强调这种交换机工作在数据链路层。</p>
+<p>利用以太网交换机可以很方便地实现虚拟局域网 VLAN（Virtual LAN）。插入 VLAN 标记得出的帧称为802.1Q 帧。</p>
+<p>现在以太网的工作范围已经从局域网扩大到城域网和广域网，从而实现了端到端的以太网传输。</p>
+<h2 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h2><p>由于传输网络不提供端到端的可靠传输服务，这就使网络中的路由器比较简单。如果主机中的进程之间的通信需要是可靠的，那么就由网络的<strong>主机中的运输层</strong>负责（包括差错处理、流量控制等）。</p>
+<p>IP 地址的编址方法共经过三个历史阶段：</p>
+<ol>
+<li>分类的 IP 地址</li>
+<li>子网的划分</li>
+<li>无分类编址 CIDR （构成超网）</li>
+</ol>
+<p><code>IP 地址 ::= &#123;&lt;网络号&gt;, &lt;主机号&gt;&#125;</code>  具有不同网络号的局域网必须使用路由器进行互连。</p>
+<p>近年来已经广泛使用无分类 IP 地址进行路由选择，A 类、B 类和 C 类地址的区分已经成为历史。</p>
+<p>主机和路由器都是使用<strong>路由表</strong> 判断直接交付还是间接交付。</p>
+<p><code>IP 地址 ::= &#123;&lt;网络号&gt;, &lt;子网号&gt;, &lt;主机号&gt;&#125;</code> 划分子网只是把 IP 地址的主机号这部分进行再划分，而不改变 IP 地址原来的网络号。</p>
+<p><code>IP 地址 ::= &#123;&lt;网络前缀&gt;, &lt;主机号&gt;&#125;</code>  CIDR 消除了传统的 A 类、B 类和 C 类地址以及划分子网的概念。</p>
+<p>P145 地址聚合和最长前缀匹配</p>
+<h3 id="路由选择协议"><a href="#路由选择协议" class="headerlink" title="路由选择协议"></a>路由选择协议</h3><p>= 路由表中的路由是怎么得出的。</p>
+<p>在目前的互联网中，一个大的 ISP 就是一个自治系统。这样，互联网就把路由选择协议划分为两大类，即：</p>
+<ul>
+<li>内部网关协议 IGP (Interior Gateway Protocol)：而在自治系统内部的路由选择叫做域内路由选择。 =内部路由器协议 IRP</li>
+<li>外部网关协议 EGP (External Gateway Protol)：自治系统之间的路由选择也叫做域间路由选择。 = 外部路由器协议 ERP</li>
+</ul>
+<h3 id="多播-P176"><a href="#多播-P176" class="headerlink" title="多播 P176"></a>多播 P176</h3><p><strong>IP 多播</strong>是需要在互联网上增加更多的智能才能提供的一种服务。当分组（packet）到达目的局域网时，由于局域网具有<strong>硬件多播</strong>功能，因此不需要复制分组，在局域网上的多播组成员都能收到这个视频分组。</p>
+<pre><code>硬件多播，是不是就是 VLAN 虚拟局域网广播的能力？ 但 VLAN 的实现并未用到 MAC 的多播地址。 但在当前章节讲解硬件多播时是使用了 MAC 的多播地址的。</code></pre>
+<p>在互联网范围的多播要靠路由器来实现，这些路由器需要增加一些能够识别多播数据报的软件。能够运行多播协议的路由器称为<strong>多播路由器</strong>。</p>
+<p>P179 IANA 拥有的以太网多播地址的范围，是怎么得出的？以太网的多播地址怎么使用实现多播的？</p>
+<p>IP 多播需要两种协议：仅有 IGMP 协议（网际组管理协议）是不能完成多播任务的，还需要<strong>多播路由选择协议</strong>。但多播路由选择协议则尚未标准化。</p>
+<p>收消息需要加组：主机向多播路由器发送加组报文，多播路由器把这种组成员关系转发给互联网上的其他多播路由器。</p>
+<p><strong>发消息不需要加组</strong>：任何进程可以在任何时候向任何一个多播组发送多播数据报，这个进程并不需要加入这个多播组。</p>
+<ul>
+<li>多次加组有什么影响？每秒一次的重复加组算得上广播风暴吗？会引起网络拥塞吗？</li>
+<li>加组为什么还需要端口？</li>
+<li>编码时如何判断加组是否成功？判断 IGMP 是否发给了路由器吗？</li>
+<li>广播风暴</li>
+</ul>
+<p><a href="https://smb.tp-link.com.cn/service/detail_article_158.html">交换机知识–组播管理 - TP-LINK商用网络</a> ，交换机会侦听主机和路由器之间的 IGMP 报文。</p>
+<blockquote>
+<p>针对组播帧，非管理型交换机均把收到的组播帧广播到其他端口，从而实现转发。</p>
+<p>大部分管理型交换机使用 IGMP 或 <a href="https://zhuanlan.zhihu.com/p/422759225">IGMP Snooping</a> 协议维护组播组，可以实现更好的组播维护机制。 </p>
+</blockquote>
+<blockquote>
+<p>IGMP Snooping 通过侦听和分析三层组播设备与主机之间发送的组播报文来控制这些组播组，有利于抑制二层网络中不必要的组播数据转发，节省网络带宽。</p>
+</blockquote>
+<h2 id="运输层"><a href="#运输层" class="headerlink" title="运输层"></a>运输层</h2><p>UDP 对应用层交下来的报文，既不合并，也不拆分，而是保留这些报文的边界。若报文太长，UDP 把它交给 IP 层后，IP 层在传送时可能要进行分片。</p>
+<p>在接收方的 UDP，对 IP 层交上来的 UDP 用户数据报，在去除首部后就原封不动地交付上层地应用进程。如果发送方报文太长，接收方就需要<strong>粘包</strong>。</p>
+<h2 id="Qt-组播"><a href="#Qt-组播" class="headerlink" title="Qt 组播"></a>Qt 组播</h2><p>Qt 加组 <code>joinMulticastGroup()</code> 什么情况下会失败？</p>
+<ul>
+<li>没有连接交换机/路由器不会失败；</li>
+<li>指定不存在的网卡时，会失败；</li>
+</ul>
+<p>组播发送 IGMP 报文时，如果不指定网卡，则通过哪个接口发送 IGMP 报文和主机路由有关：</p>
+<ul>
+<li>一旦没有使用目标网络的网卡发送报文就会出错，收不到组播数据。</li>
+<li>明确指示通过某个网卡发送或（无法筛选出目标网卡时）所有网卡都发送 IGMP 报文。</li>
+</ul>
+<p>Qt 中通过指定接口加组：<code>bool QUdpSocket::joinMulticastGroup(const QHostAddress &amp;groupAddress, const QNetworkInterface &amp;iface)</code></p>
+<p>可以通过一个 socket 加多个组，IP 组播和端口号无关，但运输层聚合、分发数据时依赖端口号，所以一个 socket 能否绑定 <code>bind()</code> 多个端口？ 或者监听不同端口的多个 socket 使用相同的数据处理函数。</p>
+<p>在网络中实现组播是通过约定，并不存在实体。接收者的角色和服务端类似，绑定端口=发送者的目标端口。</p>
+<p>思考：向某个组发送报文时，能否忽略端口号（接收者不绑定或者绑定任意端口都可以接收组播报文）呢？</p>
+]]></content>
   </entry>
   <entry>
     <title>试验虚拟机安装黑群晖</title>
@@ -6865,6 +7056,82 @@
       </categories>
   </entry>
   <entry>
+    <title>网络协议</title>
+    <url>/2023/03/26/osi/</url>
+    <content><![CDATA[<p><a href="https://zh.wikipedia.org/wiki/TCP/IP%E5%8D%8F%E8%AE%AE%E6%97%8F">互联网协议套件</a></p>
+<p>OSI 七层模型和 TCP/IP 四层模型：</p>
+<ul>
+<li>http、ftp 应用层</li>
+<li>[表示层]</li>
+<li>[会话层]</li>
+<li>tcp/udp 传输层</li>
+<li>ip、icmp 网络层</li>
+<li>ethernet/以太网 数据链路层</li>
+<li>[物理层]</li>
+</ul>
+<a id="more"></a>
+
+<h1 id="tcp"><a href="#tcp" class="headerlink" title="tcp"></a>tcp</h1><p>TCP 三次握手和四次挥手，报文 SYN/ACK ，报文 FIN /ACK </p>
+<p>中间状态切换， timewait 为什么等两个 msl ？  e.g. <code>TIME_WAIT</code> 和 <code>ESTABLISHED</code></p>
+<p>以 tcp 为传输协议设计应用层协议时，要考虑粘包、半包、拆包等问题，参考 http 解决即可。</p>
+<h1 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h1><p>重载 overload 相同签名不同入参，编译期多态/静态多态（模板也是编译期多态的手段）。</p>
+<p>重写/覆写/覆盖 override 继承体系，运行期多态。</p>
+<p>怎么实现多态？虚函数表 + vptr</p>
+<p>空对象的大小？1 个字节。</p>
+<p>子类不重写父类的任何虚函数，子类的 vptr 会和父类的 vptr 指向同一 vftable 吗？ 不会。</p>
+<p>思考：多态解决什么问题？</p>
+<h1 id="内存拷贝"><a href="#内存拷贝" class="headerlink" title="内存拷贝"></a>内存拷贝</h1><p><code>memcpy()</code> 和 <code>memmove()</code> 两者有 <a href="https://www.jianshu.com/p/9c3784d8d8ad">什么区别</a>？</p>
+<h1 id="关联容器"><a href="#关联容器" class="headerlink" title="关联容器"></a>关联容器</h1><p>由浅入深的几个问题：</p>
+<ol>
+<li><p><code>map</code> 和 <code>unordermap</code> 的区别</p>
+</li>
+<li><p><code>unordermap</code> 元素数太多，有什么影响</p>
+</li>
+<li><p><code>map</code> 和 <code>unorder_map</code> 的底层数据结构</p>
+</li>
+<li><p><code>map</code> 红黑树，和平衡二叉树区别</p>
+</li>
+<li><p><code>B+</code> 树</p>
+</li>
+</ol>
+<h1 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h1><p>有状态服务 vs. 无状态服务</p>
+<p><a href="https://www.redhat.com/en/blog/struggling-containerize-stateful-applications-cloud-heres-how">云端有状态应用的容器化</a></p>
+<p>集群化有哪些情况？</p>
+<p>k8s 有状态服务，怎么处理</p>
+<h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><p>怎么设计流媒体？通过思考的过程，验证能否去除流媒体调度服务，能否 k8s 自行扩展？</p>
+<ol>
+<li><p>k8s 按照长连接数目的策略选择实例</p>
+</li>
+<li><p>收到客户请求（入参要有 puid），访问 redis 是否存在 puid，如果不存在：</p>
+<ol>
+<li><p>向设备发出拉流信令</p>
+</li>
+<li><p>将 puid 和 spid 放到 redis 上，设置过期时间，要求服务打卡续命</p>
+</li>
+<li><p>失败或断开时主动从 redis 移除 puid</p>
+</li>
+</ol>
+</li>
+<li><p>如果已经存在：</p>
+<ol>
+<li>将 ……</li>
+</ol>
+</li>
+</ol>
+<h3 id="认真思考"><a href="#认真思考" class="headerlink" title="认真思考"></a>认真思考</h3><p>参照公司梳理主流程的做法，我自己也抽取一套更小的流程（主流程之内或者之外再考虑），保证可测试、可验证，尝试优化、改进。</p>
+<h1 id="异步-IO"><a href="#异步-IO" class="headerlink" title="异步 IO"></a>异步 IO</h1><p>windows 平台的 IOCP</p>
+<p>linux 平台的 libaio </p>
+<blockquote>
+<p>Linux-native asynchronous I/O access library.</p>
+</blockquote>
+<p>POSIX aio 又是什么概念呢</p>
+<p><a href="https://stackoverflow.com/questions/8768083/difference-between-posix-aio-and-libaio-on-linux">Difference between POSIX AIO and libaio on Linux?</a></p>
+]]></content>
+      <categories>
+        <category>network</category>
+      </categories>
+  </entry>
+  <entry>
     <title>传值、传指针和传引用</title>
     <url>/2016/12/05/pass-parameters/</url>
     <content><![CDATA[<p>我们先从最简单的内置类型说起，结合汇编代码说说三者之间的联系和区别；然后我们再讲用户自定义类类型的三种传参方式的优劣。</p>
@@ -6976,82 +7243,6 @@
       <tags>
         <tag>memo</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>网络协议</title>
-    <url>/2023/03/26/osi/</url>
-    <content><![CDATA[<p><a href="https://zh.wikipedia.org/wiki/TCP/IP%E5%8D%8F%E8%AE%AE%E6%97%8F">互联网协议套件</a></p>
-<p>OSI 七层模型和 TCP/IP 四层模型：</p>
-<ul>
-<li>http、ftp 应用层</li>
-<li>[表示层]</li>
-<li>[会话层]</li>
-<li>tcp/udp 传输层</li>
-<li>ip、icmp 网络层</li>
-<li>ethernet/以太网 数据链路层</li>
-<li>[物理层]</li>
-</ul>
-<a id="more"></a>
-
-<h1 id="tcp"><a href="#tcp" class="headerlink" title="tcp"></a>tcp</h1><p>TCP 三次握手和四次挥手，报文 SYN/ACK ，报文 FIN /ACK </p>
-<p>中间状态切换， timewait 为什么等两个 msl ？  e.g. <code>TIME_WAIT</code> 和 <code>ESTABLISHED</code></p>
-<p>以 tcp 为传输协议设计应用层协议时，要考虑粘包、半包、拆包等问题，参考 http 解决即可。</p>
-<h1 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h1><p>重载 overload 相同签名不同入参，编译期多态/静态多态（模板也是编译期多态的手段）。</p>
-<p>重写/覆写/覆盖 override 继承体系，运行期多态。</p>
-<p>怎么实现多态？虚函数表 + vptr</p>
-<p>空对象的大小？1 个字节。</p>
-<p>子类不重写父类的任何虚函数，子类的 vptr 会和父类的 vptr 指向同一 vftable 吗？ 不会。</p>
-<p>思考：多态解决什么问题？</p>
-<h1 id="内存拷贝"><a href="#内存拷贝" class="headerlink" title="内存拷贝"></a>内存拷贝</h1><p><code>memcpy()</code> 和 <code>memmove()</code> 两者有 <a href="https://www.jianshu.com/p/9c3784d8d8ad">什么区别</a>？</p>
-<h1 id="关联容器"><a href="#关联容器" class="headerlink" title="关联容器"></a>关联容器</h1><p>由浅入深的几个问题：</p>
-<ol>
-<li><p><code>map</code> 和 <code>unordermap</code> 的区别</p>
-</li>
-<li><p><code>unordermap</code> 元素数太多，有什么影响</p>
-</li>
-<li><p><code>map</code> 和 <code>unorder_map</code> 的底层数据结构</p>
-</li>
-<li><p><code>map</code> 红黑树，和平衡二叉树区别</p>
-</li>
-<li><p><code>B+</code> 树</p>
-</li>
-</ol>
-<h1 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h1><p>有状态服务 vs. 无状态服务</p>
-<p><a href="https://www.redhat.com/en/blog/struggling-containerize-stateful-applications-cloud-heres-how">云端有状态应用的容器化</a></p>
-<p>集群化有哪些情况？</p>
-<p>k8s 有状态服务，怎么处理</p>
-<h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><p>怎么设计流媒体？通过思考的过程，验证能否去除流媒体调度服务，能否 k8s 自行扩展？</p>
-<ol>
-<li><p>k8s 按照长连接数目的策略选择实例</p>
-</li>
-<li><p>收到客户请求（入参要有 puid），访问 redis 是否存在 puid，如果不存在：</p>
-<ol>
-<li><p>向设备发出拉流信令</p>
-</li>
-<li><p>将 puid 和 spid 放到 redis 上，设置过期时间，要求服务打卡续命</p>
-</li>
-<li><p>失败或断开时主动从 redis 移除 puid</p>
-</li>
-</ol>
-</li>
-<li><p>如果已经存在：</p>
-<ol>
-<li>将 ……</li>
-</ol>
-</li>
-</ol>
-<h3 id="认真思考"><a href="#认真思考" class="headerlink" title="认真思考"></a>认真思考</h3><p>参照公司梳理主流程的做法，我自己也抽取一套更小的流程（主流程之内或者之外再考虑），保证可测试、可验证，尝试优化、改进。</p>
-<h1 id="异步-IO"><a href="#异步-IO" class="headerlink" title="异步 IO"></a>异步 IO</h1><p>windows 平台的 IOCP</p>
-<p>linux 平台的 libaio </p>
-<blockquote>
-<p>Linux-native asynchronous I/O access library.</p>
-</blockquote>
-<p>POSIX aio 又是什么概念呢</p>
-<p><a href="https://stackoverflow.com/questions/8768083/difference-between-posix-aio-and-libaio-on-linux">Difference between POSIX AIO and libaio on Linux?</a></p>
-]]></content>
-      <categories>
-        <category>network</category>
-      </categories>
   </entry>
   <entry>
     <title>复合类型（指针、引用、数组）</title>
@@ -8800,7 +8991,7 @@
 <a id="more"></a>
 
 <h1 id="tools-标签下第一篇"><a href="#tools-标签下第一篇" class="headerlink" title="tools 标签下第一篇"></a>tools 标签下第一篇</h1><p>2016年1月5日 14:34:16</p>
-<p>此目录主要是和工具有关的笔记，重点在于使用工具的经验、教训和心得，是自己实实在在尝试过、折腾过的（比如 <a href="/2017/03/27/VersionControl/">版本控制</a> 这篇单纯罗列的帖子就不应该在此目录下，而应该整理到思维导图中）。<br>另，百度网盘 <a href="mailto:&#x6e;&#x69;&#101;&#108;&#111;&#x6e;&#103;&#x32;&#x30;&#x31;&#x34;&#64;&#x31;&#54;&#x33;&#46;&#x63;&#111;&#x6d;">&#x6e;&#x69;&#101;&#108;&#111;&#x6e;&#103;&#x32;&#x30;&#x31;&#x34;&#64;&#x31;&#54;&#x33;&#46;&#x63;&#111;&#x6d;</a> 中，上传了部分软件工具。</p>
+<p>此目录主要是和工具有关的笔记，重点在于使用工具的经验、教训和心得，是自己实实在在尝试过、折腾过的（比如 <a href="/2017/03/27/VersionControl/">版本控制</a> 这篇单纯罗列的帖子就不应该在此目录下，而应该整理到思维导图中）。<br>另，百度网盘 <a href="mailto:&#110;&#x69;&#101;&#x6c;&#x6f;&#x6e;&#x67;&#50;&#x30;&#49;&#52;&#x40;&#49;&#x36;&#51;&#46;&#99;&#111;&#x6d;">&#110;&#x69;&#101;&#x6c;&#x6f;&#x6e;&#x67;&#50;&#x30;&#49;&#52;&#x40;&#49;&#x36;&#51;&#46;&#99;&#111;&#x6d;</a> 中，上传了部分软件工具。</p>
 <p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/tools/f5cf1fe2-a2b3-45de-95f3-b741994ce323.png" alt="来源：工具（2016-01-05）.mmap"></p>
 <p>附件：<a href="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/tools/%E5%B7%A5%E5%85%B7%EF%BC%882016-01-05%EF%BC%89.mmap">工具（2016-01-05）.mmap</a></p>
 ]]></content>
@@ -9542,37 +9733,6 @@
       </tags>
   </entry>
   <entry>
-    <title>XX 笔记，这些应用怎么用？</title>
-    <url>/2017/04/17/xxnote/</url>
-    <content><![CDATA[<p>2016/1/19 14:35:09</p>
-<p>链接内容可以慢慢看，稍后放链接。重点想说以下观点： </p>
-<blockquote>
-<p>有这样的一个故事：旱鸭子想学游泳，哦，游泳需要游泳衣，游泳还需要游泳帽，游泳还需要潜水镜。然后搜索了各种培训班，还在视频网站上看了各种教学视频，欣赏了奥运冠军的优美泳姿——最终一个夏天过去了，旱鸭子仍然还是旱鸭子。</p>
-</blockquote>
-<a id="more"></a>
-
-<p>很多人在开始一件事之前都会有这样的问题，所以要提醒的是，<strong>不要把手段当成目的</strong>。使用这类工具时，尽管挑好一个就可以，其实使用各种巩固大家的使用方法都是大同小异的，只是根据个人喜好。</p>
-<p>工具综合症和资料收集狂——引以为戒。</p>
-<p>知乎话题：</p>
-<ul>
-<li><a href="https://www.zhihu.com/topic/19831475">Evernote 使用技巧</a></li>
-<li><a href="https://www.zhihu.com/question/20094873">如何协调印象笔记（Evernote）的「标签」和「笔记本」整理笔记？</a></li>
-<li><a href="https://www.zhihu.com/question/20066940">Evernote的tag功能如何使用最有效？</a></li>
-<li>另外，<a href="https://www.zhihu.com/question/21482266">为知笔记（Wiznote）有什么使用心得或技巧？</a></li>
-</ul>
-<p>所以，既然已经在用印象笔记（个人生活）和为知笔记（专业知识），那么以下帖子就不重要了：</p>
-<ul>
-<li><a href="https://www.zhihu.com/question/20784991">Evernote、麦库、有道云笔记、天天记事、为知笔记、易趣记事本哪个好？</a></li>
-<li><a href="https://www.zhihu.com/question/20227618">印象笔记（Evernote）好用吗？</a></li>
-</ul>
-<p>2016/3/23 9:25:04 补充</p>
-<p>这些工具目前的核心定位无外乎在线笔记、知识管理，或者兼而有之。所以掌握在线笔记是怎么回事，知识管理又是什么才是关键。</p>
-]]></content>
-      <categories>
-        <category>tools</category>
-      </categories>
-  </entry>
-  <entry>
     <title>使用 Markdown 注意事项</title>
     <url>/2016/06/13/writing2/</url>
     <content><![CDATA[<p>分为语法和工具两个部分，备忘录。</p>
@@ -9699,6 +9859,37 @@
       <tags>
         <tag>memo</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>XX 笔记，这些应用怎么用？</title>
+    <url>/2017/04/17/xxnote/</url>
+    <content><![CDATA[<p>2016/1/19 14:35:09</p>
+<p>链接内容可以慢慢看，稍后放链接。重点想说以下观点： </p>
+<blockquote>
+<p>有这样的一个故事：旱鸭子想学游泳，哦，游泳需要游泳衣，游泳还需要游泳帽，游泳还需要潜水镜。然后搜索了各种培训班，还在视频网站上看了各种教学视频，欣赏了奥运冠军的优美泳姿——最终一个夏天过去了，旱鸭子仍然还是旱鸭子。</p>
+</blockquote>
+<a id="more"></a>
+
+<p>很多人在开始一件事之前都会有这样的问题，所以要提醒的是，<strong>不要把手段当成目的</strong>。使用这类工具时，尽管挑好一个就可以，其实使用各种巩固大家的使用方法都是大同小异的，只是根据个人喜好。</p>
+<p>工具综合症和资料收集狂——引以为戒。</p>
+<p>知乎话题：</p>
+<ul>
+<li><a href="https://www.zhihu.com/topic/19831475">Evernote 使用技巧</a></li>
+<li><a href="https://www.zhihu.com/question/20094873">如何协调印象笔记（Evernote）的「标签」和「笔记本」整理笔记？</a></li>
+<li><a href="https://www.zhihu.com/question/20066940">Evernote的tag功能如何使用最有效？</a></li>
+<li>另外，<a href="https://www.zhihu.com/question/21482266">为知笔记（Wiznote）有什么使用心得或技巧？</a></li>
+</ul>
+<p>所以，既然已经在用印象笔记（个人生活）和为知笔记（专业知识），那么以下帖子就不重要了：</p>
+<ul>
+<li><a href="https://www.zhihu.com/question/20784991">Evernote、麦库、有道云笔记、天天记事、为知笔记、易趣记事本哪个好？</a></li>
+<li><a href="https://www.zhihu.com/question/20227618">印象笔记（Evernote）好用吗？</a></li>
+</ul>
+<p>2016/3/23 9:25:04 补充</p>
+<p>这些工具目前的核心定位无外乎在线笔记、知识管理，或者兼而有之。所以掌握在线笔记是怎么回事，知识管理又是什么才是关键。</p>
+]]></content>
+      <categories>
+        <category>tools</category>
+      </categories>
   </entry>
   <entry>
     <title>Makefile 入门</title>

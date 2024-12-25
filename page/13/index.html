@@ -196,6 +196,278 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/16/char-wchar-t/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/11/16/char-wchar-t/" class="post-title-link" itemprop="url">字符（串）之间的转换</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-16 13:04:04" itemprop="dateCreated datePublished" datetime="2016-11-16T13:04:04+08:00">2016-11-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>字符串之间的转换分为两类：</p>
+<ol>
+<li>底层字符集之间的转换，表现为 <code>char</code> <code>wchar_t</code> 之间的转换，<code>string</code> <code>wstring</code> 之间的转换；</li>
+<li>在此之上牵扯到 Windows 平台下的各种字符串之间的转换；去伪存真，归根到底还是第一种转换。</li>
+</ol>
+<p>为了“知其然，也要知其所以然”，我们在描述相互转换之前，先介绍一些相关的类型。上层所有的字符串类型归根到底都是对底层 <code>char</code> 或者 <code>wchar_t</code> 类型的封装，如果真有刨根问底的兴趣，就需要了解 <code>char</code> <code>wchar_t</code> 的关联和区别。我们比较熟悉 <code>char</code>，接下来看一下 <code>wchar_t</code>。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/11/16/char-wchar-t/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/08/char-string-CString/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/11/08/char-string-CString/" class="post-title-link" itemprop="url">C、C++ 和 VC++ 中的字符串</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-08 18:01:12" itemprop="dateCreated datePublished" datetime="2016-11-08T18:01:12+08:00">2016-11-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我们先从使用的角度，从最直观的数据类型说起。</p>
+<p>ps 这一篇笔记并不显式地涉及 <code>wchar_t</code>，也不包含字符（串）之间如何转换。更多内容请跳转 <a href="https://tnie.github.io/2016/11/16/char-wchar-t/">字符（串）之间的转换</a></p>
+<h1 id="类型：char-char-string-CString"><a href="#类型：char-char-string-CString" class="headerlink" title="类型：char[]\char*\string\CString"></a>类型：char[]\char*\string\CString</h1><p>转帖来源：<a target="_blank" rel="noopener" href="http://blog.csdn.net/conanswp/article/details/23341901">C++中的字符串</a></p>
+<p>C++支持两种字符串：C风格字符串和string。之所以抛弃char*的字符串而选用C++标准程序库中的string类，是因为它和前者比较起来，不必担心内存是否足够、字符串长度等等，而且作为一个类出现，它集成的操作函数足以完成我们大多数情况下(甚至是100%)的需要。我们可以用 <code>=</code> 进行赋值操作，<code>==</code> 进行比较，<code>+</code> 做串联（是不是很简单:-D）。我们尽可以把它看成是C++的基本数据类型。此外，CString类在MFC中广泛应用，简化了字符串的处理。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/11/08/char-string-CString/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/extern-static-const/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/11/03/extern-static-const/" class="post-title-link" itemprop="url">进一步理解 extern</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-03 16:32:03" itemprop="dateCreated datePublished" datetime="2016-11-03T16:32:03+08:00">2016-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>首先，要区分全局变量和局部变量。</p>
+<h1 id="全局变量和局部变量"><a href="#全局变量和局部变量" class="headerlink" title="全局变量和局部变量"></a>全局变量和局部变量</h1><p>在 C 和 C++ 中，局部变量意义相同；全局变量略有出入。</p>
+<p>在《C++ Primer》中很明确的表示：(p44)</p>
+<blockquote>
+<p>名字 <code>main</code> 定义于所有花括号之外，它和其他大多数定义在函数体之外的名字一样拥有<strong>全局作用域</strong>。一旦声明之后，全局作用域内的名字在<strong>整个程序的范围内</strong>都可使用。</p>
+</blockquote>
+<p>在 <a target="_blank" rel="noopener" href="http://c.biancheng.net/cpp/html/62.html">C语言中文网-C语言局部变量和全局变量</a> 中指出：</p>
+<blockquote>
+<p>在所有函数外部定义的变量称为全局变量（Global Variable），它的作用域是<strong>整个源程序</strong>。</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/11/03/extern-static-const/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/headFirstC-note1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1312,282 +1584,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/typeConversion/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/03/typeConversion/" class="post-title-link" itemprop="url">类型转换</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-11-03 16:08:24" itemprop="dateCreated datePublished" datetime="2016-11-03T16:08:24+08:00">2016-11-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在《Effective C++》条款 27 强调<strong>尽量少做转型动作</strong>，参考此条款中的内容整理笔记。</p>
-<blockquote>
-<p>在 C++ 中转型是一个你会想带着极大尊重去亲近的一个特性。</p>
-</blockquote>
-<p>我们先回顾转型的语法，然后回过头再看怎么赋予类型转型的能力。</p>
-<h1 id="隐式转型"><a href="#隐式转型" class="headerlink" title="隐式转型"></a>隐式转型</h1><p>我们经常接触的隐式转换发生于内置类型中的数值类型之间。但往往因为过于自然，反而忽略了转型动作的存在。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/11/03/typeConversion/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/synchronization-mutex/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/03/synchronization-mutex/" class="post-title-link" itemprop="url">同步与互斥</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-11-03 16:07:30" itemprop="dateCreated datePublished" datetime="2016-11-03T16:07:30+08:00">2016-11-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>由生产者-消费者模式展开，学习其编程的最佳实践，却发现自己不知“信号量”的概念，忘了PV操作，困惑于“使用数组做循环队列时，判断满、空的条件怎么写”，为什么不直接使用 STL 的容器做队列？进出队列是不是严格需要锁？获取队列大小时是不是严格需要锁？</p>
-<h1 id="进程和线程管理"><a href="#进程和线程管理" class="headerlink" title="进程和线程管理"></a>进程和线程管理</h1><p>参考来源：<a target="_blank" rel="noopener" href="http://c.biancheng.net/cpp/html/2589.html">C 语言中文网</a></p>
-<p>进程控制块（PCB）</p>
-<blockquote>
-<p>为了使参与并发执行的程序（含数据）能独立地运行，必须为之配置一个专门的数据结构，称为进程控制块(Process Control Block, PCB)。系统利用PCB来描述进程的基本情况和运行状态，进而控制和管理进程。相应地，由程序段、相关数据段和PCB三部分构成了进程映像（进程实体）。所谓创建进程，实质上是创建进程映像中的PCB；而撤销进程，实质上是撤销进程的PCB。值得注意的是，进程映像是静态的，进程则是动态的。</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/11/03/synchronization-mutex/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/03/RAII/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/03/RAII/" class="post-title-link" itemprop="url">RAII</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-11-03 15:03:38" itemprop="dateCreated datePublished" datetime="2016-11-03T15:03:38+08:00">2016-11-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/cpp-idioms/" itemprop="url" rel="index"><span itemprop="name">cpp-idioms</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在学习 C++ 的时候经常见到“资源获取即初始化”这句话。一直困惑这句话要表达的意思，是强调“资源获取”还是强调“初始化”，字面意思：获得系统资源这个行为就是“初始化”。不理解到底是指什么。</p>
-<h1 id="维基百科怎么说？"><a href="#维基百科怎么说？" class="headerlink" title="维基百科怎么说？"></a>维基百科怎么说？</h1><p>我们看 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/RAII">RAII-Wikipedia</a> 中的叙述：</p>
-<blockquote>
-<p> RAII全称为Resource Acquisition Is Initialization，它是在一些面向对象语言中的一种惯用法。XX 在设计C++异常时，为解决资源管理时的异常安全性而使用了该用法。</p>
-</blockquote>
-<blockquote>
-<p>RAII要求，资源的有效期与持有资源的对象的生命期严格绑定，即由对象的构造函数完成资源的分配(获取)，同时由析构函数完成资源的释放。在这种要求下，只要对象能正确地析构，就不会出现资源泄露问题。</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/11/03/RAII/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1655,7 +1655,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">149</span>
+          <span class="site-state-item-count">152</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

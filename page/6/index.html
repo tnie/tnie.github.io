@@ -196,6 +196,274 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/12/10/vcpkg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/12/10/vcpkg/" class="post-title-link" itemprop="url">vcpkg 包管理器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-12-10 10:04:22" itemprop="dateCreated datePublished" datetime="2018-12-10T10:04:22+08:00">2018-12-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:23:06" itemprop="dateModified" datetime="2023-05-20T12:23:06+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>强调</strong>：安装 IDE 时不要变更默认路径！否则，使用 vcpkg 磨难重重，<a target="_blank" rel="noopener" href="https://github.com/microsoft/vcpkg/issues/12488">vcpkg issue#12488</a>。<del>我安装 Language English 就失败了，后面也就没尝试</del>。</p>
+<p>从 visual studio 2015 的“选项”跳转到的中文网站，选择英文语言包下载到的其实是中文语言包，需要更换到对应的英文网站下载才是正确的。仍旧需要使用默认安装路径！</p>
+<p>网速要好，偶尔也需要翻墙。如果使用系统自带的 powershell 碰到下载失败、下载慢，且版本陈旧。建议下载 powershell core 试一试，可能会有惊喜。 <a target="_blank" rel="noopener" href="https://www.yixuju.cn/other/talking-about-proxy/">在 Windows 终端中设置代理</a> 解决问题：<code>$Env:https_proxy=&quot;http://127.0.0.1:10809&quot;</code></p>
+<p>使用 vcpkg 安装库后，如果较长时间未更新，再次更新时可能报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PS F:\vcpkg&gt; .\vcpkg.exe update</span><br><span class="line">Using local portfile versions. To update the local portfiles, use &#96;git pull&#96;.</span><br><span class="line">Error: while loading boost-signals:</span><br><span class="line">The port directory (F:\vcpkg\ports\boost-signals) does not exist</span><br><span class="line">Error: failed to load port from F:\vcpkg\ports\boost-signals</span><br><span class="line">Note: Updating vcpkg by rerunning bootstrap-vcpkg may resolve this failure.</span><br></pre></td></tr></table></figure>
+<p>此时按照提示重新执行多次 <code>bootstrap-vcpkg</code> 也是无效的，我们需要清理掉过时的库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PS F:\vcpkg&gt; .\vcpkg.exe list boost-signals</span><br><span class="line">boost-signals2:x86-windows-static-md               1.71.0           Boost signals2 module</span><br><span class="line">boost-signals:x86-windows                          1.68.0           Boost signals module</span><br><span class="line">PS F:\vcpkg&gt; .\vcpkg.exe remove boost-signals:x86-windows</span><br><span class="line">The following packages will be removed:</span><br><span class="line">    boost-signals:x86-windows</span><br><span class="line">Removing package boost-signals:x86-windows...</span><br><span class="line">Removing package boost-signals:x86-windows... done</span><br></pre></td></tr></table></figure>
+<p>之后就使用正常了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PS F:\vcpkg&gt; .\vcpkg.exe update</span><br><span class="line">Using local portfile versions. To update the local portfiles, use &#96;git pull&#96;.</span><br><span class="line">The following packages differ from their port versions:</span><br><span class="line">    abseil:x86-windows               2020-03-03-4 -&gt; 2020-09-23#3</span><br><span class="line">    abseil:x86-windows-static-md     2020-03-03-4 -&gt; 2020-09-23#3</span><br><span class="line">    asio:x86-windows                 1.12.2 -&gt; 1.18.0</span><br><span class="line">    asio:x86-windows-static-md       1.12.2-2 -&gt; 1.18.0</span><br><span class="line">    boost-accumulators:x86-windows-static-md 1.71.0 -&gt; 1.75.0</span><br></pre></td></tr></table></figure>
+<p>除特别备注，全部摘自 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/cpp/vcpkg?view=vs-2017">vcpkg: A C++ package manager for Windows, Linux and MacOS</a>。此章节类似读书（博客）笔记。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/12/10/vcpkg/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/12/03/streambuf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/12/03/streambuf/" class="post-title-link" itemprop="url">streambuf</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-12-03 10:05:37" itemprop="dateCreated datePublished" datetime="2018-12-03T10:05:37+08:00">2018-12-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-concept/" itemprop="url" rel="index"><span itemprop="name">cpp-concept</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="streambuf"><a href="#streambuf" class="headerlink" title="streambuf"></a>streambuf</h1><p>中文版 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/io/basic_streambuf">https://zh.cppreference.com/w/cpp/io/basic_streambuf</a>，偶有误差，可参考英文版本纠正。</p>
+<p>英文版 <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/io/basic_streambuf">https://en.cppreference.com/w/cpp/io/basic_streambuf</a></p>
+<p>类 basic_streambuf 控制字符序列的输入与输出。它包含下列内容并提供到它们的访问：</p>
+<ol>
+<li><p>受控字符序列（<em>The controlled character sequence</em>），也称作 <em>buffer</em>，可包括：<em>input sequence</em> (also called <em>get area</em>) 用于缓冲输入操作；以及 <em>output sequence</em> (also called <em>put area</em>) 用于缓冲输出操作。</p>
+</li>
+<li><p>关联字符序列，又称作源（对于输入）或池（对于输出）。它可以是通过 OS API 访问的实体（文件、 TCP 接头、串行端口、其他字符设备），或者可以是能转译成字符源或池的对象（ <code>std::vector</code> 、数组、字符串字面量）</p>
+</li>
+</ol>
+<p>受控制序列中的字符表示和编码可以异于关联序列中的字符表示，该情况下典型地用 <code>std::codecvt</code> 本地环境进行转换。常见的例子是通过 <code>std::wfstream</code> 对象访问 UTF-8 （或其他多字节编码）文件：受控制字符序列由 <code>wchar_t</code> 字符组成，但关联序列由字节组成。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/12/03/streambuf/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/12/03/cmake/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/12/03/cmake/" class="post-title-link" itemprop="url">cmake 备忘</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-12-03 09:59:20" itemprop="dateCreated datePublished" datetime="2018-12-03T09:59:20+08:00">2018-12-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>automake 系列工具友好性的确不咋地，而且只限于 *inux 平台。跨平台还是 cmake 为佳，也有越来越多的项目在使用 cmake，比如 google 的 gRPC，比如 zlib 也支持 cmake。</p>
+<p>如果只是说要编译三方库为自己所用，一般来说不需要掌握怎么编写 <code>CMakeLists.txt</code>；只有当自己的项目需要用 cmake 管理、组织编译时才需要弄懂 <code>CMakeLists.txt</code> 中的“语言”怎么编写。</p>
+<h1 id="使用-cmake"><a href="#使用-cmake" class="headerlink" title="使用 cmake"></a>使用 cmake</h1><pre><code>mkdir build &amp;&amp; cd build &amp;&amp; cmake .. &amp;&amp; cmake --build . --target install</code></pre>
+<p><code>cmake --build .</code> 在 linux 下等价于 <code>make</code>，在 windows 下等同于 msvc 生成解决方案 </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/12/03/cmake/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/09/06/singleton3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -807,304 +1075,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/07/04/socket/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/07/04/socket/" class="post-title-link" itemprop="url">socket 编程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-07-04 16:54:05" itemprop="dateCreated datePublished" datetime="2017-07-04T16:54:05+08:00">2017-07-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>C/C++ 的 socket 编程。开篇</p>
-<ol>
-<li>socket 编程貌似是从 *nix 到的 windows？</li>
-<li>socket 编程源于 C，但 C++ 似乎并没有原生的支持，依旧是 C 语言下的 socket 编程？</li>
-<li>C++ 的网络编程，包含哪些具体的内容？单单是 socket 吗？ socket 编程不应该是更接近 C 语言吗？</li>
-<li></li>
-</ol>
-<p>socket 编程，入门学习非常推荐吴秦的 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/skynet/archive/2010/12/12/1903949.html">Linux Socket编程（不限Linux）</a>。当做学习 socket 编程的第一篇完全足够，甩开网上其他的帖子一万八千里，强烈推荐。本意是整理 socket 的学习笔记，但有上述帖子完全足够，在此只记录一些“边边角角”的零碎知识。</p>
-<p>手册推荐：<a target="_blank" rel="noopener" href="http://beej.us/guide/bgnet/output/html/multipage/index.html">Beej’s Guide to Network Programming</a></p>
-<h1 id="htonl-函数、htons-函数"><a href="#htonl-函数、htons-函数" class="headerlink" title="htonl() 函数、htons() 函数"></a><code>htonl()</code> 函数、<code>htons()</code> 函数</h1><p>在吴秦的博客里重点强调了主机字节序（host byte order）与网络字节序（network byte order）的，上述两个函数就是用来实现两者之间的转换的。参考 <a target="_blank" rel="noopener" href="http://beej.us/guide/bgnet/output/html/multipage/htonsman.html">Beej’s Guide to Network Programming</a> 我们能够找到以下函数原型：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">uint32_t</span> <span class="title">htonl</span><span class="params">(<span class="keyword">uint32_t</span> hostlong)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">uint16_t</span> <span class="title">htons</span><span class="params">(<span class="keyword">uint16_t</span> hostshort)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">uint32_t</span> <span class="title">ntohl</span><span class="params">(<span class="keyword">uint32_t</span> netlong)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">uint16_t</span> <span class="title">ntohs</span><span class="params">(<span class="keyword">uint16_t</span> netshort)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>不需要死记硬背，函数的命名通俗易懂。强调一下，转换 ip 地址使用长整型转换函数，转换 port 使用短整型转换函数。我在码代码学习时，误用 <code>htonl(6666)；</code> 转换端口编译通过，运行时也不报错，启动多个服务程序也不报错 ps 正常情况重复启动服务程序时会报错“端口已经占用”。</p>
-<h2 id="INADDR-ANY-宏"><a href="#INADDR-ANY-宏" class="headerlink" title="INADDR_ANY 宏"></a><code>INADDR_ANY</code> 宏</h2><p>详细解释参考 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/16508685/understanding-inaddr-any-for-socket-programming-c">understanding INADDR_ANY for socket programming - c</a>。在此只强调一点，<code>INADDR_ANY</code> 表示的是一个服务器上所有的网卡。</p>
-<h1 id="inet-pton-函数"><a href="#inet-pton-函数" class="headerlink" title="inet_pton() 函数"></a><code>inet_pton()</code> 函数</h1><p>IP地址转换函数，可以在将 IP 地址在“点分十进制”和“二进制整数”之间转换。在 <a target="_blank" rel="noopener" href="http://beej.us/guide/bgnet/output/html/multipage/inet_ntopman.html">Beej’s Guide to Network Programming</a> 我们找到的描述以及函数原型：</p>
-<blockquote>
-<p>Convert IP addresses to human-readable form and back.</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">char</span> *<span class="title">inet_ntop</span><span class="params">(<span class="keyword">int</span> af, <span class="keyword">const</span> <span class="keyword">void</span> *src,</span></span></span><br><span class="line"><span class="function"><span class="params">                      <span class="keyword">char</span> *dst, <span class="keyword">socklen_t</span> size)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">inet_pton</span><span class="params">(<span class="keyword">int</span> af, <span class="keyword">const</span> <span class="keyword">char</span> *src, <span class="keyword">void</span> *dst)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>强调一点，<code>inet_pton()</code> 同样支持 “localhost”。</p>
-<h1 id="inet-addr-函数"><a href="#inet-addr-函数" class="headerlink" title="inet_addr() 函数"></a><del><code>inet_addr()</code> 函数</del></h1><blockquote>
-<p>Convert IP addresses from a dots-and-number string to a <code>struct in_addr</code> and back</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ALL THESE ARE DEPRECATED!  Use inet_pton()  or inet_ntop() instead!!</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">inet_ntoa</span><span class="params">(struct in_addr in)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">inet_aton</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *cp, struct in_addr *inp)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">in_addr_t</span> <span class="title">inet_addr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *cp)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>我们可以看到其中的注释，这三个函数即将淘汰。</p>
-<h1 id="学习-libevent"><a href="#学习-libevent" class="headerlink" title="学习 libevent"></a>学习 libevent</h1><h2 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h2><ol>
-<li><p><code>select()</code> 函数第一个参数为什么要 <code>maxfd+1</code>？不理解 <a target="_blank" rel="noopener" href="http://www.wangafu.net/~nickm/libevent-book/01_intro.html">官方手册</a> 中讲述 <code>select()</code> 低效的这段话：</p>
-<blockquote>
-<p>On the userspace side, …But on the kernel side,…</p>
-</blockquote>
-</li>
-<li><p>为什么在 Example: select()-based ROT13 server 中需要 <code>make_nonblocking()</code> ？为什么 Example: A low-level ROT13 server with Libevent 中需要 <code>evutil_make_socket_nonblocking()</code>？</p>
-</li>
-<li><p><code>setvbuf(stdout, NULL, _IONBF, 0);</code> 的意义？</p>
-</li>
-</ol>
-<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><p>最初步的认识，最简单的例子：<a target="_blank" rel="noopener" href="http://hahaya.github.io/hello-in-libevent/">使用libevent输出Hello</a></p>
-<blockquote>
-<p>（niel）这里只提到了 <code>strcut event_base</code>、<code>struct event</code>。给出的简单示例代码里，有一处瑕疵： <code>event_base_set()</code> 函数属于过时的函数，在 2.0 之前的版本中配合 <code>event_set()</code> 使用，在 2.0 及其之后的版本中这两者被  <code>event_new()</code> 替代，所以作者混用 <code>event_new()</code> + <code>event_base_set()</code> 表明了作者并未多花时间学习。</p>
-</blockquote>
-<p>接下来，我们可以学习一下：<a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_9db214690101cet0.html">libevent入门教程：Echo Server based on libevent </a></p>
-<blockquote>
-<p>（niel）这篇博客循序渐进，讲到了 <code>strcut buffevent</code> 及其相关操作。美中不足的是作者在介绍过程中穿插记录了自己的疑惑，新手读起来打破了学习的连贯性，本就在学习新知识，却也要困于作者的“泥潭”。只能说这真的只是作者的学习笔记，并未从读者的角度做考虑。总的来说，帖子很不错！初次学习时，这些问题的存在让人很难受，影响学习进度、学习动力；但熟悉作者讲的知识之后，这些问题反而才是“金子”，认真思考这些问题。</p>
-</blockquote>
-<p>接下来推荐的学习资源就是官方手册了：<a target="_blank" rel="noopener" href="http://www.wangafu.net/~nickm/libevent-book/">Programming with Libevent</a></p>
-<blockquote>
-<p>（niel）虽然是用英文写的，但阅读起来毫无障碍，很容易理解。marks  C0、C1、R0 ~ R4、R8 认真阅读；R5、R6 重点关注了小部分函数，其余走马观花浏览了一下；R6a、R7、R9 三节没有看。开发过程中，查阅函数原型肯定是得翻这个手册的！</p>
-</blockquote>
-<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000005594871">Libevent 官方文档学习笔记</a>，这篇帖子可以看一看，和自己读英文手册理解的相互佐证。</p>
-<p><a target="_blank" rel="noopener" href="https://taozj.org/201605/learn-note-of-libevent-(1)-basic-usage.html">Libevent学习笔记（一）：基本使用</a>，检验自己的学习成果。</p>
-<blockquote>
-<p>总的来说，后面这两篇帖子并不适合用来学习。更多的定位于作者知识的整理，并不是面向新手的入门介绍。</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/27/automake2nd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/27/automake2nd/" class="post-title-link" itemprop="url">Automake 之 Flat 目录机构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-27 16:45:13" itemprop="dateCreated datePublished" datetime="2017-04-27T16:45:13+08:00">2017-04-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2015年12月24日 19:01:26</p>
-<p>这个其实是个子篇。整体见 <a href="/2017/04/27/automake1st/">Makefile 自动生成</a></p>
-<p>在进入正文之前先通过下图对操作步骤及其中的依赖关系有个大致的概念，理解起来更容易：</p>
-<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/automake1st/1.png" alt="流程图"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/27/automake2nd/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/27/automake1st/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/27/automake1st/" class="post-title-link" itemprop="url">Makefile 自动生成 - 三种目录结构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-27 16:45:04" itemprop="dateCreated datePublished" datetime="2017-04-27T16:45:04+08:00">2017-04-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2015年12月22日 14:48:52</p>
-<p>这个标题《Makefile 自动生成》 8 号立的，拖到今天刚好两周。ps 2017/8/24 14:04:25 删改了 2/3 的内容，改为现在的标题。</p>
-<p>一方面因为最近在忙别的工作，整理数据库表结构的；另一方面，是直到今天，对于自动生成 Makefile 操作依旧懵懵懂懂，在实际项目中无法使用，还是自己手动写 Makefile 文件。下面进入主题。</p>
-<p>Makefile 自动生成，实际项目中接触到的工具有：easymake、cmake 和 autotools。 在这里只整理 autotools。</p>
-<ul>
-<li>easymake 怎么用，给个简单使用的参考，进一步的细节和更深程度上的使用，以后用到了再学。<a target="_blank" rel="noopener" href="http://www.cnblogs.com/Pony279/p/3888774.html">通用的 makefile 小工具分享 - Easymake 使用说明</a>。</li>
-<li>cmake 又是值得大书特书的一款工具。<a target="_blank" rel="noopener" href="http://www.hahack.com/codes/cmake/">CMake 入门实战</a></li>
-</ul>
-<p>autotools 作为重点学习，所以发现了很多篇不错的帖子。</p>
-<ol>
-<li><a href="/2017/08/24/autotools/">编译利器：大型项目如何使用Automake和Autoconf完成编译配置(ver+0.6)</a> 内容很棒，却找不到好的排版，将其摘入自己博客</li>
-<li><a target="_blank" rel="noopener" href="http://www.pchou.info/linux/2016/09/16/gnu-build-system-1.html">概念：GNU构建系统和Autotool</a>、<a target="_blank" rel="noopener" href="http://www.pchou.info/linux/2016/09/24/gnu-build-system-2.html">实践：GNU构建系统</a> 作者整理的真心不错，专业功底、语言描述、文章结构都很赞；</li>
-<li><a target="_blank" rel="noopener" href="https://geesun.github.io/posts/2015/02/autotool.html">使用autotools生成Makefile学习笔记</a> 不能当做一篇学习的帖子，其“常用功能分析”一节可以作为参考手册，认清知识点</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/27/automake1st/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1172,7 +1146,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">149</span>
+          <span class="site-state-item-count">152</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

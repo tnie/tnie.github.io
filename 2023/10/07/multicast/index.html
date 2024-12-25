@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="摘抄自《计算机网络（第7版）-谢希仁》教材，读书笔记。 OSI 的七层协议体系结构的概念清楚，理论也较完整，但它既复杂又不实用。 TCP&#x2F;IP 的体系结构则不同，但它现在却得到了非常广泛的应用。TCP&#x2F;IP 是一个四层的体系结构，它包含应用层、运输层、网际层和网络接口层（用网际层这个名字是强调这一层是为了解决不同网络的互连问题）。不过从实质上将，TCP&#x2F;IP 只有最上面的三层，因为最下面的网络接口">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多播">
+<meta property="og:url" content="https://tnie.github.io/2023/10/07/multicast/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="摘抄自《计算机网络（第7版）-谢希仁》教材，读书笔记。 OSI 的七层协议体系结构的概念清楚，理论也较完整，但它既复杂又不实用。 TCP&#x2F;IP 的体系结构则不同，但它现在却得到了非常广泛的应用。TCP&#x2F;IP 是一个四层的体系结构，它包含应用层、运输层、网际层和网络接口层（用网际层这个名字是强调这一层是为了解决不同网络的互连问题）。不过从实质上将，TCP&#x2F;IP 只有最上面的三层，因为最下面的网络接口">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-10-07T10:25:00.000Z">
+<meta property="article:modified_time" content="2024-12-25T14:19:42.757Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2023/10/07/multicast/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>多播 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/10/07/multicast/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          多播
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-07 18:25:00" itemprop="dateCreated datePublished" datetime="2023-10-07T18:25:00+08:00">2023-10-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 22:19:42" itemprop="dateModified" datetime="2024-12-25T22:19:42+08:00">2024-12-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>摘抄自《计算机网络（第7版）-谢希仁》教材，读书笔记。</p>
+<p>OSI 的七层协议体系结构的概念清楚，理论也较完整，但它既复杂又不实用。</p>
+<p>TCP/IP 的体系结构则不同，但它现在却得到了非常广泛的应用。TCP/IP 是一个四层的体系结构，它包含应用层、运输层、网际层和网络接口层（用<strong>网际层</strong>这个名字是强调这一层是为了<strong>解决不同网络的互连问题</strong>）。不过从实质上将，TCP/IP 只有最上面的三层，因为最下面的网络接口层并没有什么具体内容。</p>
+<p>互联网是由大量的<strong>异构</strong>(heterogeneous)网络通过<strong>路由器</strong>(router)相互连接起来的。互联网使用的网络层协议是无连接的网际协议 IP(Internet Protocol) 和许多种路由选择协议，因此互联网的网络层也叫做网际层或 IP 层。</p>
+<h2 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h2><p>局域网虽然是个网络，但我们并不把局域网放在网络层中讨论。这是因为在网络层要讨论的问题是多个网络互联的问题，是讨论分组（packet）怎样从一个网络，通过路由器，转发到另一个网络。在本章中我们研究的是在同一个局域网中，分组（packet）怎样从一台主机传送到另一台主机，但并不经过路由器转发。从整个互联网来看，局域网仍属于数据链路层的范围。</p>
+<p>packet 小包裹、信息包，在教材中一般翻译为“分组”，但“分组”在日常对话中多理解成动词，给读者造成困扰。分组：</p>
+<a id="more"></a>
+
+<ol>
+<li>网络专有名词。大多数计算机网络都不能连续地传送任意长的数据，所以实际上网络系统把数据分割成小块，然后逐块地发送，这种小块就称作分组（packet）。也有些书籍把分组定义为网络层的协议数据单元。</li>
+<li>动词。把一堆人或物划分成几组人或物。</li>
+</ol>
+<p>链路层使用的信道主要有两种类型：1）点对点信道 2）广播信道。局域网使用的是广播信道。</p>
+<p>对于点对点的链路，点对点协议 PPP 则是目前使用得最广泛的数据链路层协议。 PPP 协议就是用户计算机和 ISP 网络服务提供商进行通信时所使用的数据链路层协议（计算机还未获取到 IP 地址，不可能使用 IP 协议/网络层）。</p>
+<p><strong>Ethernet 以太网</strong>已经在局域网市场占据了绝对优势。现在以太网几乎成为了局域网的同义词。</p>
+<p>48 位的 MAC 地址中存在 2 个特殊位分别指示：0单个站地址/1组地址，全球管理/本地管理。</p>
+<p>发往本站的 MAC 帧包括三种帧：单播帧、广播帧、多播帧。以太网适配器的混杂模式，不再过滤 MAC 帧，“窃听”发往本站、其他站的所有帧。</p>
+<p>交换式集线器（switching hub）通常称为以太网交换机（switch）或第二层交换机（L2 switch），强调这种交换机工作在数据链路层。</p>
+<p>利用以太网交换机可以很方便地实现虚拟局域网 VLAN（Virtual LAN）。插入 VLAN 标记得出的帧称为802.1Q 帧。</p>
+<p>现在以太网的工作范围已经从局域网扩大到城域网和广域网，从而实现了端到端的以太网传输。</p>
+<h2 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h2><p>由于传输网络不提供端到端的可靠传输服务，这就使网络中的路由器比较简单。如果主机中的进程之间的通信需要是可靠的，那么就由网络的<strong>主机中的运输层</strong>负责（包括差错处理、流量控制等）。</p>
+<p>IP 地址的编址方法共经过三个历史阶段：</p>
+<ol>
+<li>分类的 IP 地址</li>
+<li>子网的划分</li>
+<li>无分类编址 CIDR （构成超网）</li>
+</ol>
+<p><code>IP 地址 ::= &#123;&lt;网络号&gt;, &lt;主机号&gt;&#125;</code>  具有不同网络号的局域网必须使用路由器进行互连。</p>
+<p>近年来已经广泛使用无分类 IP 地址进行路由选择，A 类、B 类和 C 类地址的区分已经成为历史。</p>
+<p>主机和路由器都是使用<strong>路由表</strong> 判断直接交付还是间接交付。</p>
+<p><code>IP 地址 ::= &#123;&lt;网络号&gt;, &lt;子网号&gt;, &lt;主机号&gt;&#125;</code> 划分子网只是把 IP 地址的主机号这部分进行再划分，而不改变 IP 地址原来的网络号。</p>
+<p><code>IP 地址 ::= &#123;&lt;网络前缀&gt;, &lt;主机号&gt;&#125;</code>  CIDR 消除了传统的 A 类、B 类和 C 类地址以及划分子网的概念。</p>
+<p>P145 地址聚合和最长前缀匹配</p>
+<h3 id="路由选择协议"><a href="#路由选择协议" class="headerlink" title="路由选择协议"></a>路由选择协议</h3><p>= 路由表中的路由是怎么得出的。</p>
+<p>在目前的互联网中，一个大的 ISP 就是一个自治系统。这样，互联网就把路由选择协议划分为两大类，即：</p>
+<ul>
+<li>内部网关协议 IGP (Interior Gateway Protocol)：而在自治系统内部的路由选择叫做域内路由选择。 =内部路由器协议 IRP</li>
+<li>外部网关协议 EGP (External Gateway Protol)：自治系统之间的路由选择也叫做域间路由选择。 = 外部路由器协议 ERP</li>
+</ul>
+<h3 id="多播-P176"><a href="#多播-P176" class="headerlink" title="多播 P176"></a>多播 P176</h3><p><strong>IP 多播</strong>是需要在互联网上增加更多的智能才能提供的一种服务。当分组（packet）到达目的局域网时，由于局域网具有<strong>硬件多播</strong>功能，因此不需要复制分组，在局域网上的多播组成员都能收到这个视频分组。</p>
+<pre><code>硬件多播，是不是就是 VLAN 虚拟局域网广播的能力？ 但 VLAN 的实现并未用到 MAC 的多播地址。 但在当前章节讲解硬件多播时是使用了 MAC 的多播地址的。</code></pre>
+<p>在互联网范围的多播要靠路由器来实现，这些路由器需要增加一些能够识别多播数据报的软件。能够运行多播协议的路由器称为<strong>多播路由器</strong>。</p>
+<p>P179 IANA 拥有的以太网多播地址的范围，是怎么得出的？以太网的多播地址怎么使用实现多播的？</p>
+<p>IP 多播需要两种协议：仅有 IGMP 协议（网际组管理协议）是不能完成多播任务的，还需要<strong>多播路由选择协议</strong>。但多播路由选择协议则尚未标准化。</p>
+<p>收消息需要加组：主机向多播路由器发送加组报文，多播路由器把这种组成员关系转发给互联网上的其他多播路由器。</p>
+<p><strong>发消息不需要加组</strong>：任何进程可以在任何时候向任何一个多播组发送多播数据报，这个进程并不需要加入这个多播组。</p>
+<ul>
+<li>多次加组有什么影响？每秒一次的重复加组算得上广播风暴吗？会引起网络拥塞吗？</li>
+<li>加组为什么还需要端口？</li>
+<li>编码时如何判断加组是否成功？判断 IGMP 是否发给了路由器吗？</li>
+<li>广播风暴</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://smb.tp-link.com.cn/service/detail_article_158.html">交换机知识–组播管理 - TP-LINK商用网络</a> ，交换机会侦听主机和路由器之间的 IGMP 报文。</p>
+<blockquote>
+<p>针对组播帧，非管理型交换机均把收到的组播帧广播到其他端口，从而实现转发。</p>
+<p>大部分管理型交换机使用 IGMP 或 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/422759225">IGMP Snooping</a> 协议维护组播组，可以实现更好的组播维护机制。 </p>
+</blockquote>
+<blockquote>
+<p>IGMP Snooping 通过侦听和分析三层组播设备与主机之间发送的组播报文来控制这些组播组，有利于抑制二层网络中不必要的组播数据转发，节省网络带宽。</p>
+</blockquote>
+<h2 id="运输层"><a href="#运输层" class="headerlink" title="运输层"></a>运输层</h2><p>UDP 对应用层交下来的报文，既不合并，也不拆分，而是保留这些报文的边界。若报文太长，UDP 把它交给 IP 层后，IP 层在传送时可能要进行分片。</p>
+<p>在接收方的 UDP，对 IP 层交上来的 UDP 用户数据报，在去除首部后就原封不动地交付上层地应用进程。如果发送方报文太长，接收方就需要<strong>粘包</strong>。</p>
+<h2 id="Qt-组播"><a href="#Qt-组播" class="headerlink" title="Qt 组播"></a>Qt 组播</h2><p>Qt 加组 <code>joinMulticastGroup()</code> 什么情况下会失败？</p>
+<ul>
+<li>没有连接交换机/路由器不会失败；</li>
+<li>指定不存在的网卡时，会失败；</li>
+</ul>
+<p>组播发送 IGMP 报文时，如果不指定网卡，则通过哪个接口发送 IGMP 报文和主机路由有关：</p>
+<ul>
+<li>一旦没有使用目标网络的网卡发送报文就会出错，收不到组播数据。</li>
+<li>明确指示通过某个网卡发送或（无法筛选出目标网卡时）所有网卡都发送 IGMP 报文。</li>
+</ul>
+<p>Qt 中通过指定接口加组：<code>bool QUdpSocket::joinMulticastGroup(const QHostAddress &amp;groupAddress, const QNetworkInterface &amp;iface)</code></p>
+<p>可以通过一个 socket 加多个组，IP 组播和端口号无关，但运输层聚合、分发数据时依赖端口号，所以一个 socket 能否绑定 <code>bind()</code> 多个端口？ 或者监听不同端口的多个 socket 使用相同的数据处理函数。</p>
+<p>在网络中实现组播是通过约定，并不存在实体。接收者的角色和服务端类似，绑定端口=发送者的目标端口。</p>
+<p>思考：向某个组发送报文时，能否忽略端口号（接收者不绑定或者绑定任意端口都可以接收组播报文）呢？</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/05/30/createProcess/" rel="prev" title="在 Windows 下启动外部程序">
+      <i class="fa fa-chevron-left"></i> 在 Windows 下启动外部程序
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/11/04/FTP/" rel="next" title="FTP">
+      FTP <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-number">1.</span> <span class="nav-text">链路层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-number">2.</span> <span class="nav-text">网络层</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.1.</span> <span class="nav-text">路由选择协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%92%AD-P176"><span class="nav-number">2.2.</span> <span class="nav-text">多播 P176</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%BE%93%E5%B1%82"><span class="nav-number">3.</span> <span class="nav-text">运输层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Qt-%E7%BB%84%E6%92%AD"><span class="nav-number">4.</span> <span class="nav-text">Qt 组播</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">152</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
