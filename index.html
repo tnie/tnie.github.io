@@ -196,6 +196,75 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2025/01/13/compileQtBase/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/01/13/compileQtBase/" class="post-title-link" itemprop="url">从源码构建 Qt</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-01-13 19:37:10 / 修改时间：21:03:13" itemprop="dateCreated datePublished" datetime="2025-01-13T19:37:10+08:00">2025-01-13</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>不建议从源码构建！除非你没 <a href="../../../2024/11/16/installQt/">其他办法</a> 了</p>
+<p>构建费事费力，需要踩过很多坑才能得到一个勉强能用的版本。</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://doc.qt.io/qt-5/windows-requirements.html#building-from-source">Building from Source</a> ，需要 Perl / Python / MSVC ，其他章节跳过不用看</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://doc.qt.io/qt-5/windows-building.html">Qt for Windows - Building from Source</a> ，5 个步骤：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/01/13/compileQtBase/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2024/12/21/QUdpSocket/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -986,102 +1055,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/05/30/createProcess/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/05/30/createProcess/" class="post-title-link" itemprop="url">在 Windows 下启动外部程序</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-05-30 17:26:04" itemprop="dateCreated datePublished" datetime="2023-05-30T17:26:04+08:00">2023-05-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-27 22:25:37" itemprop="dateModified" datetime="2024-04-27T22:25:37+08:00">2024-04-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Managing C++ libs with CMake ExternalProject and Git</p>
-<blockquote>
-<p>CMake has a functionality called ExternalProject_add, which can use, to automatically check out a git repository, and build that as part of the normal build process.</p>
-<p>Of course, the same functionality would be possible with <em>git submodules</em>, but honestly, I always found this part of git rather cumbersome, and unnecessarily complex, for what I want to do.</p>
-</blockquote>
-<p>Git 子模块</p>
-<h1 id="启动外部程序"><a href="#启动外部程序" class="headerlink" title="启动外部程序"></a>启动外部程序</h1><p>在 windows 下如何使用 C++ 语言启动外部程序？</p>
-<h2 id="函数-system"><a href="#函数-system" class="headerlink" title="函数 system()"></a>函数 system()</h2><p>使用 CMD.exe 命令行窗口解释输入的字符串命令，引用来自 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/system-wsystem?view=msvc-170">system, _wsystem</a></p>
-<blockquote>
-<p>The <code>system</code> function passes <code>command</code> to the command interpreter, which executes the string as an operating-system command.</p>
-<p><code>system</code> uses the <code>COMSPEC</code> and <code>PATH</code> environment variables to locate the command-interpreter file CMD.exe.</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/05/30/createProcess/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1153,7 +1126,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">152</span>
+          <span class="site-state-item-count">153</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1201,7 +1174,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2024</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -196,6 +196,133 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/02/netAndvs-setup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/11/02/netAndvs-setup/" class="post-title-link" itemprop="url">微软和 Visual C++</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-02 11:31:46" itemprop="dateCreated datePublished" datetime="2016-11-02T11:31:46+08:00">2016-11-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>微软、Visual Studio 和 Visual C++ 那些事……</p>
+<h1 id="NET-框架"><a href="#NET-框架" class="headerlink" title=".NET 框架"></a>.NET 框架</h1><p>.NET 框架（.NET Framework）的 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/.NET%E6%A1%86%E6%9E%B6">维基百科</a> 中有很详细的阐述，其中的 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/File:DotNet.svg">组件堆栈图</a> 一目了然，对于 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/.NET%E6%A1%86%E6%9E%B6#.NET_vs._Java_EE">.NET vs. Java EE</a> 和 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/.NET%E6%A1%86%E6%9E%B6#.NET_vs._COM">.NET vs. COM</a> 的介绍也言简意赅。以下摘取几句，做笔记。</p>
+<blockquote>
+<p>.NET框架是以一种采用系统虚拟机运行的编程平台，以通用语言运行库（Common Language Runtime）为基础，支持多种语言（C#、F#、VB.NET、C++、Python等）的开发。</p>
+<p>通用中间语言被设计来<strong>即时编译（JIT）</strong>，而Java的字节码在最初的时候则是设计成用于<strong>解释运行</strong>，而非即时编译。</p>
+<p>前一版软件组件技术由Microsoft所提出的COM，该技术被用来创建大型（large-scale）的软件系统上，使用COM+ 或MTS对于传统分布式组件有强化的作用。很明显的，Microsoft最终将以.NET全面替换COM成为软件组件的架构。</p>
+</blockquote>
+<h2 id="NET-的语言"><a href="#NET-的语言" class="headerlink" title=".NET 的语言"></a>.NET 的语言</h2><blockquote>
+<p>CLI是一套运作环境规范，包括一般系统、基础类库和与机器无关的中间代码，全称为Common Language Infrastructure。如果一种语言实现生成了CLI，它也可以通过使用CLR被调用，这样它就可以与任何其他.NET语言生成的数据相交互。CLR也被设计为操作系统无关性。</p>
+<p>CLI被设计成支持任何面向对象的编程语言，分享共同对象模型与大型共同类库。</p>
+</blockquote>
+<blockquote>
+<p>大部分的语言都做了重大改变以搭配.NET框架。厂商通常利用这个机会来同时改变语言的其他特性。</p>
+</blockquote>
+<ol>
+<li><p>C#，一个以C++和Java语法为基础开发的一个全新的面向对象语言，是.NET开发的首选语言。</p>
+<p> 我们圈外人以为做 C# 的就是 .NET，其实前者只是后者的官方开发语言。</p>
+</li>
+<li><p>Visual Basic .NET，一个加强了面向对象支持的，支持多线程的Visual Basic版本。</p>
+<p> VB .NET 和 VB 不同。</p>
+</li>
+<li><p>C++/CLI，一个C++的.NET平台版本变种。</p>
+<p> 接下来我们就说说这个。</p>
+</li>
+</ol>
+<h1 id="托管-C-和-C-CLI"><a href="#托管-C-和-C-CLI" class="headerlink" title="托管 C++ 和 C++/CLI"></a>托管 C++ 和 C++/CLI</h1><blockquote>
+<p>托管C++并非独立存在的编程语言，而仅仅是微软对C++的一个<strong>语法扩展</strong>，允许C++程序员在.NET框架和CLR的基础上进行托管编程。</p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C%2B%2B%E6%89%98%E7%AE%A1%E6%89%A9%E5%B1%95">C++ 托管扩展</a>（Managed Extensions for C++，也经常被称为“托管 C++”）自Visual C++ 2005起被正在标准化的C++/CLI所替换。</p>
+</blockquote>
+<blockquote>
+<p>目前只有托管C++及其后继者C++/CLI可以做到无缝集成托管和非托管代码，在托管代码中调用COM的速度又相当慢（所以用非托管代码调用咯），所以经常被用于其他语言和非托管代码之间的桥梁。</p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C%2B%2B/CLI">C++/CLI</a>（CLI: Common Language Infrastructure）在计算机语言中是一门由微软设计，用来代替C++托管扩展（Managed C++，下文使用MC++指代）的语言。这门语言在兼容原有的C++标准的同时，重新简化了托管代码扩展的语法，提供了更好的代码可读性。</p>
+</blockquote>
+<h1 id="托管代码和本地代码"><a href="#托管代码和本地代码" class="headerlink" title="托管代码和本地代码"></a>托管代码和本地代码</h1><p>在维基百科 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8F%97%E6%8E%A7%E4%BB%A3%E7%A2%BC">托管代码</a> 的词条中提及托管代码的运行：</p>
+<blockquote>
+<p>运行代码时，运行库编译器（runtime-aware compiler）在受控运行环境下，将中间语言（Intermediate Language）编译成本机的机器码。<strong>受控运行环境</strong>可为代码插入垃圾回收、异常处理、类型安全、数组边界和索引检查等，以保证代码安全的运行。</p>
+</blockquote>
+<p>另有 <a target="_blank" rel="noopener" href="http://blog.csdn.net/suhuaiqiang_janlay/article/details/6004909">博客</a> 介绍的很好。</p>
+<blockquote>
+<p>Visual Basic .NET和C#只能产生托管代码。如果你用这类语言写程序，那么所产生的代码就是托管代码。如果你愿意，Visual C++ .NET可以生成托管代码。当你创建一个项目的时候，选择名字是以.Managed开头的项目类型。例如.Managed C++ application。</p>
+<p>跟Visual Studio平台的其他编程语言不一样，Visual C++可以创建非托管程序。当你创建一个项目，并且选择名字以M FC，ATL或者Win32开头的项目类型，那么这个项目所产生的就是非托管程序。</p>
+</blockquote>
+<p>托管代码和非托管代码性能的比较：理解这个问题的关键在于对“即时编译器”和“解释器”是否有正确的认识。</p>
+<blockquote>
+<p>.Net程序被加载入内存以后，当某段IL代码被第一次运行的时候，JIT编译器就会将这段IL代码，全部编译成本地代码，然后再执行。这也就是为什么.NET程序第一次运行都启动很慢的原因！ 随.NET库，微软还附带了一个工具，可以事先将.NET程序所有的IL代码都编译成本地代码并保存在缓存区中，这样一来，这个程序就跟c++编译的一模一样了，没有任何区别，运行时也可以脱离JIT了（这里不要混淆了，这里不是说可以脱离.NET库，而是说不需要在进行即时编译这个过程了）。</p>
+<p>所以，请不要将.NET和Java混为一谈，两个的运行效率根本不是一个等级的！</p>
+</blockquote>
+<h1 id="打包工具"><a href="#打包工具" class="headerlink" title="打包工具"></a>打包工具</h1><p>我们在 VS2010 中更习惯使用 Visual Studio Installer 打包项目，进行安装和部署。但不知什么原因（目前我还不知道，也没有在网上认真找过 <a target="_blank" rel="noopener" href="https://blogs.msdn.microsoft.com/buckh/2011/03/17/visual-studio-setup-projects-vdproj-will-not-ship-with-future-versions-of-vs/">资料</a>），微软放弃了自家的这款工具，在 VS2012 中不再有，而只能用 InstallShield Limited Edition，同时更新过 VS2010 的朋友也会发现在“安装和部署”下除了原有的 Visual Studio Installer，也增加了 InstallShield LE 项目，看来微软是铁了心放弃 VS Installer 了，那我们也没有坚守的必要了。除非公司跟不上时代，否则还是早放弃的好。</p>
+<p>在 stackoverflow 上 <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/12378125/create-msi-or-setup-project-with-visual-studio-2012">Create MSI or setup project with Visual Studio 2012</a> 说了同一件事情。好在 InstallShield LE 太难用，最关键的是在对 ActiveX 控件、Windows services的支持上有 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/asxinyu/p/3306992.html">硬伤</a>，事情出现 <a target="_blank" rel="noopener" href="https://blogs.msdn.microsoft.com/bharry/2014/04/18/creating-installers-with-visual-studio/">转机</a>，Visual Studio Installer 通过扩展的形式重新回到 VS 中，不过貌似只有 VS2013 和 2015 版本，但也足够了，你说呢？你要是死磕 VS2012，何必呢</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=UnniRavindranathan-MSFT.MicrosoftVisualStudio2013InstallerProjects">Microsoft Visual Studio 2013 Installer Projects </a></li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.MicrosoftVisualStudio2015InstallerProjects">Microsoft Visual Studio 2015 Installer Projects </a></li>
+</ul>
+<h1 id="预编译头"><a href="#预编译头" class="headerlink" title="预编译头"></a>预编译头</h1><ul>
+<li><a target="_blank" rel="noopener" href="http://blog.csdn.net/luoweifu/article/details/49010627">理解微软的预编译头技术 - csdn</a></li>
+<li><a target="_blank" rel="noopener" href="http://521-lion.blog.163.com/blog/static/6662942920117236949606/">stdafx.h - 163</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.csdn.net/Nhsoft/article/details/11558">预编译头文件的使用 - csdn</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%A2%84%E7%BC%96%E8%AF%91%E5%A4%B4">预编译头 - wikipidea</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/02/git-workflow/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1383,190 +1510,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/06/13/writing2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/06/13/writing2/" class="post-title-link" itemprop="url">使用 Markdown 注意事项</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-06-13 13:15:05" itemprop="dateCreated datePublished" datetime="2016-06-13T13:15:05+08:00">2016-06-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>分为语法和工具两个部分，备忘录。</p>
-<h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>在使用 JotterPad（CommonMark）阅读 markdown 格式的文本时，发现的细节：</p>
-<ol>
-<li><p>标题 <code>#</code> 后需要有空格，才能解析成标题，不然就是文本；【重要】</p>
-<ul>
-<li>进一步修正：任意级别的标题行前后添加空行，至少标题行之前要有空行，<code>#</code> 之后添加空格；</li>
-</ul>
-</li>
-<li><p>使用参考式链接时，链接网址只能放在文件最末尾，不然识别不出来；【重要】</p>
-</li>
-<li><p>引用内使用编号问题：</p>
-<blockquote>
-<p>引用文字</p>
-<ol>
-<li>item1</li>
-<li>item</li>
-</ol>
-<p>编号结束，结尾的引用文字</p>
-</blockquote>
-</li>
-<li><p>怎么写代码块？——是解析的，只不过呈现方式只体现在字体上，排版效果并不明显。</p>
-</li>
-<li><p><del>尽量不要嵌套使用。在 GitHub 上项目的 README.md 都不复杂。占一屏幕，不需要滚屏。</del> 建议很值得采纳，但实在是不实用。</p>
-</li>
-<li><p>可以做图片链接的哦，惊喜</p>
-</li>
-<li><p><del>嵌套时无需有空行（分段需求除外，比如引用时），当两个模块是平行关系时需要有空行（列表除外，列表项之间添加空行会引入 &lt;p&gt;）。参考 1.1 节</del></p>
-</li>
-<li><p>中英文混合排版加不加空格问题，持保留态度，无论加或者不加，都保持原状。</p>
-<ol>
-<li><p>强调语义，不加；强调呈现，添加。</p>
-</li>
-<li><p>书写笔记不考虑纯手工补充空格，为了表现效果美观<strong>吹毛求疵</strong>，时间成本太高，没有意义。【重要】</p>
-<p>扩展阅读：</p>
-</li>
-</ol>
-<ul>
-<li><a target="_blank" rel="noopener" href="http://www.geekpark.net/topics/198213">不仅仅是空格的问题——再谈中西文混排</a></li>
-</ul>
-</li>
-<li><p>测试 item</p>
-</li>
-</ol>
-<h2 id="块元素"><a href="#块元素" class="headerlink" title="块元素"></a>块元素</h2><p>模块之间的嵌套使用，怎么书写是规范的一直是一件比较困惑的事情。但在我写下这篇文字的时候，我已经感觉到胜利在朝我招手了。</p>
-<p>首先一定要有意识区分“块元素（Block Element）”和“Span Element”，对于熟悉 html 的程序员来说可能是很 easy 的一件事情，但是虽然我用 Markdown 两三个月，相关的操作手册、语法说明也看了很多，但我是自动过滤这两个单词的，讲解标题（用不同数目的 # 区分标题级别）和强调（用 * 斜体，** 加粗）时肯定是分别放在 Block Element 和 Span Element 中介绍，但我脑子里是没有这两个概念的，我并未意识到它们意味着什么，甚至并未意识到它们的存在。我真的是个前端白痴，原谅我。</p>
-<ol>
-<li><p>块元素（Block Element）包括：</p>
-<ul>
-<li>标题</li>
-<li>引用</li>
-<li>列表，注意是整个列表，而不是列表的 item</li>
-<li>代码块</li>
-<li>分割线</li>
-</ul>
-</li>
-<li><p>Span Element 包括：</p>
-<ul>
-<li>链接</li>
-<li>强调</li>
-<li>代码</li>
-<li>图片</li>
-</ul>
-</li>
-</ol>
-<p>块元素是涉及嵌套的主体！Span Element 不是。所以嵌套问题是块元素的嵌套问题，额，如果我了解 html 多好。</p>
-<h2 id="结论（针对-GFM）"><a href="#结论（针对-GFM）" class="headerlink" title="结论（针对 GFM）"></a>结论（针对 GFM）</h2><p><strong>秘籍：</strong>（在严格坚持第一点的基础上，除却以下情况不会用到第二点：如果问题出现在章节末尾（见本文末尾）、列表末尾，使用第二点）</p>
-<ol>
-<li><p>每个独立的块元素（包括分段）之后留有空行，标题、分割线可以除外；</p>
-</li>
-<li><p>哪个块元素解析有问题，就在哪个块元素之前加空行；</p>
-<ol>
-<li>为了保证一致性（特殊情形，即当前嵌套情形（列表主体除末尾空行无其他空行，且在末尾嵌套有子列表）），要求嵌套子列表时，子模块前添加空行（即本行之前的空行，否则解释时不完美）；</li>
-</ol>
-</li>
-<li><p>综合上述两点，在每个块元素（包括分段）的前后添加空行可以保证所有情形下解释正确。唯一的不足在于阅读源文本时可能稍显松散。</p>
-</li>
-<li><p>其实，在每个块元素（包括分段、标题、分割线）之前留有空行是不是就万事大吉了呢？【重要】</p>
-</li>
-</ol>
-<p><strong>详细描述：</strong></p>
-<ol>
-<li><p>分段用空行，这句是废话；</p>
-</li>
-<li><p>标题之前加空行，保证所有情况下语法正常解释；【重要】</p>
-<ul>
-<li>如果前置标题、分割线或者普通段落，则没有空行语法也能正常解释；</li>
-<li>如果前置列表、引用等，没有空行，语法解释后呈现有问题；</li>
-</ul>
-</li>
-<li><p>空行意味着引用、列表的结束；标题、分割线是单行的；GFM 中代码块是 ``` 结束的。多个空行合并成一个。</p>
-<ul>
-<li>分段时，空行意味着段落的结束；</li>
-<li>非分段情况下，段落之后不用跟空行。接标题、引用、<del>列表、</del>代码块都意味着段落结束。</li>
-<li>非分段情况下，段落之后无空行直接跟有序列表，是有问题的；直接跟无序列表没问题；</li>
-<li>综合上述三条，建议每个独立的块元素之后留有空行，标题、分割线除外【重要】</li>
-</ul>
-</li>
-<li><p>列表内容拥有缩进概念；</p>
-<ul>
-<li>列表 item 中缩进内容（针对引用、代码块）前（或者后）加空行；否则语法无法正常解释</li>
-<li>缩进内容为列表（即嵌套子列表）时，按照规则建议添加空行。即使无空行，语法也能正常解释，看着还顺眼一点</li>
-<li>综合上述两条，建议在嵌套子模块的结尾留有空行【重要】</li>
-</ul>
-</li>
-</ol>
-<p>补充说明：</p>
-<ol>
-<li><p>列表的 item 之间一般不需要空行（分段除外），如果</p>
-<blockquote>
-<p>如果列表项之间有空行，markdown会给每一个生成的li元素创建一个p:</p>
-</blockquote>
-</li>
-</ol>
-<h1 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h1><p>前两年一直使用的 MarkdownPad2，后来随着系统更新（而软件并未跟进）出现了几项功能性问题，虽然也能通过某些手段结局，但无疑是影响体验的。</p>
-<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/40eb4f8207d1" title="MarkdownPad 2 使用问题">MarkdownPad 2 使用问题</a></p>
-<p>在此基础上，由于对 Visual Studio Code 好奇心（喜新厌旧嘛），放弃了使用 MarkdownPad2，但回头再看（2020/12/25 17:38:28 ）前者也只那些 vimer 的狂欢，经过各种调教之后可能好用，但调教本身也是成本。</p>
-<blockquote>
-<p>快捷键支持并不完全。还是算了。<a target="_blank" rel="noopener" href="https://lanlan2017.github.io/blog/11f888fa/">来源</a></p>
-</blockquote>
-<p>深有感触，不胜其烦。所以又回归了 MarkdownPad2</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1638,7 +1581,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">152</span>
+          <span class="site-state-item-count">153</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1686,7 +1629,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2024</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

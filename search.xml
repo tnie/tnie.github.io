@@ -731,23 +731,6 @@
       </tags>
   </entry>
   <entry>
-    <title>父子进程</title>
-    <url>/2017/03/17/Parent-Process-Child-xxx/</url>
-    <content><![CDATA[<p>2016/6/21 17:52:03</p>
-<p>参见 维基百科 词条：<a href="https://zh.wikipedia.org/wiki/%E7%88%B6%E8%BF%9B%E7%A8%8B">父进程</a>、<a href="https://zh.wikipedia.org/wiki/%E5%AD%90%E8%BF%9B%E7%A8%8B">子进程</a></p>
-<p>关于僵尸进程和孤儿进程，在上述维基百科中也有提到，更详细的知识参考 <a href="http://www.cnblogs.com/Anker/p/3271773.html">孤儿进程与僵尸进程</a></p>
-<a id="more"></a>
-
-<blockquote>
-<p>严格地来说，僵死进程并不是问题的根源，罪魁祸首是产生出大量僵死进程的那个父进程。因此，当我们寻求如何消灭系统中大量的僵死进程时，答案就是把产生大 量僵死进程的那个元凶枪毙掉（也就是通过kill发送SIGTERM或者SIGKILL信号啦）。枪毙了元凶进程之后，它产生的僵死进程就变成了孤儿进 程，这些孤儿进程会被init进程接管，init进程会wait()这些孤儿进程，释放它们占用的系统进程表中的资源，这样，这些已经僵死的孤儿进程 就能瞑目而去了。</p>
-</blockquote>
-<p>也就是说，<strong>僵尸进程存在的前提是父进程不死</strong>。父进程死，僵尸进程就变成孤儿进程，没有危害 了。</p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
     <title>POD 类型</title>
     <url>/2016/12/15/POD/</url>
     <content><![CDATA[<p>POD 类型是一个神神道道的概念，有点反人类。好在大多时候我们并不需要涉及这个概念，即便在一些场景中用到了，C++11 新增的 3 个与之有关的判断也足够了。</p>
@@ -805,6 +788,23 @@
       <categories>
         <category>cpp</category>
         <category>cpp-concept</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>父子进程</title>
+    <url>/2017/03/17/Parent-Process-Child-xxx/</url>
+    <content><![CDATA[<p>2016/6/21 17:52:03</p>
+<p>参见 维基百科 词条：<a href="https://zh.wikipedia.org/wiki/%E7%88%B6%E8%BF%9B%E7%A8%8B">父进程</a>、<a href="https://zh.wikipedia.org/wiki/%E5%AD%90%E8%BF%9B%E7%A8%8B">子进程</a></p>
+<p>关于僵尸进程和孤儿进程，在上述维基百科中也有提到，更详细的知识参考 <a href="http://www.cnblogs.com/Anker/p/3271773.html">孤儿进程与僵尸进程</a></p>
+<a id="more"></a>
+
+<blockquote>
+<p>严格地来说，僵死进程并不是问题的根源，罪魁祸首是产生出大量僵死进程的那个父进程。因此，当我们寻求如何消灭系统中大量的僵死进程时，答案就是把产生大 量僵死进程的那个元凶枪毙掉（也就是通过kill发送SIGTERM或者SIGKILL信号啦）。枪毙了元凶进程之后，它产生的僵死进程就变成了孤儿进 程，这些孤儿进程会被init进程接管，init进程会wait()这些孤儿进程，释放它们占用的系统进程表中的资源，这样，这些已经僵死的孤儿进程 就能瞑目而去了。</p>
+</blockquote>
+<p>也就是说，<strong>僵尸进程存在的前提是父进程不死</strong>。父进程死，僵尸进程就变成孤儿进程，没有危害 了。</p>
+]]></content>
+      <categories>
+        <category>linux</category>
       </categories>
   </entry>
   <entry>
@@ -2715,6 +2715,46 @@
       </categories>
   </entry>
   <entry>
+    <title>从源码构建 Qt</title>
+    <url>/2025/01/13/compileQtBase/</url>
+    <content><![CDATA[<p>不建议从源码构建！除非你没 <a href="../../../2024/11/16/installQt/">其他办法</a> 了</p>
+<p>构建费事费力，需要踩过很多坑才能得到一个勉强能用的版本。</p>
+<p>参考 <a href="https://doc.qt.io/qt-5/windows-requirements.html#building-from-source">Building from Source</a> ，需要 Perl / Python / MSVC ，其他章节跳过不用看</p>
+<p>参考 <a href="https://doc.qt.io/qt-5/windows-building.html">Qt for Windows - Building from Source</a> ，5 个步骤：</p>
+<a id="more"></a>
+
+<ol>
+<li>不需要商业许可</li>
+<li>使用 qt-everywhere-src-5.15.15</li>
+<li>配置环境：配置 clang 可以先跳过</li>
+</ol>
+<figure class="highlight bat"><table><tr><td class="code"><pre><span class="line"><span class="comment">REM Set up Microsoft Visual Studio 2017, where &lt;arch&gt; is amd64, x86, etc.</span></span><br><span class="line"><span class="keyword">CALL</span> &quot;C:\Program Files (x86)\Microsoft Visual Studio\<span class="number">2019</span>\Enterprise\VC\Auxiliary\Build\vcvarsall.bat&quot; amd64</span><br><span class="line"><span class="built_in">SET</span> _ROOT=D:\Users\Qt\qt-everywhere-src-<span class="number">5</span>.<span class="number">15</span>.<span class="number">15</span></span><br><span class="line"><span class="built_in">SET</span> <span class="built_in">PATH</span>=<span class="variable">%_ROOT%</span>\qtbase\bin;<span class="variable">%_ROOT%</span>\gnuwin32\bin;<span class="variable">%PATH%</span></span><br><span class="line"><span class="built_in">SET</span> _PERL=D:\Users\Qt\tool\strawberry-perl-<span class="number">5</span>.<span class="number">40</span>.<span class="number">0</span>.<span class="number">1</span>-<span class="number">64</span>bit-portable</span><br><span class="line"><span class="built_in">SET</span> <span class="built_in">PATH</span>=<span class="variable">%_PERL%</span>\perl\site\bin;<span class="variable">%_PERL%</span>\perl\bin;<span class="variable">%_PERL%</span>\c\bin;<span class="variable">%PATH%</span></span><br><span class="line"><span class="built_in">SET</span> _PYTHON=D:\Users\fnie\AppData\Local\Programs\Python\Python313</span><br><span class="line"><span class="built_in">SET</span> _JOM=D:\Users\Qt\tool\jom_1_1_4</span><br><span class="line"><span class="comment">REM 构建 qdoc.exe QtDoc 时才需要 clang</span></span><br><span class="line"><span class="built_in">SET</span> _CLANG=D:\Users\Qt\tool\libclang\bin</span><br><span class="line"><span class="built_in">SET</span> _CMAKE=D:\Portable\cmake-<span class="number">3</span>.<span class="number">30</span>.<span class="number">5</span>-windows-x86_64\bin</span><br><span class="line"><span class="built_in">SET</span> <span class="built_in">PATH</span>=<span class="variable">%_PYTHON%</span>;<span class="variable">%_JOM%</span>;<span class="variable">%_CLANG%</span>;<span class="variable">%_CMAKE%</span>;<span class="variable">%PATH%</span></span><br><span class="line"><span class="comment">REM clang 18.1.7 failed 版本太高，Qt5.15 识别不出来 ; </span></span><br><span class="line"><span class="comment">REM clang 12.0 ok ; </span></span><br><span class="line"><span class="comment">REM clang 11.0 ok</span></span><br><span class="line"><span class="comment">REM clang 10.0 build qdoc.exe ok ，构建 QtDoc 时 vc2019 报错：版本太低</span></span><br><span class="line">:: <span class="built_in">SET</span> LLVM_INSTALL_DIR=D:\Users\Qt\tool\libclang</span><br><span class="line"><span class="comment">REM Uncomment the below line when using a git checkout of the source repository</span></span><br><span class="line"><span class="comment">REM SET PATH=%_ROOT%\qtrepotools\bin;%PATH%</span></span><br><span class="line"><span class="built_in">SET</span> _ROOT=</span><br><span class="line"><span class="built_in">SET</span> _PERL=</span><br><span class="line"><span class="built_in">SET</span> _PYTHON=</span><br><span class="line"><span class="built_in">SET</span> _JOM=</span><br><span class="line"><span class="built_in">SET</span> _CLANG=</span><br><span class="line"><span class="built_in">SET</span> _CMAKE=</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>参考 <a href="https://doc.qt.io/qt-5/configure-options.html">Qt Configure Options</a> ，尽可能地减少模块和特性，只保留需要的，减少构建时长</li>
+</ol>
+<figure class="highlight bat"><table><tr><td class="code"><pre><span class="line">..\qt-everywhere-src-<span class="number">5</span>.<span class="number">15</span>.<span class="number">15</span>\configure.bat -release -recheck-all -opensource^</span><br><span class="line">  -nomake examples -nomake tests ^</span><br><span class="line">  -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtlottie -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquick3d -skip qtquickcontrols -skip qtquickcontrols2 -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qtsvg -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebglplugin -skip qtwebsockets -skip qtwebview -skip qtwinextras -skip qtx11extras -skip qtxmlpatterns ^</span><br><span class="line">  -no-feature-assistant -no-feature-designer -no-feature-distancefieldgenerator -no-feature-kmap2qmap -no-feature-linguist -no-feature-makeqpf -no-feature-pixeltool -no-feature-qev -no-feature-qtdiag -no-feature-qtpaths -no-feature-qtplugininfo -no-feature-windeployqt </span><br><span class="line"></span><br><span class="line">jom -j8</span><br><span class="line">jom -j8 install</span><br><span class="line">// 安装之后才能构建 docs</span><br><span class="line">jom -j8 docs</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>构建 QtDoc 搁置，未成功。参考 <a href="https://wiki.qt.io/Building_Qt_Documentation#Building_Qt_5_Documentation">Building Qt 5 Documentation</a> ，Qt 提供了已经编译好的 clang 库备用，但有坑，/(ㄒoㄒ)/~~  ；参考 <a href="https://doc.qt.io/qt-5/qdoc-guide-clang.html">Installing Clang for QDoc</a> 配置环境</li>
+<li>官方提供 Qt Creator ，直接下载即可</li>
+</ol>
+<h1 id="libclang"><a href="#libclang" class="headerlink" title="libclang"></a>libclang</h1><p>构建 qdoc.exe 对 clang 版本比较挑剔；构建 QtDoc 非常耗时，暂未成功。</p>
+<h2 id="静态库"><a href="#静态库" class="headerlink" title="静态库"></a>静态库</h2><p>前述链接目录下中 libclang.lib 似乎是 <strong>静态库</strong>，不存在 bin\libclang.dll ，使用其中的包构建 qdoc.exe 报错：</p>
+<p><del>libclang-release_18.1.7-based-windows-vs2019_64.7z</del>    05-Jul-2024 11:00    461M<br>f0cffd0e9cff950af20efc36d42aefdb  libclang-release_18.1.7-based-windows-vs2019_64.7z</p>
+<p><del>libclang-release_120-based-windows-vs2019_64.7z</del>    30-Apr-2021 10:37    306M<br>86c307866f629b0fb4fa1df801c99268  libclang-release_120-based-windows-vs2019_64.7z</p>
+<p><del>libclang-release_110-based-windows-vs2019_64.7z</del>    20-Oct-2020 20:57    290M<br>ff0a30c881691068c14fbed9239b3583c8c45c6a  libclang-release_110-based-windows-vs2019_64.7z</p>
+<p>使用 clang12.0 静态库构建 qdoc.exe 工具时报错：</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/%E4%BD%BF%E7%94%A8clang12.0%E9%9D%99%E6%80%81%E5%BA%93%E6%9E%84%E5%BB%BAqdoc%E5%B7%A5%E5%85%B7%E6%97%B6%E6%8A%A5%E9%94%99.jpg" alt="使用clang12.0静态库构建qdoc工具时报错"></p>
+<p>在 [<a href="https://stackoverflow.com/questions/5159353/how-can-i-get-rid-of-the-imp-prefix-in-the-linker-in-vc">How can I get rid of the <strong>imp</strong> prefix in the linker in VC++?</a> 中也提到：<code>__imp_</code> 是动态库特有的前缀。</p>
+<h2 id="动态库"><a href="#动态库" class="headerlink" title="动态库"></a>动态库</h2><p><a href="https://download.qt.io/development_releases/prebuilt/libclang/"><strong>上一层</strong> 目录</a> 中的 libclang.lib 是 <strong>动态库</strong> 配套的导入库，存在 bin\libclang.dll ，使用特定的版本构建 qdoc.exe 成功：</p>
+<p><del>libclang-release_18.1.7-based-windows-vs2019_64.7z</del>    12-Jun-2024 12:50    628M<br>ceecf8830149829d1269bf0008319c34  libclang-release_18.1.7-based-windows-vs2019_64.7z</p>
+<p>libclang-release_120-based-windows-vs2019_64.7z    03-May-2021 11:57    364M<br>e6a729d347b5cedb3391a59ca695dcfe  libclang-release_120-based-windows-vs2019_64.7z</p>
+<p>libclang-release_110-based-windows-vs2019_64.7z    23-Mar-2021 10:44    342M<br>488375c83ea2d808d1b2e96e1ca68a8b  libclang-release_110-based-windows-vs2019_64.7z</p>
+<p><del>libclang-release_100-based-windows-vs2019_64.7z</del>    18-Sep-2020 10:09    317M<br>MD5 Hash: 00aac61180028608e421c7a02b798b24</p>
+<p>使用 clang10.0 动态库构建文档时报错：</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/%E4%BD%BF%E7%94%A8clang10.0%E5%8A%A8%E6%80%81%E5%BA%93%E6%9E%84%E5%BB%BA%E6%96%87%E6%A1%A3%E6%97%B6%E6%8A%A5%E9%94%99.jpg" alt="使用clang10.0动态库构建文档时报错"></p>
+]]></content>
+  </entry>
+  <entry>
     <title>条件变量</title>
     <url>/2021/05/26/conditionalvariable/</url>
     <content><![CDATA[<p>这里不讲条件变量 <code>std::conditional_varibale</code> 的具体使用，自行上 cppreference 网站查阅手册。</p>
@@ -2949,6 +2989,72 @@
       </tags>
   </entry>
   <entry>
+    <title>C++ Coroutines Understanding the promise type</title>
+    <url>/2021/03/31/coroutine-c/</url>
+    <content><![CDATA[<p>来源：<a href="https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type">https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type</a></p>
+<h1 id="Coroutine-Concepts"><a href="#Coroutine-Concepts" class="headerlink" title="Coroutine Concepts"></a>Coroutine Concepts</h1><p>The compiler applies some fairly mechanical transformations to the code that you write to turn it into a state-machine that allows it to suspend execution at particular points within the function and then later resume execution.</p>
+<p>编译器会对您编写的代码进行一些相当机械的转换，以将其转换为状态机，使状态机可以在函数内的特定点挂起执行，然后再恢复执行。</p>
+<h1 id="Promise-objects"><a href="#Promise-objects" class="headerlink" title="Promise objects"></a>Promise objects</h1><p>The Promise object defines and controls the behaviour of the coroutine itself by implementing methods that are called at specific points during execution of the coroutine.</p>
+<a id="more"></a>
+
+<blockquote>
+<p>Before we go on, I want you to try and rid yourself of any preconceived notions of what a “promise” is. While, in some use-cases, the coroutine promise object does indeed act in a similar role to the <code>std::promise</code> part of a <code>std::future</code> pair, for other use-cases the analogy is somewhat stretched. It may be easier to think about the coroutine’s promise object as being a “coroutine state controller” object that controls the behaviour of the coroutine and can be used to track its state.</p>
+<p>在继续之前，我希望您尝试摆脱对“promise”的任何先入为主的观念。虽然在某些用例中，协程的 promise 对象确实起到了与 <code>std::future</code> 的 <code>std::promise</code> 部分相似的作用，但在其他用例中，类推却有些捉襟见肘。将协程的 promise 对象视为控制协程行为并可以用来跟踪其状态的“<strong>协程状态控制器</strong>”对象可能更容易些。</p>
+</blockquote>
+<p>When you write a coroutine function that has a body, <code>&lt;body-statements&gt;</code>, which contains one of the coroutine keywords (<code>co_return</code>, <code>co_await</code>, <code>co_yield</code>) then the body of the coroutine is transformed to something (roughly) like the following:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">co_await</span> promise.initial_suspend();</span><br><span class="line">  <span class="keyword">try</span></span><br><span class="line">  &#123;</span><br><span class="line">    &lt;body-statements&gt;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (...)</span><br><span class="line">  &#123;</span><br><span class="line">    promise.unhandled_exception();</span><br><span class="line">  &#125;</span><br><span class="line">FinalSuspend:</span><br><span class="line">  <span class="keyword">co_await</span> promise.final_suspend();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>When a coroutine function is called there are a number of steps that are performed prior to executing the code in the source of the coroutine body that are a little different to regular functions.</p>
+<p>Here is a summary of the steps (I’ll go into more detail on each of the steps below).</p>
+<ol>
+<li>Allocate a coroutine frame using <code>operator new</code> (optional).</li>
+<li>Copy any function parameters to the coroutine frame.</li>
+<li>Call the constructor for the promise object of type, <code>P</code>.</li>
+<li>Call the <code>promise.get_return_object()</code> method to obtain the result to return to the caller when the coroutine first suspends. Save the result as a local variable.</li>
+<li>Call the <code>promise.initial_suspend()</code> method and <code>co_await</code> the result.</li>
+<li>When the <code>co_await promise.initial_suspend()</code> expression resumes (either immediately or asynchronously), then the coroutine starts executing the coroutine body statements that you wrote.</li>
+</ol>
+<p>Some additional steps are executed when execution reaches a <code>co_return</code> statement:</p>
+<ol>
+<li>Call <code>promise.return_void()</code> or <code>promise.return_value(&lt;expr&gt;)</code></li>
+<li>Destroy all variables with automatic storage duration in reverse order they were created.</li>
+<li>Call <code>promise.final_suspend()</code> and <code>co_await</code> the result.</li>
+</ol>
+<p>If instead, execution leaves <code>&lt;body-statements&gt;</code> due to an unhandled exception then:</p>
+<ol>
+<li>Catch the exception and call <code>promise.unhandled_exception()</code> from within the catch-block.</li>
+<li>Call <code>promise.final_suspend()</code> and <code>co_await</code> the result.</li>
+</ol>
+<p>Once execution propagates outside of the coroutine body then the coroutine frame is destroyed. Destroying the coroutine frame involves a number of steps:</p>
+<ol>
+<li>Call the destructor of the promise object.</li>
+<li>Call the destructors of the function parameter copies.</li>
+<li>Call <code>operator delete</code> to free the memory used by the coroutine frame (optional)</li>
+<li>Transfer execution back to the caller/resumer.</li>
+</ol>
+<p>When execution first reaches a <code>&lt;return-to-caller-or-resumer&gt;</code> point inside a <code>co_await</code> expression, or if the coroutine runs to completion without hitting a <code>&lt;return-to-caller-or-resumer&gt;</code> point, then the coroutine is either suspended or destroyed and the return-object previously returned from the call to <code>promise.get_return_object()</code> is then returned to the caller of the coroutine.</p>
+<p>之后，作者就上述步骤进行了详细的介绍。</p>
+<h2 id="How-the-compiler-chooses-the-promise-type"><a href="#How-the-compiler-chooses-the-promise-type" class="headerlink" title="How the compiler chooses the promise type"></a>How the compiler chooses the promise type</h2><p>The type of the promise object is determined from the signature of the coroutine by using the <code>std::experimental::coroutine_traits</code> class.</p>
+<p>模板类的参数，就是协程函数签名中的返回类型+入参类型。</p>
+<p>模板类 <code>coroutine_traits</code> 的默认实现，是使用返回类型的嵌套类型或类型别名：</p>
+<p><code>using promise_type = typename RET::promise_type;</code></p>
+<p>如果有权限，则在返回值类型中定义嵌套类即可；否则新增 <code>coroutine_traits</code> 特例化。</p>
+<h2 id="Identifying-a-specific-coroutine-activation-frame"><a href="#Identifying-a-specific-coroutine-activation-frame" class="headerlink" title="Identifying a specific coroutine activation frame"></a>Identifying a specific coroutine activation frame</h2><p>When you call a coroutine function, a coroutine frame is created. In order to resume the associated coroutine or destroy the coroutine frame you need some way to identify or refer to that particular coroutine frame.</p>
+<p>The mechanism the Coroutines TS provides for this is the <code>coroutine_handle</code> type.</p>
+<p>You can obtain a coroutine_handle for a coroutine in two ways:</p>
+<ol>
+<li>It is passed to the <code>await_suspend()</code> method during a <code>co_await</code> expression.</li>
+<li>If you have a reference to the coroutine’s promise object, you can reconstruct its coroutine_handle using <code>coroutine_handle&lt;Promise&gt;::from_promise()</code>.</li>
+</ol>
+<p>Note that the coroutine_handle is <strong>NOT</strong> and RAII object. You must manually call <code>.destroy()</code> to destroy the coroutine frame and free its resources.</p>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+      <tags>
+        <tag>coroutine</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Coroutine 学习总结</title>
     <url>/2021/04/02/coroutine/</url>
     <content><![CDATA[<p>参考 <a href="https://github.com/tnie/learn_chrono">tnie/learn_xxx</a> 中 coro 项目。</p>
@@ -3031,72 +3137,6 @@
 <p>The secret of stackless coroutines is that they can suspend themselves only from the top-level function.</p>
 <p>无栈协程只能在顶层函数暂停执行。</p>
 <p>每次 suspend 时 frame 释放掉(pop)，resume 的时候由 coroutine object (as local variable on the caller’s frame) 再次建立 frame。—— 参考 <a href="https://lewissbaker.github.io/2017/09/25/coroutine-theory">coroutine-theory</a> 的 The ‘Resume’ operation 章节。</p>
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-      <tags>
-        <tag>coroutine</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++ Coroutines Understanding the promise type</title>
-    <url>/2021/03/31/coroutine-c/</url>
-    <content><![CDATA[<p>来源：<a href="https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type">https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type</a></p>
-<h1 id="Coroutine-Concepts"><a href="#Coroutine-Concepts" class="headerlink" title="Coroutine Concepts"></a>Coroutine Concepts</h1><p>The compiler applies some fairly mechanical transformations to the code that you write to turn it into a state-machine that allows it to suspend execution at particular points within the function and then later resume execution.</p>
-<p>编译器会对您编写的代码进行一些相当机械的转换，以将其转换为状态机，使状态机可以在函数内的特定点挂起执行，然后再恢复执行。</p>
-<h1 id="Promise-objects"><a href="#Promise-objects" class="headerlink" title="Promise objects"></a>Promise objects</h1><p>The Promise object defines and controls the behaviour of the coroutine itself by implementing methods that are called at specific points during execution of the coroutine.</p>
-<a id="more"></a>
-
-<blockquote>
-<p>Before we go on, I want you to try and rid yourself of any preconceived notions of what a “promise” is. While, in some use-cases, the coroutine promise object does indeed act in a similar role to the <code>std::promise</code> part of a <code>std::future</code> pair, for other use-cases the analogy is somewhat stretched. It may be easier to think about the coroutine’s promise object as being a “coroutine state controller” object that controls the behaviour of the coroutine and can be used to track its state.</p>
-<p>在继续之前，我希望您尝试摆脱对“promise”的任何先入为主的观念。虽然在某些用例中，协程的 promise 对象确实起到了与 <code>std::future</code> 的 <code>std::promise</code> 部分相似的作用，但在其他用例中，类推却有些捉襟见肘。将协程的 promise 对象视为控制协程行为并可以用来跟踪其状态的“<strong>协程状态控制器</strong>”对象可能更容易些。</p>
-</blockquote>
-<p>When you write a coroutine function that has a body, <code>&lt;body-statements&gt;</code>, which contains one of the coroutine keywords (<code>co_return</code>, <code>co_await</code>, <code>co_yield</code>) then the body of the coroutine is transformed to something (roughly) like the following:</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">co_await</span> promise.initial_suspend();</span><br><span class="line">  <span class="keyword">try</span></span><br><span class="line">  &#123;</span><br><span class="line">    &lt;body-statements&gt;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (...)</span><br><span class="line">  &#123;</span><br><span class="line">    promise.unhandled_exception();</span><br><span class="line">  &#125;</span><br><span class="line">FinalSuspend:</span><br><span class="line">  <span class="keyword">co_await</span> promise.final_suspend();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>When a coroutine function is called there are a number of steps that are performed prior to executing the code in the source of the coroutine body that are a little different to regular functions.</p>
-<p>Here is a summary of the steps (I’ll go into more detail on each of the steps below).</p>
-<ol>
-<li>Allocate a coroutine frame using <code>operator new</code> (optional).</li>
-<li>Copy any function parameters to the coroutine frame.</li>
-<li>Call the constructor for the promise object of type, <code>P</code>.</li>
-<li>Call the <code>promise.get_return_object()</code> method to obtain the result to return to the caller when the coroutine first suspends. Save the result as a local variable.</li>
-<li>Call the <code>promise.initial_suspend()</code> method and <code>co_await</code> the result.</li>
-<li>When the <code>co_await promise.initial_suspend()</code> expression resumes (either immediately or asynchronously), then the coroutine starts executing the coroutine body statements that you wrote.</li>
-</ol>
-<p>Some additional steps are executed when execution reaches a <code>co_return</code> statement:</p>
-<ol>
-<li>Call <code>promise.return_void()</code> or <code>promise.return_value(&lt;expr&gt;)</code></li>
-<li>Destroy all variables with automatic storage duration in reverse order they were created.</li>
-<li>Call <code>promise.final_suspend()</code> and <code>co_await</code> the result.</li>
-</ol>
-<p>If instead, execution leaves <code>&lt;body-statements&gt;</code> due to an unhandled exception then:</p>
-<ol>
-<li>Catch the exception and call <code>promise.unhandled_exception()</code> from within the catch-block.</li>
-<li>Call <code>promise.final_suspend()</code> and <code>co_await</code> the result.</li>
-</ol>
-<p>Once execution propagates outside of the coroutine body then the coroutine frame is destroyed. Destroying the coroutine frame involves a number of steps:</p>
-<ol>
-<li>Call the destructor of the promise object.</li>
-<li>Call the destructors of the function parameter copies.</li>
-<li>Call <code>operator delete</code> to free the memory used by the coroutine frame (optional)</li>
-<li>Transfer execution back to the caller/resumer.</li>
-</ol>
-<p>When execution first reaches a <code>&lt;return-to-caller-or-resumer&gt;</code> point inside a <code>co_await</code> expression, or if the coroutine runs to completion without hitting a <code>&lt;return-to-caller-or-resumer&gt;</code> point, then the coroutine is either suspended or destroyed and the return-object previously returned from the call to <code>promise.get_return_object()</code> is then returned to the caller of the coroutine.</p>
-<p>之后，作者就上述步骤进行了详细的介绍。</p>
-<h2 id="How-the-compiler-chooses-the-promise-type"><a href="#How-the-compiler-chooses-the-promise-type" class="headerlink" title="How the compiler chooses the promise type"></a>How the compiler chooses the promise type</h2><p>The type of the promise object is determined from the signature of the coroutine by using the <code>std::experimental::coroutine_traits</code> class.</p>
-<p>模板类的参数，就是协程函数签名中的返回类型+入参类型。</p>
-<p>模板类 <code>coroutine_traits</code> 的默认实现，是使用返回类型的嵌套类型或类型别名：</p>
-<p><code>using promise_type = typename RET::promise_type;</code></p>
-<p>如果有权限，则在返回值类型中定义嵌套类即可；否则新增 <code>coroutine_traits</code> 特例化。</p>
-<h2 id="Identifying-a-specific-coroutine-activation-frame"><a href="#Identifying-a-specific-coroutine-activation-frame" class="headerlink" title="Identifying a specific coroutine activation frame"></a>Identifying a specific coroutine activation frame</h2><p>When you call a coroutine function, a coroutine frame is created. In order to resume the associated coroutine or destroy the coroutine frame you need some way to identify or refer to that particular coroutine frame.</p>
-<p>The mechanism the Coroutines TS provides for this is the <code>coroutine_handle</code> type.</p>
-<p>You can obtain a coroutine_handle for a coroutine in two ways:</p>
-<ol>
-<li>It is passed to the <code>await_suspend()</code> method during a <code>co_await</code> expression.</li>
-<li>If you have a reference to the coroutine’s promise object, you can reconstruct its coroutine_handle using <code>coroutine_handle&lt;Promise&gt;::from_promise()</code>.</li>
-</ol>
-<p>Note that the coroutine_handle is <strong>NOT</strong> and RAII object. You must manually call <code>.destroy()</code> to destroy the coroutine frame and free its resources.</p>
 ]]></content>
       <categories>
         <category>cpp</category>
@@ -3627,40 +3667,6 @@
       </tags>
   </entry>
   <entry>
-    <title>不值得读</title>
-    <url>/2016/11/30/do-not-read/</url>
-    <content><![CDATA[<p>以前写书的人都是高手。写专业书籍首先要求技术够牛，其次文笔也要可以。进入新世纪，什么杂七杂八、牛鬼蛇神都可以出版书了，市场上充斥着大量的垃圾，浪费纸张浪费木材不说，万一被市场、群众（被大众所选择的不一定是对的）欺骗买了这样的书你真是想死的心都有。也有一些书，处在尴尬的层次——（尤其是专业书籍）算不上佳作，匆匆一瞥也挑不出问题，可是当你真正深入阅读时慢慢发现细节惨不忍睹（尤其是计算机领域渣渣们为了名利职称等翻译国外著作）。</p>
-<h1 id="别看《C-Primer-Plus》"><a href="#别看《C-Primer-Plus》" class="headerlink" title="别看《C++ Primer Plus》"></a>别看《C++ Primer Plus》</h1><p>这本书是带“光环”的。在国内一些博客网站上，程序员们对这本书的评价还是可以的，<a href="https://book.douban.com/subject/1319751/">豆瓣的评分</a>也蛮高的。所谓群众的选择！但我接触过之后，开始怀疑“给予这本书肯定评价的程序员难道都是渣渣吗？或者都是门外汉拿这本书入门，觉得学到东西了所以给予肯定？”。以下是以前的记录，可以得出结论：原作者的水平就值得怀疑，翻译之后不会比原作更好。<strong>英文原著、译文都不值得看！</strong></p>
-<p>2016/2/17 9:52:41</p>
-<p>因为网上关于《C++ Primer》的电纸书资源有限，好吧，只找到英文原版第五版的mobi格式，而恰巧搜索资源的时候找到了《Plus》第五版的中文资源，亚马逊官方的，排版也不错，所以就在kindle 上看了，当时是打算重点学习后面的章节：函数重载、类的设计与使用、继承、异常处理等。</p>
-<p>到目前读了20%，因为前四章的内容都比较基础，所以并没有详细地一页页读过来，而是拣选不熟的知识点学习。但已经有点烦了，确实好些地方娓娓道来，让人豁然开朗（跟我水平低也有关），但更多的细节上的不注意让人慢慢地烦躁起来，从网上找到两篇评论，恰巧说到了我的感觉。无论如何，打算放弃了，而且我<strong>绝对不会推荐</strong>别人读这本书的。</p>
-<ol>
-<li><p><a href="http://book.douban.com/review/5472087/">关注 C++ Primer Plus（第 6 版）的同学，请留步</a></p>
-</li>
-<li><p><a href="http://www.amazon.cn/review/R2QJQH8LI1JADU/ref=cm_cr_dp_title?ie=UTF8&ASIN=B008A4XZRI&channel=detail-glance&nodeID=&store=books">小错误太多，很不负责任</a>，66/71 认为此评论有用。这足够说明问题了。</p>
-</li>
-<li><p>还看到一个犀利的评价：</p>
-<p> <img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/cpp-primer-plus.png"></p>
-</li>
-</ol>
-<p>甚至会怀疑，那些让我豁然开朗，觉得学到东西的文字叙述是否真的就是那么回事，作者没有诓我吧。</p>
-<p>最后一根稻草，是指针这一块的。</p>
-<p>4.7.1节 讲到声明和初始化指针，提到声明指针时，<code>*</code> 操作符两边的空格问题，本身说的就不清楚，再加上难以自圆其说 指针声明中 <code>*</code> 和 解引用 <code>*</code> 的区别，甚至在作者的描述中两者是一致的。<br>我完全被打败了，弄糊涂了。所以去翻《C++ Primer》，很清晰，一点就明。</p>
-<p>更多的错误就不说了，算是跳读的，虽说到了20%的进度，但就实际阅读的可能不到5%，我标注了8个明显的上下文不一致错误、翻译错误，让人费解的地方。</p>
-<p>所以，打算去啃《Primer》英文原版了。</p>
-<h1 id="别看《C-Concurrency-in-Action》译作"><a href="#别看《C-Concurrency-in-Action》译作" class="headerlink" title="别看《C++ Concurrency in Action》译作"></a>别看《C++ Concurrency in Action》译作</h1><p><strong>原著是值得肯定的</strong>，是 C++ 领域少有的介绍并发编程、多线程的书。但 <a href="https://book.douban.com/review/7485014/">国内翻译的版本</a> 被喷的一无是处，不再多说。</p>
-<p>另外，GitBook 上有一份陈晓伟翻译的 <a href="https://www.gitbook.com/book/chenxiaowei/cpp_concurrency_in_action/details">《C++并发编程(中文版)》</a>，我起初抱着很大的期望去读的。目前（2016/7/14 10:07:18 ） 快读到第二章结尾了，发现其中也有好多不尽人意之处，甚至有些完全翻译错误，将读者带跑带偏。某句话末尾多出个词汇，文字输入时音正字错（“人为”写成“认为”）的现象更是频繁出现。读起来磕磕绊绊，最主要的还是担心译者水平，翻译错误——很明显的错误能够发现，然后去找原文矫正；可是意识不到就代表没有错误了吗？——肯定有，译者的英文水平其实挺一般的。</p>
-<p>所以，打算去看英文原版了。好在作者用的都是日常词汇，读起来并不“卡”，只是会慢些而已。</p>
-<p>追评：原著写得挺好的，真正地去读英文原版会发现也没想象中那么困难，已经向第 4 章迈进了。目前阅读进度缓慢甚至停滞，主要是因为阅读目的（并发入门）已经达到，后面的进阶内容在目前用不到，所以读书的动力就不大了。</p>
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-      <tags>
-        <tag>memo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>桌面环境</title>
     <url>/2023/05/17/displayManager/</url>
     <content><![CDATA[<p>GNOME 和 MATE 都是桌面环境。</p>
@@ -3699,6 +3705,40 @@
       </categories>
       <tags>
         <tag>systemd systemctl</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>不值得读</title>
+    <url>/2016/11/30/do-not-read/</url>
+    <content><![CDATA[<p>以前写书的人都是高手。写专业书籍首先要求技术够牛，其次文笔也要可以。进入新世纪，什么杂七杂八、牛鬼蛇神都可以出版书了，市场上充斥着大量的垃圾，浪费纸张浪费木材不说，万一被市场、群众（被大众所选择的不一定是对的）欺骗买了这样的书你真是想死的心都有。也有一些书，处在尴尬的层次——（尤其是专业书籍）算不上佳作，匆匆一瞥也挑不出问题，可是当你真正深入阅读时慢慢发现细节惨不忍睹（尤其是计算机领域渣渣们为了名利职称等翻译国外著作）。</p>
+<h1 id="别看《C-Primer-Plus》"><a href="#别看《C-Primer-Plus》" class="headerlink" title="别看《C++ Primer Plus》"></a>别看《C++ Primer Plus》</h1><p>这本书是带“光环”的。在国内一些博客网站上，程序员们对这本书的评价还是可以的，<a href="https://book.douban.com/subject/1319751/">豆瓣的评分</a>也蛮高的。所谓群众的选择！但我接触过之后，开始怀疑“给予这本书肯定评价的程序员难道都是渣渣吗？或者都是门外汉拿这本书入门，觉得学到东西了所以给予肯定？”。以下是以前的记录，可以得出结论：原作者的水平就值得怀疑，翻译之后不会比原作更好。<strong>英文原著、译文都不值得看！</strong></p>
+<p>2016/2/17 9:52:41</p>
+<p>因为网上关于《C++ Primer》的电纸书资源有限，好吧，只找到英文原版第五版的mobi格式，而恰巧搜索资源的时候找到了《Plus》第五版的中文资源，亚马逊官方的，排版也不错，所以就在kindle 上看了，当时是打算重点学习后面的章节：函数重载、类的设计与使用、继承、异常处理等。</p>
+<p>到目前读了20%，因为前四章的内容都比较基础，所以并没有详细地一页页读过来，而是拣选不熟的知识点学习。但已经有点烦了，确实好些地方娓娓道来，让人豁然开朗（跟我水平低也有关），但更多的细节上的不注意让人慢慢地烦躁起来，从网上找到两篇评论，恰巧说到了我的感觉。无论如何，打算放弃了，而且我<strong>绝对不会推荐</strong>别人读这本书的。</p>
+<ol>
+<li><p><a href="http://book.douban.com/review/5472087/">关注 C++ Primer Plus（第 6 版）的同学，请留步</a></p>
+</li>
+<li><p><a href="http://www.amazon.cn/review/R2QJQH8LI1JADU/ref=cm_cr_dp_title?ie=UTF8&ASIN=B008A4XZRI&channel=detail-glance&nodeID=&store=books">小错误太多，很不负责任</a>，66/71 认为此评论有用。这足够说明问题了。</p>
+</li>
+<li><p>还看到一个犀利的评价：</p>
+<p> <img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/cpp-primer-plus.png"></p>
+</li>
+</ol>
+<p>甚至会怀疑，那些让我豁然开朗，觉得学到东西的文字叙述是否真的就是那么回事，作者没有诓我吧。</p>
+<p>最后一根稻草，是指针这一块的。</p>
+<p>4.7.1节 讲到声明和初始化指针，提到声明指针时，<code>*</code> 操作符两边的空格问题，本身说的就不清楚，再加上难以自圆其说 指针声明中 <code>*</code> 和 解引用 <code>*</code> 的区别，甚至在作者的描述中两者是一致的。<br>我完全被打败了，弄糊涂了。所以去翻《C++ Primer》，很清晰，一点就明。</p>
+<p>更多的错误就不说了，算是跳读的，虽说到了20%的进度，但就实际阅读的可能不到5%，我标注了8个明显的上下文不一致错误、翻译错误，让人费解的地方。</p>
+<p>所以，打算去啃《Primer》英文原版了。</p>
+<h1 id="别看《C-Concurrency-in-Action》译作"><a href="#别看《C-Concurrency-in-Action》译作" class="headerlink" title="别看《C++ Concurrency in Action》译作"></a>别看《C++ Concurrency in Action》译作</h1><p><strong>原著是值得肯定的</strong>，是 C++ 领域少有的介绍并发编程、多线程的书。但 <a href="https://book.douban.com/review/7485014/">国内翻译的版本</a> 被喷的一无是处，不再多说。</p>
+<p>另外，GitBook 上有一份陈晓伟翻译的 <a href="https://www.gitbook.com/book/chenxiaowei/cpp_concurrency_in_action/details">《C++并发编程(中文版)》</a>，我起初抱着很大的期望去读的。目前（2016/7/14 10:07:18 ） 快读到第二章结尾了，发现其中也有好多不尽人意之处，甚至有些完全翻译错误，将读者带跑带偏。某句话末尾多出个词汇，文字输入时音正字错（“人为”写成“认为”）的现象更是频繁出现。读起来磕磕绊绊，最主要的还是担心译者水平，翻译错误——很明显的错误能够发现，然后去找原文矫正；可是意识不到就代表没有错误了吗？——肯定有，译者的英文水平其实挺一般的。</p>
+<p>所以，打算去看英文原版了。好在作者用的都是日常词汇，读起来并不“卡”，只是会慢些而已。</p>
+<p>追评：原著写得挺好的，真正地去读英文原版会发现也没想象中那么困难，已经向第 4 章迈进了。目前阅读进度缓慢甚至停滞，主要是因为阅读目的（并发入门）已经达到，后面的进阶内容在目前用不到，所以读书的动力就不大了。</p>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+      <tags>
+        <tag>memo</tag>
       </tags>
   </entry>
   <entry>
@@ -5795,98 +5835,6 @@
       </categories>
   </entry>
   <entry>
-    <title>iocp</title>
-    <url>/2020/12/25/iocp/</url>
-    <content><![CDATA[<p>内核对象的概念，是什么？</p>
-<p>设备内核对象？</p>
-<p>事件内核对象？</p>
-<a id="more"></a>
-
-<p><a href="https://docs.microsoft.com/en-us/windows/win32/fileio/i-o-completion-ports">IOCP 概念</a></p>
-<blockquote>
-<p>An I/O completion port is associated with the process that created it and is not sharable between processes. However, a single handle is sharable between threads in the same process.</p>
-</blockquote>
-<p>IOCP 相关的基础 API 只有这三个，相关类型和函数的描述：</p>
-<ul>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/fileio/createiocompletionport">CreateIoCompletionPort </a></li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">HANDLE WINAPI <span class="title">CreateIoCompletionPort</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// An open file handle or INVALID_HANDLE_VALUE.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_     HANDLE    FileHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// A handle to an existing I/O completion port or NULL.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_opt_ HANDLE    ExistingCompletionPort,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// Use the CompletionKey parameter to help your application track which I/O operations have completed.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_     ULONG_PTR CompletionKey,</span></span></span><br><span class="line"><span class="function"><span class="params">  _In_     DWORD     NumberOfConcurrentThreads</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiset-getqueuedcompletionstatus">GetQueuedCompletionStatus</a></li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">GetQueuedCompletionStatus</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  HANDLE       CompletionPort,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPDWORD      lpNumberOfBytesTransferred,</span></span></span><br><span class="line"><span class="function"><span class="params">  PULONG_PTR   lpCompletionKey,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// 指针的指针</span></span></span></span><br><span class="line"><span class="function"><span class="params">  LPOVERLAPPED *lpOverlapped,</span></span></span><br><span class="line"><span class="function"><span class="params">  DWORD        dwMilliseconds</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/fileio/postqueuedcompletionstatus">PostQueuedCompletionStatus</a></li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL WINAPI <span class="title">PostQueuedCompletionStatus</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  _In_     HANDLE       CompletionPort,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// 后面三个参数直接转给 GetQueuedCompletionStatus，内部不使用也不做合法校验，可以不做有效赋值</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_     DWORD        dwNumberOfBytesTransferred,</span></span></span><br><span class="line"><span class="function"><span class="params">  _In_     ULONG_PTR    dwCompletionKey,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// In particular, the lpOverlapped parameter need not point to an OVERLAPPED structure.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_opt_ LPOVERLAPPED lpOverlapped</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-overlapped">OVERLAPPED </a></li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">OVERLAPPED</span> &#123;</span></span><br><span class="line">  <span class="comment">// The status code for the I/O request.</span></span><br><span class="line">  ULONG_PTR Internal;   <span class="comment">//系统内部使用</span></span><br><span class="line">  <span class="comment">// The number of bytes transferred for the I/O request.</span></span><br><span class="line">  ULONG_PTR InternalHigh;   <span class="comment">//系统内部使用</span></span><br><span class="line">  <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">      DWORD Offset;</span><br><span class="line">      DWORD OffsetHigh;</span><br><span class="line">    &#125; DUMMYSTRUCTNAME;</span><br><span class="line">    PVOID Pointer;  <span class="comment">// 系统内部使用</span></span><br><span class="line">  &#125; DUMMYUNIONNAME;</span><br><span class="line">  HANDLE    hEvent;</span><br><span class="line">&#125; OVERLAPPED, *LPOVERLAPPED;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">WSAOVERLAPPED</span> &#123;</span></span><br><span class="line">  DWORD    Internal;</span><br><span class="line">  DWORD    InternalHigh;</span><br><span class="line">  DWORD    Offset;</span><br><span class="line">  DWORD    OffsetHigh;</span><br><span class="line">  WSAEVENT hEvent;</span><br><span class="line">&#125; WSAOVERLAPPED, *LPWSAOVERLAPPED;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>Any unused members of this structure should always be initialized to zero before the structure is used in a function call.</p>
-</blockquote>
-<p>其余三个属性一般置零 <code>l.Offset = l.OffsetHigh = 0; l.hEvent = NULL;</code></p>
-<blockquote>
-<p>The <code>WSAOVERLAPPED</code> structure is compatible with the Windows <code>OVERLAPPED</code> structure.</p>
-</blockquote>
-<h1 id="More"><a href="#More" class="headerlink" title="More"></a>More</h1><ul>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-readfile">ReadFile </a></li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">ReadFile</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  HANDLE       hFile,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPVOID       lpBuffer,</span></span></span><br><span class="line"><span class="function"><span class="params">  DWORD        nNumberOfBytesToRead,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// 以下两个指针分属同步、异步场景中使用，否则置零</span></span></span></span><br><span class="line"><span class="function"><span class="params">  LPDWORD      lpNumberOfBytesRead,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPOVERLAPPED lpOverlapped</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><a href="">WSAStartup</a> </li>
-</ul>
-<blockquote>
-<p>The <code>WSAStartup</code> function initiates use of the Winsock DLL by a process.</p>
-</blockquote>
-<blockquote>
-<p>The <code>WSAStartup</code> function must be the first Windows Sockets function called by an application or DLL. </p>
-</blockquote>
-<ul>
-<li><a href="">WSASocket</a> 和 <a href="">socket </a></li>
-</ul>
-<blockquote>
-<p>By default, a socket created with the <code>WSASocket</code> function will not have this overlapped attribute set.<br>In contrast, the <code>socket</code> function creates a socket that supports overlapped I/O operations as the default behavior.</p>
-</blockquote>
-<ul>
-<li><p><a href="">WSAAccept </a> 和 </p>
-</li>
-<li><p><a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsarecv">WSARecv</a></p>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> WSAAPI <span class="title">WSARecv</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  SOCKET                             s,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// A pointer to an array of WSABUF structures.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  LPWSABUF                           lpBuffers,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// The number of WSABUF structures in the lpBuffers array.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  DWORD                              dwBufferCount,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// Use NULL for this parameter if the lpOverlapped parameter is not NULL to avoid potentially erroneous results.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  LPDWORD                            lpNumberOfBytesRecvd,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPDWORD                            lpFlags,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// A pointer to a WSAOVERLAPPED structure</span></span></span></span><br><span class="line"><span class="function"><span class="params">  LPWSAOVERLAPPED                    lpOverlapped,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> WSAAPI <span class="title">WSASend</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  SOCKET                             s,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPWSABUF                           lpBuffers,</span></span></span><br><span class="line"><span class="function"><span class="params">  DWORD                              dwBufferCount,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// Use NULL for this parameter if the lpOverlapped parameter is not NULL to avoid potentially erroneous results. </span></span></span></span><br><span class="line"><span class="function"><span class="params">  LPDWORD                            lpNumberOfBytesSent,</span></span></span><br><span class="line"><span class="function"><span class="params">  DWORD                              dwFlags,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPWSAOVERLAPPED                    lpOverlapped,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<h1 id="Overlapped-IO-重叠输入输出"><a href="#Overlapped-IO-重叠输入输出" class="headerlink" title="Overlapped IO 重叠输入输出"></a>Overlapped IO 重叠输入输出</h1><p><a href="https://docs.microsoft.com/en-us/windows/win32/fileio/createiocompletionport">异步 I/O 技术(Overlapped I/O)，避免使用多线程</a></p>
-<ol>
-<li><p>激发的文件 handles / 设备内核对象</p>
-</li>
-<li><p>激发的 event 对象 / 事件内核对象</p>
-<blockquote>
-<p>IOEvent 用的是 Overlapped IO 模型。使用起来也比较简单，仅需要将 fd buf overlapped(event) 这4者绑在一起，由内核完成数据的收发，并通过 event 通知应用层，应用层再进行数据操作已经完成后的操作，不需要多余的内存拷贝，数据已经在指定的 buf 上了。<a href="https://docs.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiset-getqueuedcompletionstatus">C++ SOCKET通信模型（二）IOEvent</a></p>
-</blockquote>
-</li>
-<li><p>异步过程调用 APCs（Asynchronous Procedure Calls）</p>
-</li>
-<li><p>I/O completion ports（重要）适用于高负载服务器</p>
-</li>
-</ol>
-<!--more-->
-
-<h1 id="IOCP-输入输出完成端口"><a href="#IOCP-输入输出完成端口" class="headerlink" title="IOCP 输入输出完成端口"></a>IOCP 输入输出完成端口</h1><p><a href="https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-overlapped">完成端口(Completion Port)详解</a></p>
-<blockquote>
-<p>最后，我的建议是，想要使用 <em>基于事件通知的</em> 重叠 I/O 和<em>基于完成例程的</em> 重叠 I/O 的朋友，如果不是特别必要，就不要去使用了，因为这两种方式不仅使用和理解起来也不算简单，而且还有性能上的明显瓶颈</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-      <tags>
-        <tag>windows</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>kubernetes 笔记</title>
     <url>/2022/02/15/kubernetes/</url>
     <content><![CDATA[<p>Kubernetes 是一个开源的<strong>容器编排引擎</strong>，用来对容器化应用进行自动化部署、 扩缩和管理。</p>
@@ -6023,6 +5971,98 @@
       </categories>
   </entry>
   <entry>
+    <title>iocp</title>
+    <url>/2020/12/25/iocp/</url>
+    <content><![CDATA[<p>内核对象的概念，是什么？</p>
+<p>设备内核对象？</p>
+<p>事件内核对象？</p>
+<a id="more"></a>
+
+<p><a href="https://docs.microsoft.com/en-us/windows/win32/fileio/i-o-completion-ports">IOCP 概念</a></p>
+<blockquote>
+<p>An I/O completion port is associated with the process that created it and is not sharable between processes. However, a single handle is sharable between threads in the same process.</p>
+</blockquote>
+<p>IOCP 相关的基础 API 只有这三个，相关类型和函数的描述：</p>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/fileio/createiocompletionport">CreateIoCompletionPort </a></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">HANDLE WINAPI <span class="title">CreateIoCompletionPort</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// An open file handle or INVALID_HANDLE_VALUE.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_     HANDLE    FileHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// A handle to an existing I/O completion port or NULL.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_opt_ HANDLE    ExistingCompletionPort,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// Use the CompletionKey parameter to help your application track which I/O operations have completed.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_     ULONG_PTR CompletionKey,</span></span></span><br><span class="line"><span class="function"><span class="params">  _In_     DWORD     NumberOfConcurrentThreads</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiset-getqueuedcompletionstatus">GetQueuedCompletionStatus</a></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">GetQueuedCompletionStatus</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  HANDLE       CompletionPort,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPDWORD      lpNumberOfBytesTransferred,</span></span></span><br><span class="line"><span class="function"><span class="params">  PULONG_PTR   lpCompletionKey,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// 指针的指针</span></span></span></span><br><span class="line"><span class="function"><span class="params">  LPOVERLAPPED *lpOverlapped,</span></span></span><br><span class="line"><span class="function"><span class="params">  DWORD        dwMilliseconds</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/fileio/postqueuedcompletionstatus">PostQueuedCompletionStatus</a></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL WINAPI <span class="title">PostQueuedCompletionStatus</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  _In_     HANDLE       CompletionPort,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// 后面三个参数直接转给 GetQueuedCompletionStatus，内部不使用也不做合法校验，可以不做有效赋值</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_     DWORD        dwNumberOfBytesTransferred,</span></span></span><br><span class="line"><span class="function"><span class="params">  _In_     ULONG_PTR    dwCompletionKey,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// In particular, the lpOverlapped parameter need not point to an OVERLAPPED structure.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  _In_opt_ LPOVERLAPPED lpOverlapped</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-overlapped">OVERLAPPED </a></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">OVERLAPPED</span> &#123;</span></span><br><span class="line">  <span class="comment">// The status code for the I/O request.</span></span><br><span class="line">  ULONG_PTR Internal;   <span class="comment">//系统内部使用</span></span><br><span class="line">  <span class="comment">// The number of bytes transferred for the I/O request.</span></span><br><span class="line">  ULONG_PTR InternalHigh;   <span class="comment">//系统内部使用</span></span><br><span class="line">  <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">      DWORD Offset;</span><br><span class="line">      DWORD OffsetHigh;</span><br><span class="line">    &#125; DUMMYSTRUCTNAME;</span><br><span class="line">    PVOID Pointer;  <span class="comment">// 系统内部使用</span></span><br><span class="line">  &#125; DUMMYUNIONNAME;</span><br><span class="line">  HANDLE    hEvent;</span><br><span class="line">&#125; OVERLAPPED, *LPOVERLAPPED;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">WSAOVERLAPPED</span> &#123;</span></span><br><span class="line">  DWORD    Internal;</span><br><span class="line">  DWORD    InternalHigh;</span><br><span class="line">  DWORD    Offset;</span><br><span class="line">  DWORD    OffsetHigh;</span><br><span class="line">  WSAEVENT hEvent;</span><br><span class="line">&#125; WSAOVERLAPPED, *LPWSAOVERLAPPED;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Any unused members of this structure should always be initialized to zero before the structure is used in a function call.</p>
+</blockquote>
+<p>其余三个属性一般置零 <code>l.Offset = l.OffsetHigh = 0; l.hEvent = NULL;</code></p>
+<blockquote>
+<p>The <code>WSAOVERLAPPED</code> structure is compatible with the Windows <code>OVERLAPPED</code> structure.</p>
+</blockquote>
+<h1 id="More"><a href="#More" class="headerlink" title="More"></a>More</h1><ul>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-readfile">ReadFile </a></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">ReadFile</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  HANDLE       hFile,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPVOID       lpBuffer,</span></span></span><br><span class="line"><span class="function"><span class="params">  DWORD        nNumberOfBytesToRead,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// 以下两个指针分属同步、异步场景中使用，否则置零</span></span></span></span><br><span class="line"><span class="function"><span class="params">  LPDWORD      lpNumberOfBytesRead,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPOVERLAPPED lpOverlapped</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><a href="">WSAStartup</a> </li>
+</ul>
+<blockquote>
+<p>The <code>WSAStartup</code> function initiates use of the Winsock DLL by a process.</p>
+</blockquote>
+<blockquote>
+<p>The <code>WSAStartup</code> function must be the first Windows Sockets function called by an application or DLL. </p>
+</blockquote>
+<ul>
+<li><a href="">WSASocket</a> 和 <a href="">socket </a></li>
+</ul>
+<blockquote>
+<p>By default, a socket created with the <code>WSASocket</code> function will not have this overlapped attribute set.<br>In contrast, the <code>socket</code> function creates a socket that supports overlapped I/O operations as the default behavior.</p>
+</blockquote>
+<ul>
+<li><p><a href="">WSAAccept </a> 和 </p>
+</li>
+<li><p><a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsarecv">WSARecv</a></p>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> WSAAPI <span class="title">WSARecv</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  SOCKET                             s,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// A pointer to an array of WSABUF structures.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  LPWSABUF                           lpBuffers,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// The number of WSABUF structures in the lpBuffers array.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  DWORD                              dwBufferCount,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// Use NULL for this parameter if the lpOverlapped parameter is not NULL to avoid potentially erroneous results.</span></span></span></span><br><span class="line"><span class="function"><span class="params">  LPDWORD                            lpNumberOfBytesRecvd,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPDWORD                            lpFlags,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// A pointer to a WSAOVERLAPPED structure</span></span></span></span><br><span class="line"><span class="function"><span class="params">  LPWSAOVERLAPPED                    lpOverlapped,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> WSAAPI <span class="title">WSASend</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  SOCKET                             s,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPWSABUF                           lpBuffers,</span></span></span><br><span class="line"><span class="function"><span class="params">  DWORD                              dwBufferCount,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="comment">// Use NULL for this parameter if the lpOverlapped parameter is not NULL to avoid potentially erroneous results. </span></span></span></span><br><span class="line"><span class="function"><span class="params">  LPDWORD                            lpNumberOfBytesSent,</span></span></span><br><span class="line"><span class="function"><span class="params">  DWORD                              dwFlags,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPWSAOVERLAPPED                    lpOverlapped,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Overlapped-IO-重叠输入输出"><a href="#Overlapped-IO-重叠输入输出" class="headerlink" title="Overlapped IO 重叠输入输出"></a>Overlapped IO 重叠输入输出</h1><p><a href="https://docs.microsoft.com/en-us/windows/win32/fileio/createiocompletionport">异步 I/O 技术(Overlapped I/O)，避免使用多线程</a></p>
+<ol>
+<li><p>激发的文件 handles / 设备内核对象</p>
+</li>
+<li><p>激发的 event 对象 / 事件内核对象</p>
+<blockquote>
+<p>IOEvent 用的是 Overlapped IO 模型。使用起来也比较简单，仅需要将 fd buf overlapped(event) 这4者绑在一起，由内核完成数据的收发，并通过 event 通知应用层，应用层再进行数据操作已经完成后的操作，不需要多余的内存拷贝，数据已经在指定的 buf 上了。<a href="https://docs.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiset-getqueuedcompletionstatus">C++ SOCKET通信模型（二）IOEvent</a></p>
+</blockquote>
+</li>
+<li><p>异步过程调用 APCs（Asynchronous Procedure Calls）</p>
+</li>
+<li><p>I/O completion ports（重要）适用于高负载服务器</p>
+</li>
+</ol>
+<!--more-->
+
+<h1 id="IOCP-输入输出完成端口"><a href="#IOCP-输入输出完成端口" class="headerlink" title="IOCP 输入输出完成端口"></a>IOCP 输入输出完成端口</h1><p><a href="https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-overlapped">完成端口(Completion Port)详解</a></p>
+<blockquote>
+<p>最后，我的建议是，想要使用 <em>基于事件通知的</em> 重叠 I/O 和<em>基于完成例程的</em> 重叠 I/O 的朋友，如果不是特别必要，就不要去使用了，因为这两种方式不仅使用和理解起来也不算简单，而且还有性能上的明显瓶颈</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+      <tags>
+        <tag>windows</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>学习 C++</title>
     <url>/2016/07/30/learnSche_cpp/</url>
     <content><![CDATA[<p>跌跌撞撞，兜来绕去，终究还是在 C++ 这个圈子里。毕业时，因为身外事去选择工作单位，而工作单位决定了工作性质，决定了自己处在做软件的边缘，甚至一度成为网管。两年之后跳出陷阱时，背负着“过去的选择”走进了 C++ 的世界，因为一无所长，在诸多技术更迭交替的 IT 圈我像个刚入门的新人似的，只了解一点点 VC++。我没有从头来过的魄力，我也并不清楚 Java 是否更有前途，互联网是否更多辛苦。</p>
@@ -6121,29 +6161,6 @@
       <categories>
         <category>linux</category>
       </categories>
-  </entry>
-  <entry>
-    <title>有料的博客</title>
-    <url>/2016/12/14/memo-url/</url>
-    <content><![CDATA[<p>书山有路勤为径</p>
-<h1 id="有料"><a href="#有料" class="headerlink" title="有料"></a>有料</h1><ul>
-<li><a href="https://program-think.blogspot.com/">编程随想的博客</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/">阮一峰的网络日志</a></li>
-<li><a href="http://www.midphoto.com/chinese/chinese.htm">杨飞工作室</a></li>
-<li><a href="http://www.playpcesor.com/">電腦玩物</a></li>
-<li><a href="http://sspai.com/tag/android">少数派-Android</a></li>
-<li><a href="http://www.rainymood.com/">雨声</a></li>
-</ul>
-<h1 id="专业"><a href="#专业" class="headerlink" title="专业"></a>专业</h1><ul>
-<li><a href="http://linuxtools-rst.readthedocs.io/zh_CN/latest/index.html">Linux工具快速教程</a></li>
-<li><a href="http://linux-wiki.cn/">Linux 中文知识库</a></li>
-<li><a href="http://blog.jobbole.com/82633/">有哪些实用的计算机相关技能，可以在一天内学会？</a></li>
-<li><a href="http://www.cnblogs.com/haippy/p/3284540.html">C++11 并发指南系列 - cnblogs</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>memo</tag>
-      </tags>
   </entry>
   <entry>
     <title>编码转换和 locale</title>
@@ -6286,6 +6303,29 @@
       <categories>
         <category>cpp</category>
       </categories>
+  </entry>
+  <entry>
+    <title>有料的博客</title>
+    <url>/2016/12/14/memo-url/</url>
+    <content><![CDATA[<p>书山有路勤为径</p>
+<h1 id="有料"><a href="#有料" class="headerlink" title="有料"></a>有料</h1><ul>
+<li><a href="https://program-think.blogspot.com/">编程随想的博客</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/">阮一峰的网络日志</a></li>
+<li><a href="http://www.midphoto.com/chinese/chinese.htm">杨飞工作室</a></li>
+<li><a href="http://www.playpcesor.com/">電腦玩物</a></li>
+<li><a href="http://sspai.com/tag/android">少数派-Android</a></li>
+<li><a href="http://www.rainymood.com/">雨声</a></li>
+</ul>
+<h1 id="专业"><a href="#专业" class="headerlink" title="专业"></a>专业</h1><ul>
+<li><a href="http://linuxtools-rst.readthedocs.io/zh_CN/latest/index.html">Linux工具快速教程</a></li>
+<li><a href="http://linux-wiki.cn/">Linux 中文知识库</a></li>
+<li><a href="http://blog.jobbole.com/82633/">有哪些实用的计算机相关技能，可以在一天内学会？</a></li>
+<li><a href="http://www.cnblogs.com/haippy/p/3284540.html">C++11 并发指南系列 - cnblogs</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>memo</tag>
+      </tags>
   </entry>
   <entry>
     <title>从 static 到对象的内存布局</title>
@@ -6483,7 +6523,7 @@
 <li><a href="http://www.mindmanager.cc/zhucema-jihuoma-xuliehao.html">各版本MindManager注册码-激活码-序列号地址</a></li>
 <li><a href="http://www.weiyu.la/2013/2332.html">Mindjet MindManager 14.0.334 正式发布（最后更新：2013-11-11）</a></li>
 </ul>
-<p>ps：目前在用的版本和中文汉化包，都在百度云盘中上传了备份。<a href="mailto:&#x6e;&#105;&#101;&#x6c;&#111;&#110;&#103;&#x32;&#x30;&#x31;&#x34;&#64;&#49;&#x36;&#51;&#x2e;&#x63;&#x6f;&#x6d;">&#x6e;&#105;&#101;&#x6c;&#111;&#110;&#103;&#x32;&#x30;&#x31;&#x34;&#64;&#49;&#x36;&#51;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
+<p>ps：目前在用的版本和中文汉化包，都在百度云盘中上传了备份。<a href="mailto:&#110;&#x69;&#x65;&#108;&#111;&#110;&#x67;&#x32;&#48;&#x31;&#52;&#64;&#49;&#x36;&#51;&#x2e;&#99;&#x6f;&#x6d;">&#110;&#x69;&#x65;&#108;&#111;&#110;&#x67;&#x32;&#48;&#x31;&#52;&#64;&#49;&#x36;&#51;&#x2e;&#99;&#x6f;&#x6d;</a></p>
 <p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/mindmanager/117c25cd-6171-4608-b210-336c5df6f9cc.jpg" alt="启动时弹出对话框"></p>
 ]]></content>
       <categories>
@@ -8991,7 +9031,7 @@
 <a id="more"></a>
 
 <h1 id="tools-标签下第一篇"><a href="#tools-标签下第一篇" class="headerlink" title="tools 标签下第一篇"></a>tools 标签下第一篇</h1><p>2016年1月5日 14:34:16</p>
-<p>此目录主要是和工具有关的笔记，重点在于使用工具的经验、教训和心得，是自己实实在在尝试过、折腾过的（比如 <a href="/2017/03/27/VersionControl/">版本控制</a> 这篇单纯罗列的帖子就不应该在此目录下，而应该整理到思维导图中）。<br>另，百度网盘 <a href="mailto:&#110;&#x69;&#101;&#x6c;&#x6f;&#x6e;&#x67;&#50;&#x30;&#49;&#52;&#x40;&#49;&#x36;&#51;&#46;&#99;&#111;&#x6d;">&#110;&#x69;&#101;&#x6c;&#x6f;&#x6e;&#x67;&#50;&#x30;&#49;&#52;&#x40;&#49;&#x36;&#51;&#46;&#99;&#111;&#x6d;</a> 中，上传了部分软件工具。</p>
+<p>此目录主要是和工具有关的笔记，重点在于使用工具的经验、教训和心得，是自己实实在在尝试过、折腾过的（比如 <a href="/2017/03/27/VersionControl/">版本控制</a> 这篇单纯罗列的帖子就不应该在此目录下，而应该整理到思维导图中）。<br>另，百度网盘 <a href="mailto:&#x6e;&#x69;&#101;&#108;&#x6f;&#x6e;&#103;&#x32;&#x30;&#49;&#52;&#x40;&#x31;&#54;&#x33;&#46;&#99;&#x6f;&#109;">&#x6e;&#x69;&#101;&#108;&#x6f;&#x6e;&#103;&#x32;&#x30;&#49;&#52;&#x40;&#x31;&#54;&#x33;&#46;&#99;&#x6f;&#109;</a> 中，上传了部分软件工具。</p>
 <p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/tools/f5cf1fe2-a2b3-45de-95f3-b741994ce323.png" alt="来源：工具（2016-01-05）.mmap"></p>
 <p>附件：<a href="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/tools/%E5%B7%A5%E5%85%B7%EF%BC%882016-01-05%EF%BC%89.mmap">工具（2016-01-05）.mmap</a></p>
 ]]></content>
