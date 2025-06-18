@@ -196,6 +196,296 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/05/07/spdlog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/05/07/spdlog/" class="post-title-link" itemprop="url">spdlog 日志库</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-07 10:31:30" itemprop="dateCreated datePublished" datetime="2019-05-07T10:31:30+08:00">2019-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在项目中弃用 glog，改用 <a target="_blank" rel="noopener" href="https://github.com/gabime/spdlog">spdlog</a>。花了三个小时，跟了一遍 example.cpp 中提到 <code>xxx_example()</code>，当底层跳转要进入 fmt 时就不再追踪。</p>
+<h1 id="学习-spdlog-源码"><a href="#学习-spdlog-源码" class="headerlink" title="学习 spdlog 源码"></a>学习 spdlog 源码</h1><ol>
+<li>在单参数构造函数中明确使用 <code>explicit</code> 关键词，避免隐式构造，避免隐式类型转换。</li>
+<li>log.h 存放模板类声明，但在头文件末尾 <code>#include log_impl.h</code>，后者存放模板类的定义</li>
+<li>颜色默认只针对 level 关键词，不同级别预设了不同的色彩。但也可以使用 <code>%^</code> <code>%$</code> 划定收尾。</li>
+<li>线程安全，支持多线程</li>
+<li>注册表工厂模式？</li>
+<li>fmt/spdlog 如何输出和二进制的？<code>spdlog::to_hex</code> 与 fmt 自身的二进制格式化输出有什么不同？ <a target="_blank" rel="noopener" href="http://fmtlib.net/latest/api.html#formatting-user-defined-types">fmt 对自定义类型的支持</a></li>
+<li>spdlog 本身是线程安全的，async_ 定位？</li>
+<li>spdlog 开启 <code>FMT_HEADER_ONLY</code> 预编译宏，使用 fmt</li>
+<li>spdlog 以 head-only 方式使用</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/05/07/spdlog/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/01/05/asio/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/01/05/asio/" class="post-title-link" itemprop="url">asio 网络库</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-01-05 09:38:00" itemprop="dateCreated datePublished" datetime="2019-01-05T09:38:00+08:00">2019-01-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>asio 封装了平台差异性，在 windows 下本质就是 IOCP。<a href="https://tnie.github.io/2020/12/25/iocp/">使用 IOCP 请看这里</a></p>
+<h1 id="ASIO"><a href="#ASIO" class="headerlink" title="ASIO"></a>ASIO</h1><p>Your program will have at least one <strong>I/O execution context</strong>, such as an <code>asio::io_context</code> object, <code>asio::thread_pool</code> object, or <code>asio::system_context</code>. This I/O execution context represents your program’s link to the operating system’s I/O services.</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35976351/article/details/106959768">理解 C++ Executor 的设计理念</a>，查看 asio <a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_76_0/doc/html/boost_asio/reference/Executor1.html#boost_asio.reference.Executor1.networking_ts_style_executors">Executor requirements</a>，就只是朴素的 callable thing 的执行器概念</p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000007225464">基于 Asio 的 C++ 网络编程</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1056970">Boost asio 官方教程</a></p>
+<p><a target="_blank" rel="noopener" href="http://think-async.com/Asio/asio-1.12.2/doc/index.html">Documentation (non-Boost)</a></p>
+<p>查看 asio 源码，可以学到“错误代码 vs 异常”两种策略；可以学到“同步 vs 异步”两种接口形式。</p>
+<p>如果依赖 IO 的结果，（单线程）异步 IO 和同步阻塞 IO 都要等到 IO 完成才能继续执行，那么异步的性能是否更好？如果是，为什么？—— 理解 iocp 之后是否就“豁然开朗”了呢</p>
+<blockquote>
+<p>有一点也需要注意, 就是从 request 进来到完成, <strong>应用内各个节点和调用流程都要支持异步 io 调用</strong>, 否则一个节点不支持, 就退化成多线程的解决方式。<a target="_blank" rel="noopener" href="https://www.cnblogs.com/hucn/p/5725522.html">摘自</a></p>
+</blockquote>
+<p>ps. 如果某个节点特别耗时，阻塞当前线程，其实也就退化了</p>
+<blockquote>
+<p>异步IO模型需要一个消息循环，在消息循环中，主线程不断地重复“读取消息-处理消息”这一过程。<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/00143208573480558080fa77514407cb23834c78c6c7309000">摘自</a></p>
+<p>在消息模型中，处理一个消息必须非常迅速，否则，主线程将无法及时处理消息队列中的其他消息，导致程序看上去停止响应。</p>
+</blockquote>
+<p>要理解 asio，其实就是 windows 下的 iocp，就是要理解 Proactor</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/qicosmos/p/3836721.html">拨开迷雾见月明-剖析asio中的proactor模式（一）</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/qicosmos/p/3841026.html">拨开迷雾见月明-剖析asio中的proactor模式（二）</a></li>
+</ul>
+<p>如果要在连续下载文件中使用 asio 异步模型，那么如何将下载后 sqlite3 入库改为嵌入 handler 中？</p>
+<h2 id="例子学习笔记"><a href="#例子学习笔记" class="headerlink" title="例子学习笔记"></a>例子学习笔记</h2><p>2019/8/29 16:07:03 因为多数函数都是模板，编码时信息提示本就是短板。结合 <code>co_await</code> 运算符使用时，更是得不到任何提示信息。只能“瞎写”参数数目和类型，编译报错 + 查看源码多次试验究竟怎么写入参。</p>
+<p><a target="_blank" rel="noopener" href="http://think-async.com/Asio/asio-1.18.0/src/examples/cpp11/futures/daytime_client.cpp">daytime_client.cpp</a></p>
+<p>结合 c++11 <code>std::future</code> 使用 asio 的异步接口，只是在局部提升效率：每个异步接口返回的 <code>future</code>，在其他异步接口中使用时要传入 <code>future::get()</code> 结果，**而非 <code>future</code>**。从全局来看依旧是阻塞的。</p>
+<p>当然，有些业务场景恰好如此。一方面想改进每次同步 IO 的阻塞，因为两次 IO 之间可以做些其余工作；另一方面，下一次 IO 调用依赖前一次 IO 的结果。如果为了局部改进，整体改用「异步 + 回调」形式，开发耗时久：“回调地狱”真的很累，难写，看的人也累。</p>
+<p>在上述场景中，如果没有 <del>两次 IO 之间可以做些其余工作</del> 的需求，其实再次“退化”改用同步接口即可。</p>
+<h1 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h1><p>Boost ASIO supports 3 coroutine types:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_70_0/doc/html/boost_asio/reference/coroutine.html">Stackless Coroutines</a> - Boost ASIO own light weight co routine library using pre-processor macros (been around for a long time now)</li>
+<li><a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_69_0/doc/html/boost_asio/overview/core/spawn.html">Stackful Coroutines</a> - Uses Boost Coroutine library</li>
+<li><a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_71_0/doc/html/boost_asio/overview/core/coroutines_ts.html">Coroutines TS Support</a> (experimental) - Uses CO Routine TS (which is also stackless)</li>
+</ul>
+<h2 id="无栈协程-☆"><a href="#无栈协程-☆" class="headerlink" title="无栈协程 ☆"></a>无栈协程 ☆</h2><p>Boost 库中的协程支持两种方式：</p>
+<ul>
+<li>一种是封装了 <code>Boost.Coroutine</code> 的 <code>spawn</code>，是一个 stackful 类型的协程；</li>
+<li>一种是 asio 作者写出的 stackless 协程。</li>
+</ul>
+<p>asio 的作者通过 <a target="_blank" rel="noopener" href="https://bbs.avplayer.org/t/asio/771">Duff’s Device 技术</a> 实现的无栈协程，用到了好多奇技淫巧。结合 <a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_70_0/doc/html/boost_asio/reference/coroutine.html">coroutine 类</a> 的手册和 <a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_70_0/doc/html/boost_asio/example/cpp03/http/server4/server.cpp">官方 example</a> 学习过程中有以下问题或心得：</p>
+<p><code>std::function&lt;&gt;</code> 模板约定的签名是无法适配默认参数的：即 <code>void handler(asio::error_code, size_t len = 0)</code> 是无法赋值给 <code>std::function&lt;void(asio::error_code)&gt;</code> 类型的。</p>
+<p>一方面从 c++11 才开始支持 <code>std::function&lt;&gt;</code>，另一方面在 c++03 example 中 <code>async_accept()</code>/<code>async_read_some()</code>/<code>async_write()</code> 竟然全部可以使用回调对象：<code>void operator()( asio::error_code ec = asio::error_code(), std::size_t length = 0)</code> ，要知道 <code>async_accpet()</code> 的回调签名可是 <code>void(asio::error_code)</code></p>
+<p>几个关键的** 伪-关键词**，其实都是宏。宏是不支持断点调试的，除非手动把所有的宏展开。不过作为成熟的网络库，这些宏都是经过千锤百炼的，调试中根本无需展开。</p>
+<p>达夫设备的 fall-through 理解起来太难了，我能理解简单的使用案例，但前述伪-关键词还是看不懂。查看 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/attributes/fallthrough">fallthrough </a></p>
+<p>成员<strong>全部交给</strong> <code>std::shared_ptr</code> 托管，因为函数对象需要频繁的拷贝：一方面拷贝开销不能太大；另一方面，回调重入时成员必须有效且正确。虽然 <code>fork server(*this)()</code> 浅拷贝，但实际上 <del>所有</del> 智能指针陆续通过 <code>ptr.reset(new xx)</code> 全部新申请了内存，而 <code>socket_</code> 的浅拷贝本就是最佳解决方案。每个主动 socket 封装都携有一份用不到 <code>acceptor_</code> 也只是个瑕不掩瑜的、无法避免的小问题。</p>
+<blockquote>
+<p>刚刚介绍的协程，不需要任何编译器/底层库的支持。只使用 C 语言本身就支持的 Duff’s Device 技术就能实现。唯一的缺点是局部变量无法跨 yield 。所以所有变量都要定义为函数对象的成员变量。 另外需要把协程定义为函数对象，需要额外编写不少代码。</p>
+</blockquote>
+<p>更多请参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/guxch/article/details/82804067">Boost中的协程—Boost.Asio中的coroutine类</a></p>
+<h2 id="有栈协程-☆"><a href="#有栈协程-☆" class="headerlink" title="有栈协程 ☆"></a>有栈协程 ☆</h2><p><code>Boost.Context</code> 提供的协程包括两类：非对称型协程 asymmetric_coroutine 的和对称型协程 symmetric_coroutine，前者de协程知道唤醒自己的协程，当需要暂停的时候控制流转换给那个特定的协程；对称协程中所有的协程都是相等的，协程可以把控制流给任何一个其它的协程。</p>
+<p><a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_70_0/doc/html/boost_asio/example/cpp03/spawn/echo_server.cpp">c++03 examples</a> 和 <a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_70_0/doc/html/boost_asio/example/cpp11/spawn/echo_server.cpp">c++11 examples</a> 中 <code>spawn</code> 实例演示涉及的 <code>Boost.Coroutine</code> 库已经 <a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_70_0/libs/coroutine/doc/html/coroutine/overview.html">被标记为 Deprecated</a>，推荐使用 <code>Boost.Coroutine2</code>。尴尬的地方在于 <code>asio::spawn()</code> 并未就新的 <code>Boost.Coroutine2</code> 封装新的实现，只能凑合着使用 deprecated 特性。</p>
+<ul>
+<li>如何使用 Boost.Coroutine2，请参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/guxch/article/details/82803769">Boost中的协程—Boost.Coroutine2</a></li>
+<li>如何通过 <code>asio::spawn()</code> 使用 deprecated 的 Boost.Coroutine，请参考：<a target="_blank" rel="noopener" href="http://senlinzhan.github.io/2017/10/03/boost-asio-coroutine/">在 Boost.Asio 中使用协程</a></li>
+</ul>
+<h1 id="Coroutines-TS-Support-☆☆☆"><a href="#Coroutines-TS-Support-☆☆☆" class="headerlink" title="Coroutines TS Support ☆☆☆"></a>Coroutines TS Support ☆☆☆</h1><p>DEMO <a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_70_0/doc/html/boost_asio/examples/cpp17_examples.html">cpp17_examples</a></p>
+<p>即将进入 c++20 的协程。二百多行代码就能写个聊天室，佩服。</p>
+<p><a target="_blank" rel="noopener" href="https://think-async.com/Asio/asio-1.18.1/doc/asio/overview/core/coroutines_ts.html">Coroutines TS Support</a>，这是唯一能找到的有效介绍，虽然内容不多，但说清楚了入参、出参的用法和意义。</p>
+<blockquote>
+<p>Support for the Coroutines TS is provided via the <code>awaitable</code> class template, the <code>use_awaitable</code> completion token, and the <code>co_spawn()</code> function.</p>
+</blockquote>
+<h2 id="co-spawn"><a href="#co-spawn" class="headerlink" title="co_spawn"></a>co_spawn</h2><p>查看 <code>co_spawn</code> 函数的功能与签名：通过持有协程的返回值（第二个入参）以便 resume 协程。asio 库封装的协程，协程的调度对用户都是透明的（用户只提供了某些定制点，用户无需 resume 协程），完全由 <code>co_spawn</code> 底层实现。类比 thread，完全是 os 的定位。</p>
+<blockquote>
+<p>Spawn a new coroutined-based thread of execution. 生成一个新的<em>基于协程</em>的执行线程。</p>
+</blockquote>
+<p>对于用户，压下好奇心，不要执着于它是如何实现的，直接理解为“新启执行线程”是直观且无误的。专注业务而非库的功能。</p>
+<blockquote>
+<p>对称协程只是非对称协程的一个特例，我们可以通过添加一个中立的第三方调度中心的方式将非对称协程转换成对称协程（只需要在所有协程“暂停”时将控制权转交给调度中心统一调度即可）<a target="_blank" rel="noopener" href="https://gqw.github.io/blog/2020/10/01/%E4%BB%8Ehellowold%E5%BC%80%E5%A7%8B%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAc-20-coroutine-ts/">引用来源</a></p>
+</blockquote>
+<p>推测 <code>co_spawn</code> 内部就存在这么个“调度中心”。</p>
+<p>在 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/coroutines">coroutines_ts</a> 中给出了协程的定义等。在 asio 中协程的显著标识是函数返回值：<code>awaitable&lt;void&gt; foo()</code>，</p>
+<blockquote>
+<p>The return type of a coroutine or asynchronous operation.</p>
+</blockquote>
+<p>所以 <code>co_spawn()</code> 的第二个入参使用 lambda expression 时要显式地指出返回类型：要么 <code>return xx</code> 语句；要么 <code>-&gt; ret</code>。因为缺省使用 <code>void</code>。</p>
+<blockquote>
+<p><code>-&gt; ret</code>, where ret specifiers the return type. If trailing-return-type is not present, the return type is implied by the function return statements (or <code>void</code> if it doesn’t return any value)</p>
+</blockquote>
+<p><strong>总结</strong>：协程是特异的函数，特征就是返回签名；协程也不能像普通函数那样直接调用，而是通过 <code>co_spawn()</code> 以便 suspend 后由调度中心 resume。</p>
+<h2 id="executor"><a href="#executor" class="headerlink" title="executor"></a>executor</h2><p>在协程函数体的实现中，当需要 <code>io_context</code> 对象时，既可以通过函数参数传进来，也可以在函数内使用以下语句获取：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// asio::any_io_executor</span></span><br><span class="line"><span class="keyword">auto</span> executor = <span class="keyword">co_await</span> this_coro::executor;		</span><br></pre></td></tr></table></figure>
+
+<p>一度非常困惑两者的关系，<a target="_blank" rel="noopener" href="https://github.com/tnie/aclient/issues/11">context 和 executor 分别是什么概念</a></p>
+<blockquote>
+<p>在 asio 中，execution context 是一个重量级的对象，不允许拷贝。executor 是对一个轻量级的句柄(handle)对象指向对应的execution context。</p>
+</blockquote>
+<p>另外两个特殊值，<code>co_spawn()</code> 的第三个参数 <code>asio::detached</code>，和 <code>async_xx()</code> 的末尾参数 <code>asio::use_awaitable</code>，都是固定用法。</p>
+<p>上述三个特殊值的类型定义都是空的，模板依赖其类型进行特例化，类型的定义反而不重要。</p>
+<p><code>asio::use_awaitable</code> 用于模板特例化之外有更多的用途吗？</p>
+<p>顺序 <code>co_spawn() </code>创建 1-2-3-4 协程，在各协程中 <code>co_await</code> 之前的逻辑也是 1-2-3-4 顺序执行！——这是个浅显的现象，了解协程的定义和实现后，这也是理所当然的：在第一次 <code>co_await</code> 时函数才返回。</p>
+<h2 id="Special-Values"><a href="#Special-Values" class="headerlink" title="Special Values"></a>Special Values</h2><p>This completion token that can be passed as a handler to an asynchronous operation:</p>
+<ul>
+<li><code>asio::use_awaitable</code></li>
+<li><code>asio::detached</code></li>
+<li><code>asio::use_future</code></li>
+</ul>
+<p><strong>asio::use_awaitable</strong></p>
+<p>The <code>use_awaitable_t</code> class, with its value <code>use_awaitable</code>, is used to represent the currently executing coroutine. This completion token may be passed as a handler to an asynchronous operation. For example:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">awaitable&lt;<span class="keyword">void</span>&gt; <span class="title">my_coroutine</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">std</span>::<span class="keyword">size_t</span> n = <span class="keyword">co_await</span> my_socket.async_read_some(buffer, use_awaitable);</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>When used with <code>co_await</code>, the initiating function (<code>async_read_some</code> in the above example) suspends the current coroutine. The coroutine is resumed when the asynchronous operation completes, and the result of the operation is returned.</p>
+<p><strong>asio::detached</strong></p>
+<p>The <code>detached_t</code> class is used to indicate that an asynchronous operation is detached. That is, there is no completion handler waiting for the operation’s result. A <code>detached_t</code> object may be passed as a handler to an asynchronous operation, typically using the special value <code>asio::detached</code>. For example:</p>
+<p><code>my_socket.async_send(my_buffer, asio::detached);</code></p>
+<p><strong>asio::use_future</strong></p>
+<p>The <code>use_future_t</code> class is used to indicate that an asynchronous operation should return a <code>std::future</code> object. A <code>use_future_t</code> object may be passed as a handler to an asynchronous operation, typically using the special value <code>asio::use_future</code>. For example:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">future</span>&lt;<span class="built_in">std</span>::<span class="keyword">size_t</span>&gt; my_future</span><br><span class="line">  = my_socket.async_read_some(my_buffer, asio::use_future);</span><br></pre></td></tr></table></figure>
+<p>The initiating function (<code>async_read_some</code> in the above example) returns a future that will receive the result of the operation. If the operation completes with an <code>error_code</code> indicating failure, it is converted into a <code>system_error</code> and passed back to the caller via the future.</p>
+<p><strong>this_coro::executor</strong></p>
+<p>Awaitable object that returns the executor of the current coroutine.</p>
+<p><code>constexpr executor_t executor;</code></p>
+<h2 id="协程里外的异常"><a href="#协程里外的异常" class="headerlink" title="协程里外的异常"></a>协程里外的异常</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;asio/redirect_error.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line">asio::error_code ec;</span><br><span class="line"><span class="function"><span class="keyword">co_await</span> <span class="title">async_write</span><span class="params">(socket, asio::buffer(msg), asio::redirect_error(use_awaitable, ec) )</span></span>;</span><br><span class="line"><span class="keyword">if</span> (ec)</span><br><span class="line">&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>redirect_error_t</strong></p>
+<p>Completion token type used to specify that an error produced by an asynchronous operation is captured to an <code>error_code</code> variable.</p>
+<p><code>asio::redirect_err()</code> 的 <a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_71_0/libs/outcome/doc/html/recipes/asio-integration-1-70.html">缺点</a> 无伤大雅</p>
+<blockquote>
+<p>The <code>redirect_error</code> token transformation recovers the option to use the error_code interface, but it suffers from the same drawbacks that <strong>make pure error codes unappealing</strong> in the synchronous case.</p>
+</blockquote>
+<h2 id="co-await-和线程锁"><a href="#co-await-和线程锁" class="headerlink" title="co_await 和线程锁"></a>co_await 和线程锁</h2><p>协程中禁用线程锁！</p>
+<h2 id="不和谐的-疑惑"><a href="#不和谐的-疑惑" class="headerlink" title="不和谐的 / 疑惑"></a>不和谐的 / 疑惑</h2><p><code>asio::async_read()</code>  没有 <code>asio::use_awaitable</code> 版本的重载 (•_•)?  <a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_67_0/libs/beast/doc/html/beast/ref/boost__beast__http__async_read.html">boost beast 提供了</a></p>
+<blockquote>
+<p>The secret of stackless coroutines is that they can suspend themselves only from the <strong>top-level</strong> function.</p>
+</blockquote>
+<p><code>socket::async_read_some()</code> 无法以 <code>asio::streambuf</code> 作为入参</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> size = response_.m_response_buf.size();</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">auto</span> remain = content_length - size;</span><br><span class="line"><span class="comment">//auto len = co_await asio::async_read(*ssocket_, response_.m_response_buf, asio::transfer_at_least(content_length - size),</span></span><br><span class="line"><span class="comment">//    asio::redirect_error(asio::use_awaitable, ec));</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">size_t</span> len = <span class="number">0</span>; !ec &amp;&amp; len &lt; remain; )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">auto</span> buf = response_.m_response_buf.prepare(<span class="built_in">std</span>::min(remain, <span class="number">1024ul</span>));</span><br><span class="line">    <span class="keyword">auto</span> bytes = <span class="keyword">co_await</span> ssocket_-&gt;async_read_some(asio::buffer(buf),</span><br><span class="line">        asio::redirect_error(asio::use_awaitable, ec));</span><br><span class="line">    response_.m_response_buf.commit(bytes);</span><br><span class="line">    len += bytes;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 msvc2015 中断点调试无法监视变量 (ÒωÓױ)！</p>
+<h2 id="如何编写协程类型"><a href="#如何编写协程类型" class="headerlink" title="如何编写协程类型"></a>如何编写协程类型</h2><p>请移步 coroutine 学习总结</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/01/05/protobuf/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -864,204 +1154,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/08/24/automake3rd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/08/24/automake3rd/" class="post-title-link" itemprop="url">Makefile 自动生成 - configure & make</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-08-24 14:07:47" itemprop="dateCreated datePublished" datetime="2017-08-24T14:07:47+08:00">2017-08-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="执行脚本-configure"><a href="#执行脚本-configure" class="headerlink" title="执行脚本 ./configure"></a>执行脚本 ./configure</h1><p>configure：它能根据不同的系统，产生不同的 Makefile，从而使我们的程序具有可移植性。它还有一些参数：</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>–cache-file=FILE</td>
-<td>测试系统的特性，并将结果放到FILE中</td>
-</tr>
-<tr>
-<td>–help</td>
-<td>输出帮助信息</td>
-</tr>
-<tr>
-<td>–no-create</td>
-<td>阻止其生成输出文件</td>
-</tr>
-<tr>
-<td>–quiet</td>
-<td>执行是不做输出</td>
-</tr>
-<tr>
-<td>–silent</td>
-<td>同上，若设置则不会有任何输出到屏幕</td>
-</tr>
-<tr>
-<td>–version</td>
-<td>输出automake的版本号</td>
-</tr>
-</tbody></table>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/08/24/automake3rd/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/08/24/autotools/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/08/24/autotools/" class="post-title-link" itemprop="url">编译利器：大型项目如何使用Automake和Autoconf完成编译配置(ver+0.6)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-08-24 09:54:33" itemprop="dateCreated datePublished" datetime="2017-08-24T09:54:33+08:00">2017-08-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这篇帖子很棒！我从百度文库中下载了 <a target="_blank" rel="noopener" href="https://github.com/tnie/MarkdownPhotos/blob/master/autotools/%E7%BC%96%E8%AF%91%E5%88%A9%E5%99%A8%EF%BC%9A%E5%A4%A7%E5%9E%8B%E9%A1%B9%E7%9B%AE%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Automake%E5%92%8CAutoconf%E5%AE%8C%E6%88%90%E7%BC%96%E8%AF%91%E9%85%8D%E7%BD%AE(ver+0.6).docx?raw=true">此教程</a>，因为未做深度的考证，所以也不知原作者是谁，但在此谢谢作者。以下是作者原文，略有删改，本人有修改部分都已做出备注。</p>
-<hr>
-<p>使用过开源 C/C++ 项目的同学们都知道，标准的编译过程已经变成了简单的三部曲：configure/make/make install, 使用起来很方便，不像平时自己写代码，要手写一堆复杂的 Makefile，而且换个编译环境，Makefile 还需要修改（Eclipse 也是这样）。</p>
-<p>这么好的东东当然要拿来用了，但 GNU 的 Autotool 系列博大精深，工具数量又多，涉及的语言也多，要是自己从头看到尾，黄花菜都凉了，项目估计早就结束了；上网搜样例倒是有一大堆，但都是“hello world”的样例，离真正完成大型项目的目标还差得远。</p>
-<p>没有办法，对照网上的样例，再找几个开源的源码，然后参考各种 Autotools 的手册，花了 2 天时间，终于完成了一个基本可用的 Autotools。为了避免其他 XDJM 也浪费时间，因此将过程总结下来，就算是新年礼物，送给大家！！</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/08/24/autotools/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1133,7 +1225,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">155</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

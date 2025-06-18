@@ -9143,32 +9143,42 @@
       </categories>
   </entry>
   <entry>
-    <title>使用 Anaconda 包管理器</title>
+    <title>通过 miniconda 使用 Python</title>
     <url>/2022/02/11/tryAnaconda/</url>
     <content><![CDATA[<p>关于 python 语言的学习，参见 <a href="https://github.com/tnie/learnPython">c++ 开发人员学习 python 的记录</a></p>
-<p>上述笔记缺少了 Anaconda 环境和包管理方面的内容，在这里补充。</p>
-<p>Anaconda 下载包，在墙里的体验很差。 <a href="https://www.cpci.dev/anaconda-mirrors-configure/">Anaconda 国内源配置</a> </p>
-<p>目前（2022年2月11日） v2rayN 代理有问题，<strong>开启代理会造成 Anaconda 更新失败</strong> 等异常，报错如下：</p>
+<p>上述笔记缺少了 Python 环境和包管理方面的内容，在这里补充。</p>
+<p>在 Linux 环境下，系统可能自带某个版本的 Python；而 Windows 系统一般没有。</p>
+<p>无论哪种平台，一般不会更新升级/直接安装 Python 使用。而是，借用虚拟环境管理工具管理 Python 的版本。</p>
+<blockquote>
+<p>每个环境可以使用不同版本的 Python ，安装不同版本的依赖包。</p>
+</blockquote>
+<h1 id="conda"><a href="#conda" class="headerlink" title="conda"></a>conda</h1><p>conda 是一个开源的包管理系统 + 环境管理系统。</p>
+<p>作为包管理系统，conda 和 Python 官方的 pip 各有侧重：</p>
+<ul>
+<li><p>conda 更适合需要管理复杂依赖关系和创建隔离环境的数据科学和机器学习项目；</p>
+</li>
+<li><p><code>pip</code> 更适合管理纯 Python 包，并且在 Python 开发社区中被广泛使用。</p>
+</li>
+</ul>
+<p>避免在同一个环境中混用 conda 和 pip，以防止潜在的冲突。</p>
+<p><code>conda</code> 在环境管理方面非常强大，是不二之选。</p>
 <a id="more"></a>
 
+<h1 id="miniconda"><a href="#miniconda" class="headerlink" title="miniconda"></a>miniconda</h1><p>Anaconda 包含了 conda 以及大量的预装软件包，这些软件包都是数据科学中常用的。</p>
+<p>普通开发者使用 Miniconda 即可，它只包含 conda 和其依赖项，以及 Python 本身。</p>
+<p>Anaconda/Miniconda 下载包，在墙里的体验很差。 <a href="https://www.cpci.dev/anaconda-mirrors-configure/">Anaconda 国内源配置</a> </p>
+<p>目前（2022年2月11日） v2rayN 代理有问题，<strong>开启代理会造成 Anaconda 更新失败</strong> 等异常，报错如下：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CondaHTTPError: HTTP 000 CONNECTION FAILED for url &lt;https:&#x2F;&#x2F;repo.anaconda.com&#x2F;pkgs&#x2F;main&#x2F;win-64&#x2F;pluggy-1.0.0-py39haa95532_0.conda&gt;</span><br><span class="line">Elapsed: -</span><br><span class="line"></span><br><span class="line">An HTTP error occurred when trying to retrieve this URL.</span><br><span class="line">HTTP errors are often intermittent, and a simple retry will get you on your way.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-<p><a href="https://www.jianshu.com/p/eaee1fadc1e9">Anaconda完全入门指南</a> ，常用命令摘抄如下：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 切换到base环境</span></span><br><span class="line">activate </span><br><span class="line"><span class="meta">#</span><span class="bash"> 切换到learn环境</span></span><br><span class="line">activate learn </span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建一个名为learn的环境并指定python版本为3(的最新版本)</span></span><br><span class="line">conda create -n learn python=3 </span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出conda管理的所有环境</span></span><br><span class="line">conda env list </span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出当前环境的所有包</span></span><br><span class="line">conda list </span><br><span class="line"><span class="meta">#</span><span class="bash">  安装requests包</span></span><br><span class="line">conda install requests</span><br><span class="line"><span class="meta">#</span><span class="bash"> 卸载requets包</span></span><br><span class="line">conda remove requests </span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除learn环境及下属所有包</span></span><br><span class="line">conda remove -n learn --all</span><br><span class="line"><span class="meta">#</span><span class="bash"> 更新requests包</span></span><br><span class="line">conda update requests</span><br><span class="line"><span class="meta">#</span><span class="bash"> 导出当前环境的包信息</span></span><br><span class="line">conda env export &gt; environment.yaml </span><br><span class="line"><span class="meta">#</span><span class="bash"> 用配置文件创建新的虚拟环境</span></span><br><span class="line">conda env create -f environment.yaml</span><br></pre></td></tr></table></figure>
-
-
+<p><a href="https://www.jianshu.com/p/eaee1fadc1e9">Anaconda 完全入门指南</a> ，常用命令摘抄如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 切换到 base 环境</span></span><br><span class="line">activate</span><br><span class="line"><span class="meta">#</span><span class="bash"> 切换到 learn 环境</span></span><br><span class="line">activate learn </span><br><span class="line"><span class="meta">#</span><span class="bash"> 退出当前工作环境</span></span><br><span class="line">conda deactivate</span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出 conda 管理的所有环境</span></span><br><span class="line">conda env list </span><br><span class="line">conda info --envs</span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建一个名为 learn 的环境并指定 python 版本为 3（的最新版本）</span></span><br><span class="line">conda create -n learn python=3 </span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除 learn 环境及下属所有包</span></span><br><span class="line">conda remove -n learn --all</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出当前环境的所有包</span></span><br><span class="line">conda list </span><br><span class="line"><span class="meta">#</span><span class="bash">  安装/ 卸载 / 更新 requests 包</span></span><br><span class="line">conda install requests</span><br><span class="line">conda remove  requests </span><br><span class="line">conda update  requests</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 导出当前环境的包信息</span></span><br><span class="line">conda env export &gt; environment.yaml </span><br><span class="line"><span class="meta">#</span><span class="bash"> 用配置文件创建新的虚拟环境</span></span><br><span class="line">conda env create -f environment.yaml</span><br><span class="line"><span class="meta">#</span><span class="bash"> 打包迁移</span></span><br><span class="line">conda pack -n deepseek9 -o deepseek9.tar.gz</span><br></pre></td></tr></table></figure>
+<p>可以指定环境的路径（和 <code>-n</code> 互斥），但不推荐：切换/删除 环境时因为没有名字，只能输入全路径，不方便。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda create -p D:\ProgramData\miniconda3\envs\langchain8 python=3.8.10</span><br><span class="line">activate D:\ProgramData\miniconda3\envs\langchain8</span><br><span class="line">conda remove -p D:\ProgramData\miniconda3\envs\langchain8 --all</span><br><span class="line"><span class="meta">#</span><span class="bash"> LLM langchain</span></span><br><span class="line">conda create -n langchain python=3.12.9</span><br><span class="line">conda activate langchain</span><br><span class="line">pip install -U langchain langchain-deepseek langchain-ollama langchain-community openai-whisper conda-pack</span><br><span class="line">pip install -U langgraph</span><br><span class="line"><span class="meta">#</span><span class="bash"> LLM langchian <span class="keyword">for</span> arm</span></span><br><span class="line">pip download --platform=manylinux2014_aarch64 --only-binary=:all: langchain langchain-deepseek langchain-ollama langchain-community conda-pack</span><br><span class="line">pip install *.whl</span><br><span class="line"><span class="meta">#</span><span class="bash"> openai-whisper 失败，似乎是没有 arm 平台的？</span></span><br></pre></td></tr></table></figure>
 <p>使用 <code>activate</code> 命令在 windows 命令提示符窗口生效；在 powershell 中无效，执行 <code>activate</code> 后依然警告： </p>
 <blockquote>
 <p>the environment has not been activated.</p>
 </blockquote>
 <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Users\fnie&gt; activate</span><br><span class="line"><span class="built_in">PS</span> C:\Users\fnie&gt; python</span><br><span class="line">Python <span class="number">3.9</span>.<span class="number">7</span> (default, Sep <span class="number">16</span> <span class="number">2021</span>, <span class="number">16</span>:<span class="number">59</span>:<span class="number">28</span>) [<span class="type">MSC</span> <span class="type">v.1916</span> <span class="number">64</span> <span class="type">bit</span> (<span class="type">AMD64</span>)] :: Anaconda, Inc. on win32</span><br><span class="line"></span><br><span class="line">Warning:</span><br><span class="line">This Python interpreter is <span class="keyword">in</span> a conda environment, but the environment has</span><br><span class="line">not been activated.  Libraries may fail to load.  To activate this environment</span><br><span class="line">please see https://conda.io/activation</span><br><span class="line"></span><br><span class="line"><span class="built_in">Type</span> <span class="string">&quot;help&quot;</span>, <span class="string">&quot;copyright&quot;</span>, <span class="string">&quot;credits&quot;</span> or <span class="string">&quot;license&quot;</span> <span class="keyword">for</span> more information.</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
 <p>和 powershell 执行脚本的权限策略有关系，解决方案：<a href="https://stackoverflow.com/questions/64149680/how-to-activate-conda-environment-from-powershell">How to activate conda environment from powershell?</a></p>
-<p>使用过程中报如下错误：执行 <code>pip install mysql-connector</code> ，使用 <code>conda install mysql-connector-python</code> 命令安装一直失败</p>
-<blockquote>
-<p>ModuleNotFoundError: No module named ‘mysql’</p>
-</blockquote>
-<p>@todo 备注 Notepad++ 安装 JSTool 插件过程</p>
 ]]></content>
       <categories>
         <category>python</category>
@@ -11855,5 +11865,148 @@
       <tags>
         <tag>git</tag>
       </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2025/03/12/http-upload/</url>
+    <content><![CDATA[<p>使用 http 协议上传文件的协议细节和实现。</p>
+<h1 id="使用-curl-上传"><a href="#使用-curl-上传" class="headerlink" title="使用 curl 上传"></a>使用 curl 上传</h1><p>调试 Swagger API 时一般会使用 postman 工具，但可以有更加短平快的手段、工具满足我们轻量的调试需求。</p>
+<p>curl ，linux 平台下常用，或者 windows 平台下 git bash 中也带有 curl 命令。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"> -X, --request &lt;method&gt;      Specify request method to use </span><br><span class="line"> -d, --data &lt;data&gt;           HTTP POST data </span><br><span class="line"> -H, --header &lt;header/@file&gt; Pass custom header(s) to server</span><br><span class="line"> -v, --verbose               Make the operation more talkative </span><br><span class="line"> -F, --form &lt;name=content&gt;   Specify multipart MIME data</span><br><span class="line">To force the &#x27;content&#x27; part to be a file, prefix the filename with an @ sign.</span><br><span class="line">@ makes a file get attached in the post as a file upload, ...</span><br></pre></td></tr></table></figure>
+<p>使用上述参数，实际演练一下：使用 <code>-d</code> 或 <code>-F</code> 参数时，curl 能够自行推断出要使用 <code>POST</code> 方法</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> curl <span class="string">&#x27;http://localhost:3001/api/v1/document/upload&#x27;</span> -v \</span></span><br><span class="line"><span class="bash">    -H <span class="string">&#x27;accept: application/json&#x27;</span> \</span></span><br><span class="line"><span class="bash">    -H <span class="string">&#x27;Authorization: Bearer S0QSFCC-MYTMPGN-M9WEQBZ-3V579DV&#x27;</span> \</span></span><br><span class="line"><span class="bash">    -H <span class="string">&#x27;Content-Type: multipart/form-data&#x27;</span> \</span></span><br><span class="line"><span class="bash">    -F <span class="string">&#x27;file=@tmp.txt&#x27;</span>  <span class="comment"># -F &#x27;user=niel&#x27;</span></span></span><br><span class="line">...   # 此处有省略</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> POST /api/v1/document/upload HTTP/1.1</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Host: localhost:3001</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> User-Agent: curl/8.6.0</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> accept: application/json</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Authorization: Bearer S0QSFCC-MYTMPGN-M9WEQBZ-3V579DV</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Content-Length: 202</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Content-Type: multipart/form-data; boundary=------------------------pF28TYDnB4wmWf8sPjKctM</span></span><br><span class="line"><span class="meta">&gt;</span></span><br><span class="line"><span class="bash">&#125; [202 bytes data]</span></span><br><span class="line">* We are completely uploaded and fine</span><br><span class="line">&lt; HTTP/1.1 200 OK</span><br><span class="line">...  # 此处有省略</span><br></pre></td></tr></table></figure>
+<p>接下来结合 curl 输出和 wireshark 抓包，来学习标准。 </p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-12%20222409.png"></p>
+<p>Encapsulation 封装；Disposition 布置；</p>
+<h1 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h1><p><a href="https://zh.wikipedia.org/zh-cn/%E5%A4%9A%E7%94%A8%E9%80%94%E4%BA%92%E8%81%AF%E7%B6%B2%E9%83%B5%E4%BB%B6%E6%93%B4%E5%B1%95">多用途互联网邮件扩展</a>（英语：Multipurpose Internet Mail Extensions，缩写：MIME）是一个互联网标准，它扩展了电子邮件标准。</p>
+<p>此外，在万维网中使用的 HTTP 协议中也使用了 MIME 的框架，标准被扩展为<a href="https://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%94%E7%BD%91%E5%AA%92%E4%BD%93%E7%B1%BB%E5%9E%8B">互联网媒体形式</a>。</p>
+<p>MIME 是通过标准化电子邮件报文的头部的附加域（fields）而实现的；这些头部的附加域，描述新的报文类型的内容和组织形式。</p>
+<p>更多细节请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/MIME_types">MIME 类型</a>  的详细内容！</p>
+<h2 id="Content-Type"><a href="#Content-Type" class="headerlink" title="Content-Type"></a>Content-Type</h2><p>MIME 类型的格式：<code>Content-Type: type/subtype;parameter=value</code>  ，参数可选。</p>
+<p>类型可分为两类：<strong>独立的</strong>（discrete）和<strong>多部分的</strong>（multipart）。</p>
+<ul>
+<li><p>独立类型代表单一文件或媒介，比如一段文字、一个音乐文件、一个视频文件等。</p>
+</li>
+<li><p>而多部份类型，可以代表由多个部件组合成的文档，其中每个部分都可能有各自的 MIME 类型；此外，也可以代表多个文件被封装在单次事务中一同发送。</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/MIME_types#multipartform-data">multipart/form-data</a> 作为多部分文档格式，它由 boundary 边界线划分出的不同部分组成。</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">Content-Type: multipart/form-data; boundary=aBoundaryString</span><br></pre></td></tr></table></figure>
+<p>每一部分有自己的 content header (零个或多个 <code>Content-</code> header fields) 和 body 。 </p>
+<h2 id="Content-Disposition"><a href="#Content-Disposition" class="headerlink" title="Content-Disposition"></a>Content-Disposition</h2><p>最初的 MIME 规范仅描述了邮件消息的结构。它们没有解决呈现样式的问题。</p>
+<p>在 RFC 2183 中添加了 <code>content-disposition</code> 标头字段来指定呈现样式。</p>
+<p>此表头用在 http 协议中有两个使用场景：</p>
+<ul>
+<li><p>As a response header for the main body</p>
+</li>
+<li><p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition#as_a_header_for_a_multipart_body">As a header for a multipart body</a> ，第一个指令始终是 <code>form-data</code> ，并且还必须包含一个 <code>name</code> 参数来标识表单字段名。</p>
+<p><code>filename</code>  参数是可选的，指示要传送的文件的初始名称的字符串。</p>
+</li>
+</ul>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>使用 Qt 库完成文件上传的功能， by Google’s Gemini</p>
+<p>如果手动添加文件头 <code>Content-Type:multipart/form-data</code> 似乎会造成 <code>boundary=</code> 参数丢失： #TODO# 有待验证</p>
+<ul>
+<li>虽然手动设置文件头在前，<code>-&gt;post(request, multiPart)</code> 在后</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">uploadFile</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">QNetworkRequest <span class="title">request</span><span class="params">(QUrl(<span class="string">&quot;http://example.com/api/upload&quot;</span>))</span></span>;  <span class="comment">// 替换为您的服务器上传接口 URL</span></span><br><span class="line"></span><br><span class="line">    QHttpMultiPart *multiPart = <span class="keyword">new</span> QHttpMultiPart(QHttpMultiPart::FormDataType);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 文件数据部分</span></span><br><span class="line">    QHttpPart filePart;</span><br><span class="line">    QString disposition = QString(<span class="string">R&quot;(form-data; name=&quot;file&quot;; filename=&quot;%1&quot;)&quot;</span>).arg(QFileInfo(filePath).fileName());</span><br><span class="line">    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(disposition);</span><br><span class="line">    QFile *file = <span class="keyword">new</span> QFile(filePath);</span><br><span class="line">    <span class="keyword">if</span> (!file-&gt;open(QIODevice::ReadOnly)) &#123;</span><br><span class="line">        QMessageBox::critical(<span class="keyword">this</span>, <span class="string">&quot;错误&quot;</span>, <span class="string">&quot;无法打开文件: &quot;</span> + filePath);</span><br><span class="line">        <span class="keyword">delete</span> multiPart;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    filePart.setBodyDevice(file); <span class="comment">// file的所有权转移给filePart</span></span><br><span class="line">    file-&gt;setParent(multiPart); <span class="comment">// 设置父对象，防止被提前析构</span></span><br><span class="line">    multiPart-&gt;append(filePart);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 其他表单字段 (可选)</span></span><br><span class="line">    QHttpPart namePart;</span><br><span class="line">    namePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(<span class="string">&quot;form-data; name=\&quot;user\&quot;&quot;</span>));</span><br><span class="line">    namePart.setBody(<span class="string">&quot;niel&quot;</span>);</span><br><span class="line">    multiPart-&gt;append(namePart);</span><br><span class="line"></span><br><span class="line">    QNetworkAccessManager *manager = <span class="keyword">new</span> QNetworkAccessManager(<span class="keyword">this</span>);</span><br><span class="line">    connect(manager, &amp;QNetworkAccessManager::finished, <span class="keyword">this</span>, &amp;MyWidget::uploadFinished);</span><br><span class="line"></span><br><span class="line">    QNetworkReply *reply = manager-&gt;post(request, multiPart);</span><br><span class="line">    multiPart-&gt;setParent(reply); <span class="comment">// 设置父对象，确保multiPart在reply完成前有效</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//  可以添加请求头，例如设置认证信息</span></span><br><span class="line">    <span class="comment">// request.setHeader(QNetworkRequest::ContentTypeHeader, &quot;multipart/form-data&quot;); // QHttpMultiPart 会自动设置</span></span><br><span class="line">    <span class="comment">// request.setHeader(QNetworkRequest::AuthorizationHeader, &quot;Bearer YourAccessToken&quot;);</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">void</span> uploadFinished(QNetworkReply *reply) &#123;</span><br><span class="line">    reply-&gt;deleteLater(); <span class="comment">// 必须 deleteLater 释放 reply 对象</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2025/02/26/JavaScript/</url>
+    <content><![CDATA[<h1 id="LLM"><a href="#LLM" class="headerlink" title="LLM"></a>LLM</h1><p>如何更新 Ollama 呢？</p>
+<p> <a href="https://github.com/ollama/ollama/blob/main/docs/faq.md#how-can-i-specify-the-context-window-size">How can I specify the context window size?</a></p>
+<p>其中的“上下文窗口”是什么概念？上下文是什么概念？</p>
+<p>prompt 提示词又会带来什么？</p>
+<p>Ollama 会动态地加载（或卸载）其中的大语言模型，DeepSeek 等大模型并非一直在运行的。</p>
+<h1 id="AnythingLLM"><a href="#AnythingLLM" class="headerlink" title="AnythingLLM"></a>AnythingLLM</h1><p>参考其 github 的 README 文件</p>
+<blockquote>
+<p>这个单库由三个主要部分组成：frontend / server / collector</p>
+</blockquote>
+<p>通过 yarn 分别启动三个服务时，端口占用 3000 / 3001 / 8888 ，可以通过 nmap 扫描到这三个端口。</p>
+<p>直接启动 Desktop 桌面软件时，只监听了 localhost （无法通过局域网地址访问），telnet 3001 / 8888 能够访问，telnet 3000 失败。</p>
+<ul>
+<li>Desktop 桌面软件如何打包这三个服务的？</li>
+<li>针对 fronted ，和其他两个服务有什么区别？</li>
+</ul>
+<p>使用 Desktop 版本提供 AnythingLLM 服务：设置-管理员-系统-Enable network discovery ，局域网内能够访问 3001 端口。</p>
+<p>方案：只定制前端项目，保留最小的功能集合。后端服务由 Desktop 桌面软件提供，同时也用于配置 LLM 等管理功能。</p>
+<p>——前端项目配置文件 <code>.env</code> 修改变量  <code>VITE_API_BASE=&#39;http://$&#123;desktop&#125;:3001/api&#39;</code></p>
+<h2 id="Docker-vs-Desktop"><a href="#Docker-vs-Desktop" class="headerlink" title="Docker vs Desktop"></a>Docker vs Desktop</h2><p>参考 <a href="https://docs.anythingllm.com/installation-desktop/overview">AnythingLLM 官方文档</a></p>
+<p>如果你不需要多用户支持，你可以安装桌面版本。Docker 版本，是通过浏览器以网页形式访问。</p>
+<p>系统设置上，容器版本比桌面版本多出以下选项：</p>
+<ul>
+<li>用户与安全：启用多用户模式、密码保护等（在启用多用户模式后，此入口消失。即，无法关闭多用户模式）</li>
+<li>外观：自定义图标、自定义页脚图标、站点名称、站点图标等</li>
+<li>管理员：在启用多用户模式之后，会增加用户、邀请两个入口，用于用户管理等</li>
+</ul>
+<p>通过网页“设置-用户与安全-启用多用户模式”：</p>
+<ul>
+<li>访问桌面版软件的 3001 服务，启用多用户模式失败！报错 “ Internal Server Error”</li>
+<li>访问 Docker 或 <code>npm run dev:server</code> 服务，启用多用户模式成功。</li>
+</ul>
+<p>Desktop 只是单用户版本；Docker 版本才支持多用户（独立部署也可以，但官方不推荐也不维护）。</p>
+<p>在 Arm + Linux 上没有 Desktop 版本；只能通过浏览器 <code>http://x.x.x:3000</code> 访问独立部署的服务。</p>
+<p>Desktop 版本是如何将网页（严格来说是三个服务）打包成独立软件，我并不清楚。</p>
+<h2 id="三级用户"><a href="#三级用户" class="headerlink" title="三级用户"></a>三级用户</h2><p>官方手册 <a href="https://docs.useanything.com/features/security-and-access">Security and Access</a></p>
+<blockquote>
+<p>Once in multi-user mode, you cannot revert back to single-user mode.</p>
+</blockquote>
+<p>用户有三类：Default / Manager / Admin</p>
+<ul>
+<li>普通用户：只能发送聊天，不能上传文件。</li>
+<li>管理账户：管理所有工作区，但不能设置 LLM 以及有关的向量数据库等。</li>
+</ul>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>新建对话时，设置的 <code>name</code> 属性不生效！</p>
+<p>新增的对话的名称总是 “Thread” ，虽然请求 <code>/api/workspace/test1/thread/new</code> 接口时指定了 <code>&#123;&quot;name&quot;:&quot;未命名&quot;&#125;</code></p>
+<h2 id="数据库-sqlite"><a href="#数据库-sqlite" class="headerlink" title="数据库 sqlite"></a>数据库 sqlite</h2><p>了解 prisma 和 <a href="https://www.cnblogs.com/xiaotian0422/p/16496908.html">ORM 工具</a>的概念。</p>
+<blockquote>
+<p><strong>对象关系映射（Object Relational Mapping，简称ORM）模式是一种为了解决面向对象与关系数据库存在的互不匹配的现象的技术</strong>。</p>
+<p>ORM框架是连接数据库的桥梁，只要提供了持久化类与表的映射关系，ORM框架在运行时就能参照映射文件的信息，把对象持久化到数据库中。</p>
+</blockquote>
+<p>以下命令会在 <code>server\storage\</code> 创建 anythingllm.db 数据库文件（sqlite），并完成数据表的创建。</p>
+<p><code>cd server &amp;&amp; npx prisma migrate deploy --schema=./prisma/schema.prisma</code></p>
+<p>删掉此 <code>.db</code> 文件并重建，即可关闭多用户模式（系统的配置和用户等信息也会丢失）。</p>
+<h2 id="Run-AnythingLLM-in-production-without-Docker"><a href="#Run-AnythingLLM-in-production-without-Docker" class="headerlink" title="Run AnythingLLM in production without Docker"></a>Run AnythingLLM in production without Docker</h2><blockquote>
+<p>AnythingLLM 核心团队不支持这种部署方式，仅仅作为参考。</p>
+</blockquote>
+<p><a href="https://github.com/Mintplex-Labs/anything-llm/blob/master/BARE_METAL.md">Run AnythingLLM in production without Docker</a></p>
+<p>以下目录需要指向 <code>./anything-llm/server/storage</code> 的绝对路径，不能随意指定:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">STORAGE_DIR&#x3D;&quot;&#x2F;your&#x2F;absolute&#x2F;path&#x2F;to&#x2F;server&#x2F;storage&quot;</span><br></pre></td></tr></table></figure>
+<p>因为 server 项目将上传的文件放到了 <code>$&#123;STORAGE_DIR&#125;/../../collector/hotdir</code> ，而 collector 项目监视 <code>./anything-llm/collector/hotdir</code> 。</p>
+<p>如果随意配置 <code>STORAGE_DIR</code> 变量，在上传文件时就会报错。</p>
+<h1 id="开发语言"><a href="#开发语言" class="headerlink" title="开发语言"></a>开发语言</h1><p>我熟悉 http api 调用。使用 Qt 开发的话还要面对 Markdown 渲染：</p>
+<blockquote>
+<p><a href="https://doc.qt.io/qt-5/qtwebengine-webenginewidgets-markdowneditor-example.html">Markdown Editor</a> demonstrates how to use <code>QWebChannel</code> and <strong>JavaScript</strong> libraries to provide a rich text preview tool for a custom markup language.</p>
+</blockquote>
+<p>试验在 Qt 5.14 引入的 <code>QTextEdit::setMarkdown()</code>  <a href="https://doc.qt.io/qt-5/qtextedit.html#markdown-prop">接口</a> 能否满足目前的渲染需求。</p>
+<h2 id="具体过程"><a href="#具体过程" class="headerlink" title="具体过程"></a>具体过程</h2><ol>
+<li>部署 LLM、Ollama 、向量数据库等服务，主要由同事完成 @lix</li>
+<li>定制 AnythingLLM 前端页面 @niel</li>
+<li>了解、学习 AnythingLLM 使用流程和相关概念</li>
+<li>学习、试验 AnythingLLM api ，开发 Qt 桌面软件 @sunlb</li>
+</ol>
+<h1 id="前端开发环境"><a href="#前端开发环境" class="headerlink" title="前端开发环境"></a>前端开发环境</h1><p>JavaScript 框架和库，提供了结构化的方式来组织代码，提高了开发效率和代码可维护性。</p>
+<blockquote>
+<p>推荐 React </p>
+</blockquote>
+<p>构建工具，现代前端项目通常需要经过构建工具的处理，才能在浏览器中高效运行。</p>
+<blockquote>
+<p>推荐 Vite</p>
+</blockquote>
+<p>包管理器，前端项目会依赖各种第三方库和工具（例如 React 本身，以及各种 UI 组件库、工具库等）</p>
+<blockquote>
+<p>推荐 npm 或 yarn </p>
+</blockquote>
+<p>React 文档？</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install -g create-react-app</span><br><span class="line">npm install -g yarn</span><br><span class="line">create-react-app my-react-project</span><br><span class="line">cd my-react-project</span><br><span class="line">nmp start   # http://localhost:3000</span><br></pre></td></tr></table></figure>
+<h2 id="离线环境"><a href="#离线环境" class="headerlink" title="离线环境"></a>离线环境</h2><p><a href="https://classic.yarnpkg.com/blog/2016/11/24/offline-mirror/">Running Yarn offline</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install -g yarn</span><br><span class="line">yarn config set yarn-offline-mirror ./npm-packages-offline-cache</span><br><span class="line">yarn config set yarn-offline-mirror-pruning true</span><br><span class="line">mv ~/.yarnrc ./</span><br><span class="line">rm -rf ./node_modules/ yarn.lock</span><br><span class="line">yarn cache clean</span><br><span class="line">yarn install</span><br><span class="line">ls ~/npm-packages-offline-cache</span><br><span class="line"><span class="meta">#</span><span class="bash"> 关掉网络，清理数据后验证（保留 yarn.lock）</span></span><br><span class="line">yarn cache clean &amp;&amp; rm -rf ./node_modules/</span><br><span class="line">yarn install --offline</span><br></pre></td></tr></table></figure>
+<p>离线镜像的目录是相对路径：</p>
+<blockquote>
+<p><code>./npm-packages-offline-cache</code> is an example location relative to <strong>home folder</strong> where all the source<code>.tar.gz</code> files will be downloaded to from the registry.</p>
+</blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/27449990">npm 和 yarn 的区别</a></p>
+]]></content>
   </entry>
 </search>

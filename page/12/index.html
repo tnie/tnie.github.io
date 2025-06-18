@@ -196,6 +196,163 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/02/16/git-credential/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/02/16/git-credential/" class="post-title-link" itemprop="url">Git 凭证辅助工具</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-02-16 15:32:22" itemprop="dateCreated datePublished" datetime="2017-02-16T15:32:22+08:00">2017-02-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>事情源于我想将局域网内服务器上的代码上传到互联网上的远程仓库：repo-133 -&gt; repo-E431 -&gt; repo-remote</p>
+<ul>
+<li>代码编写以及编译运行只能在 133 服务器上，此机器无法连接互联网；</li>
+<li>133 服务器可以访问我自己的笔记本 E431，毕竟我要通过 xshell 访问 133 进行开发；</li>
+<li>E431 笔记本可以访问互联网，针对私有代码我一般使用开源中国作为远程仓库。</li>
+</ul>
+<p>实现这个打算很容易，问题出在精益求精的摸索过程中。我在 E431 上中转时使用的是 Bitvise SSH Server，搭建方法参考 <a target="_blank" rel="noopener" href="http://blog.michiru.me/posts/git-server-on-windows.html">在 Windows 上搭建 Git 服务器</a>。（我在 E431 上建立的并不是裸仓库）搭建完毕，从 repo-133 向其推送时会失败：<a target="_blank" rel="noopener" href="https://rwmj.wordpress.com/2009/03/06/git-fatal-no-matching-remote-head/">git “fatal: no matching remote head”</a>，当时因为有别的工作，通过将 repo-E431 检出一个无用分支规避错误。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/02/16/git-credential/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/02/08/git-clone/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/02/08/git-clone/" class="post-title-link" itemprop="url">两个仓库之间的联系</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-02-08 16:00:57" itemprop="dateCreated datePublished" datetime="2017-02-08T16:00:57+08:00">2017-02-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在之前的笔记中讲过 Git 的分支操作，无论简单还是深奥，那些都是一个仓库内的事情。今天这篇笔记重点描述两个仓库之间的联系，涉及到的 git 命令有 pull、push、clone 等，难点围绕着两个概念： remote-tracking branch 和 tracing branch。</p>
+<h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>如果接触过 github，或者国内的 OSChina，那么必然用过 git clone 命令。我一般是这么用的：</p>
+<ol>
+<li>先在 github 上创建一个仓库（有时候还会捎带着使用 README.md 文件）；</li>
+<li>然后使用 git clone 克隆到本地；</li>
+<li>在本地进行文件添加、修改等操作后 commit；</li>
+<li>在本地执行 push 推送到远程仓库（有时候还会将本地新增的 branch 也 push 上去）。</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/02/08/git-clone/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/12/20/initialization2nd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -912,189 +1069,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/30/sscanf-regular/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/30/sscanf-regular/" class="post-title-link" itemprop="url">sscanf 和正则表达式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-11-30 10:07:22" itemprop="dateCreated datePublished" datetime="2016-11-30T10:07:22+08:00">2016-11-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>有一篇很好的入门的帖子：<a target="_blank" rel="noopener" href="http://blog.csdn.net/kenby/article/details/4051018">sscanf 函数和正则表达式</a> </p>
-<p>“<code>%</code> 表示选择，<code>%*</code> 表示过滤”，这是一个很精辟的定义。建议先看上面的链接！当然如果要在项目中正确的使用 <code>sscanf</code> 做字符串的筛选、提取，单单看上面一篇帖子是远远不够的。以下：</p>
-<p><code>sscanf()</code> - 从一个字符串中读进与指定格式相符的数据</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/11/30/sscanf-regular/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2016/11/30/do-not-read/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/30/do-not-read/" class="post-title-link" itemprop="url">不值得读</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-11-30 09:52:01" itemprop="dateCreated datePublished" datetime="2016-11-30T09:52:01+08:00">2016-11-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>以前写书的人都是高手。写专业书籍首先要求技术够牛，其次文笔也要可以。进入新世纪，什么杂七杂八、牛鬼蛇神都可以出版书了，市场上充斥着大量的垃圾，浪费纸张浪费木材不说，万一被市场、群众（被大众所选择的不一定是对的）欺骗买了这样的书你真是想死的心都有。也有一些书，处在尴尬的层次——（尤其是专业书籍）算不上佳作，匆匆一瞥也挑不出问题，可是当你真正深入阅读时慢慢发现细节惨不忍睹（尤其是计算机领域渣渣们为了名利职称等翻译国外著作）。</p>
-<h1 id="别看《C-Primer-Plus》"><a href="#别看《C-Primer-Plus》" class="headerlink" title="别看《C++ Primer Plus》"></a>别看《C++ Primer Plus》</h1><p>这本书是带“光环”的。在国内一些博客网站上，程序员们对这本书的评价还是可以的，<a target="_blank" rel="noopener" href="https://book.douban.com/subject/1319751/">豆瓣的评分</a>也蛮高的。所谓群众的选择！但我接触过之后，开始怀疑“给予这本书肯定评价的程序员难道都是渣渣吗？或者都是门外汉拿这本书入门，觉得学到东西了所以给予肯定？”。以下是以前的记录，可以得出结论：原作者的水平就值得怀疑，翻译之后不会比原作更好。<strong>英文原著、译文都不值得看！</strong></p>
-<p>2016/2/17 9:52:41</p>
-<p>因为网上关于《C++ Primer》的电纸书资源有限，好吧，只找到英文原版第五版的mobi格式，而恰巧搜索资源的时候找到了《Plus》第五版的中文资源，亚马逊官方的，排版也不错，所以就在kindle 上看了，当时是打算重点学习后面的章节：函数重载、类的设计与使用、继承、异常处理等。</p>
-<p>到目前读了20%，因为前四章的内容都比较基础，所以并没有详细地一页页读过来，而是拣选不熟的知识点学习。但已经有点烦了，确实好些地方娓娓道来，让人豁然开朗（跟我水平低也有关），但更多的细节上的不注意让人慢慢地烦躁起来，从网上找到两篇评论，恰巧说到了我的感觉。无论如何，打算放弃了，而且我<strong>绝对不会推荐</strong>别人读这本书的。</p>
-<ol>
-<li><p><a target="_blank" rel="noopener" href="http://book.douban.com/review/5472087/">关注 C++ Primer Plus（第 6 版）的同学，请留步</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="http://www.amazon.cn/review/R2QJQH8LI1JADU/ref=cm_cr_dp_title?ie=UTF8&ASIN=B008A4XZRI&channel=detail-glance&nodeID=&store=books">小错误太多，很不负责任</a>，66/71 认为此评论有用。这足够说明问题了。</p>
-</li>
-<li><p>还看到一个犀利的评价：</p>
-<p> <img src="https://raw.githubusercontent.com/nielon/MarkdownPhotos/master/cpp-primer-plus.png"></p>
-</li>
-</ol>
-<p>甚至会怀疑，那些让我豁然开朗，觉得学到东西的文字叙述是否真的就是那么回事，作者没有诓我吧。</p>
-<p>最后一根稻草，是指针这一块的。</p>
-<p>4.7.1节 讲到声明和初始化指针，提到声明指针时，<code>*</code> 操作符两边的空格问题，本身说的就不清楚，再加上难以自圆其说 指针声明中 <code>*</code> 和 解引用 <code>*</code> 的区别，甚至在作者的描述中两者是一致的。<br>我完全被打败了，弄糊涂了。所以去翻《C++ Primer》，很清晰，一点就明。</p>
-<p>更多的错误就不说了，算是跳读的，虽说到了20%的进度，但就实际阅读的可能不到5%，我标注了8个明显的上下文不一致错误、翻译错误，让人费解的地方。</p>
-<p>所以，打算去啃《Primer》英文原版了。</p>
-<h1 id="别看《C-Concurrency-in-Action》译作"><a href="#别看《C-Concurrency-in-Action》译作" class="headerlink" title="别看《C++ Concurrency in Action》译作"></a>别看《C++ Concurrency in Action》译作</h1><p><strong>原著是值得肯定的</strong>，是 C++ 领域少有的介绍并发编程、多线程的书。但 <a target="_blank" rel="noopener" href="https://book.douban.com/review/7485014/">国内翻译的版本</a> 被喷的一无是处，不再多说。</p>
-<p>另外，GitBook 上有一份陈晓伟翻译的 <a target="_blank" rel="noopener" href="https://www.gitbook.com/book/chenxiaowei/cpp_concurrency_in_action/details">《C++并发编程(中文版)》</a>，我起初抱着很大的期望去读的。目前（2016/7/14 10:07:18 ） 快读到第二章结尾了，发现其中也有好多不尽人意之处，甚至有些完全翻译错误，将读者带跑带偏。某句话末尾多出个词汇，文字输入时音正字错（“人为”写成“认为”）的现象更是频繁出现。读起来磕磕绊绊，最主要的还是担心译者水平，翻译错误——很明显的错误能够发现，然后去找原文矫正；可是意识不到就代表没有错误了吗？——肯定有，译者的英文水平其实挺一般的。</p>
-<p>所以，打算去看英文原版了。好在作者用的都是日常词汇，读起来并不“卡”，只是会慢些而已。</p>
-<p>追评：原著写得挺好的，真正地去读英文原版会发现也没想象中那么困难，已经向第 4 章迈进了。目前阅读进度缓慢甚至停滞，主要是因为阅读目的（并发入门）已经达到，后面的进阶内容在目前用不到，所以读书的动力就不大了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1166,7 +1140,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">155</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

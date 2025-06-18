@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="使用 http 协议上传文件的协议细节和实现。 使用 curl 上传调试 Swagger API 时一般会使用 postman 工具，但可以有更加短平快的手段、工具满足我们轻量的调试需求。 curl ，linux 平台下常用，或者 windows 平台下 git bash 中也带有 curl 命令。 1234567 -X, --request &lt;method&gt;      Specify">
+<meta property="og:type" content="article">
+<meta property="og:title" content="不积小流，无以成江海">
+<meta property="og:url" content="https://tnie.github.io/2025/03/12/http-upload/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="使用 http 协议上传文件的协议细节和实现。 使用 curl 上传调试 Swagger API 时一般会使用 postman 工具，但可以有更加短平快的手段、工具满足我们轻量的调试需求。 curl ，linux 平台下常用，或者 windows 平台下 git bash 中也带有 curl 命令。 1234567 -X, --request &lt;method&gt;      Specify">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-12%20222409.png">
+<meta property="article:published_time" content="2025-03-12T13:28:58.914Z">
+<meta property="article:modified_time" content="2025-03-13T14:36:38.704Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-12%20222409.png">
+
+<link rel="canonical" href="https://tnie.github.io/2025/03/12/http-upload/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2025/03/12/http-upload/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-03-12 21:28:58" itemprop="dateCreated datePublished" datetime="2025-03-12T21:28:58+08:00">2025-03-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-03-13 22:36:38" itemprop="dateModified" datetime="2025-03-13T22:36:38+08:00">2025-03-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>使用 http 协议上传文件的协议细节和实现。</p>
+<h1 id="使用-curl-上传"><a href="#使用-curl-上传" class="headerlink" title="使用 curl 上传"></a>使用 curl 上传</h1><p>调试 Swagger API 时一般会使用 postman 工具，但可以有更加短平快的手段、工具满足我们轻量的调试需求。</p>
+<p>curl ，linux 平台下常用，或者 windows 平台下 git bash 中也带有 curl 命令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> -X, --request &lt;method&gt;      Specify request method to use </span><br><span class="line"> -d, --data &lt;data&gt;           HTTP POST data </span><br><span class="line"> -H, --header &lt;header/@file&gt; Pass custom header(s) to server</span><br><span class="line"> -v, --verbose               Make the operation more talkative </span><br><span class="line"> -F, --form &lt;name=content&gt;   Specify multipart MIME data</span><br><span class="line">To force the &#x27;content&#x27; part to be a file, prefix the filename with an @ sign.</span><br><span class="line">@ makes a file get attached in the post as a file upload, ...</span><br></pre></td></tr></table></figure>
+<p>使用上述参数，实际演练一下：使用 <code>-d</code> 或 <code>-F</code> 参数时，curl 能够自行推断出要使用 <code>POST</code> 方法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> curl <span class="string">&#x27;http://localhost:3001/api/v1/document/upload&#x27;</span> -v \</span></span><br><span class="line"><span class="bash">    -H <span class="string">&#x27;accept: application/json&#x27;</span> \</span></span><br><span class="line"><span class="bash">    -H <span class="string">&#x27;Authorization: Bearer S0QSFCC-MYTMPGN-M9WEQBZ-3V579DV&#x27;</span> \</span></span><br><span class="line"><span class="bash">    -H <span class="string">&#x27;Content-Type: multipart/form-data&#x27;</span> \</span></span><br><span class="line"><span class="bash">    -F <span class="string">&#x27;file=@tmp.txt&#x27;</span>  <span class="comment"># -F &#x27;user=niel&#x27;</span></span></span><br><span class="line">...   # 此处有省略</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> POST /api/v1/document/upload HTTP/1.1</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Host: localhost:3001</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> User-Agent: curl/8.6.0</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> accept: application/json</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Authorization: Bearer S0QSFCC-MYTMPGN-M9WEQBZ-3V579DV</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Content-Length: 202</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Content-Type: multipart/form-data; boundary=------------------------pF28TYDnB4wmWf8sPjKctM</span></span><br><span class="line"><span class="meta">&gt;</span></span><br><span class="line"><span class="bash">&#125; [202 bytes data]</span></span><br><span class="line">* We are completely uploaded and fine</span><br><span class="line">&lt; HTTP/1.1 200 OK</span><br><span class="line">...  # 此处有省略</span><br></pre></td></tr></table></figure>
+<p>接下来结合 curl 输出和 wireshark 抓包，来学习标准。 </p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-12%20222409.png"></p>
+<p>Encapsulation 封装；Disposition 布置；</p>
+<h1 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h1><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-cn/%E5%A4%9A%E7%94%A8%E9%80%94%E4%BA%92%E8%81%AF%E7%B6%B2%E9%83%B5%E4%BB%B6%E6%93%B4%E5%B1%95">多用途互联网邮件扩展</a>（英语：Multipurpose Internet Mail Extensions，缩写：MIME）是一个互联网标准，它扩展了电子邮件标准。</p>
+<p>此外，在万维网中使用的 HTTP 协议中也使用了 MIME 的框架，标准被扩展为<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%94%E7%BD%91%E5%AA%92%E4%BD%93%E7%B1%BB%E5%9E%8B">互联网媒体形式</a>。</p>
+<p>MIME 是通过标准化电子邮件报文的头部的附加域（fields）而实现的；这些头部的附加域，描述新的报文类型的内容和组织形式。</p>
+<p>更多细节请参考 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/MIME_types">MIME 类型</a>  的详细内容！</p>
+<h2 id="Content-Type"><a href="#Content-Type" class="headerlink" title="Content-Type"></a>Content-Type</h2><p>MIME 类型的格式：<code>Content-Type: type/subtype;parameter=value</code>  ，参数可选。</p>
+<p>类型可分为两类：<strong>独立的</strong>（discrete）和<strong>多部分的</strong>（multipart）。</p>
+<ul>
+<li><p>独立类型代表单一文件或媒介，比如一段文字、一个音乐文件、一个视频文件等。</p>
+</li>
+<li><p>而多部份类型，可以代表由多个部件组合成的文档，其中每个部分都可能有各自的 MIME 类型；此外，也可以代表多个文件被封装在单次事务中一同发送。</p>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/MIME_types#multipartform-data">multipart/form-data</a> 作为多部分文档格式，它由 boundary 边界线划分出的不同部分组成。</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Type: multipart/form-data; boundary=aBoundaryString</span><br></pre></td></tr></table></figure>
+<p>每一部分有自己的 content header (零个或多个 <code>Content-</code> header fields) 和 body 。 </p>
+<h2 id="Content-Disposition"><a href="#Content-Disposition" class="headerlink" title="Content-Disposition"></a>Content-Disposition</h2><p>最初的 MIME 规范仅描述了邮件消息的结构。它们没有解决呈现样式的问题。</p>
+<p>在 RFC 2183 中添加了 <code>content-disposition</code> 标头字段来指定呈现样式。</p>
+<p>此表头用在 http 协议中有两个使用场景：</p>
+<ul>
+<li><p>As a response header for the main body</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition#as_a_header_for_a_multipart_body">As a header for a multipart body</a> ，第一个指令始终是 <code>form-data</code> ，并且还必须包含一个 <code>name</code> 参数来标识表单字段名。</p>
+<p><code>filename</code>  参数是可选的，指示要传送的文件的初始名称的字符串。</p>
+</li>
+</ul>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>使用 Qt 库完成文件上传的功能， by Google’s Gemini</p>
+<p>如果手动添加文件头 <code>Content-Type:multipart/form-data</code> 似乎会造成 <code>boundary=</code> 参数丢失： #TODO# 有待验证</p>
+<ul>
+<li>虽然手动设置文件头在前，<code>-&gt;post(request, multiPart)</code> 在后</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">uploadFile</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">QNetworkRequest <span class="title">request</span><span class="params">(QUrl(<span class="string">&quot;http://example.com/api/upload&quot;</span>))</span></span>;  <span class="comment">// 替换为您的服务器上传接口 URL</span></span><br><span class="line"></span><br><span class="line">    QHttpMultiPart *multiPart = <span class="keyword">new</span> QHttpMultiPart(QHttpMultiPart::FormDataType);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 文件数据部分</span></span><br><span class="line">    QHttpPart filePart;</span><br><span class="line">    QString disposition = QString(<span class="string">R&quot;(form-data; name=&quot;file&quot;; filename=&quot;%1&quot;)&quot;</span>).arg(QFileInfo(filePath).fileName());</span><br><span class="line">    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(disposition);</span><br><span class="line">    QFile *file = <span class="keyword">new</span> QFile(filePath);</span><br><span class="line">    <span class="keyword">if</span> (!file-&gt;open(QIODevice::ReadOnly)) &#123;</span><br><span class="line">        QMessageBox::critical(<span class="keyword">this</span>, <span class="string">&quot;错误&quot;</span>, <span class="string">&quot;无法打开文件: &quot;</span> + filePath);</span><br><span class="line">        <span class="keyword">delete</span> multiPart;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    filePart.setBodyDevice(file); <span class="comment">// file的所有权转移给filePart</span></span><br><span class="line">    file-&gt;setParent(multiPart); <span class="comment">// 设置父对象，防止被提前析构</span></span><br><span class="line">    multiPart-&gt;append(filePart);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 其他表单字段 (可选)</span></span><br><span class="line">    QHttpPart namePart;</span><br><span class="line">    namePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(<span class="string">&quot;form-data; name=\&quot;user\&quot;&quot;</span>));</span><br><span class="line">    namePart.setBody(<span class="string">&quot;niel&quot;</span>);</span><br><span class="line">    multiPart-&gt;append(namePart);</span><br><span class="line"></span><br><span class="line">    QNetworkAccessManager *manager = <span class="keyword">new</span> QNetworkAccessManager(<span class="keyword">this</span>);</span><br><span class="line">    connect(manager, &amp;QNetworkAccessManager::finished, <span class="keyword">this</span>, &amp;MyWidget::uploadFinished);</span><br><span class="line"></span><br><span class="line">    QNetworkReply *reply = manager-&gt;post(request, multiPart);</span><br><span class="line">    multiPart-&gt;setParent(reply); <span class="comment">// 设置父对象，确保multiPart在reply完成前有效</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//  可以添加请求头，例如设置认证信息</span></span><br><span class="line">    <span class="comment">// request.setHeader(QNetworkRequest::ContentTypeHeader, &quot;multipart/form-data&quot;); // QHttpMultiPart 会自动设置</span></span><br><span class="line">    <span class="comment">// request.setHeader(QNetworkRequest::AuthorizationHeader, &quot;Bearer YourAccessToken&quot;);</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">void</span> uploadFinished(QNetworkReply *reply) &#123;</span><br><span class="line">    reply-&gt;deleteLater(); <span class="comment">// 必须 deleteLater 释放 reply 对象</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/02/26/JavaScript/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-curl-%E4%B8%8A%E4%BC%A0"><span class="nav-number">1.</span> <span class="nav-text">使用 curl 上传</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.</span> <span class="nav-text">协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Content-Type"><span class="nav-number">2.1.</span> <span class="nav-text">Content-Type</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Content-Disposition"><span class="nav-number">2.2.</span> <span class="nav-text">Content-Disposition</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">实现</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">155</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

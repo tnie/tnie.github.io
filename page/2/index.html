@@ -196,6 +196,162 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/11/04/FTP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/11/04/FTP/" class="post-title-link" itemprop="url">FTP</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-11-04 20:56:00" itemprop="dateCreated datePublished" datetime="2023-11-04T20:56:00+08:00">2023-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 22:24:23" itemprop="dateModified" datetime="2024-12-25T22:24:23+08:00">2024-12-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>FTP 通信分为主动 active 被动 PASV 模式。</p>
+<p>FTP 通信会占用两个 TCP 通道：一个用于命令，一个用于数据。</p>
+<p>主动、被动是站在（响应命令的）服务端的角度来说：<br>FTP 客户端首先向服务端 21 端口发送命令，然后</p>
+<ul>
+<li>（最初只有）主动模式：客户端启动端口，服务端连接</li>
+<li>（解决痛点）被动模式：服务端启动端口，客户端连接</li>
+</ul>
+<p>windows 平台下 cmd/powershell 中的 ftp 命令不支持被动模式，文件管理器支持被动模式。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/11/04/FTP/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/10/07/multicast/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/07/multicast/" class="post-title-link" itemprop="url">多播</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-07 18:25:00" itemprop="dateCreated datePublished" datetime="2023-10-07T18:25:00+08:00">2023-10-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 22:19:42" itemprop="dateModified" datetime="2024-12-25T22:19:42+08:00">2024-12-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>摘抄自《计算机网络（第7版）-谢希仁》教材，读书笔记。</p>
+<p>OSI 的七层协议体系结构的概念清楚，理论也较完整，但它既复杂又不实用。</p>
+<p>TCP/IP 的体系结构则不同，但它现在却得到了非常广泛的应用。TCP/IP 是一个四层的体系结构，它包含应用层、运输层、网际层和网络接口层（用<strong>网际层</strong>这个名字是强调这一层是为了<strong>解决不同网络的互连问题</strong>）。不过从实质上将，TCP/IP 只有最上面的三层，因为最下面的网络接口层并没有什么具体内容。</p>
+<p>互联网是由大量的<strong>异构</strong>(heterogeneous)网络通过<strong>路由器</strong>(router)相互连接起来的。互联网使用的网络层协议是无连接的网际协议 IP(Internet Protocol) 和许多种路由选择协议，因此互联网的网络层也叫做网际层或 IP 层。</p>
+<h2 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h2><p>局域网虽然是个网络，但我们并不把局域网放在网络层中讨论。这是因为在网络层要讨论的问题是多个网络互联的问题，是讨论分组（packet）怎样从一个网络，通过路由器，转发到另一个网络。在本章中我们研究的是在同一个局域网中，分组（packet）怎样从一台主机传送到另一台主机，但并不经过路由器转发。从整个互联网来看，局域网仍属于数据链路层的范围。</p>
+<p>packet 小包裹、信息包，在教材中一般翻译为“分组”，但“分组”在日常对话中多理解成动词，给读者造成困扰。分组：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/10/07/multicast/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/05/30/createProcess/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -669,7 +825,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/02/11/tryAnaconda/" class="post-title-link" itemprop="url">使用 Anaconda 包管理器</a>
+            <a href="/2022/02/11/tryAnaconda/" class="post-title-link" itemprop="url">通过 miniconda 使用 Python</a>
         </h2>
 
         <div class="post-meta">
@@ -686,7 +842,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+                <time title="修改时间：2025-04-08 19:37:03" itemprop="dateModified" datetime="2025-04-08T19:37:03+08:00">2025-04-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -710,9 +866,22 @@
 
       
           <p>关于 python 语言的学习，参见 <a target="_blank" rel="noopener" href="https://github.com/tnie/learnPython">c++ 开发人员学习 python 的记录</a></p>
-<p>上述笔记缺少了 Anaconda 环境和包管理方面的内容，在这里补充。</p>
-<p>Anaconda 下载包，在墙里的体验很差。 <a target="_blank" rel="noopener" href="https://www.cpci.dev/anaconda-mirrors-configure/">Anaconda 国内源配置</a> </p>
-<p>目前（2022年2月11日） v2rayN 代理有问题，<strong>开启代理会造成 Anaconda 更新失败</strong> 等异常，报错如下：</p>
+<p>上述笔记缺少了 Python 环境和包管理方面的内容，在这里补充。</p>
+<p>在 Linux 环境下，系统可能自带某个版本的 Python；而 Windows 系统一般没有。</p>
+<p>无论哪种平台，一般不会更新升级/直接安装 Python 使用。而是，借用虚拟环境管理工具管理 Python 的版本。</p>
+<blockquote>
+<p>每个环境可以使用不同版本的 Python ，安装不同版本的依赖包。</p>
+</blockquote>
+<h1 id="conda"><a href="#conda" class="headerlink" title="conda"></a>conda</h1><p>conda 是一个开源的包管理系统 + 环境管理系统。</p>
+<p>作为包管理系统，conda 和 Python 官方的 pip 各有侧重：</p>
+<ul>
+<li><p>conda 更适合需要管理复杂依赖关系和创建隔离环境的数据科学和机器学习项目；</p>
+</li>
+<li><p><code>pip</code> 更适合管理纯 Python 包，并且在 Python 开发社区中被广泛使用。</p>
+</li>
+</ul>
+<p>避免在同一个环境中混用 conda 和 pip，以防止潜在的冲突。</p>
+<p><code>conda</code> 在环境管理方面非常强大，是不二之选。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/02/11/tryAnaconda/#more" rel="contents">
@@ -912,186 +1081,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/10/21/streamingMediaProtocol/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/21/streamingMediaProtocol/" class="post-title-link" itemprop="url">流媒体协议</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-10-21 10:04:22" itemprop="dateCreated datePublished" datetime="2021-10-21T10:04:22+08:00">2021-10-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/media/" itemprop="url" rel="index"><span itemprop="name">media</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>音视频领域、流媒体领域涉及的协议，逐步了解。</p>
-<h1 id="GB-T-28181-202n-笔记"><a href="#GB-T-28181-202n-笔记" class="headerlink" title="GB/T 28181-202n 笔记"></a>GB/T 28181-202n 笔记</h1><p>9.1.1 注册和注销 f) 提到了 NAT 穿透的细节</p>
-<p>9.2.2.1 中三方呼叫的概念？</p>
-<p>MESSAGE 消息头 Content-type 头域为 Content-type: Application/MANSCDP+xml； </p>
-<p>9.8 历史音视频的回放，提到 媒体回放控制命令引用 MANSRTSP 协议</p>
-<p>实时音视频点播 &amp; 历史音视频回放，是将所有的历史音视频都存下来了吗？</p>
-<h2 id="SIP-协议"><a href="#SIP-协议" class="headerlink" title="SIP 协议"></a>SIP 协议</h2><p>SIP 会话发起协议（Session Initiation Protocol，缩写SIP），GB28181-2016 中称为“会话初始协议”</p>
-<p>SIP 与许多其它的协议协同工作，仅仅涉及通信会话的信令部分（control message）。SIP 报文内容发送会话描述协议（SDP），SDP 协议描述了会话所使用流媒体细节，如：使用哪个 IP 端口，采用哪种编解码器等等。SIP 的一个典型用途是：SIP “会话”传输一些简单的经过报文的实时传输协议流。RTP 本身才是语音或视频的载体。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/21/streamingMediaProtocol/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/09/11/WebRTC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/11/WebRTC/" class="post-title-link" itemprop="url">WebRTC 学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-09-11 17:22:12" itemprop="dateCreated datePublished" datetime="2021-09-11T17:22:12+08:00">2021-09-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/media/" itemprop="url" rel="index"><span itemprop="name">media</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>关键任务：open-webrtc-toolkits</p>
-<p>目标：</p>
-<ol>
-<li>搭建环境，能够简单使用上述工具包：客户端 windows sdk 或 js，部署服务端</li>
-<li>既然是 Intel 推出，是否支持低成本的 x86 架构，其他架构呢？跨平台特性？</li>
-<li>过程中是否需要很多知识点或者工具链，是影响任务进度的关键</li>
-</ol>
-<p>8/19/21 周五，工作计划：</p>
-<ol>
-<li>了解 JavaScript 的语法，编写 demo</li>
-<li>执行 OWT 的代码实验室的 js client。失败，案例描述和仓库代码不一致，本地服务器能够访问，但按钮功能异常。</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/09/11/WebRTC/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1163,7 +1152,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">153</span>
+          <span class="site-state-item-count">155</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
