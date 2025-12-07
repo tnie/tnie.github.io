@@ -196,6 +196,116 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/02/02/function-template/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/02/function-template/" class="post-title-link" itemprop="url">函数模板</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-02 16:22:31" itemprop="dateCreated datePublished" datetime="2021-02-02T16:22:31+08:00">2021-02-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/cpp-code/" itemprop="url" rel="index"><span itemprop="name">cpp-code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><code>std::function&lt;&gt;</code> 模板到底是什么？ 可以简单理解为对应 C 语言中的函数指针。入参或绑定的参数如果是原始指针或引用时，需要特别注意其生存周期。</p>
+<p>关于函数类模板，学习《Effective.Modern.C++》P39</p>
+<blockquote>
+<p>And maybe now you’re thinking “What’s a <code>std::function</code> object?” So let’s clear that up</p>
+</blockquote>
+<h1 id="boost-empty-value-的意义？"><a href="#boost-empty-value-的意义？" class="headerlink" title="boost::empty_value 的意义？"></a><code>boost::empty_value</code> 的意义？</h1><p>待补充</p>
+<h1 id="获得-std-function-对象"><a href="#获得-std-function-对象" class="headerlink" title="获得 std::function 对象"></a>获得 <code>std::function</code> 对象</h1><p>Lambda expressions </p>
+<blockquote>
+<p>Constructs a closure: an unnamed function object capable of capturing variables in scope. <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/lambda">摘自 lambda</a></p>
+</blockquote>
+<p>Function objects</p>
+<blockquote>
+<p>A function object is any object for which <strong>the function call operator</strong> is defined. <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/utility/functional">摘自 functional</a></p>
+</blockquote>
+<p><code>std::function</code>，推荐查看其 Example</p>
+<blockquote>
+<p>Class template <code>std::function</code> is a general-purpose polymorphic function wrapper. Instances of <code>std::function</code> can store, copy, and invoke any CopyConstructible Callable target – functions, lambda expressions, bind expressions, or other function objects, as well as pointers to member functions and pointers to data members. <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/utility/functional/function">摘自 function</a></p>
+</blockquote>
+<p>需要强调的是 C++ 标准未对 <code>std::bind</code> 表达式的返回类型做出定义，其返回值并不对应我们熟悉的任何类型，但可以直接赋值给 <code>std::function&lt;&gt;</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::function&lt;<span class="keyword">int</span>(<span class="keyword">int</span>)&gt; func = <span class="built_in">std</span>::<span class="built_in">tolower</span>;</span><br><span class="line"><span class="built_in">std</span>::function&lt;<span class="keyword">int</span>(<span class="keyword">int</span>)&gt; lamb = [](<span class="keyword">int</span> a) &#123; <span class="keyword">return</span> a; &#125;;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">string</span> <span class="title">str</span><span class="params">(<span class="string">&quot;niel&quot;</span>)</span></span>;</span><br><span class="line"><span class="built_in">std</span>::function&lt;<span class="keyword">size_t</span>(<span class="keyword">void</span>)&gt; bind = <span class="built_in">std</span>::bind(&amp;<span class="built_in">std</span>::<span class="built_in">string</span>::size, &amp;str);</span><br><span class="line"><span class="built_in">std</span>::function&lt;<span class="keyword">int</span>(<span class="keyword">int</span>, <span class="keyword">int</span>)&gt; object = <span class="built_in">std</span>::plus&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line"><span class="built_in">std</span>::function&lt;<span class="keyword">size_t</span>(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp;)&gt; p2mf = &amp;<span class="built_in">std</span>::<span class="built_in">string</span>::size;</span><br><span class="line"></span><br><span class="line"><span class="comment">//std::function&lt;size_t(void)&gt; bind = std::bind(&amp;std::string::size, std::ref(str));</span></span><br><span class="line"><span class="comment">//// 拷贝传参，请务必明白在做什么。also works, but str is copied</span></span><br><span class="line"><span class="comment">//std::function&lt;size_t(void)&gt; bind = std::bind(&amp;std::string::size, str);</span></span><br></pre></td></tr></table></figure>
+<h1 id="模板参数"><a href="#模板参数" class="headerlink" title="模板参数"></a>模板参数</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ERR，末尾多余的 const 造成报错内容在千里之外</span></span><br><span class="line"><span class="keyword">using</span> SENDFUNC = <span class="built_in">std</span>::function&lt;<span class="keyword">void</span>(CBD , <span class="keyword">void</span> <span class="keyword">const</span> * <span class="keyword">const</span> , <span class="keyword">size_t</span> ) <span class="keyword">const</span>&gt;;</span><br><span class="line"><span class="keyword">using</span> SENDFUNC = <span class="built_in">std</span>::function&lt;<span class="keyword">void</span>(CBD , <span class="keyword">void</span> <span class="keyword">const</span> * <span class="keyword">const</span> , <span class="keyword">size_t</span> ) <span class="comment">/*const*/</span>&gt;;</span><br></pre></td></tr></table></figure>
+<h1 id="递归调用"><a href="#递归调用" class="headerlink" title="递归调用"></a>递归调用</h1><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/2067988/recursive-lambda-functions-in-c11">为什么 <code>function&lt;&gt;</code> 对象递归调用自身不能使用 <code>auto</code>?</a></p>
+<p>vc2015 IntelliSence 提示</p>
+<blockquote>
+<p>使用 <code>auto</code> 类型说明符声明的变量不能出现在其自身的初始值设定项中</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/02/function-template/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/02/02/ppp-notes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -984,93 +1094,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/11/04/develop-cpp-windows/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/04/develop-cpp-windows/" class="post-title-link" itemprop="url">在 Windows 下开发 C++ 程序</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-04 15:51:10" itemprop="dateCreated datePublished" datetime="2019-11-04T15:51:10+08:00">2019-11-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>如题，在此做一份备忘，记录在 Windows 下进行 C++ 开发用到的工具、插件及其意义。</p>
-<p>当然多少会涉及到如何安装、配置这些工具，但不会多做介绍。</p>
-<ol>
-<li>Visual Studio，越新越好，但都有历史包袱</li>
-<li><del>Visual AssistX</del> 破解费时费力，还有兼容问题。非重度用户，可探索 visual studio IDE 自身</li>
-<li><a href="https://tnie.github.io/2018/12/10/vcpkg/">vcpkg 包管理器</a></li>
-<li>spdlog 通过 vcpkg 安装</li>
-<li>vld, <a target="_blank" rel="noopener" href="https://kinddragon.github.io/vld/">Visual Leak Detector</a></li>
-<li>不使用制表符，转换为 4 个空格。配置 IDE 实现。</li>
-</ol>
-<p>Visual Studio2015 IDE 中需要安装的插件（vc2017 中可能已经内嵌了某些插件的功能）</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.TrailingWhitespaceVisualizer">Trailing Whitespace Visualizer</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/tcbhat/cpptripleslash">cpptripleslash</a></li>
-<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=VisualStudioPlatformTeam.ProductivityPowerTools2015">Productivity Power Tools 2015</a></li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/04/develop-cpp-windows/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1142,7 +1165,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-count">158</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1155,7 +1178,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

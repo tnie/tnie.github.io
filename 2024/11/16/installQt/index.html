@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="搭建环境：  Qt 在 Qt5.12.12 之前提供 Windows&#x2F;Linux&#x2F;Mac 离线安装包，只有 x86 架构的 Qt 目前已经支持 ARM 架构，但只有在线安装包 Qt 从源码构建安装，费时费力还容易出错。我还没掌握 Qt 在 Linux 还可以通过各系统的软件仓库安装，版本陈旧，也需要联网  软件仓库系统环境： 1234567niel@ubuntu:~$ cat &#x2F;etc&#x2F;lsb-r">
+  <meta name="description" content="搭建 Qt 开发环境的几种方式：  Qt 官方下载页面  支持 ≤5.12.12 、x86 架构的离线安装包（Windows&#x2F;Linux&#x2F;Mac ）； 比 5.12.12 更新只有在线安装包；Qt 目前已经支持 ARM 架构，但只有在线安装包； Qt 从源码构建安装，费时费力还容易出错。我还没掌握 Qt 在 Linux 还可以通过各系统的软件仓库安装，版本陈旧，也需要联网  使用在线安装工具，默认">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在 Ubuntu 上搭建 Qt 开发环境">
 <meta property="og:url" content="https://tnie.github.io/2024/11/16/installQt/index.html">
 <meta property="og:site_name" content="不积小流，无以成江海">
-<meta property="og:description" content="搭建环境：  Qt 在 Qt5.12.12 之前提供 Windows&#x2F;Linux&#x2F;Mac 离线安装包，只有 x86 架构的 Qt 目前已经支持 ARM 架构，但只有在线安装包 Qt 从源码构建安装，费时费力还容易出错。我还没掌握 Qt 在 Linux 还可以通过各系统的软件仓库安装，版本陈旧，也需要联网  软件仓库系统环境： 1234567niel@ubuntu:~$ cat &#x2F;etc&#x2F;lsb-r">
+<meta property="og:description" content="搭建 Qt 开发环境的几种方式：  Qt 官方下载页面  支持 ≤5.12.12 、x86 架构的离线安装包（Windows&#x2F;Linux&#x2F;Mac ）； 比 5.12.12 更新只有在线安装包；Qt 目前已经支持 ARM 架构，但只有在线安装包； Qt 从源码构建安装，费时费力还容易出错。我还没掌握 Qt 在 Linux 还可以通过各系统的软件仓库安装，版本陈旧，也需要联网  使用在线安装工具，默认">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-11-16T05:25:00.000Z">
-<meta property="article:modified_time" content="2024-12-25T12:25:55.968Z">
+<meta property="article:modified_time" content="2025-12-07T07:39:58.947Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta name="twitter:card" content="summary">
 
@@ -229,7 +229,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-25 20:25:55" itemprop="dateModified" datetime="2024-12-25T20:25:55+08:00">2024-12-25</time>
+                <time title="修改时间：2025-12-07 15:39:58" itemprop="dateModified" datetime="2025-12-07T15:39:58+08:00">2025-12-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -252,19 +252,44 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>搭建环境：</p>
+        <p>搭建 Qt 开发环境的几种方式：</p>
 <ul>
-<li>Qt 在 Qt5.12.12 之前提供 Windows/Linux/Mac 离线安装包，只有 x86 架构的</li>
-<li>Qt 目前已经支持 ARM 架构，但只有在线安装包</li>
+<li>Qt <a target="_blank" rel="noopener" href="https://www.qt.io/offline-installers">官方下载页面</a>  支持 ≤5.12.12 、x86 架构的离线安装包（Windows/Linux/Mac ）；</li>
+<li>比 5.12.12 更新只有在线安装包；Qt 目前已经支持 ARM 架构，但只有在线安装包；</li>
 <li>Qt 从源码构建安装，费时费力还容易出错。我还没掌握</li>
 <li>Qt 在 Linux 还可以通过各系统的软件仓库安装，版本陈旧，也需要联网</li>
 </ul>
-<h1 id="软件仓库"><a href="#软件仓库" class="headerlink" title="软件仓库"></a>软件仓库</h1><p>系统环境：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">niel@ubuntu:~$ cat /etc/lsb-release </span><br><span class="line">DISTRIB_ID=Ubuntu</span><br><span class="line">DISTRIB_RELEASE=20.04</span><br><span class="line">DISTRIB_CODENAME=focal</span><br><span class="line">DISTRIB_DESCRIPTION=&quot;Ubuntu 20.04.1 LTS&quot;</span><br><span class="line">niel@ubuntu:~$ uname -a</span><br><span class="line">Linux ubuntu 5.4.0-42-generic #46-Ubuntu SMP Fri Jul 10 00:24:02 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
-<p>克隆仓库需要较大的磁盘空间，下载过程也耗时比较久：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt install apt-mirror</span><br><span class="line">vim /etc/apt/mirror.list</span><br><span class="line">apt-mirror</span><br></pre></td></tr></table></figure>
+<p>使用在线安装工具，默认只展示最新的三个 Qt 版本供用户安装。右侧筛选项，<strong>勾选 Archive</strong> 后筛选就会列出旧版本的 Qt 。</p>
 <a id="more"></a>
 
+<h1 id="Ubuntu-20-04-1-LTS-Focal-Fossa"><a href="#Ubuntu-20-04-1-LTS-Focal-Fossa" class="headerlink" title="Ubuntu 20.04.1 LTS (Focal Fossa)"></a>Ubuntu 20.04.1 LTS (Focal Fossa)</h1><p>为什么选择这个版本的系统来学习？</p>
+<p>公司业务线目前采用的 Kylin V10 桌面版。无论是含掉电保护模式的 HJ 版，还是“物美价廉”的 GF 版，大厦基石都一致：</p>
+<blockquote>
+<p>Linux version 5.4.18 ， gcc version 9.3.0</p>
+</blockquote>
+<p>推断两者都是基于 Ubuntu 20.04 LTS ，改用 UKUI 桌面环境的换皮版。 <a target="_blank" rel="noopener" href="https://dotatong.com/index.php/archives/143/">所见略同</a>。 </p>
+<p>以下是不同的版本：联网安装时会自动更新 Linux 内核！！ 查看内核版本 <code>uname -a</code></p>
+<ul>
+<li>ubuntu-20.04  ，发布于 2020-04-23， 在 2025-04 支持结束</li>
+<li>ubuntu-20.04.1 ，Linux version 5.4.0  <a target="_blank" rel="noopener" href="https://old-releases.ubuntu.com/releases/20.04.1/">Ubuntu 旧版本</a></li>
+<li>ubuntu-20.04.2 ，Linux version 5.8</li>
+<li>ubuntu-20.04.6 ，Linux version 5.15.0</li>
+</ul>
+<p>思考：公司产品都是采用 Arm 架构的飞腾主板，我只有 x86 的电脑。底层架构都不一致，争取 Linux kernel 一致性有没有必要？</p>
+<h2 id="Qt-5-12-8"><a href="#Qt-5-12-8" class="headerlink" title="Qt 5.12.8"></a>Qt 5.12.8</h2><p>在 ubuntu-20.04.1 系统中使用 <code>qt-opensource-linux-x64-5.12.8.run</code> 离线安装包时，勾选 Qt 库及其源代码，缺少 debug info 导致断点调试无法进入 Qt 源代码。</p>
+<blockquote>
+<p>如果使用 online 安装包，可以同时勾选、下载 debug info 。但 online 安装包只支持 Qt5.15.1 、 Qt5.15.2 和 Qt6.x 。</p>
+</blockquote>
+<p>调试信息需要另行下载：必须选择较新的 <a target="_blank" rel="noopener" href="https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt5_5128/qt.qt5.5128.debug_info.gcc_64/5.12.8-0-202004051456qtbase-Linux-RHEL_7_4-GCC-Linux-RHEL_7_4-X86_64-debug-symbols.7z">202004051456qtbase</a> 包！我试过 202003131355qtbase 包，不成功。</p>
+<p>Qt <a target="_blank" rel="noopener" href="https://download.qt.io/online/qtsdkrepository/linux_arm64/desktop/">打包的历史仓库</a>中，并没有 arm 架构下 Qt5.x 的离线安装包、库文件、debug info 等。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/fhw_bin_dl/article/details/82909028">Ubuntu下跟踪调试QT源码</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 安装开发工具，以及之后使用 QtCreator 依赖的库</span></span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install openssh-client openssh-server \</span><br><span class="line"> open-vm-tools open-vm-tools-desktop \</span><br><span class="line"> git build-essential vim \</span><br><span class="line"> libxcb-cursor-dev mesa-common-dev libglu1-mesa-dev libxcb-xinerama0 </span><br><span class="line"> </span><br><span class="line"><span class="meta">#</span><span class="bash"> 不要更新（避免更新 Linux kernal）</span></span><br><span class="line">reboot </span><br><span class="line">sudo ./qt-opensource-linux-x64-5.12.8.run  # 9+qDuLth.F@MD#8</span><br><span class="line">wget https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt5_5128/qt.qt5.5128.debug_info.gcc_64/5.12.8-0-202004051456qtbase-Linux-RHEL_7_4-GCC-Linux-RHEL_7_4-X86_64-debug-symbols.7z</span><br><span class="line"><span class="meta">#</span><span class="bash"> 解压后，将 debug info 放到 Qt lib 路径下</span></span><br><span class="line">sudo mv ./5.12.8/gcc_64/lib/*.debug /opt/Qt5.12.8/5.12.8/gcc_64/lib/</span><br><span class="line"><span class="meta">#</span><span class="bash"> 在 QtCreator 中进行源码路径映射</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 下载 demo 进行测试</span></span><br><span class="line">export http_proxy=&#x27;http://192.168.50.222:10811&#x27;</span><br><span class="line">export https_proxy=&#x27;http://192.168.50.222:10811&#x27;</span><br><span class="line">git clone https://github.com/tnie/DayDayUp.git</span><br></pre></td></tr></table></figure>
+<h1 id="QEMU-模拟器"><a href="#QEMU-模拟器" class="headerlink" title="QEMU 模拟器"></a>QEMU 模拟器</h1><p>在 amd64(3400g) + windows + qemu 上模拟 arm 架构安装 Kylin V10 ，延迟 10min+ 响应一次键盘事件。</p>
+<p>摸索交叉编译试一试吧</p>
+<h1 id="软件仓库"><a href="#软件仓库" class="headerlink" title="软件仓库"></a>软件仓库</h1><p>系统环境：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">niel@ubuntu:~$ cat /etc/lsb-release </span><br><span class="line">DISTRIB_ID=Ubuntu</span><br><span class="line">DISTRIB_RELEASE=20.04</span><br><span class="line">DISTRIB_CODENAME=focal</span><br><span class="line">DISTRIB_DESCRIPTION=&quot;Ubuntu 20.04.1 LTS&quot;</span><br><span class="line">niel@ubuntu:~$ uname -a</span><br><span class="line">Linux ubuntu 5.4.0-42-generic #46-Ubuntu SMP Fri Jul 10 00:24:02 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
+<p><strong>克隆仓库</strong> 需要较大的磁盘空间，下载过程也耗时比较久：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt install apt-mirror</span><br><span class="line">vim /etc/apt/mirror.list</span><br><span class="line">apt-mirror</span><br></pre></td></tr></table></figure>
 <p>针对 Kylin-Desktop-V10-SP1-General-Release-2303-arm64 ，以最小配置为例，需要准备 120G 的硬盘空间备用：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">############# config ##################</span><br><span class="line">#</span><br><span class="line">set base_path    &#x2F;media&#x2F;niel&#x2F;idle</span><br><span class="line">set nthreads   4</span><br><span class="line">set _tilde 0</span><br><span class="line">#</span><br><span class="line">############# end config ##############</span><br><span class="line"></span><br><span class="line">deb-arm64 http:&#x2F;&#x2F;archive.kylinos.cn&#x2F;kylin&#x2F;KYLIN-ALL 10.1 main restricted universe multiverse</span><br><span class="line">deb-arm64 http:&#x2F;&#x2F;archive.kylinos.cn&#x2F;kylin&#x2F;KYLIN-ALL 10.1-2303-updates main restricted universe multiverse</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>提供服务：仓库克隆下来之后，<code>$&#123;base_path&#125;</code> 随便拷贝、移动使用，比如拿到另一台设备上提供服务</p>
@@ -372,7 +397,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E4%BB%93%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">软件仓库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">开发环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QtPdfium"><span class="nav-number">3.</span> <span class="nav-text">QtPdfium</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ubuntu-20-04-1-LTS-Focal-Fossa"><span class="nav-number">1.</span> <span class="nav-text">Ubuntu 20.04.1 LTS (Focal Fossa)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Qt-5-12-8"><span class="nav-number">1.1.</span> <span class="nav-text">Qt 5.12.8</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QEMU-%E6%A8%A1%E6%8B%9F%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">QEMU 模拟器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E4%BB%93%E5%BA%93"><span class="nav-number">3.</span> <span class="nav-text">软件仓库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="nav-number">4.</span> <span class="nav-text">开发环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QtPdfium"><span class="nav-number">5.</span> <span class="nav-text">QtPdfium</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -388,7 +413,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-count">158</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -401,7 +426,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

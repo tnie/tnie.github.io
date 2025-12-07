@@ -20,17 +20,17 @@
     var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="不建议从源码构建！除非你没 其他办法 了 构建费事费力，需要踩过很多坑才能得到一个勉强能用的版本。 参考 Building from Source ，需要 Perl &#x2F; Python &#x2F; MSVC ，其他章节跳过不用看 参考 Qt for Windows - Building from Source ，5 个步骤：">
+  <meta name="description" content="不建议从源码构建！除非你没 其他办法 了 构建费事费力，需要踩过很多坑才能得到一个勉强能用的版本。 必要性如果要在不联网的设备上使用新版本 Qt ，还是需要掌握如何编译 Qt 源码！ 断点调试：之前想断点进 Qt 源码调试一直没成功，借这次机会一并实现。 Qt 4.8.7Qt4.8.7 安装包，自带源码和 pdb 调试文件，结合 MSVC2010 断点调试理解源码。 比查看、学习 Qt5.x 的源">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从源码构建 Qt">
 <meta property="og:url" content="https://tnie.github.io/2025/01/13/compileQtBase/index.html">
 <meta property="og:site_name" content="不积小流，无以成江海">
-<meta property="og:description" content="不建议从源码构建！除非你没 其他办法 了 构建费事费力，需要踩过很多坑才能得到一个勉强能用的版本。 参考 Building from Source ，需要 Perl &#x2F; Python &#x2F; MSVC ，其他章节跳过不用看 参考 Qt for Windows - Building from Source ，5 个步骤：">
+<meta property="og:description" content="不建议从源码构建！除非你没 其他办法 了 构建费事费力，需要踩过很多坑才能得到一个勉强能用的版本。 必要性如果要在不联网的设备上使用新版本 Qt ，还是需要掌握如何编译 Qt 源码！ 断点调试：之前想断点进 Qt 源码调试一直没成功，借这次机会一并实现。 Qt 4.8.7Qt4.8.7 安装包，自带源码和 pdb 调试文件，结合 MSVC2010 断点调试理解源码。 比查看、学习 Qt5.x 的源">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/%E4%BD%BF%E7%94%A8clang12.0%E9%9D%99%E6%80%81%E5%BA%93%E6%9E%84%E5%BB%BAqdoc%E5%B7%A5%E5%85%B7%E6%97%B6%E6%8A%A5%E9%94%99.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/%E4%BD%BF%E7%94%A8clang10.0%E5%8A%A8%E6%80%81%E5%BA%93%E6%9E%84%E5%BB%BA%E6%96%87%E6%A1%A3%E6%97%B6%E6%8A%A5%E9%94%99.jpg">
 <meta property="article:published_time" content="2025-01-13T11:37:10.000Z">
-<meta property="article:modified_time" content="2025-11-25T15:13:26.545Z">
+<meta property="article:modified_time" content="2025-12-07T07:03:36.818Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/%E4%BD%BF%E7%94%A8clang12.0%E9%9D%99%E6%80%81%E5%BA%93%E6%9E%84%E5%BB%BAqdoc%E5%B7%A5%E5%85%B7%E6%97%B6%E6%8A%A5%E9%94%99.jpg">
@@ -232,8 +232,17 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-11-25 23:13:26" itemprop="dateModified" datetime="2025-11-25T23:13:26+08:00">2025-11-25</time>
+                <time title="修改时间：2025-12-07 15:03:36" itemprop="dateModified" datetime="2025-12-07T15:03:36+08:00">2025-12-07</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/qt/" itemprop="url" rel="index"><span itemprop="name">qt</span></a>
+                </span>
+            </span>
 
           
 
@@ -248,25 +257,56 @@
       
         <p>不建议从源码构建！除非你没 <a href="../../../2024/11/16/installQt/">其他办法</a> 了</p>
 <p>构建费事费力，需要踩过很多坑才能得到一个勉强能用的版本。</p>
-<p>参考 <a target="_blank" rel="noopener" href="https://doc.qt.io/qt-5/windows-requirements.html#building-from-source">Building from Source</a> ，需要 Perl / Python / MSVC ，其他章节跳过不用看</p>
-<p>参考 <a target="_blank" rel="noopener" href="https://doc.qt.io/qt-5/windows-building.html">Qt for Windows - Building from Source</a> ，5 个步骤：</p>
-<a id="more"></a>
-
+<h1 id="必要性"><a href="#必要性" class="headerlink" title="必要性"></a>必要性</h1><p>如果要在不联网的设备上使用新版本 Qt ，还是需要掌握如何编译 Qt 源码！</p>
+<p><strong>断点调试：</strong>之前想断点进 Qt 源码调试一直没成功，借这次机会一并实现。</p>
+<h2 id="Qt-4-8-7"><a href="#Qt-4-8-7" class="headerlink" title="Qt 4.8.7"></a>Qt 4.8.7</h2><p>Qt4.8.7 安装包，自带源码和 pdb 调试文件，结合 MSVC2010 断点调试理解源码。</p>
+<p>比查看、学习 Qt5.x 的源码方便很多：但这个版本终究是太老了，</p>
 <ol>
-<li>不需要商业许可</li>
-<li>使用 qt-everywhere-src-5.15.15</li>
-<li>配置环境：配置 clang 可以先跳过</li>
+<li>Qt5.15.x 没有离线安装包</li>
+<li>Qt5.12.x 虽然有离线安装包，但没有 pdb 调试文件</li>
+<li>单独下载 pdb 文件后与源码版本不一致，断点位置偏移</li>
 </ol>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">REM Set up Microsoft Visual Studio 2017, where &lt;arch&gt; is amd64, x86, etc.</span></span><br><span class="line"><span class="keyword">CALL</span> &quot;C:\Program Files (x86)\Microsoft Visual Studio\<span class="number">2019</span>\Enterprise\VC\Auxiliary\Build\vcvarsall.bat&quot; amd64</span><br><span class="line"><span class="built_in">SET</span> _ROOT=D:\Users\Qt\qt-everywhere-src-<span class="number">5</span>.<span class="number">15</span>.<span class="number">15</span></span><br><span class="line"><span class="built_in">SET</span> <span class="built_in">PATH</span>=<span class="variable">%_ROOT%</span>\qtbase\bin;<span class="variable">%_ROOT%</span>\gnuwin32\bin;<span class="variable">%PATH%</span></span><br><span class="line"><span class="built_in">SET</span> _PERL=D:\Users\Qt\tool\strawberry-perl-<span class="number">5</span>.<span class="number">40</span>.<span class="number">0</span>.<span class="number">1</span>-<span class="number">64</span>bit-portable</span><br><span class="line"><span class="built_in">SET</span> <span class="built_in">PATH</span>=<span class="variable">%_PERL%</span>\perl\site\bin;<span class="variable">%_PERL%</span>\perl\bin;<span class="variable">%_PERL%</span>\c\bin;<span class="variable">%PATH%</span></span><br><span class="line"><span class="built_in">SET</span> _PYTHON=D:\Users\fnie\AppData\Local\Programs\Python\Python313</span><br><span class="line"><span class="built_in">SET</span> _JOM=D:\Users\Qt\tool\jom_1_1_4</span><br><span class="line"><span class="comment">REM 构建 qdoc.exe QtDoc 时才需要 clang</span></span><br><span class="line"><span class="built_in">SET</span> _CLANG=D:\Users\Qt\tool\libclang\bin</span><br><span class="line"><span class="built_in">SET</span> _CMAKE=D:\Portable\cmake-<span class="number">3</span>.<span class="number">30</span>.<span class="number">5</span>-windows-x86_64\bin</span><br><span class="line"><span class="built_in">SET</span> <span class="built_in">PATH</span>=<span class="variable">%_PYTHON%</span>;<span class="variable">%_JOM%</span>;<span class="variable">%_CLANG%</span>;<span class="variable">%_CMAKE%</span>;<span class="variable">%PATH%</span></span><br><span class="line"><span class="comment">REM clang 18.1.7 failed 版本太高，Qt5.15 识别不出来 ; </span></span><br><span class="line"><span class="comment">REM clang 12.0 ok ; </span></span><br><span class="line"><span class="comment">REM clang 11.0 ok</span></span><br><span class="line"><span class="comment">REM clang 10.0 build qdoc.exe ok ，构建 QtDoc 时 vc2019 报错：版本太低</span></span><br><span class="line">:: <span class="built_in">SET</span> LLVM_INSTALL_DIR=D:\Users\Qt\tool\libclang</span><br><span class="line"><span class="comment">REM Uncomment the below line when using a git checkout of the source repository</span></span><br><span class="line"><span class="comment">REM SET PATH=%_ROOT%\qtrepotools\bin;%PATH%</span></span><br><span class="line"><span class="built_in">SET</span> _ROOT=</span><br><span class="line"><span class="built_in">SET</span> _PERL=</span><br><span class="line"><span class="built_in">SET</span> _PYTHON=</span><br><span class="line"><span class="built_in">SET</span> _JOM=</span><br><span class="line"><span class="built_in">SET</span> _CLANG=</span><br><span class="line"><span class="built_in">SET</span> _CMAKE=</span><br></pre></td></tr></table></figure>
-<ol start="4">
-<li>参考 <a target="_blank" rel="noopener" href="https://doc.qt.io/qt-5/configure-options.html">Qt Configure Options</a> ，尽可能地减少模块和特性，只保留需要的，减少构建时长</li>
-</ol>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">..\qt-everywhere-src-<span class="number">5</span>.<span class="number">15</span>.<span class="number">15</span>\configure.bat -release -recheck-all -opensource^</span><br><span class="line">  -nomake examples -nomake tests ^</span><br><span class="line">  -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtlottie -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquick3d -skip qtquickcontrols -skip qtquickcontrols2 -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qtsvg -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebglplugin -skip qtwebsockets -skip qtwebview -skip qtwinextras -skip qtx11extras -skip qtxmlpatterns ^</span><br><span class="line">  -no-feature-assistant -no-feature-designer -no-feature-distancefieldgenerator -no-feature-kmap2qmap -no-feature-linguist -no-feature-makeqpf -no-feature-pixeltool -no-feature-qev -no-feature-qtdiag -no-feature-qtpaths -no-feature-qtplugininfo -no-feature-windeployqt </span><br><span class="line"></span><br><span class="line">jom -j8</span><br><span class="line">jom -j8 install</span><br><span class="line">// 安装之后才能构建 docs</span><br><span class="line">jom -j8 docs</span><br></pre></td></tr></table></figure>
-<ol start="5">
-<li>构建 QtDoc 搁置，未成功。参考 <a target="_blank" rel="noopener" href="https://wiki.qt.io/Building_Qt_Documentation#Building_Qt_5_Documentation">Building Qt 5 Documentation</a> ，Qt 提供了已经编译好的 clang 库备用，但有坑，/(ㄒoㄒ)/~~  ；参考 <a target="_blank" rel="noopener" href="https://doc.qt.io/qt-5/qdoc-guide-clang.html">Installing Clang for QDoc</a> 配置环境</li>
-<li>官方提供 Qt Creator ，直接下载即可</li>
-</ol>
+<p>使用 Qt Creator 默认的模板创建项目，调试时提示“调试器未设置”，所以使用 MSVC2010 。</p>
+<p>安装 qt-vs-addin-1.2.5.exe</p>
+<h1 id="构建过程"><a href="#构建过程" class="headerlink" title="构建过程"></a>构建过程</h1><p>参考 <a target="_blank" rel="noopener" href="https://doc.qt.io/qt-5/windows-requirements.html#building-from-source">Building from Source</a> ，需要 Perl / Python / MSVC ，其他章节跳过不用看。</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://doc.qt.io/qt-5/windows-building.html">Qt for Windows - Building from Source</a> ，5 个步骤，按部就班做就可以：</p>
+<p>Step1 不需要商业许可</p>
+<p>Step2 使用 qt-everywhere-src-5.15.x </p>
+<a id="more"></a> 
+
+<h2 id="Step3-配置环境"><a href="#Step3-配置环境" class="headerlink" title="Step3 配置环境"></a>Step3 配置环境</h2><ul>
+<li>配置 clang 可以先跳过；</li>
+<li>ICU 和 ANGLE 三方库并不是必要项目；</li>
+<li>其他中文教程中常见的 perl / python 也不需要；</li>
+<li>SSL 可能也不需要，但我电脑之前其他项目需要已经配置了，未作关注</li>
+</ul>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">REM Set up Microsoft Visual Studio 2017, where &lt;arch&gt; is amd64, x86, etc.</span></span><br><span class="line"><span class="keyword">CALL</span> &quot;C:\Program Files (x86)\Microsoft Visual Studio\<span class="number">2019</span>\Enterprise\VC\Auxiliary\Build\vcvarsall.bat&quot; amd64</span><br><span class="line"><span class="built_in">SET</span> _ROOT=D:\Portable\Qt\src\qt-everywhere-src-<span class="number">5</span>.<span class="number">15</span>.<span class="number">16</span>\</span><br><span class="line"><span class="built_in">SET</span> _TOOL=D:\Portable\Qt\build\tool</span><br><span class="line"><span class="built_in">SET</span> _PYTHON=C:\Users\Administrator\AppData\Local\Programs\Python\Python313\</span><br><span class="line"><span class="comment">REM 以上</span></span><br><span class="line"><span class="built_in">SET</span> _PERL=<span class="variable">%_TOOL%</span>\strawberry-perl-<span class="number">5</span>.<span class="number">38</span>.<span class="number">0</span>.<span class="number">1</span>-<span class="number">64</span>bit-portable</span><br><span class="line"><span class="built_in">SET</span> _JOM=<span class="variable">%_TOOL%</span>\jom</span><br><span class="line"><span class="comment">REM 构建 qdoc.exe QtDoc 时才需要 clang</span></span><br><span class="line"><span class="built_in">SET</span> _CLANG=<span class="variable">%_TOOL%</span>\libclang</span><br><span class="line"><span class="built_in">SET</span> _CMAKE=<span class="variable">%_TOOL%</span>\cmake-<span class="number">3</span>.<span class="number">24</span>.<span class="number">2</span>-windows-x86_64\bin</span><br><span class="line"><span class="comment">REM 即使只编译 qtbase ，也需要全量包中的工具</span></span><br><span class="line"><span class="built_in">SET</span> <span class="built_in">PATH</span>=<span class="variable">%_ROOT%</span>\qtbase\bin;<span class="variable">%_ROOT%</span>\gnuwin32\bin;<span class="variable">%PATH%</span></span><br><span class="line"><span class="comment">REM Uncomment the below line when using a git checkout of the source repository</span></span><br><span class="line"><span class="comment">REM SET PATH=%_ROOT%\qtrepotools\bin;%PATH%</span></span><br><span class="line"><span class="built_in">SET</span> <span class="built_in">PATH</span>=<span class="variable">%_PERL%</span>\perl\site\bin;<span class="variable">%_PERL%</span>\perl\bin;<span class="variable">%_PERL%</span>\c\bin;<span class="variable">%PATH%</span></span><br><span class="line"><span class="built_in">SET</span> <span class="built_in">PATH</span>=<span class="variable">%_CMAKE%</span>;<span class="variable">%_PYTHON%</span>;<span class="variable">%_CLANG%</span>\bin;<span class="variable">%_JOM%</span>;<span class="variable">%PATH%</span></span><br><span class="line"><span class="comment">REM SET LLVM_INSTALL_DIR=%_CLANG%</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">%_ROOT%</span></span><br><span class="line"><span class="built_in">SET</span> _ROOT=</span><br><span class="line"><span class="built_in">SET</span> _CLANG=</span><br><span class="line"><span class="built_in">SET</span> _JOM=</span><br><span class="line"><span class="built_in">SET</span> _PERL=</span><br><span class="line"><span class="built_in">SET</span> _PYTHON=</span><br><span class="line"><span class="built_in">SET</span> _CMAKE=</span><br><span class="line"><span class="built_in">SET</span> _TOOL=</span><br></pre></td></tr></table></figure>
+<h2 id="Step4-构建"><a href="#Step4-构建" class="headerlink" title="Step4 构建"></a>Step4 构建</h2><p>提供的配置命令太保守，我们可以更激进一些，将不需要的目录全部跳过。</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://doc.qt.io/qt-5/configure-options.html">Qt Configure Options</a> ，尽可能地减少模块和特性，只保留需要的，减少构建时长</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">..\qt-everywhere-src-<span class="number">5</span>.<span class="number">15</span>.<span class="number">15</span>\configure.bat -release -recheck-all -opensource^</span><br><span class="line">  -nomake examples -nomake tests ^</span><br><span class="line">  -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtlottie -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquick3d -skip qtquickcontrols -skip qtquickcontrols2 -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qtsvg -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebglplugin -skip qtwebsockets -skip qtwebview -skip qtwinextras -skip qtx11extras -skip qtxmlpatterns ^</span><br><span class="line">  -no-feature-assistant -no-feature-designer -no-feature-distancefieldgenerator -no-feature-kmap2qmap -no-feature-linguist -no-feature-makeqpf -no-feature-pixeltool -no-feature-qev -no-feature-qtdiag -no-feature-qtpaths -no-feature-qtplugininfo -no-feature-windeployqt ^</span><br><span class="line">  ？-no-dbus -no-opengl </span><br><span class="line"></span><br><span class="line">jom -j8</span><br><span class="line">jom -j8 install</span><br><span class="line">// 安装之后才能构建 docs</span><br><span class="line">jom -j8 docs</span><br></pre></td></tr></table></figure>
+<p>即便如此，在 x240 上通过 nmake 构建依然在一小时以上（报错中止了）</p>
+<p>改用 jom ，半小时构建完毕。</p>
+<blockquote>
+<p>jom is a clone of nmake to support the execution of multiple independent commands in parallel. </p>
+</blockquote>
+<h3 id="只构建-qtbase"><a href="#只构建-qtbase" class="headerlink" title="只构建 qtbase"></a>只构建 qtbase</h3><p>调整 <code>configure.bat</code> 的各项参数删减模块太麻烦，可以只下载 qtbase 模块源码，从源头杜绝编译其他模块的可能性。</p>
+<p>编写脚本完成下载-构建-安装 Qt 5.15.x，用于学习 Qt 核心的元对象系统、事件循环、信号和槽函数。</p>
+<h2 id="Step5-帮助文档"><a href="#Step5-帮助文档" class="headerlink" title="Step5 帮助文档"></a>Step5 帮助文档</h2><p>构建 QtDoc 搁置，未成功。</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://wiki.qt.io/Building_Qt_Documentation#Building_Qt_5_Documentation">Building Qt 5 Documentation</a> ，Qt 提供了已经编译好的 clang 库备用，但有坑，/(ㄒoㄒ)/~~  ；</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://doc.qt.io/qt-5/qdoc-guide-clang.html">Installing Clang for QDoc</a> 配置环境</p>
+<h2 id="Step6-Qt-Creator"><a href="#Step6-Qt-Creator" class="headerlink" title="Step6 Qt Creator"></a>Step6 Qt Creator</h2><p>官方提供 Qt Creator ，直接下载即可。</p>
+<p><strong>不用 CDB 调试：</strong></p>
+<p>使用 Qt Creator 调试 msvc 构建的程序时，必须安装 CDB ：</p>
+<p>没有单独的安装包，要把 WDK 全部装上，占用 2.1G (lll￢ω￢)</p>
+<p>那我只用 Qt Creator 借用 gdb 调试</p>
+<p>我改用 MSVC 调试 qt 程序就不用 cdb 了吧？</p>
 <h1 id="libclang"><a href="#libclang" class="headerlink" title="libclang"></a>libclang</h1><p>构建 qdoc.exe 对 clang 版本比较挑剔；构建 QtDoc 非常耗时，暂未成功。</p>
+<ul>
+<li>clang 18.1.7 failed 版本太高，Qt5.15 识别不出来 ; </li>
+<li>clang 12.0 ok ; </li>
+<li>clang 11.0 ok；</li>
+<li>clang 10.0 build qdoc.exe ok ，构建 QtDoc 时 vc2019 报错：版本太低</li>
+</ul>
 <h2 id="静态库"><a href="#静态库" class="headerlink" title="静态库"></a>静态库</h2><p>前述链接目录下中 libclang.lib 似乎是 <strong>静态库</strong>，不存在 bin\libclang.dll ，使用其中的包构建 qdoc.exe 报错：</p>
 <p><del>libclang-release_18.1.7-based-windows-vs2019_64.7z</del>    05-Jul-2024 11:00    461M<br>f0cffd0e9cff950af20efc36d42aefdb  libclang-release_18.1.7-based-windows-vs2019_64.7z</p>
 <p><del>libclang-release_120-based-windows-vs2019_64.7z</del>    30-Apr-2021 10:37    306M<br>86c307866f629b0fb4fa1df801c99268  libclang-release_120-based-windows-vs2019_64.7z</p>
@@ -281,6 +321,34 @@
 <p><del>libclang-release_100-based-windows-vs2019_64.7z</del>    18-Sep-2020 10:09    317M<br>MD5 Hash: 00aac61180028608e421c7a02b798b24</p>
 <p>使用 clang10.0 动态库构建文档时报错：</p>
 <p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/picgo/%E4%BD%BF%E7%94%A8clang10.0%E5%8A%A8%E6%80%81%E5%BA%93%E6%9E%84%E5%BB%BA%E6%96%87%E6%A1%A3%E6%97%B6%E6%8A%A5%E9%94%99.jpg" alt="使用clang10.0动态库构建文档时报错"></p>
+<h1 id="构建过程-1"><a href="#构建过程-1" class="headerlink" title="构建过程"></a>构建过程</h1><p>qmake 基于 .pro 项目文件生成 makefile 。</p>
+<blockquote>
+<p>qmake generates a Makefile based on the information in a project file. </p>
+</blockquote>
+<p>nmake.exe 基于 makefile 中描述的指令构建项目。</p>
+<blockquote>
+<p>The Microsoft Program Maintenance Utility (NMAKE.EXE) is a command-line tool included with Visual Studio. It builds projects based on commands that are contained in a description file, usually called a makefile.</p>
+</blockquote>
+<p>jom.exe 基于 nmake 增加了并发构建的功能。</p>
+<blockquote>
+<p>jom is a clone of nmake to support the execution of multiple independent commands in parallel. </p>
+</blockquote>
+<p>cl.exe 用来控制 c/c++ 编译器和链接器。和 gcc/g++ 用途一致。</p>
+<blockquote>
+<p>cl.exe is a tool that controls the Microsoft C++ (MSVC) C and C++ compilers and linker. cl.exe can be run only on operating systems that support Microsoft Visual Studio for Windows.</p>
+</blockquote>
+<p>uic.exe 将 .ui 用户界面文件转换成 .h 头文件。</p>
+<blockquote>
+<p>The uic reads an XML format user interface definition (.ui) file as generated by Qt Designer and creates a corresponding C++ header file or Python source file.</p>
+</blockquote>
+<p>moc.exe 元对象编译器，用于处理 Qt 的扩展语法。</p>
+<blockquote>
+<p>The <code>moc</code> tool reads a C++ header file. If it finds one or more class declarations that contain the <code>Q_OBJECT</code> macro, it produces a C++ source file containing the meta-object code for those classes</p>
+</blockquote>
+<h1 id="cannot-run-‘rc-exe’"><a href="#cannot-run-‘rc-exe’" class="headerlink" title="cannot run ‘rc.exe’"></a>cannot run ‘rc.exe’</h1><p>在安装 Qt 5.12.12 + MSVC 2015 之后，再次安装 MSVC2019 ，可能会碰到 LNK1158: cannot run ‘rc.exe’ 错误造成编译失败。</p>
+<p>社区关于此问题的 <a target="_blank" rel="noopener" href="https://forum.qt.io/topic/90839/lnk1158-cannot-run-rc-exe">讨论和 workaround</a> </p>
+<p>排查发现 <code>echo %WindowsSdkDir%</code> 环境变量指向的 <code>C:\Program Files (x86)\Windows Kits\10\</code> 子目录内下没有 rc.exe </p>
+<p>刨根问底 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/43847542/rc-exe-no-longer-found-in-vs-2015-command-prompt">rc.exe no longer found in VS 2015 Command Prompt</a></p>
 
     </div>
 
@@ -361,7 +429,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#libclang"><span class="nav-number">1.</span> <span class="nav-text">libclang</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%BA%93"><span class="nav-number">1.1.</span> <span class="nav-text">静态库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%BA%93"><span class="nav-number">1.2.</span> <span class="nav-text">动态库</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%85%E8%A6%81%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">必要性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Qt-4-8-7"><span class="nav-number">1.1.</span> <span class="nav-text">Qt 4.8.7</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">构建过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Step3-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83"><span class="nav-number">2.1.</span> <span class="nav-text">Step3 配置环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step4-%E6%9E%84%E5%BB%BA"><span class="nav-number">2.2.</span> <span class="nav-text">Step4 构建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AA%E6%9E%84%E5%BB%BA-qtbase"><span class="nav-number">2.2.1.</span> <span class="nav-text">只构建 qtbase</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step5-%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3"><span class="nav-number">2.3.</span> <span class="nav-text">Step5 帮助文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step6-Qt-Creator"><span class="nav-number">2.4.</span> <span class="nav-text">Step6 Qt Creator</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#libclang"><span class="nav-number">3.</span> <span class="nav-text">libclang</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%BA%93"><span class="nav-number">3.1.</span> <span class="nav-text">静态库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%BA%93"><span class="nav-number">3.2.</span> <span class="nav-text">动态库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E8%BF%87%E7%A8%8B-1"><span class="nav-number">4.</span> <span class="nav-text">构建过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cannot-run-%E2%80%98rc-exe%E2%80%99"><span class="nav-number">5.</span> <span class="nav-text">cannot run ‘rc.exe’</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -377,7 +445,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-count">158</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -390,7 +458,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
