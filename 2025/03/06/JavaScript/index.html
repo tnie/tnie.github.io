@@ -22,17 +22,17 @@
 
   <meta name="description" content="LLM如何更新 Ollama 呢？  How can I specify the context window size? 其中的“上下文窗口”是什么概念？上下文是什么概念？ prompt 提示词又会带来什么？ Ollama 会动态地加载（或卸载）其中的大语言模型，DeepSeek 等大模型并非一直在运行的。 AnythingLLM参考其 github 的 README 文件  这个单库由三个主要">
 <meta property="og:type" content="article">
-<meta property="og:title" content="不积小流，无以成江海">
-<meta property="og:url" content="https://tnie.github.io/2025/02/26/JavaScript/index.html">
+<meta property="og:title" content="AnythingLLM 检索增强生成系统">
+<meta property="og:url" content="https://tnie.github.io/2025/03/06/JavaScript/index.html">
 <meta property="og:site_name" content="不积小流，无以成江海">
 <meta property="og:description" content="LLM如何更新 Ollama 呢？  How can I specify the context window size? 其中的“上下文窗口”是什么概念？上下文是什么概念？ prompt 提示词又会带来什么？ Ollama 会动态地加载（或卸载）其中的大语言模型，DeepSeek 等大模型并非一直在运行的。 AnythingLLM参考其 github 的 README 文件  这个单库由三个主要">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-02-26T10:40:56.505Z">
-<meta property="article:modified_time" content="2025-03-06T14:03:58.781Z">
+<meta property="article:published_time" content="2025-03-06T13:51:36.000Z">
+<meta property="article:modified_time" content="2025-06-22T05:28:11.714Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://tnie.github.io/2025/02/26/JavaScript/">
+<link rel="canonical" href="https://tnie.github.io/2025/03/06/JavaScript/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title> | 不积小流，无以成江海</title>
+  <title>AnythingLLM 检索增强生成系统 | 不积小流，无以成江海</title>
   
 
 
@@ -199,7 +199,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2025/02/26/JavaScript/">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2025/03/06/JavaScript/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
@@ -212,7 +212,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          AnythingLLM 检索增强生成系统
         </h1>
 
         <div class="post-meta">
@@ -222,15 +222,24 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2025-02-26 18:40:56" itemprop="dateCreated datePublished" datetime="2025-02-26T18:40:56+08:00">2025-02-26</time>
+              <time title="创建时间：2025-03-06 21:51:36" itemprop="dateCreated datePublished" datetime="2025-03-06T21:51:36+08:00">2025-03-06</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-03-06 22:03:58" itemprop="dateModified" datetime="2025-03-06T22:03:58+08:00">2025-03-06</time>
+                <time title="修改时间：2025-06-22 13:28:11" itemprop="dateModified" datetime="2025-06-22T13:28:11+08:00">2025-06-22</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
 
           
 
@@ -253,6 +262,8 @@
 <p>这个单库由三个主要部分组成：frontend / server / collector</p>
 </blockquote>
 <p>通过 yarn 分别启动三个服务时，端口占用 3000 / 3001 / 8888 ，可以通过 nmap 扫描到这三个端口。</p>
+<a id="more"></a>
+
 <p>直接启动 Desktop 桌面软件时，只监听了 localhost （无法通过局域网地址访问），telnet 3001 / 8888 能够访问，telnet 3000 失败。</p>
 <ul>
 <li>Desktop 桌面软件如何打包这三个服务的？</li>
@@ -355,8 +366,8 @@
       <i class="fa fa-chevron-left"></i> 从源码构建 Qt
     </a></div>
       <div class="post-nav-item">
-    <a href="/2025/03/12/http-upload/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2025/03/23/http-upload/" rel="next" title="调试 http post">
+      调试 http post <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -432,7 +443,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">155</span>
+          <span class="site-state-item-count">157</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -196,6 +196,163 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/01/17/gitConfig/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/01/17/gitConfig/" class="post-title-link" itemprop="url">git 常用配置</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-17 15:08:43" itemprop="dateCreated datePublished" datetime="2018-01-17T15:08:43+08:00">2018-01-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在使用 git 版本仓库时，难免会出现默认配置不符合我们需要的地方。尤其是在 windows 上使用 git 时，不如意的地方就会更频繁的出现。这时需要我们自己手动微调 git 的默认配置，汇总如下：</p>
+<h1 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h1><p>经常输入 <code>git status</code> 查看库当前状态，如果终端环境不支持 tab 自动补全，频繁输入 <code>status</code> 完整单词就会变得很繁琐，考验耐心；即便支持自动补全，<code>git status</code> 和 <code>git stash</code> 也是前缀相同。这时我们可以考虑 <a target="_blank" rel="noopener" href="https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases">使用别名</a>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git config --global alias.co checkout</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config --global alias.br branch</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config --global alias.ci commit</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config --global alias.st status</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/01/17/gitConfig/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/08/24/automake4th/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/08/24/automake4th/" class="post-title-link" itemprop="url">Makefile 自动生成 - 渣滓</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-08-24 15:08:46" itemprop="dateCreated datePublished" datetime="2017-08-24T15:08:46+08:00">2017-08-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Configure-ac-文件解析"><a href="#Configure-ac-文件解析" class="headerlink" title="Configure.ac 文件解析"></a>Configure.ac 文件解析</h1><p>原理：Autoconf 是用来产生 “configure” 文档的工具。“configure” 是一个 shell script，它可以自动设定原始程序以符合各种不同平台上 Unix 系统的特性，并且根据系统参数及环境产生合适的 Makefile 文档或是 C 的标头档 (header file)，让原始程序可以很方便地在这些不同的平台上被编译出来。Autoconf 会读取 <del>configure.in</del> configure.ac 档然后产生 “configure” 这个 shell script。</p>
+<p><del>configure.in</del> configure.ac 文档的内容是一连串 GNU m4 的巨集，这些巨集经过 autoconf 处理后会变成检查系统特征的 shell script。<del>configure.in</del> configure.ac 内巨集的顺序并没有特别的规定，但是每一个 <del>configure.in</del> configure.ac 档必须在所有巨集前加入 AC_INIT 巨集，然後在所有巨集的最后面加上 AC_OUTPUT 巨集。</p>
+<p>一般先用 autoscan 这个工具扫描原始文件以产生一个 configure.scan 文件，再对 configure.scan 作些修改，从而生成 <del>configure.in</del> configure.ac 文件。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/08/24/automake4th/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/08/24/automake3rd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -964,178 +1121,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/25/shell-sub1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/25/shell-sub1/" class="post-title-link" itemprop="url">shell 及环境变量 -1.4 其他</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-25 16:31:37" itemprop="dateCreated datePublished" datetime="2017-04-25T16:31:37+08:00">2017-04-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2016年1月4日 10:05:04</p>
-<h1 id="shell-及环境变量-1-4-其他"><a href="#shell-及环境变量-1-4-其他" class="headerlink" title="shell 及环境变量 -1.4 其他"></a><a href="/2017/04/24/shell/">shell 及环境变量</a> -1.4 其他</h1><h2 id="参数置换"><a href="#参数置换" class="headerlink" title="参数置换"></a>参数置换</h2><p>shell提供了参数置换能力以便用户可以根据不同的条件来给变量赋不同的值。参数置换的变量有四种，这些变量通常与某一个位置参数相联系，根据指定的位置参数是否已经设置类决定变量的取值，它们的语法和功能分别如下。</p>
-<ul>
-<li><code>变量=$&#123;参数-word&#125;</code>：如果设置了参数，则用参数的值置换变量的值，否则用 word 置换。即这种变量的值等于某一个参数的值，如果该参数没有设置，则变量就等于 word 的值。</li>
-<li><code>变量=$&#123;参数=word&#125;</code>：如果设置了参数，则用参数的值置换变量的值，否则把变量设置成 word 然后再用 word 替换参数的值。注意，位置参数不能用于这种方式，因为在 shell 程序中不能为位置参数赋值。</li>
-<li><code>变量=$&#123;参数?word&#125;</code>：如果设置了参数，则用参数的值置换变量的值，否则就显示 word 并从 shell 中退出，如果省略了 word，则显示标准信息。这种变量要求一定等于某一个参数的值，如果该参数没有设置，就显示一个信息，然后退出，因此这种方式常用于出错指示。</li>
-<li><code>变量=$&#123;参数+word&#125;</code>：如果设置了参数，则用 word 置换变量，否则不进行置换。</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/25/shell-sub1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/24/shell/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/24/shell/" class="post-title-link" itemprop="url">shell 及 环境变量</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-24 09:25:47" itemprop="dateCreated datePublished" datetime="2017-04-24T09:25:47+08:00">2017-04-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2016/3/16 12:17:18</p>
-<p>汇总 3 篇。此处 shell 指工具，不涉及 shell 编程、脚本等知识。</p>
-<h1 id="shell-和简单操作"><a href="#shell-和简单操作" class="headerlink" title="shell 和简单操作"></a>shell 和简单操作</h1><h2 id="shell-简介"><a href="#shell-简介" class="headerlink" title="shell 简介"></a>shell 简介</h2><p><a target="_blank" rel="noopener" href="http://book.51cto.com/art/201107/277600.htm">Shell 是什么呢？</a> 确切地说，Shell 就是一个命令行解释器，它的作用就是遵循一定的语法将输入的命令加以解释并传给操作系统内核，它为用户提供了一个向 Linux 发送请求以便运行程序的接口，用户可以用 Shell 来启动、挂起、停止甚至是编写一些程序。</p>
-<p><a target="_blank" rel="noopener" href="http://book.51cto.com/art/201107/277601.htm">Linux Shell的种类</a> 很多，目前流行的 Shell 包括 ash、bash、ksh、csh、zsh 等，用户可以通过查看 /etc/shells 文件中的内容来查看自己主机中当前有哪些种类的 Shell。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/24/shell/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1207,7 +1192,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">155</span>
+          <span class="site-state-item-count">157</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

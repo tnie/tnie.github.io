@@ -196,6 +196,185 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2024/01/12/serial-port/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/12/serial-port/" class="post-title-link" itemprop="url">串口编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-12 21:28:03" itemprop="dateCreated datePublished" datetime="2024-01-12T21:28:03+08:00">2024-01-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-22 14:08:18" itemprop="dateModified" datetime="2024-12-22T14:08:18+08:00">2024-12-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我们在谈到“串口”的时候，往往还会提到 RS-232 、RS-485 等等，它们之间的关系是什么？</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Serial_port"><em>串行端口</em></a> 的概念，是和 <em>并行端口</em> 相对的。串口一次只传输 1bit ，但并行端口会同时传输多个 bit 。</p>
+<p>通信，传输字符/字节。</p>
+<blockquote>
+<p>历史上<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82">字节</a>长度曾基于硬件为 1-48 bit不等，最初通常使用6 bit 或9 bit 为一字节。今日标准以 8 bit 作为一字节。</p>
+</blockquote>
+<p>虽然以太网、FireWire 和 USB 等接口也以串行流的形式发送数据，但术语 <em>串行端口</em> 通常表示符合 RS-232 或相关标准（如 RS-485 或 RS-422）的硬件。</p>
+<p>我们可能会用到 232 串口线、或者 422 串口线连接两个设备，但使用 Qt serial port 模块写软件不用考虑使用了哪种串口线，只需要关注收发两端的波特率、校验位、停止位等一致。</p>
+<p>The most well-known options are </p>
+<ul>
+<li>speed, </li>
+<li>number of data bits per character, </li>
+<li>parity, and </li>
+<li>number of stop bits per character.</li>
+</ul>
+<h1 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h1><p>RS-232 是美国电子工业联盟制定的串行数据通信的接口标准，它广泛用于计算机串行接口外设连接。</p>
+<blockquote>
+<p>它规定连接电缆和机械、电气特性、信号功能及发送过程。其他常用电气标准还有 RS-422-A、RS-423A、RS-485。</p>
+</blockquote>
+<p>出于节省资金和空间的考虑，25 个管脚的 DB-25 连接器已经不常见，9 个管脚的 DB-9 型连接器被广泛使用。RS-232 中 DB-9 型连接器的信号和管脚分配：2-收，3-发，5-接地。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/12/serial-port/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/12/13/VxWorks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/12/13/VxWorks/" class="post-title-link" itemprop="url">接触嵌入式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-12-13 19:06:00" itemprop="dateCreated datePublished" datetime="2023-12-13T19:06:00+08:00">2023-12-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-25 22:15:09" itemprop="dateModified" datetime="2024-12-25T22:15:09+08:00">2024-12-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>从桌面开发突然进入 VxWorks 嵌入式开发，有几个认知上的调整：</p>
+<ol>
+<li>桌面开发的时候，驱动、操作系统和 IDE 之后，我们才开始新建项目、编写代码；</li>
+<li>嵌入式开发，从板级支持包、系统镜像就需要新建对应的项目了。</li>
+<li>理解嵌入式系统可裁剪，镜像大概率并不支持那些在桌面操作系统上常见的指令、服务和开发所需的库，需要有针对性的一个一个配置相应的驱动、组件。</li>
+</ol>
+<h1 id="Das-U-Boot"><a href="#Das-U-Boot" class="headerlink" title="Das U-Boot"></a>Das U-Boot</h1><p>加载桌面操作系统之前的引导阶段，按下任意键进入 BIOS。与之类似，我们在板子引导程序读秒期间（使用串口调试工具）发送任意键能够进入 uboot，使用 <code>printenv</code> 等命令查看状态。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看版本</span></span><br><span class="line">version</span><br><span class="line"><span class="meta">#</span><span class="bash"> 获取帮助</span></span><br><span class="line">help</span><br><span class="line">?</span><br><span class="line"><span class="meta">#</span><span class="bash"> 打印环境变量</span></span><br><span class="line">printenv</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查询 FAT 格式设备的目录和文件信息</span></span><br><span class="line">fatls scsi 0:8</span><br><span class="line">fatls scsi 0:1</span><br><span class="line"><span class="meta">#</span><span class="bash"> bootcmd 自动启动时执行命令</span></span><br><span class="line">setenv bootcmd &quot;fatload scsi 0:1 0x90100000 Ft2004.elf; bootvx32 0x90100000;&quot;</span><br><span class="line">saveenv</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看日期时间</span></span><br><span class="line">date</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看帮助</span></span><br><span class="line">help date</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 更多</span></span><br><span class="line">fatinfo - print information about filesystem  </span><br><span class="line">fatload - load binary file from a dos filesystem  </span><br><span class="line">fatls - list files in a directory (default /)</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/12/13/VxWorks/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2023/11/04/FTP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -904,183 +1083,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/12/18/officeNetwork/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/18/officeNetwork/" class="post-title-link" itemprop="url">科学地上网</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-12-18 18:04:12" itemprop="dateCreated datePublished" datetime="2021-12-18T18:04:12+08:00">2021-12-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>如何改进上网环境？如何在监控环境下相对舒适地“搬砖”，如何利用虚拟机？</p>
-<p>整体方案很简单，将认证工具、监控工具放在虚拟机 Ubuntu 中，网络选择桥接模式，直连园区无线网完成帐号认证工作；新增网卡将网络分享给其他虚拟机。</p>
-<p>2021年11月22日更新，Ubuntu 虚拟机已删除 。</p>
-<p>知易行难，具体实现过程中，因为缺乏网络相关的知识体系（尤其是路由配置等）花了较多时间，绕了很多弯。</p>
-<h1 id="查看-IP-地址"><a href="#查看-IP-地址" class="headerlink" title="查看 IP 地址"></a>查看 IP 地址</h1><p>在终端中查看 IP 地址的命令：<code>ip a</code>，在 Debian 10 或 Ubuntu 20 版本中已经没有 <code>ifconfig</code> 命令、<code>iptables 命令。</code></p>
-<p>更多请参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/81212996">如何在 Ubuntu 中检查你的 IP 地址</a></p>
-<h1 id="配置生效"><a href="#配置生效" class="headerlink" title="配置生效"></a>配置生效</h1><p>最初每次更改之后都是重启系统，保证配置生效。网络不通的原因可能很多，也弄不明白，按照网上的教程操作之后还是失败就难免怀疑配置是否生效。</p>
-<p>重启系统很笨重，但又不清楚针对网络配置的刷新（或重启）命令，后来发现图形界面网络配置项是提供了开关按钮的：重启（开关一次）网络配置生效。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/18/officeNetwork/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/12/06/gb28181/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/06/gb28181/" class="post-title-link" itemprop="url">国标阅读笔记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-12-06 10:33:12" itemprop="dateCreated datePublished" datetime="2021-12-06T10:33:12+08:00">2021-12-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/media/" itemprop="url" rel="index"><span itemprop="name">media</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>国标阅读笔记</p>
-<ul>
-<li>MANSCDP 协议（监控报警联网系统控制描述协议，Monitoringand Alarming Network System Control Description Protocol），在 GB/T 28181-2016 的附录 A 描述</li>
-<li>MANSRTSP 协议（监控报警联网系统实时流协议，Monitoring and Alarming Network System Real-Time Streaming Protocol），在 GB/T 28181-2016 的附录 B 描述</li>
-</ul>
-<p>XML 数据类型</p>
-<p>XML Schema 简介</p>
-<h1 id="SVAC-音视频编解码协议"><a href="#SVAC-音视频编解码协议" class="headerlink" title="SVAC 音视频编解码协议"></a>SVAC 音视频编解码协议</h1><p>《SVAC 安全防范监控数字视音频编解码技术标准》(简称 SVAC，Surveillance Video and Audio  Coding)。其国标号是 GB/T  25724-2017，于 2010 年提出 SVAC1.0 标准，2017 年升级为 SVAC2.0 版本，现行标准为 SVAC2.0 标准。</p>
-<p>GB28121 中使用的 2010 年的 v1.0 版本 SVAC。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/06/gb28181/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1152,7 +1154,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">155</span>
+          <span class="site-state-item-count">157</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

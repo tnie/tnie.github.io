@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="疑似过敏性结膜炎，暂时没有过敏性鼻炎症状。 前一周周末爬西山，周六（2024年3月16日，农历二月初七）爬百望山，下午亮马河大风，周日眼睛红，痒，揉眼睛。 在世纪坛医院抽血检验后，对圆柏花粉阳性。期间持续用药：  盐酸奥洛他定滴眼液早晚各一次，内舒拿鼻喷雾剂一天一次 避免使用滴眼液之后马上洗脸、洗澡，降低药效 清洗鼻子之后再使用鼻喷雾剂  一般流程：  上学出门前（07:40 左右），洗脸之后使用">
-<meta property="og:type" content="website">
+  <meta name="description" content="下载 PostgreSQL ，选择 历史版本 15.13 安装过程中密码使用 123456 ，端口使用默认端口 5432 如果有互联网可以在安装结束时使用 Stack Builder 安装 PostGIS3.5 ； 如果是在没有互联网的环境可以下载 单独的安装包 自行安装。 前者下载的文件和独立下载的 postgis-bundle-pg15x64-setup-3.5.3-2.exe 为同一文件，M">
+<meta property="og:type" content="article">
 <meta property="og:title" content="不积小流，无以成江海">
-<meta property="og:url" content="https://tnie.github.io/private/%E6%B2%90%E6%B2%90%E8%BF%87%E6%95%8F.html">
+<meta property="og:url" content="https://tnie.github.io/2025/07/20/postgis/index.html">
 <meta property="og:site_name" content="不积小流，无以成江海">
-<meta property="og:description" content="疑似过敏性结膜炎，暂时没有过敏性鼻炎症状。 前一周周末爬西山，周六（2024年3月16日，农历二月初七）爬百望山，下午亮马河大风，周日眼睛红，痒，揉眼睛。 在世纪坛医院抽血检验后，对圆柏花粉阳性。期间持续用药：  盐酸奥洛他定滴眼液早晚各一次，内舒拿鼻喷雾剂一天一次 避免使用滴眼液之后马上洗脸、洗澡，降低药效 清洗鼻子之后再使用鼻喷雾剂  一般流程：  上学出门前（07:40 左右），洗脸之后使用">
+<meta property="og:description" content="下载 PostgreSQL ，选择 历史版本 15.13 安装过程中密码使用 123456 ，端口使用默认端口 5432 如果有互联网可以在安装结束时使用 Stack Builder 安装 PostGIS3.5 ； 如果是在没有互联网的环境可以下载 单独的安装包 自行安装。 前者下载的文件和独立下载的 postgis-bundle-pg15x64-setup-3.5.3-2.exe 为同一文件，M">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-12-27T13:58:27.857Z">
-<meta property="article:modified_time" content="2024-12-21T11:03:59.919Z">
+<meta property="article:published_time" content="2025-07-20T02:36:11.671Z">
+<meta property="article:modified_time" content="2025-07-20T03:02:17.047Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://tnie.github.io/private/%E6%B2%90%E6%B2%90%E8%BF%87%E6%95%8F">
+<link rel="canonical" href="https://tnie.github.io/2025/07/20/postgis/">
 
 
 <script id="page-configurations">
@@ -40,13 +40,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title> | 不积小流，无以成江海
-</title>
+  <title> | 不积小流，无以成江海</title>
   
 
 
@@ -192,60 +191,88 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
-          <div class="content page posts-expand">
+          <div class="content post posts-expand">
             
 
     
-    
-    
-    <div class="post-block" lang="zh-CN">
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2025/07/20/postgis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">
-</h1>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
 
-<div class="post-meta">
+              <time title="创建时间：2025-07-20 10:36:11 / 修改时间：11:02:17" itemprop="dateCreated datePublished" datetime="2025-07-20T10:36:11+08:00">2025-07-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>下载 PostgreSQL ，选择 <a target="_blank" rel="noopener" href="https://www.enterprisedb.com/downloads/postgres-postgresql-downloads">历史版本 15.13</a></p>
+<p>安装过程中密码使用 123456 ，端口使用默认端口 5432</p>
+<p>如果有互联网可以在安装结束时使用 Stack Builder 安装 PostGIS3.5 ；</p>
+<p>如果是在没有互联网的环境可以下载 <a target="_blank" rel="noopener" href="https://download.osgeo.org/postgis/windows/pg15/">单独的安装包</a> 自行安装。</p>
+<p>前者下载的文件和独立下载的 <a target="_blank" rel="noopener" href="https://download.osgeo.org/postgis/windows/pg15/postgis-bundle-pg15x64-setup-3.5.3-2.exe">postgis-bundle-pg15x64-setup-3.5.3-2.exe</a> 为同一文件，MD5 检验码相同。</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>安装完毕后，根据 <a target="_blank" rel="noopener" href="https://postgis.net/documentation/getting_started/">使用手册</a> 我们需要在数据库中执行 <code>CREATE EXTENSION postgis;</code> 启用插件。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/03/23/http-upload/" rel="prev" title="调试 http post">
+      <i class="fa fa-chevron-left"></i> 调试 http post
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/10/26/wireshark/" rel="next" title="Wireshark 和  tcpdump">
+      Wireshark 和  tcpdump <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
-          <p>疑似过敏性结膜炎，暂时没有过敏性鼻炎症状。</p>
-<p>前一周周末爬西山，周六（2024年3月16日，农历二月初七）爬百望山，下午亮马河大风，周日眼睛红，痒，揉眼睛。</p>
-<p>在世纪坛医院抽血检验后，对圆柏花粉阳性。期间持续用药：</p>
-<ul>
-<li>盐酸奥洛他定滴眼液早晚各一次，内舒拿鼻喷雾剂一天一次</li>
-<li>避免使用滴眼液之后马上洗脸、洗澡，降低药效</li>
-<li>清洗鼻子之后再使用鼻喷雾剂</li>
-</ul>
-<p>一般流程：</p>
-<ul>
-<li>上学出门前（07:40 左右），洗脸之后使用盐酸奥洛他定，内舒拿</li>
-<li>放学到家后如果天气良好适合花粉扩散，要么宅在家里，要么带上护目镜下楼</li>
-<li>如果滴眼液药效已过（眼睛红、痒，揉眼睛），一般在 18:00 左右第二次盐酸奥洛他定</li>
-<li>不再出门后，冲洗头发，生理盐水洗鼻子</li>
-<li>玻璃酸钠滴眼液和生理盐水喷雾器按需使用</li>
-</ul>
-<p>在 2024年4月20日（周六）停止用药内舒拿和盐酸奥洛他定。 状态良好。</p>
-
-      </div>
-      
-      
-      
-    </div>
-    
-
-    
-    
-    
 
 
           </div>
@@ -296,6 +323,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">使用</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -311,7 +339,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">155</span>
+          <span class="site-state-item-count">157</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

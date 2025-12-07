@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Wireshark 很强大，比你想象中的还要厉害。 强烈推荐《Wireshark网络分析就这么简单》和《Wireshark网络分析的艺术》，作者林沛满。 以下笔记来自个人经历，和书中章节无关。书是两年前读的，具体的知识点已经全忘了。 抓包过滤字节tcpdump 和 Wireshark 过滤字节的语法存在差异： 12345# capture filter &#x2F; 含 8 字节头部 tcpdump udp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wireshark 和  tcpdump">
+<meta property="og:url" content="https://tnie.github.io/2025/10/26/wireshark/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="Wireshark 很强大，比你想象中的还要厉害。 强烈推荐《Wireshark网络分析就这么简单》和《Wireshark网络分析的艺术》，作者林沛满。 以下笔记来自个人经历，和书中章节无关。书是两年前读的，具体的知识点已经全忘了。 抓包过滤字节tcpdump 和 Wireshark 过滤字节的语法存在差异： 12345# capture filter &#x2F; 含 8 字节头部 tcpdump udp">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-26T13:48:20.000Z">
+<meta property="article:modified_time" content="2025-11-25T13:00:28.843Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2025/10/26/wireshark/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Wireshark 和  tcpdump | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2025/10/26/wireshark/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Wireshark 和  tcpdump
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-10-26 21:48:20" itemprop="dateCreated datePublished" datetime="2025-10-26T21:48:20+08:00">2025-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-25 21:00:28" itemprop="dateModified" datetime="2025-11-25T21:00:28+08:00">2025-11-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Wireshark 很强大，比你想象中的还要厉害。</p>
+<p>强烈推荐《Wireshark网络分析就这么简单》和《Wireshark网络分析的艺术》，作者林沛满。</p>
+<p>以下笔记来自个人经历，和书中章节无关。书是两年前读的，具体的知识点已经全忘了。</p>
+<h1 id="抓包过滤字节"><a href="#抓包过滤字节" class="headerlink" title="抓包过滤字节"></a>抓包过滤字节</h1><p>tcpdump 和 Wireshark 过滤字节的语法存在差异：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> capture filter / 含 8 字节头部</span> </span><br><span class="line">tcpdump udp[36:2]=0xb301   </span><br><span class="line"><span class="meta">#</span><span class="bash"> Wireshark display filter</span></span><br><span class="line">udp.payload[28:2]== b301</span><br><span class="line"><span class="meta">#</span><span class="bash">udp.payload[28:2]== 0xb301  <span class="comment"># error</span></span></span><br></pre></td></tr></table></figure>
+<p>多思考一步，这个差异从哪来的？</p>
+<ul>
+<li>命令行使用 tcpdump 是在抓取报文时过滤的；</li>
+<li>图形界面使用 Wireshark 存在“捕获过滤器”和“显示过滤器”，</li>
+<li>使用 Wireshark 查看已捕获的报文时只用到后者；</li>
+</ul>
+<p>两者捕获报文时的过滤语法其实一致： <code>man pcap-filter</code>  </p>
+<p>Wireshark “显示过滤器”的语法： <code>man wireshark-filter</code>  </p>
+<a id="more"></a>
+
+<h2 id="capture-filter-语法"><a href="#capture-filter-语法" class="headerlink" title="capture filter 语法"></a>capture filter 语法</h2><p>通过 <code>man pcap-filter</code> 查阅 <code>expr relop expr</code> 章节，解释 <code>tcpdump len = 100</code>  </p>
+<blockquote>
+<p>True  if  the  relation holds, where <code>relop</code> is one of &gt;, &lt;, &gt;=, &lt;=, =, !=, </p>
+<p>and <code>expr</code> is an arithmetic expression composed of </p>
+<ul>
+<li><strong>integer</strong> constants (expressed in standard C syntax), </li>
+<li>the normal binary operators [+, -, *, /, %, &amp;,  |,  ^,  &lt;&lt;,  &gt;&gt;],  </li>
+<li>a  <strong>length</strong> operator, </li>
+<li>and special packet data accessors.  <code>proto [ expr : size ]</code></li>
+</ul>
+<p>Note that all comparisons are <strong>unsigned</strong>, so that, for example, 0x80000000 and 0xffffffff are &gt; 0.</p>
+</blockquote>
+<p>提取报文内部数据时， <code>size</code> 可取值只有 1、2、4 。</p>
+<blockquote>
+<p>The length operator, indicated by the keyword <code>len</code>, gives the length of the packet.</p>
+</blockquote>
+<p>是整个包的长度，并非如 Wireshark display filter 中数据部分的长度。</p>
+<p>以 UDP 为例，一般是 42字节 + 数据长度：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">以太网头部（14字节） → IPv4头部（20字节） → UDP头部（8字节） → 应用数据（58字节）</span><br></pre></td></tr></table></figure>
+<h2 id="display-filter-语法"><a href="#display-filter-语法" class="headerlink" title="display filter 语法"></a>display filter 语法</h2><p>通过 <code>man wireshark-filter</code> 查阅 “The slice operator” 章节</p>
+<blockquote>
+<p>You can take a slice of a field if the field base type is a text string or a <strong>byte array</strong>.</p>
+</blockquote>
+<p>不同于 <code>pcap-filter</code> 抽取一字节、两字节、四字节转换成无符号数（进行比较），</p>
+<p>在  <code>wireshark-filter</code> 中可以抽取任意长度的字节（切片），相应的也就无法转换成无符号数。</p>
+<blockquote>
+<p>You can take a slice of a field if the field base type is a text string or a byte array.</p>
+</blockquote>
+<p>在  <code>wireshark-filter</code> 中切片都是单个字节依次比较 <code>frame[60:2] == 50:51</code>，</p>
+<blockquote>
+<p>Ethernet addresses and <strong>byte arrays</strong> are represented by <strong>hex</strong> digits. </p>
+<p>The hex digits <strong>may</strong> be separated by colons, periods, or hyphens.  冒号 / 句号 / 连字符</p>
+</blockquote>
+<p>字节序列可以隐式地转换成字符串，比较时更灵活：</p>
+<blockquote>
+<p>Fields which are sequences of bytes are implicitly converted to strings for comparisons against (double quoted) literal strings and raw strings.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">frame[60:2] &#x3D;&#x3D; &quot;PQ&quot;   # literal strings</span><br><span class="line">frame[60:2] &#x3D;&#x3D; 50.51  # raw strings ?</span><br><span class="line">frame[60:2] &#x3D;&#x3D; &quot;\x50\x51&quot;   # 转义字符</span><br></pre></td></tr></table></figure>
+<p>封装了多种类型，避免了只能在字节序列上筛选：</p>
+<blockquote>
+<p>Each protocol field is typed.  数值、网络地址、时间、协议等多种类型</p>
+</blockquote>
+<p><code>udp</code> 是协议，<code>udp.payload</code> 是字节序列，所以前者不能使用切片语法，后者才可以。</p>
+<blockquote>
+<p>Classless Inter-Domain Routing (CIDR) notation can be used to test if an IPv4 address is in a certain subnet. </p>
+<p>For example, this display filter will find all packets in the 129.111 network:</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ip.addr &#x3D;&#x3D; 129.111.0.0&#x2F;16</span><br><span class="line"># 过滤 192.168.50.[123]</span><br><span class="line">ip.src &#x3D;&#x3D; 192.168.50.0&#x2F;30</span><br></pre></td></tr></table></figure>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>各有各的不足：</p>
+<ul>
+<li>tcpdump 没有参数直接映射 udp 协议（含头部和数据）的长度，</li>
+</ul>
+<p>​    需要手动提取协议中长度字段对应的序列切片 udp[4:2]  </p>
+<ul>
+<li><p>Wireshark 没有字段直接获取 udp 报文（含头部和数据），</p>
+<p>需要通过 ip 的数据来间接地访问</p>
+</li>
+</ul>
+<h1 id="自定义协议"><a href="#自定义协议" class="headerlink" title="自定义协议"></a>自定义协议</h1><p>使用 C 语言编写动态库或者 Lua 脚本语言，放到对应的插件目录，重启软件。</p>
+<p>学习官方手册的过程笔记呢？</p>
+<p>简单的协议交给大语言模型完全能搞定，比如基于 UDP 的由传感器上传的无状态的测量数据报文。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/07/20/postgis/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%93%E5%8C%85%E8%BF%87%E6%BB%A4%E5%AD%97%E8%8A%82"><span class="nav-number">1.</span> <span class="nav-text">抓包过滤字节</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#capture-filter-%E8%AF%AD%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">capture filter 语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#display-filter-%E8%AF%AD%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">display filter 语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">1.3.</span> <span class="nav-text">后记</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.</span> <span class="nav-text">自定义协议</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

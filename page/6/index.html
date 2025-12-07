@@ -196,6 +196,172 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/11/04/debugCDN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/04/debugCDN/" class="post-title-link" itemprop="url">调试阿里云 CDN  同步延迟</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-04 15:49:33" itemprop="dateCreated datePublished" datetime="2019-11-04T15:49:33+08:00">2019-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>cdn 节点和源上相同文件的 etag 或 lm 是相同的。</p>
+<h1 id="http-header-response"><a href="#http-header-response" class="headerlink" title="http header response"></a>http header response</h1><p><a target="_blank" rel="noopener" href="https://kb.cnblogs.com/page/92320/">https://kb.cnblogs.com/page/92320/</a></p>
+<p>2019/7/23 14:00:43 请求源 101.200.199.142 cdnapp.ydtg.com.cn</p>
+<p>Date    原始服务器消息发出的时间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Server: nginx</span><br><span class="line">Date: Tue, 23 Jul 2019 06:00:42 GMT</span><br><span class="line">Content-Type: application&#x2F;octet-stream</span><br><span class="line">Content-Length: 1200940</span><br><span class="line">Last-Modified: Tue, 23 Jul 2019 00:58:00 GMT</span><br><span class="line">Connection: keep-alive</span><br><span class="line">ETag: &quot;5d365b98-12532c&quot;</span><br><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Access-Control-Allow-Credentials: true</span><br><span class="line">Accept-Ranges: bytes</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/04/debugCDN/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/11/04/windbg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/04/windbg/" class="post-title-link" itemprop="url">windbg</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-04 15:47:49" itemprop="dateCreated datePublished" datetime="2019-11-04T15:47:49+08:00">2019-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="获取"><a href="#获取" class="headerlink" title="获取"></a>获取</h1><p>看一下 pageheap 针对的是什么问题？ <a target="_blank" rel="noopener" href="https://blog.csdn.net/xiaohyy/article/details/4174493">堆调试工具——pageheap的使用和原理分析</a></p>
+<p>pageheap 和 gflags 什么关系？前者被包含到了后者中。</p>
+<blockquote>
+<p>This version of GFlags includes the functionality of PageHeap (pageheap.exe), a tool that enables heap allocation monitoring in Windows. </p>
+</blockquote>
+<p>如何安装 gflags？安装 WinDbg</p>
+<blockquote>
+<p>GFlags is included in the <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/debugger-download-tools">Debugging Tools for Windows 10 (WinDbg).</a></p>
+</blockquote>
+<p>如何 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/">获取 WinDbg</a>？</p>
+<ul>
+<li><p>在安装过程中，通过 win 10 sdk 的方式（无论是通过 msvc2019 还是直接安装 win10 sdk）都没有成功。</p>
+</li>
+<li><p>最终单独安装的 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-hardware/drivers/download-the-wdk">Windows Driver Kit (WDK)</a></p>
+<blockquote>
+<p>Step 2: Install WDK for Windows 10, version 1903</p>
+</blockquote>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/04/windbg/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/05/07/spdlog/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -997,163 +1163,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2018/01/17/gitConfig/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/01/17/gitConfig/" class="post-title-link" itemprop="url">git 常用配置</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-01-17 15:08:43" itemprop="dateCreated datePublished" datetime="2018-01-17T15:08:43+08:00">2018-01-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在使用 git 版本仓库时，难免会出现默认配置不符合我们需要的地方。尤其是在 windows 上使用 git 时，不如意的地方就会更频繁的出现。这时需要我们自己手动微调 git 的默认配置，汇总如下：</p>
-<h1 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h1><p>经常输入 <code>git status</code> 查看库当前状态，如果终端环境不支持 tab 自动补全，频繁输入 <code>status</code> 完整单词就会变得很繁琐，考验耐心；即便支持自动补全，<code>git status</code> 和 <code>git stash</code> 也是前缀相同。这时我们可以考虑 <a target="_blank" rel="noopener" href="https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases">使用别名</a>：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git config --global alias.co checkout</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config --global alias.br branch</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config --global alias.ci commit</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config --global alias.st status</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/01/17/gitConfig/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/08/24/automake4th/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/08/24/automake4th/" class="post-title-link" itemprop="url">Makefile 自动生成 - 渣滓</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-08-24 15:08:46" itemprop="dateCreated datePublished" datetime="2017-08-24T15:08:46+08:00">2017-08-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Configure-ac-文件解析"><a href="#Configure-ac-文件解析" class="headerlink" title="Configure.ac 文件解析"></a>Configure.ac 文件解析</h1><p>原理：Autoconf 是用来产生 “configure” 文档的工具。“configure” 是一个 shell script，它可以自动设定原始程序以符合各种不同平台上 Unix 系统的特性，并且根据系统参数及环境产生合适的 Makefile 文档或是 C 的标头档 (header file)，让原始程序可以很方便地在这些不同的平台上被编译出来。Autoconf 会读取 <del>configure.in</del> configure.ac 档然后产生 “configure” 这个 shell script。</p>
-<p><del>configure.in</del> configure.ac 文档的内容是一连串 GNU m4 的巨集，这些巨集经过 autoconf 处理后会变成检查系统特征的 shell script。<del>configure.in</del> configure.ac 内巨集的顺序并没有特别的规定，但是每一个 <del>configure.in</del> configure.ac 档必须在所有巨集前加入 AC_INIT 巨集，然後在所有巨集的最后面加上 AC_OUTPUT 巨集。</p>
-<p>一般先用 autoscan 这个工具扫描原始文件以产生一个 configure.scan 文件，再对 configure.scan 作些修改，从而生成 <del>configure.in</del> configure.ac 文件。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/08/24/automake4th/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1225,7 +1234,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">155</span>
+          <span class="site-state-item-count">157</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
