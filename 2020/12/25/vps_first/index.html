@@ -28,7 +28,7 @@
 <meta property="og:description" content="建立 vps 后（主要用于科学上网）首先要保证后续的使用安全。否则再多的功能都是空中楼阁。 SSH 登录非对称密钥算法的作用分为两种场景：  加密数据：公钥加密，私钥解密。数据由前者发往后者，数据是安全的。 认证：私钥加密，公钥解密。后者验证前者的身份，传输数据的安全性是没有保证的。  那么远程登录呢？  SSH 本身提供两种级别的验证方法：基于口令的安全验证；基于密钥的安全验证。引用来源">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-12-25T08:18:36.000Z">
-<meta property="article:modified_time" content="2024-12-22T06:08:18.426Z">
+<meta property="article:modified_time" content="2026-06-28T14:17:38.314Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta name="twitter:card" content="summary">
 
@@ -229,7 +229,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-22 14:08:18" itemprop="dateModified" datetime="2024-12-22T14:08:18+08:00">2024-12-22</time>
+                <time title="修改时间：2026-06-28 22:17:38" itemprop="dateModified" datetime="2026-06-28T22:17:38+08:00">2026-06-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -287,7 +287,7 @@
 <p>小结：口令登录时只用到了服务端 <code>/etc/ssh/</code> 目录下的一对密钥，并在客户端 <code>$HOME/</code> 下存放了 <code>known_hosts</code> 。<br>特别说明一下，口令登录时没用到客户端的密钥，也没用到服务端 <code>$HOME/</code> 下的密钥。</p>
 <h2 id="ed25519"><a href="#ed25519" class="headerlink" title="ed25519"></a>ed25519</h2><p>ed25519 是目前最安全、加解密速度最快的 ssh key 类型，由于其数学特性，它的 key 的长度比 rsa 小很多，优先推荐使用。</p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/cure/p/15389876.html">RSA，DSA，ECDSA，EdDSA 和 Ed25519 的区别</a></p>
-<h1 id="centos-的基础操作"><a href="#centos-的基础操作" class="headerlink" title="centos 的基础操作"></a>centos 的基础操作</h1><p>为了某人能够业余时间练习、熟悉操作，方便工作。所以使用了与其公司服务器相同的操作系统。限于其公司版本过低， vultr 不提供一键安装服务（需要自行配置），所以采用了目前的</p>
+<h1 id="centos-的基础操作"><a href="#centos-的基础操作" class="headerlink" title="centos 的基础操作"></a>centos 的基础操作</h1><p>为了帮朋友业余时间练习、熟悉操作，方便其工作。所以使用了与其公司服务器相同的操作系统。限于其公司版本过低， vultr 不提供一键安装服务（需要自行配置），所以采用了目前的</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看 centos 版本</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> cat /etc/redhat-release</span></span><br><span class="line">CentOS Linux release 8.1.1911 (Core)</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看用户列表</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> cat /etc/passwd</span></span><br></pre></td></tr></table></figure>
 <p>linux 下查看进程占用的端口分为两步：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">查看nginx进程pid：</span></span><br><span class="line">ps -ef | grep nginx</span><br><span class="line"><span class="meta">#</span><span class="bash">通过nginx进程pid查看占用端口（进程pid为9836）</span></span><br><span class="line">netstat -nap | grep 9836</span><br></pre></td></tr></table></figure>
@@ -312,7 +312,7 @@
 <p>调整防火墙（比如删减端口）之后，重启生效。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">重启防火墙</span></span><br><span class="line">firewall-cmd --reload</span><br><span class="line"><span class="meta">#</span><span class="bash">查看默认防火墙状态</span></span><br><span class="line">firewall-cmd --state</span><br></pre></td></tr></table></figure>
 <h2 id="启停服务"><a href="#启停服务" class="headerlink" title="启停服务"></a>启停服务</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 启动服务</span></span><br><span class="line">systemctl start firewalld</span><br><span class="line"><span class="meta">#</span><span class="bash">停止firewall</span></span><br><span class="line">systemctl stop firewalld.service</span><br><span class="line"><span class="meta">#</span><span class="bash"> 开机启动</span></span><br><span class="line">systemctl enable firewalld</span><br><span class="line"><span class="meta">#</span><span class="bash">禁止firewall开机启动</span></span><br><span class="line">systemctl disable firewalld.service</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看状态</span></span><br><span class="line">systemctl status firewalld</span><br></pre></td></tr></table></figure>
-<h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><p>2020年6月2日，今天发现在公司的联通网络下无法登录 vps 了，连接总是失败，提示超时。</p>
+<h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><p>2020年6月2日，今天发现在公司网络下无法登录 vps 了，连接总是失败，提示超时。</p>
 <p>通过其他主机访问 vps 能够成功，但进入之后看到警告信息：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">There were 2897 failed login attempts since the last successful login.</span><br></pre></td></tr></table></figure>
 <p>提示主机被尝试暴力破解。通过 <code>systemctl status sshd</code> 或者查看 <code>ll /var/log/secure -h</code> 等方式都能够看到异常。</p>
@@ -320,7 +320,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELinux is preventing /usr/sbin/sshd from name_bind access on the tcp_socket port 88888.</span><br></pre></td></tr></table></figure>
 <p>解决方式其实在配置文件的注释中也说明了：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> If you want to change the port on a SELinux system, you have to tell</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> SELinux about this change.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> semanage port -a -t ssh_port_t -p tcp <span class="comment">#PORTNUMBER</span></span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="bash"><span class="comment">#Port 22</span></span></span><br><span class="line">Port 88888</span><br></pre></td></tr></table></figure>
-<p>改完端口之后，公司的主机还是无法登录，依然是超时报错。</p>
+<p>改完端口之后，办公网络下的主机还是无法登录，依然是超时报错。</p>
 <p>2020年6月24日13:21:37 修改端口并不能一劳永逸，今天发现 /var/log/secure 文件已经 12M 了，从上次成功登陆到刚刚，有 4500+ 次的错误尝试。</p>
 <h3 id="禁用-root-远程登陆"><a href="#禁用-root-远程登陆" class="headerlink" title="禁用 root 远程登陆"></a>禁用 root 远程登陆</h3><p>先创建普通用户。</p>
 <p>修改 <code>/etc/ssh/sshd_config</code> 文件，将</p>
@@ -328,7 +328,7 @@
 <p>重启 sshd 服务生效。禁止以后，可以使用普通用户 ssh 登录，登录后可以切换到 root 权限。</p>
 <p>更安全了，但登录失败的暴力破解日志还是会一直生成，不开心。</p>
 <p>2020年6月30日13:30:50 普通用户登录，切换 root 登录时提示</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Last login: Wed Jun 24 05:51:51 UTC 2020 on pts/0</span><br><span class="line">Last failed login: Tue Jun 30 05:28:48 UTC 2020 from 106.13.69.8 on ssh:notty</span><br><span class="line">There were 14744 failed login attempts since the last successful login.</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Last login: Wed Jun 24 05:51:51 UTC 2020 on pts/0</span><br><span class="line">Last failed login: Tue Jun 30 05:28:48 UTC 2020 from 203.0.113.1 on ssh:notty</span><br><span class="line">There were 14744 failed login attempts since the last successful login.</span><br></pre></td></tr></table></figure>
 <h3 id="添加禁止-ip"><a href="#添加禁止-ip" class="headerlink" title="添加禁止 ip"></a>添加禁止 ip</h3><p>参考 <a target="_blank" rel="noopener" href="http://www.cpacm.net/2019/09/23/%E9%98%B2%E6%AD%A2%E6%9C%8D%E5%8A%A1%E5%99%A8SSH%E8%A2%AB%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/">防止服务器SSH暴力破解</a>，拷贝其脚本，在服务器定时执行 /root/a.txt 脚本。</p>
 <h3 id="秘钥登录"><a href="#秘钥登录" class="headerlink" title="秘钥登录"></a>秘钥登录</h3><p>为了保证使用的便捷性，<a target="_blank" rel="noopener" href="http://ivo-wang.github.io/2019/04/08/vps-%E6%9C%8D%E5%8A%A1%E5%99%A8-%E5%AE%89%E5%85%A8%E9%98%B2%E6%8A%A4%E8%AE%BE%E7%BD%AE/">更改秘钥登录</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/chengyuqiang/article/details/78432675">CentOS 系统 SSH 免密后依然需要输入密码</a></p>
@@ -431,7 +431,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -479,7 +479,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

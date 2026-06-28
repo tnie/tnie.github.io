@@ -28,7 +28,7 @@
 <meta property="og:description" content="原来的笔记写于 2015年11月23日，当时使用的是为知笔记默认编辑器。十个月过去了，对于 make &amp; Makefile 也有了更多的认识。今天重新整理一下，不过仍然定位在入门的帖子，所以不会添加新的内容，只是修改表述不当的地方，对原有内容作出删减，并用 markdown 格式重写。 这篇本来是打算写成阅读笔记的。但是所知不多，刚开始学习应该博览，求入门，求上手使用。再加上看的东西越来愈">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2016-09-18T08:08:08.000Z">
-<meta property="article:modified_time" content="2021-01-18T05:30:33.361Z">
+<meta property="article:modified_time" content="2026-06-28T14:40:54.902Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta property="article:tag" content="make">
 <meta name="twitter:card" content="summary">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2026-06-28 22:40:54" itemprop="dateModified" datetime="2026-06-28T22:40:54+08:00">2026-06-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -258,7 +258,7 @@
 <a id="more"></a>
 
 <p>在正式讲解之前，我们先介绍一下使用的文件：</p>
-<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn/example$ tree</span><br><span class="line">.</span><br><span class="line">└── prj</span><br><span class="line">    ├── abc.c</span><br><span class="line">    ├── abc.h</span><br><span class="line">    ├── main.c</span><br><span class="line">    ├── xyz.c</span><br><span class="line">    └── xyz.h</span><br><span class="line"></span><br><span class="line">1 directory, 5 files</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn/example$ </span><br></pre></td></tr></table></figure>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">user@host:~/see-the-world/code/make_learn/example$ tree</span><br><span class="line">.</span><br><span class="line">└── prj</span><br><span class="line">    ├── abc.c</span><br><span class="line">    ├── abc.h</span><br><span class="line">    ├── main.c</span><br><span class="line">    ├── xyz.c</span><br><span class="line">    └── xyz.h</span><br><span class="line"></span><br><span class="line">1 directory, 5 files</span><br><span class="line">user@host:~/see-the-world/code/make_learn/example$ </span><br></pre></td></tr></table></figure>
 <p>其中 <code>main.c</code> 包含头文件 <code>abc.h</code> 和 <code>xyz.h</code>，<code>abc.c</code> 包含头文件 <code>abc.h</code>，<code>xyz.c</code> 包含头文件 <code>xyz.h</code>。</p>
 <h1 id="完整的手写-Makefile"><a href="#完整的手写-Makefile" class="headerlink" title="完整的手写 Makefile"></a>完整的手写 Makefile</h1><p>明明白白、完完整整地写 Makefile 文件，是这个样子的：</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main: main.o abc.o xyz.o</span></span><br><span class="line">        gcc main.o abc.o xyz.o -o main</span><br><span class="line">        </span><br><span class="line"><span class="section">main.o: main.c abc.h xyz.h</span></span><br><span class="line">        gcc -c -o main.o main.c</span><br><span class="line">        </span><br><span class="line"><span class="section">abc.o: abc.c abc.h</span></span><br><span class="line">        gcc -c -o abc.o abc.c</span><br><span class="line">        </span><br><span class="line"><span class="section">xyz.o: xyz.c xyz.h</span></span><br><span class="line">        gcc -c -o xyz.o xyz.c</span><br></pre></td></tr></table></figure>
@@ -329,7 +329,7 @@
 <p>可是在写 main.o、abc.o 和 xyz.o 这三个目标的规则时要查看源代码，找出它们依赖于哪些头文件，这很容易出错，一是因为有的头文件包含在另一个头文件中，在写规则时很容易遗漏，二是如果以后修改源代码改变了依赖关系，很可能忘记修改 Makefile 的规则。</p>
 <p>能不能让 make &amp; Makefile 帮我们做了这个工作？很不幸，不能。Makefile 的自动推导依赖<strong>同名</strong>，从源文件到目标文件到可执行文件。而且一个源文件往往依赖很多个头文件，所以 Makefile 无法帮我们做自动依赖。必须由我们来告诉 Makefile 详细的依赖关系。好在我们可以用 gcc 的 <code>-M</code> 选项自动生成目标文件和源文件的依赖关系，然后把这些规则包含到 Makefile 中。</p>
 <p><code>-M</code> 选项把 stdio.h 以及它所包含的系统头文件也找出来了，如果我们不需要输出系统头文件的依赖关系，可以用 <code>-MM</code> 选项：</p>
-<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vimer@debian8light:~/see-the-world/code/make_learn/example/prj$ gcc -MM main.c </span><br><span class="line">main.o: main.c abc.h xyz.h</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn/example/prj$ gcc -MM *.c</span><br><span class="line">abc.o: abc.c abc.h</span><br><span class="line">main.o: main.c abc.h xyz.h</span><br><span class="line">xyz.o: xyz.c xyz.h</span><br><span class="line">vimer@debian8light:~/see-the-world/code/make_learn/example/prj$ </span><br></pre></td></tr></table></figure>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">user@host:~/see-the-world/code/make_learn/example/prj$ gcc -MM main.c </span><br><span class="line">main.o: main.c abc.h xyz.h</span><br><span class="line">user@host:~/see-the-world/code/make_learn/example/prj$ gcc -MM *.c</span><br><span class="line">abc.o: abc.c abc.h</span><br><span class="line">main.o: main.c abc.h xyz.h</span><br><span class="line">xyz.o: xyz.c xyz.h</span><br><span class="line">user@host:~/see-the-world/code/make_learn/example/prj$ </span><br></pre></td></tr></table></figure>
 <p>把 <code>gcc -MM</code> 自动生成的规则包含到 Makefile 中，<a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html">GNU make的官方手册 - Generating Prerequisites Automatically</a> 建议这样写：</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line"></span><br><span class="line">TARGET=main</span><br><span class="line">SRCS=main.c abc.c xyz.c</span><br><span class="line"><span class="comment">#SRCS=$(wildcard *.c)</span></span><br><span class="line">OBJS=$&#123;SRCS:.c=.o&#125;</span><br><span class="line">DEPS=$&#123;SRCS:.c=.d&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>:all clean</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:$&#123;TARGET&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="section">$&#123;TARGET&#125;:$&#123;OBJS&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        $&#123;RM&#125; $&#123;TARGET&#125; $&#123;OBJS&#125; $&#123;DEPS&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自动生成依赖关系</span></span><br><span class="line"><span class="keyword">include</span> $&#123;DEPS&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">%.d: %.c </span></span><br><span class="line">        set -e; rm -f <span class="variable">$@</span>; \</span><br><span class="line">        <span class="variable">$(CC)</span> -MM <span class="variable">$(CPPFLAGS)</span> <span class="variable">$&lt;</span> &gt; <span class="variable">$@</span>.$$$$; \</span><br><span class="line">        sed &#x27;s,\(<span class="variable">$*</span>\)\.o[ : ]*,\1.o <span class="variable">$@</span> : ,g&#x27; &lt; <span class="variable">$@</span>.$$$$ &gt; <span class="variable">$@</span>; \</span><br><span class="line">        rm -f <span class="variable">$@</span>.$$$$</span><br></pre></td></tr></table></figure>
 <p><code>$&#123;SRCS:.c=.d&#125;</code> 表示将 SRC 中的以 <code>*.c</code> 结尾的源文件名替换为 <code>*.d</code> 的形式，比如 main.c 对应着文件 main.d，这就是 main.c 的依赖关系文件。<del>也可以替换成 <code>.*.d</code> 的形式用来隐藏文件。</del></p>
@@ -492,7 +492,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -540,7 +540,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

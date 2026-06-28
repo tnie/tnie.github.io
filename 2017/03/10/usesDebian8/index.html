@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="最初是在 x240（个人笔记本，便携、屏幕小）上安装的双系统，因为某些原因一直未能进行实际、有效的练习。曾经考虑是否将其卸载，恢复为原始 windows 系统，使用 windows 的 boot manager。毕竟使用双系统开机启动略有不便，按电源键到进入系统也会慢很多。但后来放弃了，就这样子将就着吧，一方面恢复单系统需要重新花费时间精力，另一方面 x240 上我没有安装虚拟机，有个 Debia">
+  <meta name="description" content="最初是在个人笔记本（便携、屏幕小）上安装的双系统，因为某些原因一直未能进行实际、有效的练习。曾经考虑是否将其卸载，恢复为原始 windows 系统，使用 windows 的 boot manager。毕竟使用双系统开机启动略有不便，按电源键到进入系统也会慢很多。但后来放弃了，就这样子将就着吧，一方面恢复单系统需要重新花费时间精力，另一方面个人笔记本上我没有安装虚拟机，有个 Debian 多一个选择">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 Debian">
 <meta property="og:url" content="https://tnie.github.io/2017/03/10/usesDebian8/index.html">
 <meta property="og:site_name" content="不积小流，无以成江海">
-<meta property="og:description" content="最初是在 x240（个人笔记本，便携、屏幕小）上安装的双系统，因为某些原因一直未能进行实际、有效的练习。曾经考虑是否将其卸载，恢复为原始 windows 系统，使用 windows 的 boot manager。毕竟使用双系统开机启动略有不便，按电源键到进入系统也会慢很多。但后来放弃了，就这样子将就着吧，一方面恢复单系统需要重新花费时间精力，另一方面 x240 上我没有安装虚拟机，有个 Debia">
+<meta property="og:description" content="最初是在个人笔记本（便携、屏幕小）上安装的双系统，因为某些原因一直未能进行实际、有效的练习。曾经考虑是否将其卸载，恢复为原始 windows 系统，使用 windows 的 boot manager。毕竟使用双系统开机启动略有不便，按电源键到进入系统也会慢很多。但后来放弃了，就这样子将就着吧，一方面恢复单系统需要重新花费时间精力，另一方面个人笔记本上我没有安装虚拟机，有个 Debian 多一个选择">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2017-03-10T09:52:38.000Z">
-<meta property="article:modified_time" content="2021-01-18T05:30:33.411Z">
+<meta property="article:modified_time" content="2026-06-28T14:17:34.664Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta property="article:tag" content="memo">
 <meta name="twitter:card" content="summary">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+                <time title="修改时间：2026-06-28 22:17:34" itemprop="dateModified" datetime="2026-06-28T22:17:34+08:00">2026-06-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -253,11 +253,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>最初是在 x240（个人笔记本，便携、屏幕小）上安装的双系统，因为某些原因一直未能进行实际、有效的练习。曾经考虑是否将其卸载，恢复为原始 windows 系统，使用 windows 的 boot manager。毕竟使用双系统开机启动略有不便，按电源键到进入系统也会慢很多。但后来放弃了，就这样子将就着吧，一方面恢复单系统需要重新花费时间精力，另一方面 x240 上我没有安装虚拟机，有个 Debian 多一个选择。</p>
-<p>后来，在 E431（公司笔记本）安装虚拟机，在虚拟机中安装 Debian8.1，使用的是官方社区下载的 ISO 镜像。在默认安装中文语言、图形界面之后，因为习惯使用 xshell 进行操作，所以其图形界面对我来说意义不大，在虚拟机中也很吃资源，一直想关之；从网上搜索，自己折腾，最终还是没有找到理想的解决方法，所以又在虚拟机中重新安装了一个，命名 Debian8Light，安装时没有选择图形界面。后来在 Debian 上的一些测试一直使用后者，前者在我刚刚接触 Debian 使用图形界面安装应用时起到了一定价值。</p>
+        <p>最初是在个人笔记本（便携、屏幕小）上安装的双系统，因为某些原因一直未能进行实际、有效的练习。曾经考虑是否将其卸载，恢复为原始 windows 系统，使用 windows 的 boot manager。毕竟使用双系统开机启动略有不便，按电源键到进入系统也会慢很多。但后来放弃了，就这样子将就着吧，一方面恢复单系统需要重新花费时间精力，另一方面个人笔记本上我没有安装虚拟机，有个 Debian 多一个选择。</p>
+<p>后来，在办公笔记本上安装虚拟机，在虚拟机中安装 Debian8.1，使用的是官方社区下载的 ISO 镜像。在默认安装中文语言、图形界面之后，因为习惯使用 xshell 进行操作，所以其图形界面对我来说意义不大，在虚拟机中也很吃资源，一直想关之；从网上搜索，自己折腾，最终还是没有找到理想的解决方法，所以又在虚拟机中重新安装了一个，命名 Debian8Light，安装时没有选择图形界面。后来在 Debian 上的一些测试一直使用后者，前者在我刚刚接触 Debian 使用图形界面安装应用时起到了一定价值。</p>
 <a id="more"></a>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sys:</span><br><span class="line">root&#x2F;Debian.lyw</span><br><span class="line">niel&#x2F;nie123</span><br><span class="line">vimer&#x2F;vimer</span><br></pre></td></tr></table></figure>
 <p>最近，在 Bandwagon 中重装了 Debian8，估计是最小化安装，所以没有图形界面，系统环境也是英文的。硬件限制，甚至不如在虚拟机上的配置。不过最满意在这台 vps 上折腾了，毕竟它不会直接对我的系统造成影响，崩溃了重装（一键操作，官网也提供备份镜像）就是，而且只要有网它就一直是在线的，另一种意义上的便携。</p>
 <h1 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h1><p>了解 Linux 的启动流程，对于理解运行级别、配置文件、shell 类别有很重要的指导意义。阮一峰的博客很不错：<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2013/08/linux_boot_process.html">Linux 的启动流程</a>，作者也是以 Debian 来介绍的。</p>
 <p>觉得好牛逼，可是到自己 Debian8.1 系统上一看，擦嘞，咋没有 <code>/etc/inittab</code> 文件呀，然后就凌乱了……同时，参考<a target="_blank" rel="noopener" href="http://blog.csdn.net/yapingxin/article/details/6247760">安装Debian 6.0之后首先做的几件事</a> 中使用 <code>sysv-rc-conf</code> 命令（需要先安装）使系统默认从命令行启动，操作后无效；参考 <a target="_blank" rel="noopener" href="http://www.xitongzhijia.net/xtjc/20150112/34540.html">Debian开机不进入图形界面的方法</a> 想达到上述目的，也无法操作……</p>
@@ -270,21 +269,22 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置启动时的默认 Target</span></span><br><span class="line">$ sudo systemctl set-default multi-user.target </span><br></pre></td></tr></table></figure>
 <p>so，在 systemd 作为初始化系统的版本中，以 sysvinit 为基础的 <code>ckconfig</code>、<code>sysv-rc-conf</code> 等命令很可能就没有意义。（有些命令如 <code>init 运行等级</code> 是兼容的）</p>
 <h1 id="安装应用"><a href="#安装应用" class="headerlink" title="安装应用"></a>安装应用</h1><ol>
-<li><p>安装 Debian 之后：</p>
+<li>安装 Debian 之后：</li>
+</ol>
 <ul>
-<li>Debian 默认是不允许 root 用户登录图形界面的，所以不要认为自己用 root 登录输错了密码而频繁尝试；</li>
+<li>Debian 默认是不允许 root 用户登录图形界面的，所以不要认为自己用 root 登录输错了密码而频繁尝试；<ul>
 <li>墙内访问不了官方源，可以使用 apt-spy 寻找最快源；</li>
 <li>切换图形界面和命令行；<strong>使系统直接从命令行启动</strong>；</li>
 </ul>
 </li>
-</ol>
+</ul>
 <p>安装应用，在  wiz 中《Linux 安装应用》写的很详细。直接参考就是。</p>
 <p>在这里介绍一下，<a target="_blank" rel="noopener" href="http://my.oschina.net/u/1382972/blog/335983?fromerr=35ynwUcm">关于debian发布周期和各库的作用</a></p>
-<h1 id="图像界面和运行级别"><a href="#图像界面和运行级别" class="headerlink" title="图像界面和运行级别"></a>图像界面和运行级别</h1><p>在虚拟机上使用的经历，我迫切地想在某一次的登录中关掉图形界面服务，需要时再重新打开。当初认为在网上没有找到理想的解决方案，现在反思发现这其实是一件小事，也很容易达到目的。——类似<code>init0</code> 关机、<code>init6</code> 重启，**<code>init3</code> / <code>init5</code>切换运行级别**。</p>
+<h1 id="图像界面和运行级别"><a href="#图像界面和运行级别" class="headerlink" title="图像界面和运行级别"></a>图像界面和运行级别</h1><p>在虚拟机上使用的经历，我迫切地想在某一次的登录中关掉图形界面服务，需要时再重新打开。当初认为在网上没有找到理想的解决方案，现在反思发现这其实是一件小事，也很容易达到目的。——类似<code>init0</code> 关机、<code>init6</code> 重启，<code>init3</code> <strong>/</strong> <code>init5</code><strong>切换运行级别</strong>。</p>
 <p>以下几个链接是在当初想关图形界面时保存下来的：（如果系统使用的还是最早的 sysvinit 的 init 系统，可以参考；如果是 upstart 或者 systemd，其参考价值有限。毕竟运行级别是 sysyvinit 中的概念。）</p>
 <ol>
-<li><a target="_blank" rel="noopener" href="http://dagai.net/archives/569">Debian的运行级别</a>，结合下一条理解Debian体系和RedHat体系在运行级别上的差异</li>
-<li><a target="_blank" rel="noopener" href="http://www.i-so.org/debian-based-runlevel-andx.html">关于DEBIAN、UBUNTU运行级别和图形界面</a></li>
+<li>[Debian的运行级别][2]，结合下一条理解Debian体系和RedHat体系在运行级别上的差异</li>
+<li>[关于DEBIAN、UBUNTU运行级别和图形界面][3]</li>
 </ol>
 <p><strong>在 systemd 的世界里不要再讲运行级别了！</strong>所以，关于运行级别知道就可以了，需要深入了解的是 systemd。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>身处这个更新换代迅速的互联网时代，真是眼花缭乱啊。刚刚了解 sysvinit，可它基本上快被 systemd 淘汰掉了。</p>
@@ -390,7 +390,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -438,7 +438,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -196,6 +196,715 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/04/02/coroutine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/02/coroutine/" class="post-title-link" itemprop="url">Coroutine 学习总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-02 10:05:00" itemprop="dateCreated datePublished" datetime="2021-04-02T10:05:00+08:00">2021-04-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考 <a target="_blank" rel="noopener" href="https://github.com/tnie/learn_chrono">tnie/learn_xxx</a> 中 coro 项目。</p>
+<p>如果想看懂 asio 如何支持 <code>co_await</code> 的，想更细致地用好协程，就需要了解更基础（同时也是更复杂的）内容。</p>
+<h1 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h1><p>微软专家 <a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/oldnewthing/20191209-00/?p=103195">C++ coroutines: Getting started with awaitable objects</a> 开篇的陈述，比我的倾向更具说服力：</p>
+<p>Coroutines were added to C++20, and <a target="_blank" rel="noopener" href="https://lewissbaker.github.io/">Lewis Baker</a> has a nice introduction to them.</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2017/09/25/coroutine-theory">Coroutine theory.</a></li>
+<li><a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await">Understanding operator <code>co_await</code>.</a></li>
+<li><a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type">Understanding the promise type.</a></li>
+</ul>
+<p>特别推荐这几篇文章，作者写了 cppcoro 库，牛人！</p>
+<p>首推，此系列的文章作为入门。 </p>
+<p>对协程介绍时，先介绍 <code>awaitable/awaiter</code> 后 <code>promise</code>。学习笔记/摘抄，见 coroutine-a~c.md</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/04/02/coroutine/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/31/coroutine-c/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/31/coroutine-c/" class="post-title-link" itemprop="url">C++ Coroutines Understanding the promise type</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-31 15:31:00" itemprop="dateCreated datePublished" datetime="2021-03-31T15:31:00+08:00">2021-03-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>来源：<a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type">https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type</a></p>
+<h1 id="Coroutine-Concepts"><a href="#Coroutine-Concepts" class="headerlink" title="Coroutine Concepts"></a>Coroutine Concepts</h1><p>The compiler applies some fairly mechanical transformations to the code that you write to turn it into a state-machine that allows it to suspend execution at particular points within the function and then later resume execution.</p>
+<p>编译器会对您编写的代码进行一些相当机械的转换，以将其转换为状态机，使状态机可以在函数内的特定点挂起执行，然后再恢复执行。</p>
+<h1 id="Promise-objects"><a href="#Promise-objects" class="headerlink" title="Promise objects"></a>Promise objects</h1><p>The Promise object defines and controls the behaviour of the coroutine itself by implementing methods that are called at specific points during execution of the coroutine.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/03/31/coroutine-c/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/31/coroutine-b/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/31/coroutine-b/" class="post-title-link" itemprop="url">C++ Coroutines Understanding operator co_await</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-31 11:57:00" itemprop="dateCreated datePublished" datetime="2021-03-31T11:57:00+08:00">2021-03-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>来源：<a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await">https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await</a></p>
+<h1 id="What-does-the-Coroutines-TS-give-us"><a href="#What-does-the-Coroutines-TS-give-us" class="headerlink" title="What does the Coroutines TS give us?"></a>What does the Coroutines TS give us?</h1><p>The facilities the C++ Coroutines TS provides in the language can be thought of as a low-level assembly-language for coroutines. These facilities can be difficult to use directly in a safe way and are mainly intended to be used by library-writers to build higher-level abstractions that application developers can work with safely.</p>
+<p>C ++ Coroutines TS 提供的功能可以被认为是协程的一种低级汇编语言。这些功能可能很难以安全的方式直接使用，并且主要旨在供库编写人员用来构建更高级的抽象，以便应用程序开发人员可以安全地使用它们。</p>
+<h1 id="Compiler-lt-gt-Library-interaction"><a href="#Compiler-lt-gt-Library-interaction" class="headerlink" title="Compiler &lt;-&gt; Library interaction"></a>Compiler &lt;-&gt; Library interaction</h1><p>Instead, it specifies a general mechanism for library code to customise the behaviour of the coroutine by implementing types that conform to a specific interface. The compiler then generates code that calls methods on instances of types provided by the library.</p>
+<p>它为库代码指定了一种通用机制，可通过 <em>实现符合特定接口的类型</em> 来自定义协程的行为。然后编译器调用 这些类型的方法 = <em>库提供的类型的实例的方法</em>。</p>
+<p>There are two kinds of interfaces that are defined by the coroutines TS: The <strong>Promise</strong> interface and the <strong>Awaitable</strong> interface.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/03/31/coroutine-b/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/31/coroutine-a/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/31/coroutine-a/" class="post-title-link" itemprop="url">Coroutine Theory</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-31 10:05:00" itemprop="dateCreated datePublished" datetime="2021-03-31T10:05:00+08:00">2021-03-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>来源：<a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2017/09/25/coroutine-theory">https://lewissbaker.github.io/2017/09/25/coroutine-theory</a></p>
+<h1 id="Coroutines"><a href="#Coroutines" class="headerlink" title="Coroutines"></a>Coroutines</h1><p>Coroutines generalise the operations of a function by separating out some of the steps performed in the <strong>Call</strong> and <strong>Return</strong> operations into three <strong>extra</strong> operations: <strong>Suspend</strong>, <strong>Resume</strong> and <strong>Destroy</strong>.</p>
+<p>比其他文章多描述了一个 Destroy 步骤，更准确。</p>
+<p>Note that, like the <code>Return</code> operation of a function, a coroutine can only be suspended from within the coroutine itself at well-defined suspend-points.</p>
+<p>请注意，就像函数的 <code>Return</code> 操作一样，协程只能在定义好的暂停点处从协程自身内部暂停。</p>
+<h2 id="Coroutine-activation-frames"><a href="#Coroutine-activation-frames" class="headerlink" title="Coroutine activation frames"></a>Coroutine activation frames</h2><p>With coroutines there are some parts of the activation frame that need to be preserved across coroutine suspension and there are some parts that only need to be kept around while the coroutine is executing. For example, the lifetime of a variable with a scope that does not span any coroutine suspend-points can potentially be stored on the stack.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/03/31/coroutine-a/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/26/coroutine3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/26/coroutine3/" class="post-title-link" itemprop="url">CO_AWAITING COROUTINES</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-26 16:38:00" itemprop="dateCreated datePublished" datetime="2021-03-26T16:38:00+08:00">2021-03-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>来源：<a target="_blank" rel="noopener" href="https://blog.panicsoftware.com/co_awaiting-coroutines/">https://blog.panicsoftware.com/co_awaiting-coroutines/</a></p>
+<h1 id="Awaitable"><a href="#Awaitable" class="headerlink" title="Awaitable"></a>Awaitable</h1><p>As I have mentioned in the previous posts, the <code>suspend_always</code> and <code>suspend_never</code> are types, that fulfill the <code>Awaitable</code> concept. </p>
+<p>We can get the Awaitable object in two ways:</p>
+<ul>
+<li>Direct creation of Awaitable,</li>
+<li>Transformation of the object into Awaitable because of <code>await_transform</code> function.</li>
+</ul>
+<h1 id="co-await-operator-and-Awaiter"><a href="#co-await-operator-and-Awaiter" class="headerlink" title="co_await operator and Awaiter"></a>co_await operator and Awaiter</h1><p>The <code>co_await</code> operator is actually responsible for two things:</p>
+<ul>
+<li>Forcing compiler to generate some coroutine boilerplate code</li>
+<li>Creating the Awaiter object.</li>
+</ul>
+<p>So first let’s have a look at how is the awaiter object is created. The <code>co_await</code> operator is responsible for the creation of the awaiter object. The <code>co_await</code> operator declaration is looked upon in the awaitable object and if it’s found this <code>co_await</code> operator is executed to obtain awaiter object. Otherwise, if the appropriate function is not found, then awaitable becomes the awaiter. </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/03/26/coroutine3/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/26/coroutine2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/26/coroutine2/" class="post-title-link" itemprop="url">YOUR FIRST COROUTINE</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-26 11:03:00" itemprop="dateCreated datePublished" datetime="2021-03-26T11:03:00+08:00">2021-03-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>来源：<a target="_blank" rel="noopener" href="https://blog.panicsoftware.com/your-first-coroutine/">https://blog.panicsoftware.com/your-first-coroutine/</a></p>
+<p><code>std::future&lt;int&gt; foo();</code></p>
+<p>这是个普通函数，还是协程？这是由其具体实现决定的。</p>
+<p>If any of those keywords occur in the function, then it becomes a coroutine.</p>
+<ul>
+<li><code>co_await</code></li>
+<li><code>co_return</code></li>
+<li><code>co_yield</code></li>
+</ul>
+<p>So the operator <code>co_await</code> is a unary operator, which takes the <code>Awaitable</code> object as its argument.</p>
+<h1 id="Why-do-we-need-to-define-additional-types"><a href="#Why-do-we-need-to-define-additional-types" class="headerlink" title="Why do we need to define additional types?"></a>Why do we need to define additional types?</h1><p>So the object used to communicate with the coroutine is the object of the coroutine’s return type.</p>
+<p>我们使用协程的返回值，和协程进行沟通。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/03/26/coroutine2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/03/26/coroutine1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/26/coroutine1/" class="post-title-link" itemprop="url">COROUTINES INTRODUCTION</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-26 09:10:00" itemprop="dateCreated datePublished" datetime="2021-03-26T09:10:00+08:00">2021-03-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>来源：<a target="_blank" rel="noopener" href="https://blog.panicsoftware.com/coroutines-introduction/">https://blog.panicsoftware.com/coroutines-introduction/</a></p>
+<p>虽然协程作为重要特性，即将进入 C++ 20，但仍然有很多人吐槽。</p>
+<blockquote>
+<p> Main complaints were regarding the hardness to understand, lots of customisation points, and possibly not optimal performance due to possibly unoptimised dynamic memory allocations</p>
+</blockquote>
+<p>主要的抱怨是关于理解起来很难，大量的定制点以及，未优化的动态内存分配可能造成性能的损失。</p>
+<p>谷歌的提案存在一些问题，最终被接受的协程方案来自微软。</p>
+<h1 id="什么是协程"><a href="#什么是协程" class="headerlink" title="什么是协程"></a>什么是协程</h1><p>The coroutines already exist in many programming languages, may it be Python or C#. Coroutines provide one more way to create asynchronous code. How this way differs from threads and why do we need a dedicated language feature for coroutines and finally how we can benefit will be explained in this section.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/03/26/coroutine1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/02/18/openwrt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/18/openwrt/" class="post-title-link" itemprop="url">软路由 OpenWRT</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-18 11:52:42" itemprop="dateCreated datePublished" datetime="2021-02-18T11:52:42+08:00">2021-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-06-28 22:40:54" itemprop="dateModified" datetime="2026-06-28T22:40:54+08:00">2026-06-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>TODO</p>
+<ol start="4">
+<li>蓝牙网络连接，什么作用？删掉或禁用有影响吗？</li>
+<li>如何自动切换网关</li>
+<li>将 共享目录从台式机移到笔记本中，使用网线已经没有带宽限制了。</li>
+</ol>
+<h1 id="装机"><a href="#装机" class="headerlink" title="装机"></a>装机</h1><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Windows%E9%A0%90%E5%85%88%E5%AE%89%E8%A3%9D%E7%92%B0%E5%A2%83">Windows预先安装环境</a>（英语：Microsoft Windows Preinstallation Environment），简称 Windows PE 或 WinPE，是 Microsoft Windows 的轻量版本。</p>
+<p>关于装机的知识，通过 <a target="_blank" rel="noopener" href="http://www.wepe.com.cn/ubook/">微PE优盘使用说明书</a> 可以学习，虽然我们并不购买他家的优盘。以下摘录部分笔记。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/18/openwrt/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2021/02/02/function-template/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -227,7 +936,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+                <time title="修改时间：2026-06-28 22:40:54" itemprop="dateModified" datetime="2026-06-28T22:40:54+08:00">2026-06-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -394,710 +1103,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2020/12/25/c++20/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/25/c++20/" class="post-title-link" itemprop="url">c++20 特性</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-25 16:18:36" itemprop="dateCreated datePublished" datetime="2020-12-25T16:18:36+08:00">2020-12-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>学习 c++20 首先要有支持相关特性的编译器</p>
-<p>msvc2019 如果和工作用的 msvc2015 安装在同一台机器上，在使用 vcpkg 时会产生冲突</p>
-<p>clang 在 windows 下的使用并不平滑，如果初衷是 c++20，就不要舍本逐末。在熟悉 c++20 后回头折腾 clang</p>
-<p>虚拟机上安装 msvc2019，Hyper-V 是好的选择吗？如果要用 VMware 还是躲开 Hyper-V</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/25/c++20/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2020/12/25/exception/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/25/exception/" class="post-title-link" itemprop="url">异常 std::exception</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-25 16:18:36" itemprop="dateCreated datePublished" datetime="2020-12-25T16:18:36+08:00">2020-12-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>查看 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/error/exception"><code>std::exception</code> 的定义</a>，除了析构函数，其他包括默认构造和拷贝构造在内的函数都声明为 <code>noexcept</code>：</p>
-<blockquote>
-<p>因为不允许复制 <code>std::exception</code> 抛出异常，故当派生类（例如 <code>std::runtime_error</code> ）必须管理用户定义的诊断信息时，常将它实现为<strong>写时复制</strong>的字符串。</p>
-</blockquote>
-<p>查看 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/error/logic_error"><code>std::logic_error</code> 的定义</a> 或 <code>std::runtime_error</code> 的定义：</p>
-<blockquote>
-<p>因为不容许复制 <code>std::logic_error</code> 抛出异常，通常将此消息在内部存储为分离分配的<strong>引用计数</strong>字符串。这也是构造函数不接收 <code>std::string&amp;&amp;</code> 参数的理由：无论如何它必须复制内容。</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/25/exception/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2020/12/25/iocp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/25/iocp/" class="post-title-link" itemprop="url">iocp</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-25 16:18:36" itemprop="dateCreated datePublished" datetime="2020-12-25T16:18:36+08:00">2020-12-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>内核对象的概念，是什么？</p>
-<p>设备内核对象？</p>
-<p>事件内核对象？</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/25/iocp/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2020/12/25/nas/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/25/nas/" class="post-title-link" itemprop="url">试验虚拟机安装黑群晖</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-25 16:18:36" itemprop="dateCreated datePublished" datetime="2020-12-25T16:18:36+08:00">2020-12-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>安装 VMware workstation 15 player 时，提示：</p>
-<blockquote>
-<p>VMware workstation 15 player 和 Hyper-V 在此版本的 windows 上不兼容。</p>
-<p>请从系统中移除 hyper-v 角色或将 windows 更新到 windows 10 版本 20H1。</p>
-</blockquote>
-<p>我选择了在“启用或关闭 windows 功能”中关闭 Hyper-V，需要重启。后续启动虚拟机的时候还是报错：</p>
-<blockquote>
-<p>您的主机不满足在启用 Hyper-V 或 Device/Credential Guard 的情况下运行 VMware Workstation 的最低要求。</p>
-</blockquote>
-<p>参考帖子 ：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36761831/article/details/81175736">在禁用 Device/Credential Guard 后，可以运行 VM 的方法</a> ， 重启生效。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/25/nas/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2020/12/25/v2ray/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/25/v2ray/" class="post-title-link" itemprop="url">科学上网</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-25 16:18:36" itemprop="dateCreated datePublished" datetime="2020-12-25T16:18:36+08:00">2020-12-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近两会，科学上网又宕机了。打算专心学习一下 v2ray 的插件和配置，此笔记用于备忘操作过程中的细节。也涉及 linux 系统的基础操作。</p>
-<p>为了安全（和方便），提出以下要求或目标：禁用账号密码登录，全部改用密钥。 <a href="https://tnie.github.io/2020/12/25/vps_first/">建立 vps 后的第一步</a></p>
-<p>关于 v2ray xray v2fly，可以看看 <a target="_blank" rel="noopener" href="https://www.chengxiaobai.com/essays/v2ray-trojan-xray">V2Ray、Trojan、XRay</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/25/v2ray/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2020/12/25/vps_first/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/25/vps_first/" class="post-title-link" itemprop="url">建立 vps 后的第一步</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-25 16:18:36" itemprop="dateCreated datePublished" datetime="2020-12-25T16:18:36+08:00">2020-12-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-22 14:08:18" itemprop="dateModified" datetime="2024-12-22T14:08:18+08:00">2024-12-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>建立 vps 后（主要用于科学上网）首先要保证后续的使用安全。否则再多的功能都是空中楼阁。</p>
-<h1 id="SSH-登录"><a href="#SSH-登录" class="headerlink" title="SSH 登录"></a>SSH 登录</h1><p>非对称密钥算法的作用分为两种场景：</p>
-<ul>
-<li>加密数据：公钥加密，私钥解密。数据由前者发往后者，数据是安全的。</li>
-<li>认证：私钥加密，公钥解密。后者验证前者的身份，传输数据的安全性是没有保证的。</li>
-</ul>
-<p>那么远程登录呢？</p>
-<blockquote>
-<p>SSH 本身提供两种级别的验证方法：基于口令的安全验证；基于密钥的安全验证。<a target="_blank" rel="noopener" href="https://blog.csdn.net/li528405176/article/details/82810342">引用来源</a></p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/25/vps_first/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/11/29/initialization3rd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/29/initialization3rd/" class="post-title-link" itemprop="url">构造函数的问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-29 11:33:53" itemprop="dateCreated datePublished" datetime="2019-11-29T11:33:53+08:00">2019-11-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在工作中，遇到的几个关于构造函数的问题，以及语言边缘的坑（如何避开）。</p>
-<h1 id="显式类型转换函数和构造函数优先级"><a href="#显式类型转换函数和构造函数优先级" class="headerlink" title="显式类型转换函数和构造函数优先级?"></a>显式类型转换函数和构造函数优先级?</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Minimal(src)；	<span class="comment">// 不是类型转换语法吧？</span></span><br><span class="line"><span class="comment">// vs</span></span><br><span class="line">(Minimal)src;</span><br></pre></td></tr></table></figure>
-<p>会先按照构造函数解析，还是</p>
-<h1 id="构造函数能不能相互调用？"><a href="#构造函数能不能相互调用？" class="headerlink" title="构造函数能不能相互调用？"></a>构造函数能不能相互调用？</h1><p><del><a target="_blank" rel="noopener" href="http://www.cppblog.com/wolf/articles/63490.html">http://www.cppblog.com/wolf/articles/63490.html</a></del></p>
-<p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/chio/archive/2007/10/20/931043.html"><del>http://www.cnblogs.com/chio/archive/2007/10/20/931043.html</del></a></p>
-<p>传统的 <code>func(var)</code> 调用方式肯定不行，因为这意味着在某构造函数中又创建了个临时对象。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/29/initialization3rd/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2019/11/29/memoryLeak/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/29/memoryLeak/" class="post-title-link" itemprop="url">内存泄漏</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-29 11:12:01" itemprop="dateCreated datePublished" datetime="2019-11-29T11:12:01+08:00">2019-11-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="检查内存泄漏"><a href="#检查内存泄漏" class="headerlink" title="检查内存泄漏"></a>检查内存泄漏</h1><p>Linux 下使用 Valgrind；Windows 下使用 Visual Leak Detector。前者没接触过，后者的确不错。</p>
-<p>虽然在 Windows 下可以使用 CRT：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/debugger/finding-memory-leaks-using-the-crt-library?view=vs-2017">Find memory leaks with the CRT library</a>，但因为其也会报全局变量以及 <code>static</code> 变量（报告早于这两者的析构），当项目体量较大，全局变量或 <code>static</code> 变量较多时，没有有效的区分，查找真实的内存泄漏就会比较棘手。</p>
-<ol>
-<li><p>Enable memory leak detection，如何启用</p>
-<p> 只在启用 <code>_DEBUG</code> 时有效；若程序存在多个退出点，可以使用 <code>_CrtSetDbgFlag</code> 函数；报告默认在“输出”窗口打印，但可以自定义。</p>
-</li>
-<li><p>Interpret the memory-leak report，报告怎么看</p>
-<p> 重点强调了检测只针对 <code>malloc</code> 函数，无法检测 <code>new</code> 操作符。但其提供了使用 <code>_malloc_dbg</code> 实现的 <code>operator new</code> 重载版本：</p>
-</li>
-<li><p>Set breakpoints on a memory allocation number，如何打断点</p>
-</li>
-<li><p>Compare memory states，对比不同时刻的快照</p>
-</li>
-<li><p>False positives，误报现象</p>
-</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/29/memoryLeak/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1165,7 +1174,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1213,7 +1222,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

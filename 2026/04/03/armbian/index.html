@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="bootloader引导程序（英语：bootloader）是指在电脑系统中负责初始化周边设备、启动操作系统的程序。 操作系统在硬盘上，主板上电到读取硬盘之间还有一段路要走。  第一阶段引导加载程序的例子包括BIOS、UEFI、coreboot、Libreboot和Das U-Boot。 第二阶段引导加载程序，如GNU GRUB、rEFInd、Windows Boot Manager、Syslinu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="armbian">
+<meta property="og:url" content="https://tnie.github.io/2026/04/03/armbian/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="bootloader引导程序（英语：bootloader）是指在电脑系统中负责初始化周边设备、启动操作系统的程序。 操作系统在硬盘上，主板上电到读取硬盘之间还有一段路要走。  第一阶段引导加载程序的例子包括BIOS、UEFI、coreboot、Libreboot和Das U-Boot。 第二阶段引导加载程序，如GNU GRUB、rEFInd、Windows Boot Manager、Syslinu">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-03T14:42:12.000Z">
+<meta property="article:modified_time" content="2026-06-28T14:51:24.968Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2026/04/03/armbian/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>armbian | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2026/04/03/armbian/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          armbian
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-04-03 22:42:12" itemprop="dateCreated datePublished" datetime="2026-04-03T22:42:12+08:00">2026-04-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-06-28 22:51:24" itemprop="dateModified" datetime="2026-06-28T22:51:24+08:00">2026-06-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="bootloader"><a href="#bootloader" class="headerlink" title="bootloader"></a>bootloader</h1><p>引导程序（英语：<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Bootloader">bootloader</a>）是指在电脑系统中负责初始化周边设备、启动操作系统的程序。</p>
+<p>操作系统在硬盘上，主板上电到读取硬盘之间还有一段路要走。</p>
+<ul>
+<li>第一阶段引导加载程序的例子包括BIOS、UEFI、coreboot、Libreboot和Das U-Boot。</li>
+<li>第二阶段引导加载程序，如GNU GRUB、rEFInd、Windows Boot Manager、Syslinux和NTLDR</li>
+</ul>
+<p><strong>在个人电脑 PC 上</strong>：</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/BIOS">BIOS</a>（英文：Basic Input/Output System），即基本输入输出系统， is a type of <strong>firmware</strong> used to ……</p>
+<blockquote>
+<p>The BIOS in older PCs（个人电脑）  initializes and tests the system <strong>hardware</strong> components, and loads a <strong>boot loader</strong> from a mass storage device which then initializes a <strong>kernel</strong>. </p>
+</blockquote>
+<p>统一可扩展固件接口（英语：Unified Extensible Firmware Interface，缩写 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/UEFI">UEFI</a>） 是 PC BIOS 的继任者。</p>
+<p>In computing, [firmware][firmware ] is software that provides low-level control of computing device hardware. </p>
+<p><strong>在嵌入式设备上：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Das_U-Boot">Das U-Boot</a>  is an open-source boot loader used in embedded devices </p>
+<ul>
+<li>to perform <strong>various</strong> low-level hardware initialization tasks </li>
+<li>and boot the device’s operating system kernel.</li>
+</ul>
+<p>U-Boot 既是第一阶段引导加载程序，也是第二阶段引导加载程序。</p>
+<a id="more"></a>
+
+<h2 id="BIOS-和-Bootloader"><a href="#BIOS-和-Bootloader" class="headerlink" title="BIOS 和 Bootloader"></a>BIOS 和 Bootloader</h2><p>BIOS（或UEFI）与Bootloader是计算机启动过程中的前后衔接关系。</p>
+<ul>
+<li><strong>BIOS是固化在主板上的固件，负责初始化硬件并寻找启动设备；</strong></li>
+<li><strong>而Bootloader是存储在硬盘等设备上的软件，由BIOS加载，专注于引导操作系统内核</strong>。</li>
+</ul>
+<p>BIOS是“起步者”，Bootloader是“承接者”。<strong>二者详细关系：</strong></p>
+<ul>
+<li><strong>工作顺序与流程：</strong><ol>
+<li><strong>BIOS/UEFI</strong>：电脑按下电源后首先运行，进行POST（上电自检），初始化基本硬件（CPU、内存、显卡）。</li>
+<li><strong>移交控制权</strong>：BIOS根据配置找到启动磁盘，读取其第一扇区（MBR）或EFI系统分区的<strong>Bootloader</strong>（如GRUB、Windows Boot Manager）到内存中。</li>
+<li><strong>Bootloader</strong>：接管控制权，将操作系统内核加载到内存并运行，随后将控制权移交给系统。</li>
+</ol>
+</li>
+<li><strong>功能分工：</strong><ul>
+<li><strong>BIOS</strong>：平台通用，与操作系统无关，硬件平台特性相关。</li>
+<li><strong>Bootloader</strong>：更灵活，支持文件系统，专门为了启动特定的操作系统。</li>
+</ul>
+</li>
+<li><strong>嵌入式场景的区别：</strong><ul>
+<li>在嵌入式系统中，通常没有单独的BIOS，硬件初始化与加载内核的功能往往都合并在一个增强的<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_37926734/article/details/113805403">Bootloader</a>中（如U-Boot）</li>
+</ul>
+</li>
+</ul>
+<h1 id="U-Boot-和设备树"><a href="#U-Boot-和设备树" class="headerlink" title="U-Boot 和设备树"></a>U-Boot 和设备树</h1><p>设备树（也写作 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Devicetree">device tree</a>）是一种用于描述特定计算机的硬件组件的数据结构，以便操作系统内核可以使用和管理这些组件。</p>
+<ul>
+<li>采用 x86 架构的个人电脑（比如 Windows）通常不使用设备树，而是依赖各种自动配置协议（例如ACPI）来发现硬件。</li>
+<li>在 ARM 架构上，自 2012 年以来，所有新的 SoC 都必须使用设备树。</li>
+<li>设备树广泛用于基于 ARM 的 Android设备。</li>
+</ul>
+<p>This can be seen as a remedy（补救） to the vast number of forks (of Linux and Das U-Boot) that have historically been created to support (marginally 略微) different ARM boards. The purpose is to move a significant part of the hardware description out of the kernel binary, and into the compiled device tree <strong>blob</strong>, which is handed to the kernel by the boot loader, replacing a range of board-specific C source files and compile-time options in the kernel.</p>
+<p>Using Device tree, a vendor（供应商）might be able to use a less modified <strong>mainline U-Boot</strong> on otherwise special purpose hardware. </p>
+<p>硬件千差万别，但又区别不大。以前呢，这种硬件差异造成 Linux 和 U-boot 分支满天飞，引入设备树是将这种差异单拎出来，减少 Linux / U-boot 分支。</p>
+<h2 id="Mainline-U-Boot"><a href="#Mainline-U-Boot" class="headerlink" title="Mainline U-Boot"></a>Mainline U-Boot</h2><p>主线 U-Boot（Mainline U-Boot）是指由 Denx 维护的官方、最新版本的开源引导加载程序，</p>
+<p>不同于芯片厂商（SoC Vendor）维护的旧版本、定制化强的 U-Boot，主线 U-Boot 支持 Linux 的设备树（Device Tree）标准化管理。</p>
+<h1 id="UNT403a-线刷"><a href="#UNT403a-线刷" class="headerlink" title="UNT403a 线刷"></a>UNT403a 线刷</h1><ol>
+<li>打开 USB_Burning_Tool </li>
+<li>保持设备断电</li>
+<li>插上双公头两端：主机是网口旁边的 USB 口，盒子也是靠近网口的 USB 口</li>
+<li>按下 Reset 键上电 6 秒左右松开 Reset （刷机神器不亮灯，用不了）</li>
+<li>显示设备已连接</li>
+</ol>
+<p>在 <a target="_blank" rel="noopener" href="https://github.com/ophub/kernel/releases/tag/tools">https://github.com/ophub/kernel/releases/tag/tools</a> 给出的包用不了</p>
+<ul>
+<li><code>android_tv_hubei_mobile_unt403a_um-s905l3a-2+8g_android9_dangbei.tar.xz</code> 能刷成功，开机黑屏</li>
+<li><code>android_tv_unt403a_s905l3a.tar.xz</code> 线刷 <code>1%:加载DDR</code> 报错，<code>[0x10102002]Romcode/初始化DDR/初始化寄存器/USB控制命令出错</code> </li>
+<li>全都是 1% ； 取消勾选后，全都在 7% 失败</li>
+</ul>
+<p>拆机后发现 SOC 不是 S905L3A ，而是 <strong>S905L3B</strong> ，所以上述固件全部失败，这个版本的不好找。</p>
+<h1 id="b863av3-2-m-线刷"><a href="#b863av3-2-m-线刷" class="headerlink" title="b863av3.2-m 线刷"></a>b863av3.2-m 线刷</h1><ol>
+<li>打开 USB_Burning_Tool </li>
+<li>保持设备断电</li>
+<li>插上双公头两端：主机是网口旁边的 USB 口，盒子也是靠近网口的 USB 口</li>
+<li><del>插上刷机神器</del>（不需要短接竟然），然后上电</li>
+<li>显示设备已连接</li>
+</ol>
+<p>在 <a target="_blank" rel="noopener" href="https://github.com/ophub/kernel/releases/tag/tools">https://github.com/ophub/kernel/releases/tag/tools</a> 给出的包用不了</p>
+<ul>
+<li><code>android_tv_zxv10_b863av3.2-m_s905l3a.tar.xz</code> 线刷 <code>7%:格式化</code> 报错</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[23:40:39 651][HUB1-2][Err]--usb_reap_async_nocancel Try 2 time!  ret&#x3D;-116  Timeout&#x3D; 30</span><br><span class="line">, usbReadFile len 512 to read, ret&#x3D;-116 error_msg&#x3D;libusb0-dll:err [_usb_reap_async] timeout error</span><br><span class="line"></span><br><span class="line">[23:40:39 662][HUB1-2][Err]--[0x32030201]UBOOT&#x2F;获取返回&#x2F;DiskInitial命令出错</span><br></pre></td></tr></table></figure>
+<ul>
+<li>全都是 7%</li>
+</ul>
+<p>竟然不需要短接/刷机神器就能够连接，所以，大概率是 <a target="_blank" rel="noopener" href="https://www.znds.com/tv-1223970-1-1.html">https://www.znds.com/tv-1223970-1-1.html</a> 这里提到的现象了。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/03/31/QtMultimedia/" rel="prev" title="Qt Multimedia">
+      <i class="fa fa-chevron-left"></i> Qt Multimedia
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/04/10/ax3000t/" rel="next" title="ax3000t 线刷">
+      ax3000t 线刷 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#bootloader"><span class="nav-number">1.</span> <span class="nav-text">bootloader</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BIOS-%E5%92%8C-Bootloader"><span class="nav-number">1.1.</span> <span class="nav-text">BIOS 和 Bootloader</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#U-Boot-%E5%92%8C%E8%AE%BE%E5%A4%87%E6%A0%91"><span class="nav-number">2.</span> <span class="nav-text">U-Boot 和设备树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mainline-U-Boot"><span class="nav-number">2.1.</span> <span class="nav-text">Mainline U-Boot</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UNT403a-%E7%BA%BF%E5%88%B7"><span class="nav-number">3.</span> <span class="nav-text">UNT403a 线刷</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b863av3-2-m-%E7%BA%BF%E5%88%B7"><span class="nav-number">4.</span> <span class="nav-text">b863av3.2-m 线刷</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">166</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

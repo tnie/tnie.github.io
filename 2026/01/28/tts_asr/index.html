@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tnie.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AWLTH1YPN5","apiKey":"d9101fc28af07d0ea8ade8654c1dc48b","indexName":"test_niel","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="在银河麒麟v10 上能够与 Qt 快速集成的中文 TTS 离线引擎有哪些？ 在银河麒麟v10 上能够与 Qt QTextToSpeech 快速集成的中文 TTS 离线引擎有哪些？  在 Windows 10 上通过 QTextToSpeech 使用微软 SAPI 引擎 能够快速实现原型。  放弃 speech-dispatcher核心局限性： 原生 QTextToSpeech 在 Linux 下的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="飞桨做语音识别">
+<meta property="og:url" content="https://tnie.github.io/2026/01/28/tts_asr/index.html">
+<meta property="og:site_name" content="不积小流，无以成江海">
+<meta property="og:description" content="在银河麒麟v10 上能够与 Qt 快速集成的中文 TTS 离线引擎有哪些？ 在银河麒麟v10 上能够与 Qt QTextToSpeech 快速集成的中文 TTS 离线引擎有哪些？  在 Windows 10 上通过 QTextToSpeech 使用微软 SAPI 引擎 能够快速实现原型。  放弃 speech-dispatcher核心局限性： 原生 QTextToSpeech 在 Linux 下的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-28T14:42:12.000Z">
+<meta property="article:modified_time" content="2026-06-28T15:00:29.232Z">
+<meta property="article:author" content="tnie &amp; ilyw">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tnie.github.io/2026/01/28/tts_asr/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>飞桨做语音识别 | 不积小流，无以成江海</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">不积小流，无以成江海</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">海纳百川，有容乃大</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2026/01/28/tts_asr/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          飞桨做语音识别
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-01-28 22:42:12" itemprop="dateCreated datePublished" datetime="2026-01-28T22:42:12+08:00">2026-01-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-06-28 23:00:29" itemprop="dateModified" datetime="2026-06-28T23:00:29+08:00">2026-06-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在银河麒麟v10 上能够与 Qt 快速集成的中文 TTS 离线引擎有哪些？</p>
+<p>在银河麒麟v10 上能够与 Qt <code>QTextToSpeech</code> 快速集成的中文 TTS 离线引擎有哪些？</p>
+<ul>
+<li>在 Windows 10 上通过 <code>QTextToSpeech</code> 使用微软 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Microsoft_Speech_API">SAPI 引擎</a> 能够快速实现原型。</li>
+</ul>
+<h1 id="放弃-speech-dispatcher"><a href="#放弃-speech-dispatcher" class="headerlink" title="放弃 speech-dispatcher"></a>放弃 speech-dispatcher</h1><p>核心局限性：</p>
+<p>原生 <code>QTextToSpeech</code> 在 Linux 下的默认后端是 speech-dispatcher（Linux 通用语音调度框架），而该框架默认缺乏优质的中文离线语音模型。</p>
+<p>直接使用 <code>QTextToSpeech</code> 难以实现流畅的中文离线朗读，大多只能支持英文或机械感极强的中文（甚至无法识别中文），需要额外配置中文 TTS 后端引擎才能满足需求。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install espeak-ng espeak-ng-data speech-dispatcher espeak-ng espeak-ng-data libespeak-ng1</span><br><span class="line">espeak-ng -vzh <span class="string">&quot;你好，我是Linux系统&quot;</span></span><br></pre></td></tr></table></figure>
+<h1 id="飞桨"><a href="#飞桨" class="headerlink" title="飞桨"></a>飞桨</h1><p>注意事项：</p>
+<ul>
+<li>PaddleSpeech 暂不支持 PaddlePaddle 3.x 版本</li>
+<li>换清华镜像源加速下载 <code>b </code></li>
+<li><strong>不可以同时安装</strong> <code>paddlepaddle</code>（CPU 版）和 <code>paddlepaddle-gpu</code>（GPU 版）</li>
+</ul>
+<a id="more"></a>
+
+<p>没有显卡，使用 cpu ：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">conda env remove -y -n paddle_cpu</span><br><span class="line">conda create -y -n paddle_cpu python=3.10</span><br><span class="line">conda activate paddle_cpu</span><br><span class="line">pip install paddlepaddle==2.6.2 -i https://www.paddlepaddle.org.cn/packages/stable/cpu/</span><br><span class="line">pip install pytest-runner paddlespeech paddlespeech-ctcdecoders -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">pip install <span class="string">&quot;numpy&lt;2&quot;</span> --force-reinstall</span><br></pre></td></tr></table></figure>
+<p>有显卡时：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">conda env remove -y -n paddle_cu11</span><br><span class="line">conda create -y -n paddle_cu11 python=<span class="number">3</span>.<span class="number">10</span></span><br><span class="line">conda activate paddle_cu11</span><br><span class="line">pip install paddlepaddle-gpu==<span class="number">2</span>.<span class="number">6</span>.<span class="number">2</span> -i https://www.paddlepaddle.org.cn/packages/stable/cu118/</span><br><span class="line">pip install pytest-runner paddlespeech -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">pip install &quot;numpy&lt;<span class="number">2</span>&quot;  --force-reinstall</span><br></pre></td></tr></table></figure>
+<p>迁移到离线环境中使用时，还需要：</p>
+<ul>
+<li><code>C:\Users\&#123;you&#125;\AppData\Roaming\nltk_data</code></li>
+<li><code>C:\Users\&#123;you&#125;\AppData\.paddlespeech</code></li>
+<li><code>C:\Users\&#123;you&#125;\AppData\.paddlenlp</code></li>
+</ul>
+<p>存在两个短板，可能是我的问题，不想搞了：</p>
+<ul>
+<li>语音合成耗时久，无论是 GPU 还是 CPU 命令执行时耗时 10s+，和初始加载模型有关，但除了写代码好像没其他办法</li>
+<li>从联网设备往公司内网导入不友好，蚂蚁搬家，逐步试错，找出依赖文件，逐个导入</li>
+</ul>
+<h2 id="miniconda"><a href="#miniconda" class="headerlink" title="miniconda"></a>miniconda</h2><p>参考 [Installing Miniconda][<a target="_blank" rel="noopener" href="https://www.anaconda.com/docs/getting-started/miniconda/install#linux-2]">https://www.anaconda.com/docs/getting-started/miniconda/install#linux-2]</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># install</span></span><br><span class="line">mkdir -p ~/miniconda3</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line">rm ~/miniconda3/miniconda.sh</span><br><span class="line"><span class="comment"># activate</span></span><br><span class="line"><span class="built_in">source</span> ~/miniconda3/bin/activate</span><br></pre></td></tr></table></figure>
+<h2 id="paddlespeech-server"><a href="#paddlespeech-server" class="headerlink" title="paddlespeech_server"></a>paddlespeech_server</h2><p>直接使用这项服务，它在启动服务时将模型加载到内存中备用，避免使用 CLI 时每次重新加载。</p>
+<p>但避免使用 <code>paddlespeech_client </code> ，它在发出网络请求之前耗时做了很多无用功。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conda activate paddle_cpu</span><br><span class="line"><span class="comment"># conda activate paddlespeech_cpu</span></span><br><span class="line">paddlespeech_server start --config_file ./demos/speech_server/conf/application.yaml</span><br><span class="line">paddlespeech_client tts --server_ip 10.0.0.100 --port 8090 --input <span class="string">&quot;您好，欢迎使用百度飞桨语音合成服务。&quot;</span> --output output.wav</span><br></pre></td></tr></table></figure>
+<h2 id="client"><a href="#client" class="headerlink" title="client"></a>client</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> shell 脚本</span></span><br></pre></td></tr></table></figure>
+<h1 id="Coqui-TTS"><a href="#Coqui-TTS" class="headerlink" title="Coqui TTS"></a>Coqui TTS</h1><p>这个框架在 2024 年初宣布停止维护，但 2025 年时依然很热门。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda env remove -y -n coqui_tts</span><br><span class="line">conda create -y -n coqui_tts python=3.10</span><br><span class="line">pip install TTS -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/26/wireshark/" rel="prev" title="Wireshark 和  tcpdump">
+      <i class="fa fa-chevron-left"></i> Wireshark 和  tcpdump
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/03/07/agent_robot/" rel="next" title="国产化平台 agent">
+      国产化平台 agent <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%BE%E5%BC%83-speech-dispatcher"><span class="nav-number">1.</span> <span class="nav-text">放弃 speech-dispatcher</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A3%9E%E6%A1%A8"><span class="nav-number">2.</span> <span class="nav-text">飞桨</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#miniconda"><span class="nav-number">2.1.</span> <span class="nav-text">miniconda</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#paddlespeech-server"><span class="nav-number">2.2.</span> <span class="nav-text">paddlespeech_server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#client"><span class="nav-number">2.3.</span> <span class="nav-text">client</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Coqui-TTS"><span class="nav-number">3.</span> <span class="nav-text">Coqui TTS</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tnie & ilyw"
+      src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+  <p class="site-author-name" itemprop="name">tnie & ilyw</p>
+  <div class="site-description" itemprop="description">家人是奋斗的初衷，路途艰辛时常思初心。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">166</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tnie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tnie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/nie7g" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;nie7g" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tnie & ilyw</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

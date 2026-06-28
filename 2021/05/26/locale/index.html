@@ -28,7 +28,7 @@
 <meta property="og:description" content="学习 locale 和编码转换过程中的关键以及问题。  不使用 locale，无法完成编码转换吗？Unicode 自身的 utf-8&#x2F;16&#x2F;32 的 存储方式之间的转换 也不行吗？ utf-8 对应 char、string；utf-16 对应 wchar_t&#x2F;wstring，这种理解对吗？所以 boost::locale::conv::to_utf&lt;char&gt;() 就是转 utf-8（">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-05-26T07:33:38.000Z">
-<meta property="article:modified_time" content="2023-05-20T04:21:13.607Z">
+<meta property="article:modified_time" content="2026-06-28T14:40:54.934Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta name="twitter:card" content="summary">
 
@@ -229,7 +229,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+                <time title="修改时间：2026-06-28 22:40:54" itemprop="dateModified" datetime="2026-06-28T22:40:54+08:00">2026-06-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -368,8 +368,8 @@
 </tbody></table>
 <p>*：警告只限于 <code>initializeBlockInfoWithType()</code> 中的板块路径：</p>
 <ul>
-<li>函数所在的 DZHYUNRequest.cpp 文件使用的 UTF-8-BOM 编码（msvc 打开<strong>未乱码</strong>），「字面值（有 BOM） ，转 utf-8，转 执行字符集（无前缀，未指定相关编译选项，则目标是 current code page/Big5）」，再通过 <code>boost::locale::conv::to_utf&lt;char&gt;(oss.str(), &quot;GBK&quot;); </code> 将 Big5 硬编码字节当做 GBK 转换成 utf-8，所以出错造成按键精灵缺失板块。</li>
-<li>DZHYUNdef.cpp 文件使用的 GB2312 编码，所以在 msvc 中打开看到原本简体中文的位置变成了<strong>乱码</strong>（Big5 的皮，<strong>GBK 的芯</strong>），在后续的「字面值（无 BOM 则依据 current code page/Big5），转 utf-8，转 执行字符集（无前缀，未指定相关编译选项，则目标是 current code page/Big5）」没什么变化，再通过 <code>boost::locale::conv::to_utf&lt;char&gt;(oss.str(), &quot;GBK&quot;); </code> GBK 转换成 utf-8，反而正确了。</li>
+<li>函数所在的 RequestModule.cpp 文件使用的 UTF-8-BOM 编码（msvc 打开<strong>未乱码</strong>），「字面值（有 BOM） ，转 utf-8，转 执行字符集（无前缀，未指定相关编译选项，则目标是 current code page/Big5）」，再通过 <code>boost::locale::conv::to_utf&lt;char&gt;(oss.str(), &quot;GBK&quot;); </code> 将 Big5 硬编码字节当做 GBK 转换成 utf-8，所以出错造成按键精灵缺失板块。</li>
+<li>DefModule.cpp 文件使用的 GB2312 编码，所以在 msvc 中打开看到原本简体中文的位置变成了<strong>乱码</strong>（Big5 的皮，<strong>GBK 的芯</strong>），在后续的「字面值（无 BOM 则依据 current code page/Big5），转 utf-8，转 执行字符集（无前缀，未指定相关编译选项，则目标是 current code page/Big5）」没什么变化，再通过 <code>boost::locale::conv::to_utf&lt;char&gt;(oss.str(), &quot;GBK&quot;); </code> GBK 转换成 utf-8，反而正确了。</li>
 </ul>
 <h2 id="心得-结论"><a href="#心得-结论" class="headerlink" title="心得/结论"></a>心得/结论</h2><p>首先，源文件使用 UTF-8-BOM 格式保存；其次</p>
 <ul>
@@ -482,7 +482,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -530,7 +530,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -196,6 +196,664 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/24/shell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/24/shell/" class="post-title-link" itemprop="url">shell 及 环境变量</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-24 09:25:47" itemprop="dateCreated datePublished" datetime="2017-04-24T09:25:47+08:00">2017-04-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2016/3/16 12:17:18</p>
+<p>汇总 3 篇。此处 shell 指工具，不涉及 shell 编程、脚本等知识。</p>
+<h1 id="shell-和简单操作"><a href="#shell-和简单操作" class="headerlink" title="shell 和简单操作"></a>shell 和简单操作</h1><h2 id="shell-简介"><a href="#shell-简介" class="headerlink" title="shell 简介"></a>shell 简介</h2><p><a target="_blank" rel="noopener" href="http://book.51cto.com/art/201107/277600.htm">Shell 是什么呢？</a> 确切地说，Shell 就是一个命令行解释器，它的作用就是遵循一定的语法将输入的命令加以解释并传给操作系统内核，它为用户提供了一个向 Linux 发送请求以便运行程序的接口，用户可以用 Shell 来启动、挂起、停止甚至是编写一些程序。</p>
+<p><a target="_blank" rel="noopener" href="http://book.51cto.com/art/201107/277601.htm">Linux Shell的种类</a> 很多，目前流行的 Shell 包括 ash、bash、ksh、csh、zsh 等，用户可以通过查看 /etc/shells 文件中的内容来查看自己主机中当前有哪些种类的 Shell。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/04/24/shell/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/24/DevelopmentOnLinux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/24/DevelopmentOnLinux/" class="post-title-link" itemprop="url">怎样的linux开发方式？很原始的</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-24 09:15:05" itemprop="dateCreated datePublished" datetime="2017-04-24T09:15:05+08:00">2017-04-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-06-28 22:40:54" itemprop="dateModified" datetime="2026-06-28T22:40:54+08:00">2026-06-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2015年11月20日 14:31:06</p>
+<p>从月初开始接触 linux 开发，真心是磕磕绊绊。简单的使用，查阅一些操作命令这些都不是问题，困难主要在于 linux 下的开发。</p>
+<ol>
+<li>大学有一本 unix 的教材，至少看了前五章。自己也折腾安装过 linux 的系统，从 CentOS、Fedora 到 debian，安装后也简单的操作过，虽说没有任务驱动最终也不了了之。但多少不认生。</li>
+<li>公司的开发环境是有几台 suse 的服务器，在不同的局域网里。远程连接上去进行开发。使用的工具是 Xbrowser，其中包括 Xshell、Xftp 等。最开始两天使用过其中的 XDMCP 以图形界面操作局域网 A 中一台服务器，唯一的感受就是卡，画面的操作很不流畅，严重影响使用体验。一开始使用 suse 企业版 10 远程图形界面操作一般，后来重装系统 open suse linux 10 之后，XDMCP 的操作体验变得很糟糕。</li>
+<li>XDMCP 的使用，需要在服务器上进行有关的设置。后来在 57（局域网B中服务器的 ip）服务器上开发，工作组成员都没有此服务器的 root 权限。再没有使用图形界面，使用 Xshell+Xftp，使用 Xshell 进行和开发有关的操作，使用 Xftp 进行文件的传输和文本的编辑。基本上就是<strong>在主机上使用 notepad++ 编辑代码，通过 Xftp 同步到服务器，在 Xshell 中进行编译、运行操作</strong>（还没有掌握 gdb，调试处于看错误输出，改项目源码的阶段）。在 Xftp 中可以直接打开服务器上的源码进行编辑保存操作，所以还是比较方便的。</li>
+<li>目前阶段这种“拼凑”的开发方式还是足够用的，但能明显感觉到瓶颈。对 vim 的操作止于零，这个<strong>周末在家练习</strong>，一步步把 vim 搭建成开发环境。+ makefile文件 + gdb</li>
+<li>有时间了补足一下 x- 系列的操作步骤，虽然简单，但当时在网上没找到有关的介绍，前后也花费了大半天时间。</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/04/24/DevelopmentOnLinux/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/19/ConditionalCompilationInVS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/19/ConditionalCompilationInVS/" class="post-title-link" itemprop="url">条件编译，针对VS</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-19 16:08:44" itemprop="dateCreated datePublished" datetime="2017-04-19T16:08:44+08:00">2017-04-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/windows/" itemprop="url" rel="index"><span itemprop="name">windows</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2016/3/26 20:07:56</p>
+<p>条件编译是应用较为广泛的一个概念，不限于编译器。但在这里，只讲如何在 VS2010 一个项目中使用条件编译实现不同的版本。</p>
+<p>只放链接，以后再次用到时再做整理。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://blog.csdn.net/xemexeme/article/details/8026313">使用Visual Studio .NET 2010的配置和条件编译在一个项目实现不同版本</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.163.com/lvan100@yeah/blog/static/68117214201124402367/">【经验之谈】如何实现条件编译（VS2010为例）</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.csdn.net/NewMap/article/details/5206265#comments">使用VS配置管理器实现不同版本的输出</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/19/lib-dll-mt-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/19/lib-dll-mt-md/" class="post-title-link" itemprop="url">LIB和DLL，MT(d)和MD(d)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-19 16:06:27" itemprop="dateCreated datePublished" datetime="2017-04-19T16:06:27+08:00">2017-04-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/windows/" itemprop="url" rel="index"><span itemprop="name">windows</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2016/3/26 20:02:05</p>
+<h1 id="静态库（LIB）和动态库（DLL）"><a href="#静态库（LIB）和动态库（DLL）" class="headerlink" title="静态库（LIB）和动态库（DLL）"></a>静态库（LIB）和动态库（DLL）</h1><p>放两个链接，以后再一次用到时再做整理。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.cppblog.com/amazon/archive/2009/09/04/95318.html">LIB和DLL的区别与使用</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/kex1n/archive/2011/09/06/2168435.html">静态链接与动态链接的区别</a></li>
+</ul>
+<p>关于“导入库”：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/chio/archive/2008/08/05/1261296.html">动态链接库dll，静态链接库lib, 导入库lib</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/skynet/p/3372855.html">C++静态库与动态库</a></li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/04/19/lib-dll-mt-md/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/19/network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/19/network/" class="post-title-link" itemprop="url">双网卡、内外网</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-19 15:40:20" itemprop="dateCreated datePublished" datetime="2017-04-19T15:40:20+08:00">2017-04-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-06-28 22:40:54" itemprop="dateModified" datetime="2026-06-28T22:40:54+08:00">2026-06-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/windows/" itemprop="url" rel="index"><span itemprop="name">windows</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2015年11月2日 16:21:18</p>
+<p>参考：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/lightnear/archive/2013/02/03/2890835.html">Windows路由表配置：双网卡同时上公司内外网</a></p>
+<p>我的网络环境：外网 &amp; 内网</p>
+<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/network/1.png" alt="外网环境"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/04/19/network/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/19/career/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/19/career/" class="post-title-link" itemprop="url">职业</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-19 11:22:26" itemprop="dateCreated datePublished" datetime="2017-04-19T11:22:26+08:00">2017-04-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-06-28 22:24:35" itemprop="dateModified" datetime="2026-06-28T22:24:35+08:00">2026-06-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="要有主动性"><a href="#要有主动性" class="headerlink" title="要有主动性"></a>要有主动性</h1><p>L<br>工作态度是第一位的，工作能力其次。<br>工作过程中要有主动性，不能让主管耳提面命的，整天催着才干活。<br>要有责任心。</p>
+<p>W<br>做产品和做研发不一样。<br>做研发关注技术，关注深度。新员工有人指点技术？。<br>做产品，强调解决问题。对技术、框架有丰富的了解（强调数目），在众多的技术和框架中找到解决问题的最优方案，然后可能才是深挖这个技术怎么用。所以哪怕是老员工，也都是在接手新任务，了解新框架，学习代码……所以，有时间多了解新技术、新框架，在有新产品，新任务的时候才能有<strong>做选择</strong>的资本。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/04/19/career/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/19/pkm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/19/pkm/" class="post-title-link" itemprop="url">PKM 整理记录</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-19 10:44:57" itemprop="dateCreated datePublished" datetime="2017-04-19T10:44:57+08:00">2017-04-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="2016年3月20日-16-57-20"><a href="#2016年3月20日-16-57-20" class="headerlink" title="2016年3月20日 16:57:20"></a>2016年3月20日 16:57:20</h1><p>不能西瓜芝麻一起捡！筛选信息关键在于过滤，过滤掉那些价值低、随时间贬值快、内容表述糟糕的博客、文章和笔记等，值得在 wiz 和大象中花费时间整理总结的是那些半衰期长、价值高的内容。个人偶尔的牢骚也是不值得记录的，只有那些经过反复思考、辩证过的蜕变成长才值得记录。</p>
+<p>如果泥沙俱下，都往 wiz 和大象里誊抄，一方面放弃了信息过滤这一层保障，另一方面也会浪费自己大量的时间，累死人。</p>
+<p>即便是以前付出过心血的东西，该放弃时也要丢弃。懂得取<strong>舍</strong>，也要知行合一。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/04/19/pkm/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/19/toread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
+      <meta itemprop="name" content="tnie & ilyw">
+      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不积小流，无以成江海">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/19/toread/" class="post-title-link" itemprop="url">读一读</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-19 10:05:09" itemprop="dateCreated datePublished" datetime="2017-04-19T10:05:09+08:00">2017-04-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在为知笔记里有一个文件夹《读一读》，是<strong>觉得</strong>有意思应该看一看的博客，可是一放少则几个月，多则一两年过去了。有点类似于 chrome 中的僵尸书签，觉得有用做了标记，可是一直扔在那里占着地方却再也没有翻起。</p>
+<p>还有个类似的行为，买书、囤书却不读书。哈哈哈，为什么呢？怎么解决这种行为，这种现象呢？互联网时代在网络上优质资源混杂在垃圾信息里，怎么筛选出有价值的内容？进入新世纪后，出书也变得简单，不再有门槛限制，也是出来了各种各样的垃圾，怎么挑选？</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/04/19/toread/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/18/tools/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -227,7 +885,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-05-20 12:21:13" itemprop="dateModified" datetime="2023-05-20T12:21:13+08:00">2023-05-20</time>
+                <time title="修改时间：2026-06-28 22:01:18" itemprop="dateModified" datetime="2026-06-28T22:01:18+08:00">2026-06-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -361,685 +1019,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/18/devcpp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/18/devcpp/" class="post-title-link" itemprop="url">devcpp 5.1.1 在 win8.1 x64 系统上</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-18 14:32:51" itemprop="dateCreated datePublished" datetime="2017-04-18T14:32:51+08:00">2017-04-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ol>
-<li><p>编译器 TDM-GCC 4.9.2 64-bit Release/Debug，可能对 64 位处理的不是很好，经常报 gdb.exe 崩溃。因此<strong>建议不使用用 64 位的编译配置</strong>，包括 Release、Debug；</p>
-</li>
-<li><p>使用 TDM-GCC 4.9.2 32-bit Release/Debug，报错缺失 zlib1.dll 文件，这一点可能是 32 位编译器对 64 位系统的兼容性有限，参考 <a target="_blank" rel="noopener" href="http://zhidao.baidu.com/link?url=sAumyFo8EBxFxrMFy-fcFq5y4HL92atlVjqPRe2Vj7xB2auGH_pSD9XeublFo9V6og0kGkHwd13Dl0wFm8wg8RAZTUZJRX5Z5_vUj_XgTOm">计算机中丢失 ZLIB1.DLL</a> 去网上下载 dll 文件拷贝到相应目录即可。然后就可以正常使用 devcpp 了。</p>
-</li>
-<li><p>打开 devcpp，将编译器选择 TDM-GCC 4.9.2 32-bit Debug ，每次重启之后报错：</p>
-<p> <img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/devcpp/devcpp1.png" alt="报错内容"></p>
-<p> 解决方法：在 mingw64 创建一个 lib32 文件夹就可以了。</p>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/18/fiddler/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/18/fiddler/" class="post-title-link" itemprop="url">Fiddler 使用技巧</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-18 14:32:43" itemprop="dateCreated datePublished" datetime="2017-04-18T14:32:43+08:00">2017-04-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2015年11月16日 11:34:56</p>
-<p>先放一个链接：<a target="_blank" rel="noopener" href="http://kb.cnblogs.com/page/130367/">Fiddler 教程</a></p>
-<p>在使用 <code>curl</code> 命令，调用 libcurl 中有涉及 http 传输（主要是上传），所以需要查看 http headers。但也因为只是简单实用，所以我自己本人并未看过这篇教程。只是觉得作者条理清晰，文章内容应该不会差，作为一篇教程应该足以。</p>
-<p>以下只列出几个在实际使用中碰到的问题：（其实在网上都能查到，但是一个帖子一个问题，比较零散，统一放在这里，以备以后查看）</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/18/fiddler/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/18/TextEditor/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/18/TextEditor/" class="post-title-link" itemprop="url">文本编辑器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-18 14:32:22" itemprop="dateCreated datePublished" datetime="2017-04-18T14:32:22+08:00">2017-04-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2015年12月22日 14:10:39</p>
-<h1 id="Notepad"><a href="#Notepad" class="headerlink" title="Notepad++"></a>Notepad++</h1><p>简介：摘自 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Notepad%2B%2B">维基百科 - Notepad++</a></p>
-<blockquote>
-<p>Notepad++是一套为自由软件的纯文本编辑器。该软件以 GPL 发布，有完整的中文化接口及支持多国语言撰写的功能（采用 UTF-8 编码）。它的功能比 Windows 中的记事本（Notepad）强大，除了可以用来制作一般的纯文字的帮助文档，也十分适合用作<strong>撰写计算机程序</strong>的编辑器。由6.2.3版本起，Notepad++的文件默认文字格式由ANSI改为除去BOM的UTF8（UTF8 without BOM）。Notepad++不仅有语法高亮度显示，也有语法折叠功能，并且支持宏以及扩充基本功能的插件。</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/18/TextEditor/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/17/cancelaccount/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/17/cancelaccount/" class="post-title-link" itemprop="url">为什么不能销户呢？</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-17 14:52:40" itemprop="dateCreated datePublished" datetime="2017-04-17T14:52:40+08:00">2017-04-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2015年12月31日 15:40:20</p>
-<p>不知道和自己是学计算机的有没有关系，总之我如果手机号不用了我要销号，银行卡不用了我要销卡。同样的，好多网络上的账户（最主要的就是邮箱和社交平台）我也希望能够有借有还，注册注销闭环操作。可惜就我目前了解到的，网易不同，百度各种账号/平台不提供……</p>
-<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/cancelaccount/1b1f9566-5e1d-4eb8-a798-2eb0925ae2d4.png" alt="注销账户"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/17/cancelaccount/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/17/xxnote/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/17/xxnote/" class="post-title-link" itemprop="url">XX 笔记，这些应用怎么用？</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-17 14:46:32" itemprop="dateCreated datePublished" datetime="2017-04-17T14:46:32+08:00">2017-04-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2016/1/19 14:35:09</p>
-<p>链接内容可以慢慢看，稍后放链接。重点想说以下观点： </p>
-<blockquote>
-<p>有这样的一个故事：旱鸭子想学游泳，哦，游泳需要游泳衣，游泳还需要游泳帽，游泳还需要潜水镜。然后搜索了各种培训班，还在视频网站上看了各种教学视频，欣赏了奥运冠军的优美泳姿——最终一个夏天过去了，旱鸭子仍然还是旱鸭子。</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/17/xxnote/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/17/gtd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/17/gtd/" class="post-title-link" itemprop="url">GTD</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-17 14:39:46" itemprop="dateCreated datePublished" datetime="2017-04-17T14:39:46+08:00">2017-04-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2016/3/23 9:27:13</p>
-<p>相信“GTD 这个系统本来也不是给初学者用的，整个系统过于复杂，难度过高，维持 GTD 系统本身就要花费很大的精力和时间”，引自 <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/23051794/answer/24689356">GTD 入门应该从哪些资料开始？ —— warfalcon 的回答</a>。</p>
-<p><img src="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/gtd/2a199e39-7741-4bff-a885-7aacb7dbca1b.png" alt="初学者应该学什么"></p>
-<p>我在一年前为了使用 doit.im 还买了会员账户，当时肯定是真爱，期待也相信这个工具能够给我带来帮助，甚至是改变。事实是，跳槽之后（15年10月）我已经很少使用它了。也就是我迷恋这款应用只持续了三个月左右。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/17/gtd/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/17/mindmanager/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/17/mindmanager/" class="post-title-link" itemprop="url">MindManager</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-17 14:28:52" itemprop="dateCreated datePublished" datetime="2017-04-17T14:28:52+08:00">2017-04-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2016年1月5日 14:43:50</p>
-<p>思维导图的重要性不言而喻。</p>
-<p>最近两年主要使用思维导图来做知识整理（634所期间），但是在换工作之后最近的这两个月内，因为做笔记的需求大增，所以大多直接整理知识到wiz，而不再使用思维导图做中间过渡。以前知识流线为：</p>
-<ol>
-<li>在 chrome 浏览器中创建分级目录，保存有关网页为书签。同时善用 chrome 同一账号不同设备的同步功能；第一次过滤知识</li>
-<li>不定期的整理书签到思维导图。一般当 chrome 中的书签目录饱和，分级超 3 层时，进行迁移。这个过程对之前保存的书签进行二次的过滤</li>
-<li>进一步在 wiz 中总结，整理出学习笔记；</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/17/mindmanager/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tnie.github.io/2017/04/14/DoubSystems/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/tnie/MarkdownPhotos/master/Baymax1.jpg">
-      <meta itemprop="name" content="tnie & ilyw">
-      <meta itemprop="description" content="家人是奋斗的初衷，路途艰辛时常思初心。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不积小流，无以成江海">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/14/DoubSystems/" class="post-title-link" itemprop="url">双系统</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-14 17:51:56" itemprop="dateCreated datePublished" datetime="2017-04-14T17:51:56+08:00">2017-04-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 13:30:33" itemprop="dateModified" datetime="2021-01-18T13:30:33+08:00">2021-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>双系统，还是虚拟机？如果机器跑虚拟机资源足够（操作并不会明显卡，风扇不会疯狂地转），我会选择后者。双系统带来的问题，在于两个系统的切换需要重新关机重启而且使用图形界面的 Linux 对比 windows 毫无优势，Linux 的优点在于不带图形界面的前提下占用资源少。而如果在 Linux 中使用图形界面不单单耗费资源，而且体验不如 windows。</p>
-<p>你可以在虚拟机中不带界面跑 Linux，而双系统的情景下谁会只安装命令行（Linux 不带图形界面）的交互呢？</p>
-<p>在接触系统之前，先了解更底层的东西。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/14/DoubSystems/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1107,7 +1090,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1155,7 +1138,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

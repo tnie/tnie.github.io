@@ -28,7 +28,7 @@
 <meta property="og:description" content="从桌面开发突然进入 VxWorks 嵌入式开发，有几个认知上的调整：  桌面开发的时候，驱动、操作系统和 IDE 之后，我们才开始新建项目、编写代码； 嵌入式开发，从板级支持包、系统镜像就需要新建对应的项目了。 理解嵌入式系统可裁剪，镜像大概率并不支持那些在桌面操作系统上常见的指令、服务和开发所需的库，需要有针对性的一个一个配置相应的驱动、组件。  Das U-Boot加载桌面操作系统之前的引导阶">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-12-13T11:06:00.000Z">
-<meta property="article:modified_time" content="2024-12-25T14:15:09.427Z">
+<meta property="article:modified_time" content="2026-06-28T14:40:54.902Z">
 <meta property="article:author" content="tnie &amp; ilyw">
 <meta name="twitter:card" content="summary">
 
@@ -229,7 +229,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-12-25 22:15:09" itemprop="dateModified" datetime="2024-12-25T22:15:09+08:00">2024-12-25</time>
+                <time title="修改时间：2026-06-28 22:40:54" itemprop="dateModified" datetime="2026-06-28T22:40:54+08:00">2026-06-28</time>
               </span>
 
           
@@ -256,7 +256,7 @@
 <p>如何从 tftp 加载系统镜像并启动？ U-boot 中的 <code>ipaddr=</code> 似乎没有生效，<code>ping</code> 失败。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">ft2004#</span><span class="bash">ping 127.0.0.1</span></span><br><span class="line">Trying ethernet@28210000</span><br><span class="line">ethernet@28210000 Waiting for PHY auto negotiation to complete......... TIMEOUT !</span><br><span class="line">Could not initialize PHY ethernet@28210000</span><br><span class="line">FAIL</span><br><span class="line">Trying ethernet@2820c000</span><br><span class="line">DMA reset timeout</span><br><span class="line">FAIL</span><br><span class="line">ping failed; host 127.0.0.1 is not alive</span><br><span class="line"><span class="meta">ft2004#</span></span><br></pre></td></tr></table></figure>
 <p>如何通过串口从主机拷贝文件到硬盘？<code>load[bxyz]</code> 到内存，再从内存到文件系统。 <code>[rs]z</code> 命令是什么？</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 检查</span></span><br><span class="line">ping 10.23.50.128</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 检查</span></span><br><span class="line">ping 192.168.1.128</span><br></pre></td></tr></table></figure>
 <p>如何从 U 盘启动？</p>
 <p>使用 <code>loady</code> 使用串口将 <code>ft2004.elf</code> 内核文件加载到内存（传输很慢，需要耐心），然后 <code>bootvx32 0x90100000</code> 启动。</p>
 <p>之前 U 盘没有插好（可能是 USB 接口接触不良），前后晃动一下 U 盘能够看到 <code>/bd0</code> ，能够从 U 盘拷贝文件了！ </p>
@@ -288,7 +288,7 @@
 <p>比如表示 vx 工程所在的文件夹的上 2 层路径：<code>$(PRJ_DIR)/../..</code></p>
 <p>同样的这些 <code>$</code> 打头的全局路径，也可以用做一些第三方库文件的相对路径中，比如在设置 <code>EXTRA_MODULES</code> 时，也可使用。</p>
 <h1 id="DeltaOS"><a href="#DeltaOS" class="headerlink" title="DeltaOS"></a>DeltaOS</h1><p>做国产平替会使用到 DeltaOS 道系统，开发环境是 LambdaPro 。需要付费。</p>
-<p>从同事手中转过来 xp 的虚拟机包含试用版的 LambdaPro ，试用期在 22年10月中旬左右。开发环境没有虚拟的仿真机，将编译结果放到飞腾的板子运行，通过补充单行日志来调试。</p>
+<p>从他人手中转过来 xp 的虚拟机包含试用版的 LambdaPro ，试用期在 22年10月中旬左右。开发环境没有虚拟的仿真机，将编译结果放到 ARM 开发板运行，通过补充单行日志来调试。</p>
 <p>碰到的第一个问题，不知道如何连接、使用这块板子。网口在没启动系统、未进行配置的时候是无法使用的，多个网口也不知道连接哪一个是可用的（二维魔方的右下角）。串口之前没接触过。</p>
 <p>2024年4月24日，备忘：右下角的网口似乎损坏了，无法生效。改用左下角的网口 ngb0 ，插上网线后 D53 灯会亮。</p>
 <p>2024年5月22日，备忘：哪个网口可以用，每次都不一样。通过串口输出查看分配的 ip ，通过插拔网线和修改对端主机的 ip 查找可用网口。</p>
@@ -405,7 +405,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">166</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -453,7 +453,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
